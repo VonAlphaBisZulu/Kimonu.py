@@ -110,14 +110,20 @@ cobrapy-native I/O; keep the concordance core independent of the kinetic/ACR lay
 - [ ] Lift the sparse exact nullspace out of straindesign into a standalone package (SENS/SERREF);
       Kimonu and straindesign both depend on it. (See the nullspace-package roadmap.)
 
-**Phase 1 — concordance core in Python**
-- [ ] `io.py`: build N, Y, A from a cobra model incl. elementary-step splitting; complex enumeration.
-- [ ] `concordance.py`: K=ker(N) via SENS → M=A·K → exact proportional-row grouping; balanced;
-      ratios; trivial-concordance shortcut from Y.
-- [ ] Unit test — **Küken Fig.1 toy**: balanced {2A, D, A+E, F}; module {B, C, B+C, 2B};
-      γ(C, B+C) = −1.
-- [ ] Reproduce Julia PoC exactly: EnvZ (13/5/3/8) and e_coli_core (895/209/110/2436).
-- [ ] Resolve the **896-vs-895** complex enumeration off-by-one (boundary/empty-complex edge case).
+**Phase 1 — concordance core in Python**  *(core done; SENUS-backed, tested)*
+- [x] `io.build_crn`: complex enumeration (substrate/product multisets, COCOA-style order) → A, Y, N;
+      verified `N == Y·A == cobra stoichiometric matrix`.
+- [x] `concordance.concordance`: FVA-unblock (the only, one-time LP) → K=ker(N) via **SENUS** →
+      M=A·K → exact proportional-row grouping (balanced = zero rows). Handles the SENUS ExactCOO
+      (>int64) path exactly. Tests: N==Y·A, internal consistency, determinism.
+- **Phase 1b — preprocessing to match the PoC counts.** Exact agreement with the Julia PoC (EnvZ
+  13/5/3/8, e_coli 895/209/110/2436) requires the **elementary-step splitting** the PoC ran; the
+  shared SBML are un-split (raw EnvZ → 16 complexes, not 13). This is the preprocessing-consistency
+  issue the review notes flagged. Implement `split_into_elementary_rxns`, then:
+  - [ ] Reproduce EnvZ (13/5/3/8) and e_coli_core (895/209/110/2436).
+  - [ ] Küken Fig.1 toy unit test: balanced {2A, D, A+E, F}; module {B, C, B+C, 2B}; γ(C, B+C) = −1.
+  - [ ] Resolve the **896-vs-895** complex enumeration off-by-one (boundary/empty-complex edge case).
+- [ ] concordance ratios γ_ij and the trivial-concordance shortcut from Y (in the Julia PoC; not yet ported).
 
 **Phase 2 — kinetic modules + ACR**
 - [ ] `kinetic.py`: autonomy + feeding refinement of concordance modules.
