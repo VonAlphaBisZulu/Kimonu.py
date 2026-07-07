@@ -1,2 +1,2 @@
-# COCOA.py
-Identify concordant and kinetic modules through exact nullspace computations
+# Kimonu.py
+Identify concordant and **KI**netic **MO**dules through exact **NU**llspace computations
