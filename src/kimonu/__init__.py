@@ -7,5 +7,8 @@ K = ker(N) (exact, sparse, via SENUS), and M = A·K, concordant complexes are th
 proportional rows of M and balanced complexes are its zero rows — exact linear algebra,
 no LP, no sampling. See ROADMAP.md.
 """
+from kimonu.io import build_crn
+from kimonu.concordance import concordance, ConcordanceResult
+
 __version__ = "0.0.1"
-__all__ = ["__version__"]
+__all__ = ["build_crn", "concordance", "ConcordanceResult", "__version__"]

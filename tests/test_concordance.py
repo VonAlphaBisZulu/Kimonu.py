@@ -1,0 +1,69 @@
+"""Phase-1 concordance core tests.
+
+Validates the *method* (N = Y·A, K = ker(N), M = A·K, proportional-row grouping) structurally and
+for internal consistency. Exact agreement with the Julia PoC counts (EnvZ 13/5/3/8, e_coli
+895/209/110/2436) additionally requires the elementary-step splitting preprocessing the PoC used —
+see ROADMAP (Phase 1b); the shared SBML here are the un-split models.
+"""
+import os
+from fractions import Fraction
+
+import numpy as np
+import pytest
+from cobra.io import read_sbml_model
+
+import kimonu
+from kimonu.io import build_crn
+
+SHARED = "/home/sadreyev_lab/pschneider/pipelines/2026-06_COCOA/shared_models"
+
+
+def _model(name):
+    path = os.path.join(SHARED, name + ".xml")
+    if not os.path.exists(path):
+        pytest.skip(f"shared model {name} not available")
+    return read_sbml_model(path)
+
+
+def test_N_equals_Y_times_A():
+    """The complex factorization must reproduce the stoichiometric matrix: N == Y·A."""
+    from cobra.util.array import create_stoichiometric_matrix
+    m = _model("EnvZ_OmpR")
+    crn = build_crn(m)
+    N_ref = create_stoichiometric_matrix(m)          # metabolites x reactions
+    N_ya = np.asarray((crn.Y @ crn.A).todense(), dtype=float)
+    assert np.array_equal(N_ref, N_ya)
+
+
+def test_partition_is_internally_consistent():
+    """Balanced complexes have zero activity; complexes in a module have proportional M-rows."""
+    import senus
+    m = _model("EnvZ_OmpR")
+    crn = build_crn(m)
+    K = senus.sparse_nullspace(crn.N)
+    assert not isinstance(K, senus.ExactCOO)         # small model: fast int64 path
+    M = np.asarray((crn.A @ K).todense(), dtype=object)
+
+    r = kimonu.concordance(m, preprocess=False)      # partition of this exact crn
+    for i in r.balanced:
+        assert all(v == 0 for v in M[i]), "balanced complex has nonzero activity"
+    for grp in r.modules:
+        if len(grp) < 2:
+            continue
+        base = M[grp[0]]
+        b0 = next(x for x in base if x != 0)
+        ref = [Fraction(int(x), int(b0)) for x in base]
+        for i in grp[1:]:
+            row = M[i]
+            r0 = next(x for x in row if x != 0)
+            assert [Fraction(int(x), int(r0)) for x in row] == ref, "module rows not proportional"
+
+
+def test_deterministic_and_runs_on_ecoli():
+    m = _model("e_coli_core")
+    r1 = kimonu.concordance(m)
+    r2 = kimonu.concordance(m)
+    assert (r1.n_complexes, r1.n_balanced, r1.n_modules, r1.n_concordant_pairs) == \
+           (r2.n_complexes, r2.n_balanced, r2.n_modules, r2.n_concordant_pairs)
+    # balanced + partitioned complexes account for every complex
+    assert r1.n_balanced + sum(len(g) for g in r1.modules) == r1.n_complexes
