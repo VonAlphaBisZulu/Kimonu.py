@@ -13,7 +13,9 @@ authors = [{ name = "Philipp Schneider" }]
 keywords = ["metabolic-networks", "concordance", "kinetic-modules", "ACR", "nullspace", "cobra", "systems-biology"]
 # Pure-Python; a Julia toolchain is deliberately NOT required.
 dependencies = [
-  "senus @ git+https://github.com/VonAlphaBisZulu/SENUS.git",
+  # exact sparse nullspace comes from straindesign (straindesign.sparse_nullspace);
+  # pinned to the branch until it lands in a straindesign release.
+  "straindesign @ git+https://github.com/klamt-lab/straindesign.git@exact-nullspace-bigint",
   "cobra>=0.26",
 ]
 

@@ -37,7 +37,7 @@ def test_N_equals_Y_times_A():
 
 def test_partition_is_internally_consistent():
     """Balanced complexes have zero activity; complexes in a module have proportional M-rows."""
-    import senus
+    import straindesign as senus
     m = _model("EnvZ_OmpR")
     crn = build_crn(m)
     K = senus.sparse_nullspace(crn.N)

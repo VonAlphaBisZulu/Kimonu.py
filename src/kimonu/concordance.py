@@ -11,7 +11,7 @@ from fractions import Fraction
 import numpy as np
 from scipy import sparse
 
-import senus
+import straindesign as sd
 
 from kimonu.io import build_crn
 
@@ -26,10 +26,10 @@ def _M_rows(A, K):
     """Yield (row_index, [(col, Fraction value), ...]) for the nonzero rows of M = A·K.
 
     A is integer (complexes x reactions). K is the exact nullspace (reactions x nu), either a scipy
-    integer CSR (common word-sized case) or a senus.ExactCOO (>int64 coefficients). Either way M is
+    integer CSR (common word-sized case) or a sd.ExactCOO (>int64 coefficients). Either way M is
     exact; a common denominator only scales rows and never affects proportionality, so it is dropped.
     """
-    if isinstance(K, senus.ExactCOO):
+    if isinstance(K, sd.ExactCOO):
         # K[r, c] = data / denom; build M = A·K exactly with Python ints (denom cancels for ratios).
         Kcols = {}
         for r, c, v in zip(K.rows, K.cols, K.data):
@@ -85,7 +85,7 @@ def concordance(model, preprocess=True):
     if preprocess:
         model = _fva_unblocked(model)
     crn = build_crn(model)
-    K = senus.sparse_nullspace(crn.N)   # reactions x nu, exact
+    K = sd.sparse_nullspace(crn.N)   # reactions x nu, exact
 
     balanced = []
     groups = {}                          # canonical key -> [complex indices]
