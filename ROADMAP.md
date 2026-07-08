@@ -61,13 +61,13 @@ Kimonu is exact in both regimes, so it is the natural "ground truth" implementat
 
 ## 5. Package architecture (proposed)
 
-Dependency: **the lifted sparse-exact-nullspace package** (working name SENS / SERREF — see the
+Dependency: **the lifted sparse-exact-nullspace package** (working name straindesign — see the
 separate nullspace roadmap). Kimonu is a thin, exact analysis layer on top of it.
 
 ```
 kimonu/
   io.py            load cobra/SBML models; build N, Y, A (complex enumeration = graph nodes)
-  nullspace.py     thin wrapper over SENS: K = ker(N), exact & sparse
+  nullspace.py     thin wrapper over straindesign: K = ker(N), exact & sparse
   concordance.py   M = A·K; group proportional rows (exact rational); balanced = zero rows;
                    ratios γ; trivial concordances read off Y's two-complex columns
   kinetic.py       kinetic modules: autonomy + feeding refinement
@@ -90,7 +90,7 @@ cobrapy-native I/O; keep the concordance core independent of the kinetic/ACR lay
   shared models. (The review notes flag that COCOA's own figures measure only its scaling, not a
   head-to-head — this is the gap Kimonu's paper fills.) *MATLAB license pending; note if deferred.*
 - **(d) Scaling + peak memory** — genome-scale networks; the sparse exact nullspace is the enabler.
-  This is the shared benchmark with the SENS package (speed + sparsity of `K`).
+  This is the shared benchmark with the straindesign package (speed + sparsity of `K`).
 - **(e) Full suite parity** — reassemble COCOA's 62-run suite (33 ordered / 29 random binding).
 
 ## 7. Publication
@@ -107,14 +107,14 @@ cobrapy-native I/O; keep the concordance core independent of the kinetic/ACR lay
 ## 8. TODO — phased
 
 **Phase 0 — foundation**
-- [ ] Lift the sparse exact nullspace out of straindesign into a standalone package (SENS/SERREF);
+- [ ] Lift the sparse exact nullspace out of straindesign into a standalone package (straindesign);
       Kimonu and straindesign both depend on it. (See the nullspace-package roadmap.)
 
-**Phase 1 — concordance core in Python**  *(core done; SENUS-backed, tested)*
+**Phase 1 — concordance core in Python**  *(core done; straindesign-backed, tested)*
 - [x] `io.build_crn`: complex enumeration (substrate/product multisets, COCOA-style order) → A, Y, N;
       verified `N == Y·A == cobra stoichiometric matrix`.
-- [x] `concordance.concordance`: FVA-unblock (the only, one-time LP) → K=ker(N) via **SENUS** →
-      M=A·K → exact proportional-row grouping (balanced = zero rows). Handles the SENUS ExactCOO
+- [x] `concordance.concordance`: FVA-unblock (the only, one-time LP) → K=ker(N) via **straindesign** →
+      M=A·K → exact proportional-row grouping (balanced = zero rows). Handles the straindesign ExactCOO
       (>int64) path exactly. Tests: N==Y·A, internal consistency, determinism.
 - **Phase 1b — preprocessing to match the PoC counts.** Exact agreement with the Julia PoC (EnvZ
   13/5/3/8, e_coli 895/209/110/2436) requires the **elementary-step splitting** the PoC ran; the
