@@ -15,7 +15,10 @@ from cobra.io import read_sbml_model
 import kimonu
 from kimonu.io import build_crn
 
-SHARED = "/home/sadreyev_lab/pschneider/pipelines/2026-06_COCOA/shared_models"
+SHARED = os.environ.get(
+    "KIMONU_SHARED_MODELS",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, os.pardir, "shared_models"),
+)
 
 
 def _model(name):
@@ -37,11 +40,11 @@ def test_N_equals_Y_times_A():
 
 def test_partition_is_internally_consistent():
     """Balanced complexes have zero activity; complexes in a module have proportional M-rows."""
-    import straindesign as senus
+    import straindesign as sd
     m = _model("EnvZ_OmpR")
     crn = build_crn(m)
-    K = senus.sparse_nullspace(crn.N)
-    assert not isinstance(K, senus.ExactCOO)         # small model: fast int64 path
+    K = sd.sparse_nullspace(crn.N)
+    assert not isinstance(K, sd.ExactCOO)         # small model: fast int64 path
     M = np.asarray((crn.A @ K).todense(), dtype=object)
 
     r = kimonu.concordance(m, preprocess=False)      # partition of this exact crn

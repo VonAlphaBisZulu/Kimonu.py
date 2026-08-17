@@ -3,7 +3,7 @@
 Concordance is flux coupling lifted one matrix product up: with N = Y·A and K = ker(N), two
 complexes are concordant iff the corresponding rows of M = A·K are proportional, and balanced iff
 the M-row is zero. Pure exact linear algebra over the rationals — no LP, no sampling. K comes from
-SENUS. Ported from the validated Julia proof-of-concept (concordance_nullspace.jl).
+straindesign. Ported from the validated Julia proof-of-concept (concordance_nullspace.jl).
 """
 from collections import namedtuple
 from fractions import Fraction

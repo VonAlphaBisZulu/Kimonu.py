@@ -14,8 +14,8 @@ keywords = ["metabolic-networks", "concordance", "kinetic-modules", "ACR", "null
 # Pure-Python; a Julia toolchain is deliberately NOT required.
 dependencies = [
   # exact sparse nullspace comes from straindesign (straindesign.sparse_nullspace);
-  # pinned to the branch until it lands in a straindesign release.
-  "straindesign @ git+https://github.com/klamt-lab/straindesign.git@exact-nullspace-bigint",
+  # public API since 1.19.
+  "straindesign>=1.19",
   "cobra>=0.26",
 ]
 
