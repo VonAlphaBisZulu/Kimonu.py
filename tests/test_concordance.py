@@ -38,6 +38,32 @@ def test_N_equals_Y_times_A():
     assert np.array_equal(N_ref, N_ya)
 
 
+def test_fractional_coefficients_are_exact():
+    """Fractional stoichiometry must survive into N, and N_integer must scale it exactly.
+
+    e_coli_core has 0.5 O2 in CYTBD and a biomass reaction full of decimals. Rounding those to
+    integers still produces a plausible-looking network with the same complexes, so the damage is
+    invisible in the counts and only shows up as a wrong nullspace.
+    """
+    from cobra.util.array import create_stoichiometric_matrix
+    m = _model("e_coli_core")
+    crn = build_crn(m)
+    S = create_stoichiometric_matrix(m)
+
+    assert np.array_equal(S, np.asarray((crn.Y @ crn.A).todense(), dtype=float))
+    assert any(float(c) != int(c) for comp in crn.complexes for _, c in comp), \
+        "test model has no fractional coefficients — it cannot catch the rounding it is here to catch"
+
+    # Row scaling must be by a single positive factor per metabolite: that leaves ker(N) unchanged.
+    N_int = np.asarray(crn.N_integer.todense(), dtype=float)
+    for i in range(S.shape[0]):
+        nz = np.nonzero(S[i])[0]
+        if len(nz) == 0:
+            continue
+        ratios = N_int[i, nz] / S[i, nz]
+        assert np.allclose(ratios, ratios[0]) and ratios[0] > 0
+
+
 def test_partition_is_internally_consistent():
     """Balanced complexes have zero activity; complexes in a module have proportional M-rows."""
     import straindesign as sd

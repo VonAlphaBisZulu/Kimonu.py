@@ -85,7 +85,7 @@ def concordance(model, preprocess=True):
     if preprocess:
         model = _fva_unblocked(model)
     crn = build_crn(model)
-    K = sd.sparse_nullspace(crn.N)   # reactions x nu, exact
+    K = sd.sparse_nullspace(crn.N_integer)   # reactions x nu, exact
 
     balanced = []
     groups = {}                          # canonical key -> [complex indices]

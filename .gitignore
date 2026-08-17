@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+benchmarks/processed/
+benchmarks/results/
+benchmarks/*.log
+benchmarks/julia/Manifest.toml
