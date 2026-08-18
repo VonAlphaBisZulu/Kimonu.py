@@ -140,3 +140,43 @@ pair was rejected because its activity ratio actually varies.
 - The published-number comparison is one model and one binding variant.
 - COCOA.jl does **not** reproduce this defect: it agrees with Kimonu exactly on all four shared
   models. On this point the comparison runs in COCOA's favour.
+
+## iAB_RBC_283, brute force
+
+The third shared model completed after 1575 s (224,645 candidate pairs, every one tested):
+58 balanced complexes — the same set as Kimonu and COCOA — and 1219 concordant pairs against their
+1269. A strict subset again, 50 pairs short.
+
+## Open: on the reference's own split models the partitions cross
+
+Running Kimonu directly on the 30 elementary-step-split models the reference ships, and comparing
+against the committed results (`compare_to_published.py`), gives a *different* picture from the
+small models, and it is not yet explained.
+
+- **Balanced complexes agree exactly on 22 of 30 models.** Where they differ the published set is
+  usually larger (e.g. iSDY_1059 +0/-94, iLJ478 +0/-122); iJB785 goes the other way by a wide margin
+  (+2072/-60) and looks like something other than a tolerance effect.
+- **On most models the partitions cross**: as well as pairs Kimonu finds and the reference does not,
+  there are published concordance edges that Kimonu rejects. On the small models there were none of
+  the latter.
+
+Two candidate explanations were tested and one was ruled out:
+
+- **Blocked reactions — ruled out.** Kimonu's kernel test answers "zero over ker(N)", which
+  coincides with "zero over the feasible set" only when no reaction is blocked, and elementary-step
+  splitting can introduce blocked reactions after the reference's preprocessing removed them. But an
+  LP scan finds **0 blocked reactions of 1339** in iIS312_Trypomastigote (partitions nest) and
+  **0 of 3913** in iCN900 (partitions cross). The distinction lies elsewhere.
+- **The trivial-concordance rule — sound.** On iCN900 all 1147 edges the reference records as
+  trivially concordant (`CC == -1`, from the species-degree rule, no LP) agree with Kimonu. The
+  crossing comes entirely from LP-accepted edges (`CC == 2`): 34 of 36 are rejected by Kimonu.
+
+Attempting to recompute those 34 with the reference's own positive-branch LP did **not** reproduce
+the published verdict — the ratio bounds came back far apart (spreads of order 1e5), i.e. *not*
+concordant, where the published CC says concordant. So the replication is not yet faithful: the
+branch actually taken depends on the sign classification, which the published file stores in its
+`group` field and which was not used here. Until that is redone, **no claim is made about false
+positives in the reference.** The direction of this half of the disagreement is open.
+
+Index alignment is not the problem: the published balanced sets match Kimonu's exactly on most
+models, which could not happen by chance if the complex indices were misaligned.
