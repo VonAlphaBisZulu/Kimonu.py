@@ -9,6 +9,9 @@ no LP, no sampling. See ROADMAP.md.
 """
 from kimonu.io import build_crn
 from kimonu.concordance import concordance, concordance_from_matrices, ConcordanceResult
+from kimonu.kinetic import kinetic_modules, KineticResult
+from kimonu.acr import acr_acrr, AcrResult
 
 __version__ = "0.0.1"
-__all__ = ["build_crn", "concordance", "concordance_from_matrices", "ConcordanceResult", "__version__"]
+__all__ = ["build_crn", "concordance", "concordance_from_matrices", "ConcordanceResult",
+           "kinetic_modules", "KineticResult", "acr_acrr", "AcrResult", "__version__"]
