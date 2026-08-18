@@ -43,6 +43,36 @@ def reaction_complexes(A):
     return out
 
 
+class _Topology:
+    """Reaction adjacency in the form the upstream algorithm needs, built once.
+
+    Phase I is a propagation, not a scan: a complex can only *become* an entry complex when one of
+    the substrates feeding it leaves the set. Keeping, per complex, the reactions that produce it
+    and the complexes it feeds turns each phase into work proportional to what actually changed,
+    instead of a sweep over every reaction on every round.
+    """
+
+    __slots__ = ("succ", "pred", "producers", "substrates", "downstream", "n")
+
+    def __init__(self, A):
+        rxns = reaction_complexes(A)
+        n = A.shape[0]
+        self.n = n
+        self.succ = [set() for _ in range(n)]
+        self.pred = [set() for _ in range(n)]
+        self.producers = [[] for _ in range(n)]      # complex -> reactions producing it
+        self.substrates = [s for s, _ in rxns]       # reaction -> substrate complexes
+        self.downstream = [set() for _ in range(n)]  # complex -> complexes it can strand
+        for j, (subs, prods) in enumerate(rxns):
+            for p in prods:
+                self.producers[p].append(j)
+            for sc in subs:
+                for p in prods:
+                    self.succ[sc].add(p)
+                    self.pred[p].add(sc)
+                    self.downstream[sc].add(p)
+
+
 def complex_graph(A):
     """Successors and predecessors of each complex in the reaction graph."""
     n = A.shape[0]
@@ -99,19 +129,28 @@ def _sccs(succ, scope):
     return result
 
 
-def upstream_set(candidates, rxn_complexes, succ):
+def upstream_set(candidates, topology, succ=None):
     """The upstream set of a candidate complex set (Remark S2-1)."""
     current = set(candidates)
+    succ = topology.succ if succ is None else succ
 
-    # phase I: drop entry complexes, to a fixed point
-    while current:
-        entry = set()
-        for substrates, products in rxn_complexes:
-            if any(s not in current for s in substrates):
-                entry |= {p for p in products if p in current}
-        if not entry:
-            break
-        current -= entry
+    # phase I: drop entry complexes, to a fixed point, by propagation
+    substrates = topology.substrates
+    producers = topology.producers
+
+    def is_entry(c):
+        return any(any(s not in current for s in substrates[j]) for j in producers[c])
+
+    queue = [c for c in current if is_entry(c)]
+    while queue:
+        c = queue.pop()
+        if c not in current:
+            continue
+        current.discard(c)
+        # only what c fed can newly become an entry complex
+        for downstream in topology.downstream[c]:
+            if downstream in current and is_entry(downstream):
+                queue.append(downstream)
 
     # phase II: drop terminal strongly connected components
     #
@@ -154,12 +193,24 @@ def is_weakly_reversible(succ, pred, n):
     return True
 
 
-def classical_deficiency(Y, A, succ, pred):
-    """delta = n - l - rank(N): complexes, minus linkage classes, minus the rank of Y*A."""
+def classical_deficiency(Y, A, succ, pred, nullity=None):
+    """delta = n - l - rank(N): complexes, minus linkage classes, minus the rank of N = Y*A.
+
+    The rank comes from the exact nullspace, not from an SVD. A float rank test would put a
+    numerical tolerance in the middle of a discrete rule — the deficiency decides whether every
+    unbalanced module merges, and the difference between delta = 1 and delta = 2 changes the answer.
+    It is also the difference between an O(n^3) dense factorisation and a sparse exact one.
+
+    ``nullity`` may be supplied when the kernel has already been computed for the concordance
+    partition, in which case no factorisation happens here at all.
+    """
     n = A.shape[0]
     linkage = len(_weak_components(succ, pred, set(range(n))))
-    rank = np.linalg.matrix_rank(np.asarray((Y @ A).todense(), dtype=float))
-    return n - linkage - int(rank)
+    if nullity is None:
+        import straindesign as sd
+        nullity = sd.sparse_nullspace((Y @ A).tocsr()).shape[1]
+    rank = A.shape[1] - nullity
+    return n - linkage - rank
 
 
 def _merge_overlapping(groups):
@@ -173,7 +224,7 @@ def _merge_overlapping(groups):
     return merged
 
 
-def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20):
+def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20, nullity=None):
     """Kinetic modules from the concordance partition.
 
     Args:
@@ -184,19 +235,22 @@ def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20):
             merges; without it only overlapping upstream sets are merged, which reproduces the
             reference implementation's behaviour and can miss ACR.
         max_iterations: cap on the outer loop; convergence is normally reached in a few passes.
+        nullity: dimension of ker(N), when already known from the concordance step. Supplying it
+            skips the only factorisation this function would otherwise perform.
 
     Returns a :class:`KineticResult`.
     """
     from kimonu.acr import acr_acrr, coupling_signatures
 
     n = A.shape[0]
-    succ, pred = complex_graph(A)
-    rxn_complexes = reaction_complexes(A)
+    topology = _Topology(A)
+    succ, pred = topology.succ, topology.pred
     balanced = set(balanced)
 
     concordance = [set(m) - balanced for m in modules]
     concordance = [m for m in concordance if m]
-    initial_delta = classical_deficiency(Y, A, succ, pred) if Y is not None else -1
+    initial_delta = (classical_deficiency(Y, A, succ, pred, nullity=nullity)
+                     if Y is not None else -1)
     weakly_reversible = is_weakly_reversible(succ, pred, n)
 
     known_acr = set()
@@ -210,7 +264,7 @@ def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20):
         upstream_sets = []
         origin = []
         for idx, module in enumerate(concordance):
-            s = upstream_set(module | balanced, rxn_complexes, succ)
+            s = upstream_set(module | balanced, topology)
             if s:
                 upstream_sets.append(s)
                 origin.append(idx)
@@ -255,7 +309,7 @@ def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20):
             deficiency_merged = True
             upstream_sets = []
             for module in concordance:
-                s = upstream_set(module | balanced, rxn_complexes, succ)
+                s = upstream_set(module | balanced, topology)
                 if s:
                     upstream_sets.append(s)
             sets = _group_sets(upstream_sets, list(range(len(upstream_sets))), Y, known_acr)
