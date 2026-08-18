@@ -15,6 +15,10 @@ committed balanced sets exactly:
 | iIS312_Amastigote | 1446 | 315 | 315 | none |
 | iIS312_Epimastigote | 1738 | 379 | 379 | none |
 
+Sets, not just counts, are identical in all three cases. Octave's `load` fails on some of the
+committed result files with a zlib decompression error where scipy reads them without complaint, so
+the published side is read in Python (`compare_balanced_to_published.py`) rather than in Octave.
+
 ## Result on the shared models
 
 Same preprocessed network and same complex decomposition for all three implementations, scenario
