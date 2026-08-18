@@ -1,11 +1,13 @@
-# Benchmarks — Kimonu vs COCOA.jl
+# Benchmarks — Kimonu vs COCOA.jl vs the MATLAB reference
 
-Correctness and speed comparison against COCOA.jl on the shared models, mirroring the benchmark
-COCOA.jl ran against its own MATLAB predecessor — with Kimonu in the challenger seat.
+Correctness and speed comparison against COCOA.jl and against the MATLAB reference implementation
+(ankueken/Upstream_Algorithm), mirroring the benchmark COCOA.jl ran against that same predecessor —
+with Kimonu in the challenger seat. The reference runs under Octave and needs no MATLAB licence;
+see `matlab_reference/`.
 
 ## Design
 
-**One preprocessed model, both tools.** The Julia side runs COCOA's own preprocessing pipeline and
+**One preprocessed model, all tools.** The Julia side runs COCOA's own preprocessing pipeline and
 writes the resulting network to `processed/<profile>/<model>.json`; the Python side reads exactly
 that file and runs with `preprocess=False`. Complex counts depend on which preprocessing steps ran,
 so tools that preprocess separately are not comparable — this removes the question entirely.
@@ -26,15 +28,28 @@ disagreements that are not there.
 ## Running
 
 ```bash
-# 1. COCOA: preprocess, export the model, run the LP sweep, record the partition
+# 1. Export the preprocessed network and COCOA's complex decomposition (A, Y, S, bounds)
+julia --project=benchmarks/julia benchmarks/export_crn.jl
+
+# 2. COCOA: run the LP sweep, record the partition
 julia --project=benchmarks/julia benchmarks/run_cocoa.jl
 
-# 2. Kimonu: same model, exact nullspace
+# 3. Kimonu: same model, exact nullspace
 python benchmarks/run_kimonu.py
 
-# 3. Compare
+# 4. MATLAB reference, under Octave (optional; see matlab_reference/README.md)
+export UPSTREAM_ALGORITHM=/path/to/Upstream_Algorithm
+octave --no-gui benchmarks/matlab_reference/run_reference.m \
+    benchmarks/processed/concordance/e_coli_core.crn.json \
+    benchmarks/results/reference_concordance_i_e_coli_core.json
+
+# 5. Compare
 python benchmarks/compare.py
 ```
+
+All three tools consume the same exported network, and the reference and Kimonu additionally use
+COCOA's complex decomposition (`export_crn.jl` writes A and Y), so complex enumeration is held
+fixed and only the decision procedure varies.
 
 Both runners take `--model M` (repeatable), `--profile`, and `--repeats`. Timings report the
 fastest of `--repeats` runs, which the Julia side needs so that JIT compilation of the first call

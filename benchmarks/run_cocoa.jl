@@ -66,6 +66,32 @@ function complex_compositions(model)
 end
 
 
+
+"""Write the complex-reaction incidence matrix A as triplets, in COCOA's complex order.
+
+The MATLAB reference works from A directly. Exporting COCOA's A means all three implementations
+decide concordance on the same incidence matrix, so what is compared is the decision procedure
+rather than three separate complex enumerations.
+"""
+function write_incidence(path, model, compositions)
+    Amat, _ = incidence(model; return_ids = true)
+    rows = rowvals(Amat)
+    vals = nonzeros(Amat)
+    size(Amat, 1) == length(compositions) ||
+        error("incidence rows $(size(Amat, 1)) != complexes $(length(compositions))")
+    open(path, "w") do io
+        println(io, "{")
+        println(io, "  \"n_complexes\": $(size(Amat, 1)), \"n_reactions\": $(size(Amat, 2)),")
+        println(io, "  \"reactions\": [", join(["\"$(r)\"" for r in A.reactions(model)], ", "), "],")
+        triplets = String[]
+        for j in 1:size(Amat, 2), k in nzrange(Amat, j)
+            push!(triplets, "[$(rows[k]), $(j), $(repr(vals[k]))]")
+        end
+        println(io, "  \"triplets\": [", join(triplets, ", "), "]")
+        println(io, "}")
+    end
+end
+
 function write_results(path, opts, model_name, compositions, complex_ids, modules, seconds, extra)
     open(path, "w") do io
         println(io, "{")
@@ -106,6 +132,7 @@ function main(args)
         write_json(processed, joinpath(outdir, name * ".json"))
 
         compositions, complex_ids = complex_compositions(processed)
+        write_incidence(joinpath(outdir, name * ".incidence.json"), processed, compositions)
 
         # Scenario (ii) restricts the flux space to near-optimal states; (i) is the full cone.
         bound = opts["scenario"] == "ii" ? COBREXA.relative_tolerance_bound(0.999) : nothing
