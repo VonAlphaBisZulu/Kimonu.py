@@ -31,11 +31,16 @@ import straindesign as sd
 AcrResult = namedtuple("AcrResult", ["acr", "acrr", "n_columns"])
 
 
-def composition_differences(Y, modules):
+def composition_differences(Y, modules, known_acr=()):
     """YΔ: the composition differences within each kinetic module.
 
     Each module contributes the differences of its first complex against every other member, which
     spans the same subspace as all pairwise differences would.
+
+    Metabolites already known to have ACR contribute their unit vector as an extra column
+    (Remark S3-6). This is what lets the analysis make progress: once a metabolite is known to be
+    robust, differences involving it become decidable, which can license merges that were not
+    decidable before.
     """
     Y = Y.tocsc()
     columns = []
@@ -46,6 +51,9 @@ def composition_differences(Y, modules):
         reference = Y[:, members[0]]
         for other in members[1:]:
             columns.append(reference - Y[:, other])
+    for met in sorted(known_acr):
+        unit = sparse.csc_matrix(([1], ([met], [0])), shape=(Y.shape[0], 1), dtype=np.int64)
+        columns.append(unit)
     if not columns:
         return sparse.csc_matrix((Y.shape[0], 0), dtype=np.int64)
     return sparse.hstack(columns).tocsc()
@@ -75,7 +83,32 @@ def _rows_of_left_nullspace(YD):
     return out
 
 
-def acr_acrr(Y, modules, metabolite_ids=None):
+def coupling_signatures(Y, modules, known_acr=()):
+    """Signature L'Y[:, c] of each module's representative, for the Proposition S3-4 merge.
+
+    Two modules may be merged when the composition difference of their representatives lies in
+    im(YΔ), which holds exactly when their signatures agree — so merging is again a grouping of
+    equal exact vectors rather than a rank test per pair.
+    """
+    YD = composition_differences(Y, modules, known_acr)
+    rows = _rows_of_left_nullspace(YD)
+    if rows is None:
+        return None
+
+    Ycsc = Y.tocsc()
+
+    def signature(complex_index):
+        start, end = Ycsc.indptr[complex_index], Ycsc.indptr[complex_index + 1]
+        acc = {}
+        for met, coeff in zip(Ycsc.indices[start:end], Ycsc.data[start:end]):
+            for col, value in rows[int(met)]:
+                acc[col] = acc.get(col, Fraction(0)) + Fraction(str(coeff)) * value
+        return tuple(sorted((c, v) for c, v in acc.items() if v != 0))
+
+    return [signature(min(module)) for module in modules]
+
+
+def acr_acrr(Y, modules, metabolite_ids=None, known_acr=()):
     """ACR metabolites and ACRR metabolite pairs from the kinetic modules.
 
     Args:
@@ -86,7 +119,7 @@ def acr_acrr(Y, modules, metabolite_ids=None):
     ACRR pairs where both metabolites already have ACR are excluded: their ratio is constant only
     because each concentration is, which is not an independent finding.
     """
-    YD = composition_differences(Y, modules)
+    YD = composition_differences(Y, modules, known_acr)
     rows = _rows_of_left_nullspace(YD)
     n = Y.shape[0]
     names = metabolite_ids if metabolite_ids is not None else list(range(n))

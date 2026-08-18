@@ -1,65 +1,65 @@
 """Kinetic modules from the concordance partition.
 
-A kinetic module is a set of complexes whose reactions are kinetically coupled. Following the
-upstream algorithm of Langary et al. (2025), each concordance module is tested together with the
-balanced complexes for *autonomy* on the directed complex graph — one vertex per complex, one edge
-per reaction, from its substrate complex to its product complex — and the surviving complexes are
-what the four phases below retain.
+A kinetic module is a set of complexes whose reactions are kinetically coupled. Following Langary
+et al. (2025), each concordance module is taken together with the balanced complexes and reduced to
+its *upstream set* on the complex graph — one vertex per complex, one edge per reaction, from its
+substrate complex to its product complex. The upstream algorithm (Remark S2-1) has two phases:
 
-Ported from the reference implementation's `code_kineticModule_analysis.R`. Two things there are
-worth recording because they are not obvious from the paper:
+1. remove entry complexes — complexes produced by a reaction whose substrate lies outside the set —
+   repeatedly, which leaves a set nothing outside can feed;
+2. remove terminal strongly connected components, which leaves a set that feeds itself.
 
-* The reference deletes edges whose `Elementary_Kinetic_Param` is zero. That field is absent from
-  the committed result files, so in R the expression selects nothing and the step is inert. This
-  implementation keeps every edge, which reproduces the published behaviour.
-* Phase IV computes an induced subgraph and then takes strongly connected components of the *full*
-  graph rather than of that subgraph. Reproducing the published numbers requires the full graph, so
-  that is what ``phase_iv_on_full_graph`` does by default; pass ``False`` for the reading the
-  induced subgraph suggests.
+The upstream sets are then merged, and the merging is where most of the work is. Three rules apply,
+and all three are needed: sets that share a complex merge; sets whose representatives are *coupled*
+merge (Proposition S3-4); and if the mass-action deficiency is one, every unbalanced concordance
+module merges (Lemma S4-5). Merges feed back into the concordance modules, so the whole thing is
+iterated to a fixed point, with metabolites found to have ACR augmenting the coupling matrix as they
+are discovered (Remark S3-6).
+
+The feedback matters. On EnvZ-OmpR the coupling rule alone cannot merge the set containing XD with
+the set containing XD + Yp: doing so requires e_Yp to lie in the span of the coupling matrix, which
+is the very question the merge would settle. The deficiency rule breaks that circle.
 """
 from collections import namedtuple
 from fractions import Fraction
 
 import numpy as np
 
-KineticResult = namedtuple("KineticResult", ["modules", "module_of", "n_modules", "giant_module"])
+KineticResult = namedtuple(
+    "KineticResult",
+    ["modules", "module_of", "n_modules", "giant_module", "known_acr", "iterations", "deficiency"],
+)
+
+
+def reaction_complexes(A):
+    """Per reaction, its substrate and product complexes."""
+    A = A.tocsc()
+    out = []
+    for j in range(A.shape[1]):
+        start, end = A.indptr[j], A.indptr[j + 1]
+        rows, vals = A.indices[start:end], A.data[start:end]
+        out.append(([int(r) for r, v in zip(rows, vals) if v < 0],
+                    [int(r) for r, v in zip(rows, vals) if v > 0]))
+    return out
 
 
 def complex_graph(A):
-    """Directed graph on complexes: an edge per reaction, substrate complex -> product complex.
-
-    Returns (successors, predecessors) as lists of sets, and the edge list.
-    """
-    A = A.tocsc()
+    """Successors and predecessors of each complex in the reaction graph."""
     n = A.shape[0]
     succ = [set() for _ in range(n)]
     pred = [set() for _ in range(n)]
-    edges = []
-    for j in range(A.shape[1]):
-        start, end = A.indptr[j], A.indptr[j + 1]
-        rows = A.indices[start:end]
-        vals = A.data[start:end]
-        substrates = [int(r) for r, v in zip(rows, vals) if v < 0]
-        products = [int(r) for r, v in zip(rows, vals) if v > 0]
+    for substrates, products in reaction_complexes(A):
         for s in substrates:
             for p in products:
                 succ[s].add(p)
                 pred[p].add(s)
-                edges.append((s, p))
-    return succ, pred, edges
+    return succ, pred
 
 
-def _strongly_connected(succ, vertices=None):
-    """Tarjan's strongly connected components, iterative."""
-    n = len(succ)
-    scope = set(range(n)) if vertices is None else set(vertices)
-    index = {}
-    low = {}
-    on_stack = set()
-    stack = []
-    result = []
+def _sccs(succ, scope):
+    """Tarjan's strongly connected components restricted to ``scope``."""
+    index, low, on_stack, stack, result = {}, {}, set(), [], []
     counter = 0
-
     for root in sorted(scope):
         if root in index:
             continue
@@ -70,7 +70,7 @@ def _strongly_connected(succ, vertices=None):
         on_stack.add(root)
         while work:
             v, it = work[-1]
-            advanced = False
+            descended = False
             for w in it:
                 if w not in index:
                     index[w] = low[w] = counter
@@ -78,11 +78,11 @@ def _strongly_connected(succ, vertices=None):
                     stack.append(w)
                     on_stack.add(w)
                     work.append((w, iter(sorted(succ[w] & scope))))
-                    advanced = True
+                    descended = True
                     break
                 if w in on_stack:
                     low[v] = min(low[v], index[w])
-            if advanced:
+            if descended:
                 continue
             work.pop()
             if work:
@@ -95,186 +95,230 @@ def _strongly_connected(succ, vertices=None):
                     component.append(w)
                     if w == v:
                         break
-                result.append(component)
+                result.append(set(component))
     return result
 
 
-def _non_terminal(succ, scope, vertices):
-    """Complexes in a strongly connected component that has an edge leaving it."""
-    out = set()
-    for component in _strongly_connected(succ, scope):
-        members = set(component)
-        leaves = any((succ[v] - members) for v in members)
-        if leaves:
-            out |= members & set(vertices)
-    return out
+def upstream_set(candidates, rxn_complexes, succ):
+    """The upstream set of a candidate complex set (Remark S2-1)."""
+    current = set(candidates)
 
-
-def autonomous(candidates, succ, pred):
-    """The four phases of the upstream algorithm on a candidate complex set.
-
-    Phase I removes complexes fed from outside the set, iterated to a fixed point. Phase II removes
-    complexes with no outgoing reaction. Phase III removes, again to a fixed point, complexes that
-    feed outside the set; the ones removed here are kept. Phase IV keeps the non-terminal survivors.
-    """
-    x = set(candidates)
-
-    # phase I: no producer outside the set
-    while True:
-        drop = {v for v in x if pred[v] - x}
-        if not drop:
+    # phase I: drop entry complexes, to a fixed point
+    while current:
+        entry = set()
+        for substrates, products in rxn_complexes:
+            if any(s not in current for s in substrates):
+                entry |= {p for p in products if p in current}
+        if not entry:
             break
-        x -= drop
-        if not x:
-            return set()
+        current -= entry
 
-    # phase II: must consume
-    x = {v for v in x if succ[v]}
-    if not x:
-        return set()
-
-    # phase III: no consumer outside the set
-    x1 = set(x)
-    while True:
-        drop = {v for v in x if succ[v] - x}
-        if not drop:
-            break
-        x -= drop
-        if not x:
-            break
-    phase_iii = x1 - x
-
-    # phase IV: non-terminal survivors
-    phase_iv = _non_terminal(succ, set(range(len(succ))), x) if x else set()
-    return phase_iii | phase_iv
+    # phase II: drop terminal strongly connected components
+    #
+    # Terminality is decided against the set as it stands after phase I, and every terminal
+    # component is removed together. Removing them one at a time and re-testing against the
+    # shrinking set cascades: each removal can strand the component that fed it, and the whole set
+    # unravels.
+    if current:
+        components = _sccs(succ, current)
+        terminal = [c for c in components if not any(succ[v] & (current - c) for v in c)]
+        for component in terminal:
+            current -= component
+    return current
 
 
-def _weak_components(succ, pred, n):
-    seen = [False] * n
-    out = []
-    for start in range(n):
-        if seen[start]:
+def _weak_components(succ, pred, scope):
+    seen, out = set(), []
+    for start in sorted(scope):
+        if start in seen:
             continue
         stack, comp = [start], []
-        seen[start] = True
+        seen.add(start)
         while stack:
             v = stack.pop()
             comp.append(v)
-            for w in succ[v] | pred[v]:
-                if not seen[w]:
-                    seen[w] = True
+            for w in (succ[v] | pred[v]) & scope:
+                if w not in seen:
+                    seen.add(w)
                     stack.append(w)
-        out.append(comp)
+        out.append(set(comp))
     return out
 
 
-def _coupling_merge(groups, Y):
-    """Merge upstream sets whose representatives are coupled (Proposition S3-4).
+def is_weakly_reversible(succ, pred, n):
+    """True when every linkage class is a single strongly connected component."""
+    scope = set(range(n))
+    for component in _weak_components(succ, pred, scope):
+        if len(_sccs(succ, component)) > 1:
+            return False
+    return True
 
-    Two sets merge when the composition difference of their representatives lies in the span of the
-    coupling matrix YD built from the sets themselves. Sharing a complex is not required, and this
-    is the step that distinguishes the exhaustive path from the fast one: without it, sets that are
-    coupled but disjoint stay apart, and a metabolite whose ACR is witnessed by one complex in each
-    of them is missed.
 
-    Span membership is decided through the left nullspace, as in :mod:`kimonu.acr`: with
-    L = ker(YD'), a difference lies in the span exactly when the two representatives have the same
-    signature L'Y[:, c]. So the merge is again a grouping of equal exact vectors, with no tolerance.
-    """
-    from kimonu.acr import composition_differences, _rows_of_left_nullspace
+def classical_deficiency(Y, A, succ, pred):
+    """delta = n - l - rank(N): complexes, minus linkage classes, minus the rank of Y*A."""
+    n = A.shape[0]
+    linkage = len(_weak_components(succ, pred, set(range(n))))
+    rank = np.linalg.matrix_rank(np.asarray((Y @ A).todense(), dtype=float))
+    return n - linkage - int(rank)
 
-    sized = [g for g in groups if len(g) >= 2]
-    if len(groups) < 2 or not sized:
-        return groups
 
-    YD = composition_differences(Y, sized)
-    rows = _rows_of_left_nullspace(YD)
-    if rows is None:
-        return groups
-
-    Ycsc = Y.tocsc()
-
-    def signature(complex_index):
-        start, end = Ycsc.indptr[complex_index], Ycsc.indptr[complex_index + 1]
-        entries = list(zip(Ycsc.indices[start:end], Ycsc.data[start:end]))
-        acc = {}
-        for met, coeff in entries:
-            for col, value in rows[int(met)]:
-                acc[col] = acc.get(col, Fraction(0)) + Fraction(str(coeff)) * value
-        return tuple(sorted((c, v) for c, v in acc.items() if v != 0))
-
-    # a deterministic representative, rather than an arbitrary set element
-    by_signature = {}
-    for group in groups:
-        by_signature.setdefault(signature(min(group)), []).append(group)
-
+def _merge_overlapping(groups):
     merged = []
-    for members in by_signature.values():
-        union = set()
-        for g in members:
-            union |= g
-        merged.append(union)
+    for group in groups:
+        touching = [m for m in merged if m & group]
+        for m in touching:
+            merged.remove(m)
+            group = group | m
+        merged.append(group)
     return merged
 
 
-def kinetic_modules(A, modules, balanced, Y=None):
+def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20):
     """Kinetic modules from the concordance partition.
 
     Args:
         A: complexes x reactions incidence matrix.
-        modules: concordance modules as lists of complex indices (singletons included).
+        modules: concordance modules as iterables of complex indices (singletons included).
         balanced: indices of balanced complexes.
-        Y: metabolites x complexes composition matrix. When given, coupled upstream sets are
-            merged as well as overlapping ones (Proposition S3-4). Omitting it reproduces the
-            reference implementation's overlap-only merging, which is coarser-grained nowhere and
-            can therefore miss ACR.
+        Y: metabolites x complexes composition matrix. Required for the coupling and deficiency
+            merges; without it only overlapping upstream sets are merged, which reproduces the
+            reference implementation's behaviour and can miss ACR.
+        max_iterations: cap on the outer loop; convergence is normally reached in a few passes.
 
     Returns a :class:`KineticResult`.
     """
+    from kimonu.acr import acr_acrr, coupling_signatures
+
     n = A.shape[0]
-    succ, pred, _ = complex_graph(A)
+    succ, pred = complex_graph(A)
+    rxn_complexes = reaction_complexes(A)
     balanced = set(balanced)
 
-    found = []
-    for module in modules:
-        module = set(module) - balanced
-        if not module:
-            continue
-        survivors = autonomous(module | balanced, succ, pred)
-        if survivors:
-            found.append(survivors)
+    concordance = [set(m) - balanced for m in modules]
+    concordance = [m for m in concordance if m]
+    initial_delta = classical_deficiency(Y, A, succ, pred) if Y is not None else -1
+    weakly_reversible = is_weakly_reversible(succ, pred, n)
 
-    # linkage classes made up entirely of balanced complexes are kinetic modules in their own right
-    for comp in _weak_components(succ, pred, n):
-        if comp and set(comp) <= balanced:
-            found.append(set(comp))
+    known_acr = set()
+    n_merges = 0
+    previous = None
+    iterations = 0
+    current_modules = []
 
-    # merge modules that share a complex
-    merged = []
-    for group in found:
-        overlapping = [m for m in merged if m & group]
-        for m in overlapping:
-            merged.remove(m)
-        for m in overlapping:
-            group = group | m
-        merged.append(group)
+    while iterations < max_iterations:
+        iterations += 1
+        upstream_sets = []
+        origin = []
+        for idx, module in enumerate(concordance):
+            s = upstream_set(module | balanced, rxn_complexes, succ)
+            if s:
+                upstream_sets.append(s)
+                origin.append(idx)
 
-    if Y is not None:
-        merged = _coupling_merge(merged, Y)
+        if not upstream_sets:
+            break
 
-    assigned = set().union(*merged) if merged else set()
+        sets = _group_sets(upstream_sets, origin, Y, known_acr)
+
+        # a merge of upstream sets is a merge of the concordance modules behind them
+        new_concordance = []
+        for _, sources in sets:
+            union = set()
+            for i in sources:
+                union |= concordance[i]
+            new_concordance.append(union)
+        for idx, module in enumerate(concordance):
+            if not any(idx in sources for _, sources in sets):
+                new_concordance.append(module)
+
+        n_merges += len(concordance) - len(new_concordance)
+        current_modules = [s for s, _ in sets]
+
+        if Y is not None:
+            found = acr_acrr(Y, current_modules, known_acr=known_acr)
+            known_acr |= set(found.acr)
+
+        state = (frozenset(frozenset(s) for s in current_modules),
+                 frozenset(frozenset(m) for m in new_concordance))
+        concordance = new_concordance
+        if state == previous:
+            break
+        previous = state
+
+    # Lemma S4-5: with mass-action deficiency one, every unbalanced module belongs together
+    deficiency_merged = False
+    if Y is not None and initial_delta >= 0 and len(concordance) > 1:
+        lower = 0 if weakly_reversible else 1
+        upper = initial_delta - n_merges
+        if lower == 1 and upper == 1:
+            concordance = [set().union(*concordance)]
+            deficiency_merged = True
+            upstream_sets = []
+            for module in concordance:
+                s = upstream_set(module | balanced, rxn_complexes, succ)
+                if s:
+                    upstream_sets.append(s)
+            sets = _group_sets(upstream_sets, list(range(len(upstream_sets))), Y, known_acr)
+            current_modules = [s for s, _ in sets]
+
+    result = list(current_modules)
+
+    # linkage classes made up entirely of balanced complexes stand on their own
+    assigned = set().union(*result) if result else set()
+    for comp in _weak_components(succ, pred, set(range(n))):
+        if comp <= balanced and not (comp & assigned):
+            result.append(comp)
+            assigned |= comp
+
     for i in range(n):
         if i not in assigned:
-            merged.append({i})
+            result.append({i})
 
     module_of = np.zeros(n, dtype=np.int64)
-    for idx, group in enumerate(merged, start=1):
+    for idx, group in enumerate(result, start=1):
         for i in group:
             module_of[i] = idx
 
     return KineticResult(
-        modules=merged,
+        modules=result,
         module_of=module_of,
-        n_modules=sum(1 for m in merged if len(m) > 1),
-        giant_module=max((len(m) for m in merged), default=0),
+        n_modules=sum(1 for m in result if len(m) > 1),
+        giant_module=max((len(m) for m in result), default=0),
+        known_acr=sorted(known_acr),
+        iterations=iterations,
+        deficiency=initial_delta,
     )
+
+
+def _group_sets(upstream_sets, origin, Y, known_acr):
+    """Merge upstream sets by overlap and, when Y is given, by coupling (Proposition S3-4).
+
+    Returns a list of (merged set, set of originating concordance module indices).
+    """
+    from kimonu.acr import coupling_signatures
+
+    items = [(set(s), {o}) for s, o in zip(upstream_sets, origin)]
+
+    # overlap
+    merged = []
+    for group, sources in items:
+        touching = [x for x in merged if x[0] & group]
+        for x in touching:
+            merged.remove(x)
+            group = group | x[0]
+            sources = sources | x[1]
+        merged.append((group, sources))
+
+    if Y is None or len(merged) < 2:
+        return merged
+
+    signatures = coupling_signatures(Y, [g for g, _ in merged], known_acr)
+    if signatures is None:
+        return merged
+
+    by_signature = {}
+    for (group, sources), sig in zip(merged, signatures):
+        key = by_signature.setdefault(sig, [set(), set()])
+        key[0] |= group
+        key[1] |= sources
+    return [(g, s) for g, s in by_signature.values()]
