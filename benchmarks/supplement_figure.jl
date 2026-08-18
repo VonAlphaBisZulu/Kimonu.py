@@ -71,6 +71,7 @@ end
 function panel_values(kin)
     giant = isempty(kin.kinetic_modules) ? 0 : maximum(length.(kin.kinetic_modules))
     return (giant_module = giant,
+            n_kinetic_modules = count(m -> length(m) > 1, kin.kinetic_modules),
             n_acr = length(kin.acr),
             n_acrr = length(kin.acrr))
 end
@@ -88,14 +89,21 @@ function main(args)
     results = Dict{String,Any}("model" => basename(crn_path), "solver" => SOLVER, "seeds" => seeds)
 
     # --- COCOA, one run per seed -----------------------------------------------------------
+    # Wall time is recorded per stage: the concordance sweep is what differs between the
+    # implementations, while the kinetic/ACR stage is shared, so a combined figure would blur the
+    # comparison the runtime panel is meant to make.
     cocoa_runs = []
     for s in seeds
         @info "COCOA" seed = s
-        t = @elapsed res = activity_concordance_analysis(
+        t_conc = @elapsed res = activity_concordance_analysis(
             model; optimizer = opt, workers = Int[], seed = UInt(s),
-            kinetic_analysis = true, kinetic_efficient = false)
-        kin = kinetic_analysis(res, model; efficient = false)
-        push!(cocoa_runs, merge(Dict(pairs(panel_values(kin))), Dict("seconds" => t, "seed" => s)))
+            kinetic_analysis = false)
+        t_kin = @elapsed kin = kinetic_analysis(res, model; efficient = false)
+        push!(cocoa_runs, merge(Dict(pairs(panel_values(kin))),
+                                Dict("seconds_concordance" => t_conc,
+                                     "seconds_kinetic" => t_kin,
+                                     "seconds" => t_conc + t_kin,
+                                     "seed" => s)))
     end
     results["cocoa"] = cocoa_runs
 
