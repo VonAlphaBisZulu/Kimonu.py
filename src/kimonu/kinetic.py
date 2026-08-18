@@ -18,6 +18,7 @@ worth recording because they are not obvious from the paper:
   induced subgraph suggests.
 """
 from collections import namedtuple
+from fractions import Fraction
 
 import numpy as np
 
@@ -167,13 +168,66 @@ def _weak_components(succ, pred, n):
     return out
 
 
-def kinetic_modules(A, modules, balanced):
+def _coupling_merge(groups, Y):
+    """Merge upstream sets whose representatives are coupled (Proposition S3-4).
+
+    Two sets merge when the composition difference of their representatives lies in the span of the
+    coupling matrix YD built from the sets themselves. Sharing a complex is not required, and this
+    is the step that distinguishes the exhaustive path from the fast one: without it, sets that are
+    coupled but disjoint stay apart, and a metabolite whose ACR is witnessed by one complex in each
+    of them is missed.
+
+    Span membership is decided through the left nullspace, as in :mod:`kimonu.acr`: with
+    L = ker(YD'), a difference lies in the span exactly when the two representatives have the same
+    signature L'Y[:, c]. So the merge is again a grouping of equal exact vectors, with no tolerance.
+    """
+    from kimonu.acr import composition_differences, _rows_of_left_nullspace
+
+    sized = [g for g in groups if len(g) >= 2]
+    if len(groups) < 2 or not sized:
+        return groups
+
+    YD = composition_differences(Y, sized)
+    rows = _rows_of_left_nullspace(YD)
+    if rows is None:
+        return groups
+
+    Ycsc = Y.tocsc()
+
+    def signature(complex_index):
+        start, end = Ycsc.indptr[complex_index], Ycsc.indptr[complex_index + 1]
+        entries = list(zip(Ycsc.indices[start:end], Ycsc.data[start:end]))
+        acc = {}
+        for met, coeff in entries:
+            for col, value in rows[int(met)]:
+                acc[col] = acc.get(col, Fraction(0)) + Fraction(str(coeff)) * value
+        return tuple(sorted((c, v) for c, v in acc.items() if v != 0))
+
+    # a deterministic representative, rather than an arbitrary set element
+    by_signature = {}
+    for group in groups:
+        by_signature.setdefault(signature(min(group)), []).append(group)
+
+    merged = []
+    for members in by_signature.values():
+        union = set()
+        for g in members:
+            union |= g
+        merged.append(union)
+    return merged
+
+
+def kinetic_modules(A, modules, balanced, Y=None):
     """Kinetic modules from the concordance partition.
 
     Args:
         A: complexes x reactions incidence matrix.
         modules: concordance modules as lists of complex indices (singletons included).
         balanced: indices of balanced complexes.
+        Y: metabolites x complexes composition matrix. When given, coupled upstream sets are
+            merged as well as overlapping ones (Proposition S3-4). Omitting it reproduces the
+            reference implementation's overlap-only merging, which is coarser-grained nowhere and
+            can therefore miss ACR.
 
     Returns a :class:`KineticResult`.
     """
@@ -204,6 +258,9 @@ def kinetic_modules(A, modules, balanced):
         for m in overlapping:
             group = group | m
         merged.append(group)
+
+    if Y is not None:
+        merged = _coupling_merge(merged, Y)
 
     assigned = set().union(*merged) if merged else set()
     for i in range(n):
