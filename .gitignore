@@ -220,3 +220,4 @@ benchmarks/processed/
 benchmarks/results/
 benchmarks/*.log
 benchmarks/julia/Manifest.toml
+benchmarks/published/

@@ -85,11 +85,25 @@ def concordance(model, preprocess=True):
     if preprocess:
         model = _fva_unblocked(model)
     crn = build_crn(model)
-    K = sd.sparse_nullspace(crn.N_integer)   # reactions x nu, exact
+    return concordance_from_matrices(crn.A, crn.N_integer, complexes=crn.complexes,
+                                     reaction_ids=crn.reaction_ids)
+
+
+def concordance_from_matrices(A, N, complexes=None, reaction_ids=None):
+    """Concordance partition from the incidence matrix ``A`` and stoichiometry ``N`` directly.
+
+    For networks that already carry a complex decomposition — the elementary-step-split models
+    distributed with the reference implementation, for instance — there is nothing to enumerate,
+    and rebuilding a cobra model only to take it apart again would risk changing the decomposition
+    being analysed.
+
+    ``N`` must have integer or rational entries; the kernel is computed from it exactly.
+    """
+    K = sd.sparse_nullspace(N)   # reactions x nu, exact
 
     balanced = []
     groups = {}                          # canonical key -> [complex indices]
-    for i, nz in _M_rows(crn.A, K):
+    for i, nz in _M_rows(A, K):
         if not nz:
             balanced.append(i)
             continue
@@ -102,12 +116,12 @@ def concordance(model, preprocess=True):
     pairs = sum(len(g) * (len(g) - 1) // 2 for g in modules)
 
     return ConcordanceResult(
-        n_complexes=len(crn.complexes),
+        n_complexes=A.shape[0],
         n_balanced=len(balanced),
         n_modules=len(modules),
         n_concordant_pairs=pairs,
         modules=modules,
         balanced=balanced,
-        complexes=crn.complexes,
-        reaction_ids=crn.reaction_ids,
+        complexes=complexes if complexes is not None else list(range(A.shape[0])),
+        reaction_ids=reaction_ids if reaction_ids is not None else list(range(A.shape[1])),
     )

@@ -8,7 +8,7 @@ proportional rows of M and balanced complexes are its zero rows — exact linear
 no LP, no sampling. See ROADMAP.md.
 """
 from kimonu.io import build_crn
-from kimonu.concordance import concordance, ConcordanceResult
+from kimonu.concordance import concordance, concordance_from_matrices, ConcordanceResult
 
 __version__ = "0.0.1"
-__all__ = ["build_crn", "concordance", "ConcordanceResult", "__version__"]
+__all__ = ["build_crn", "concordance", "concordance_from_matrices", "ConcordanceResult", "__version__"]
