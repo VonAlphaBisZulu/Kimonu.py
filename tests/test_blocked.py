@@ -36,10 +36,12 @@ def test_reversible_reaction_pinned_from_two_sides():
 def test_backward_only_reactions_are_oriented_correctly():
     """A reaction confined to negative flux runs backwards; its coefficients read inverted.
 
-    Ignoring that inverts the direction of the dead-end argument and blocks reactions that are
-    perfectly able to carry flux.
+    Both reactions here carry a +1 for F, so read naively they both look like producers and F looks
+    unbalanceable — which would block them both. But the second is bounded to negative flux, so it
+    consumes F, the balance closes, and neither is blocked. This is the shape that wrongly blocked
+    PFL, EX_for_e and FORt2 on e_coli_core through FORt's (-1000, 0) bounds.
     """
-    #  r0: -> A (forward)     r1: A -> B written backwards, bounds (-1000, 0), so it makes A
-    N = sparse.csr_matrix(np.array([[1, -1], [0, 1]], dtype=np.int64))
+    #  r0: -> F, forward           r1: +1 F with bounds (-1000, 0), so it removes F
+    N = sparse.csr_matrix(np.array([[1, 1]], dtype=np.int64))
     result = blocked_reactions(N, [0, -1000], [1000, 0])
-    assert result.blocked == [] or 0 not in result.blocked
+    assert result.blocked == []
