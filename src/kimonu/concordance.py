@@ -55,35 +55,39 @@ def _M_rows(A, K):
             yield i, nz
 
 
-def _fva_unblocked(model):
+def _fva_unblocked(model, solver=None, tol=1e-9):
     """Return a copy of ``model`` with blocked reactions removed (FVA-based).
 
     The concordance partition is exact over the *feasible* steady-state set, whose linear span is
     ker(N) restricted to reactions that can carry flux. This preprocessing (an LP-based FVA, done
     once) is the only place an LP appears — the concordance detection itself is LP-free. Matches
     COCOA's scenario (i) (irreversibility only).
+
+    Uses straindesign's accelerated FVA, the same solver stack the exact nullspace comes from.
     """
-    from cobra.flux_analysis import find_blocked_reactions
     m = model.copy()
-    blocked = find_blocked_reactions(m)
+    ranges = sd.fva(m, solver=solver) if solver else sd.fva(m)
+    blocked = [rid for rid in ranges.index
+               if abs(ranges.at[rid, "minimum"]) <= tol and abs(ranges.at[rid, "maximum"]) <= tol]
     if blocked:
         m.remove_reactions(blocked, remove_orphans=True)
     return m
 
 
-def concordance(model, preprocess=True):
+def concordance(model, preprocess=True, solver=None):
     """Compute the exact concordance partition of a cobra ``model``.
 
     Args:
         preprocess: if True (default), remove blocked reactions via FVA first (scenario i). Pass a
             model that is already FVA-unblocked with ``preprocess=False``.
+        solver: solver for that FVA; None lets straindesign choose.
 
     Returns a :class:`ConcordanceResult`. ``modules`` are groups of mutually concordant complexes
     (proportional M-rows, singletons included, matching the Julia PoC); ``balanced`` are complexes
     whose activity is identically zero over the steady-state space.
     """
     if preprocess:
-        model = _fva_unblocked(model)
+        model = _fva_unblocked(model, solver=solver)
     crn = build_crn(model)
     return concordance_from_matrices(crn.A, crn.N_integer, complexes=crn.complexes,
                                      reaction_ids=crn.reaction_ids)

@@ -46,6 +46,10 @@ end
 
 @info "model rebuilt" reactions = length(A.reactions(model)) metabolites = length(A.metabolites(model))
 
+# activity_concordance_analysis does not forward `seed` to its kinetic stage, but that stage is
+# deterministic on this path: kinetic_analysis calls identify_acr_acrr, which uses no RNG. The
+# seeded identify_acr_acrr_dce is exported and never reached. So the seed varies the concordance
+# sampler only, which is the stage under comparison.
 t_conc = @elapsed res = activity_concordance_analysis(
     model; optimizer = HiGHS.Optimizer, workers = Int[], seed = UInt(seed),
     kinetic_analysis = true, kinetic_efficient = false)

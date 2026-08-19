@@ -1,0 +1,7918 @@
+{
+ "tool": "Kimonu.py",
+ "seconds": 0.12067251815460622,
+ "seconds_cold": 0.17831390304490924,
+ "repeats": 3,
+ "n_reactions": 1339,
+ "n_metabolites": 708,
+ "complexes": [
+  {
+   "id": "complex_1",
+   "module": 1,
+   "composition": {
+    "akg[m]": 1.0,
+    "mal__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_2",
+   "module": 1,
+   "composition": {
+    "akg[c]": 1.0,
+    "mal__L[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_3",
+   "module": 2,
+   "composition": {
+    "g6p_A[c]": 1.0,
+    "E_36": 1.0
+   }
+  },
+  {
+   "id": "complex_4",
+   "module": 0,
+   "composition": {
+    "E36_g6p_A[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_5",
+   "module": 0,
+   "composition": {
+    "E36_g6p_B[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_6",
+   "module": -1,
+   "composition": {
+    "g6p_B[c]": 1.0,
+    "E_36": 1.0
+   }
+  },
+  {
+   "id": "complex_7",
+   "module": 4,
+   "composition": {
+    "accoa[m]": 1.0,
+    "E_28": 1.0
+   }
+  },
+  {
+   "id": "complex_8",
+   "module": 4,
+   "composition": {
+    "E28_accoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_9",
+   "module": 4,
+   "composition": {
+    "gly[m]": 1.0,
+    "E28_accoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_10",
+   "module": 0,
+   "composition": {
+    "E28_accoa[m]_gly[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_11",
+   "module": 0,
+   "composition": {
+    "E28_2aobut[m]_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_12",
+   "module": 4,
+   "composition": {
+    "2aobut[m]": 1.0,
+    "E28_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_13",
+   "module": 4,
+   "composition": {
+    "E28_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_14",
+   "module": 4,
+   "composition": {
+    "coa[m]": 1.0,
+    "E_28": 1.0
+   }
+  },
+  {
+   "id": "complex_15",
+   "module": 5,
+   "composition": {
+    "akg[m]": 1.0,
+    "E_49": 1.0
+   }
+  },
+  {
+   "id": "complex_16",
+   "module": 5,
+   "composition": {
+    "E49_akg[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_17",
+   "module": 5,
+   "composition": {
+    "ala__L[m]": 1.0,
+    "E49_akg[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_18",
+   "module": 0,
+   "composition": {
+    "E49_akg[m]_ala__L[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_19",
+   "module": 0,
+   "composition": {
+    "E49_glu__L[m]_pyr[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_20",
+   "module": 5,
+   "composition": {
+    "glu__L[m]": 1.0,
+    "E49_pyr[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_21",
+   "module": 5,
+   "composition": {
+    "E49_pyr[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_22",
+   "module": 5,
+   "composition": {
+    "pyr[m]": 1.0,
+    "E_49": 1.0
+   }
+  },
+  {
+   "id": "complex_23",
+   "module": 4,
+   "composition": {
+    "nad[m]": 1.0,
+    "E_29": 1.0
+   }
+  },
+  {
+   "id": "complex_24",
+   "module": 4,
+   "composition": {
+    "E29_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_25",
+   "module": 4,
+   "composition": {
+    "thr__L[m]": 1.0,
+    "E29_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_26",
+   "module": 0,
+   "composition": {
+    "E29_nad[m]_thr__L[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_27",
+   "module": 0,
+   "composition": {
+    "E29_2aobut[m]_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_28",
+   "module": 4,
+   "composition": {
+    "2aobut[m]": 1.0,
+    "E29_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_29",
+   "module": 4,
+   "composition": {
+    "E29_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_30",
+   "module": 4,
+   "composition": {
+    "h[m]": 1.0,
+    "E29_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_31",
+   "module": 4,
+   "composition": {
+    "E29_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_32",
+   "module": 4,
+   "composition": {
+    "nadh[m]": 1.0,
+    "E_29": 1.0
+   }
+  },
+  {
+   "id": "complex_33",
+   "module": 6,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_15": 1.0
+   }
+  },
+  {
+   "id": "complex_34",
+   "module": 6,
+   "composition": {
+    "E15_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_35",
+   "module": 6,
+   "composition": {
+    "r5p[c]": 1.0,
+    "E15_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_36",
+   "module": 0,
+   "composition": {
+    "E15_atp[c]_r5p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_37",
+   "module": 0,
+   "composition": {
+    "E15_amp[c]_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_38",
+   "module": 6,
+   "composition": {
+    "amp[c]": 1.0,
+    "E15_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_39",
+   "module": 6,
+   "composition": {
+    "E15_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_40",
+   "module": 6,
+   "composition": {
+    "h[c]": 1.0,
+    "E15_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_41",
+   "module": 6,
+   "composition": {
+    "E15_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_42",
+   "module": 6,
+   "composition": {
+    "prpp[c]": 1.0,
+    "E_15": 1.0
+   }
+  },
+  {
+   "id": "complex_43",
+   "module": 7,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_82": 1.0
+   }
+  },
+  {
+   "id": "complex_44",
+   "module": 7,
+   "composition": {
+    "E82_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_45",
+   "module": 7,
+   "composition": {
+    "r5p[c]": 1.0,
+    "E82_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_46",
+   "module": 0,
+   "composition": {
+    "E82_atp[c]_r5p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_47",
+   "module": 0,
+   "composition": {
+    "E82_amp[c]_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_48",
+   "module": 7,
+   "composition": {
+    "amp[c]": 1.0,
+    "E82_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_49",
+   "module": 7,
+   "composition": {
+    "E82_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_50",
+   "module": 7,
+   "composition": {
+    "h[c]": 1.0,
+    "E82_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_51",
+   "module": 7,
+   "composition": {
+    "E82_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_52",
+   "module": 7,
+   "composition": {
+    "prpp[c]": 1.0,
+    "E_82": 1.0
+   }
+  },
+  {
+   "id": "complex_53",
+   "module": 8,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_83": 1.0
+   }
+  },
+  {
+   "id": "complex_54",
+   "module": 8,
+   "composition": {
+    "E83_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_55",
+   "module": 8,
+   "composition": {
+    "r5p[c]": 1.0,
+    "E83_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_56",
+   "module": 0,
+   "composition": {
+    "E83_atp[c]_r5p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_57",
+   "module": 0,
+   "composition": {
+    "E83_amp[c]_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_58",
+   "module": 8,
+   "composition": {
+    "amp[c]": 1.0,
+    "E83_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_59",
+   "module": 8,
+   "composition": {
+    "E83_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_60",
+   "module": 8,
+   "composition": {
+    "h[c]": 1.0,
+    "E83_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_61",
+   "module": 8,
+   "composition": {
+    "E83_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_62",
+   "module": 8,
+   "composition": {
+    "prpp[c]": 1.0,
+    "E_83": 1.0
+   }
+  },
+  {
+   "id": "complex_63",
+   "module": 9,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_84": 1.0
+   }
+  },
+  {
+   "id": "complex_64",
+   "module": 9,
+   "composition": {
+    "E84_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_65",
+   "module": 9,
+   "composition": {
+    "r5p[c]": 1.0,
+    "E84_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_66",
+   "module": 0,
+   "composition": {
+    "E84_atp[c]_r5p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_67",
+   "module": 0,
+   "composition": {
+    "E84_amp[c]_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_68",
+   "module": 9,
+   "composition": {
+    "amp[c]": 1.0,
+    "E84_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_69",
+   "module": 9,
+   "composition": {
+    "E84_h[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_70",
+   "module": 9,
+   "composition": {
+    "h[c]": 1.0,
+    "E84_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_71",
+   "module": 9,
+   "composition": {
+    "E84_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_72",
+   "module": 9,
+   "composition": {
+    "prpp[c]": 1.0,
+    "E_84": 1.0
+   }
+  },
+  {
+   "id": "complex_73",
+   "module": 10,
+   "composition": {
+    "r5p[c]": 1.0,
+    "E_76": 1.0
+   }
+  },
+  {
+   "id": "complex_74",
+   "module": 10,
+   "composition": {
+    "E76_r5p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_75",
+   "module": 10,
+   "composition": {
+    "xu5p__D[c]": 1.0,
+    "E76_r5p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_76",
+   "module": 0,
+   "composition": {
+    "E76_r5p[c]_xu5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_77",
+   "module": 0,
+   "composition": {
+    "E76_g3p[c]_s7p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_78",
+   "module": 10,
+   "composition": {
+    "g3p[c]": 1.0,
+    "E76_s7p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_79",
+   "module": 10,
+   "composition": {
+    "E76_s7p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_80",
+   "module": 10,
+   "composition": {
+    "s7p[c]": 1.0,
+    "E_76": 1.0
+   }
+  },
+  {
+   "id": "complex_81",
+   "module": 10,
+   "composition": {
+    "xu5p__D[c]": 1.0,
+    "E_76": 1.0
+   }
+  },
+  {
+   "id": "complex_82",
+   "module": 10,
+   "composition": {
+    "E76_xu5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_83",
+   "module": 10,
+   "composition": {
+    "e4p[c]": 1.0,
+    "E76_xu5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_84",
+   "module": 0,
+   "composition": {
+    "E76_e4p[c]_xu5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_85",
+   "module": 0,
+   "composition": {
+    "E76_f6p[c]_g3p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_86",
+   "module": 10,
+   "composition": {
+    "g3p[c]": 1.0,
+    "E76_f6p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_87",
+   "module": 10,
+   "composition": {
+    "E76_f6p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_88",
+   "module": 10,
+   "composition": {
+    "f6p[c]": 1.0,
+    "E_76": 1.0
+   }
+  },
+  {
+   "id": "complex_89",
+   "module": 0,
+   "composition": {
+    "co2[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_90",
+   "module": -1,
+   "composition": {
+    "co2[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_91",
+   "module": 12,
+   "composition": {
+    "ala__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_92",
+   "module": -1,
+   "composition": {
+    "ala__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_93",
+   "module": 10,
+   "composition": {
+    "g6p_B[c]": 1.0,
+    "E_78": 1.0
+   }
+  },
+  {
+   "id": "complex_94",
+   "module": 10,
+   "composition": {
+    "E78_g6p_B[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_95",
+   "module": 10,
+   "composition": {
+    "nadp[c]": 1.0,
+    "E78_g6p_B[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_96",
+   "module": 0,
+   "composition": {
+    "E78_g6p_B[c]_nadp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_97",
+   "module": 0,
+   "composition": {
+    "E78_6pgl[c]_h[c]_nadph[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_98",
+   "module": 10,
+   "composition": {
+    "nadph[c]": 1.0,
+    "E78_6pgl[c]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_99",
+   "module": 10,
+   "composition": {
+    "E78_6pgl[c]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_100",
+   "module": 10,
+   "composition": {
+    "h[c]": 1.0,
+    "E78_6pgl[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_101",
+   "module": 10,
+   "composition": {
+    "E78_6pgl[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_102",
+   "module": 10,
+   "composition": {
+    "6pgl[c]": 1.0,
+    "E_78": 1.0
+   }
+  },
+  {
+   "id": "complex_103",
+   "module": 14,
+   "composition": {
+    "dhap[x]": 1.0,
+    "E_45": 1.0
+   }
+  },
+  {
+   "id": "complex_104",
+   "module": 0,
+   "composition": {
+    "E45_dhap[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_105",
+   "module": 0,
+   "composition": {
+    "E45_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_106",
+   "module": 14,
+   "composition": {
+    "g3p[x]": 1.0,
+    "E_45": 1.0
+   }
+  },
+  {
+   "id": "complex_107",
+   "module": 15,
+   "composition": {
+    "glu__L[e]": 1.0,
+    "h[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_108",
+   "module": 15,
+   "composition": {
+    "h[c]": 1.0,
+    "glu__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_109",
+   "module": 16,
+   "composition": {
+    "h2o[m]": 1.0,
+    "E_62": 1.0
+   }
+  },
+  {
+   "id": "complex_110",
+   "module": 16,
+   "composition": {
+    "E62_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_111",
+   "module": 16,
+   "composition": {
+    "ppi[m]": 1.0,
+    "E62_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_112",
+   "module": 0,
+   "composition": {
+    "E62_h2o[m]_ppi[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_113",
+   "module": 0,
+   "composition": {
+    "E62_h[m]_pi[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_114",
+   "module": 16,
+   "composition": {
+    "h[m]": 1.0,
+    "E62_pi[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_115",
+   "module": 16,
+   "composition": {
+    "E62_pi[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_116",
+   "module": 16,
+   "composition": {
+    "pi[m]": 2.0,
+    "E_62": 1.0
+   }
+  },
+  {
+   "id": "complex_117",
+   "module": 17,
+   "composition": {
+    "h[m]": 1.0,
+    "E_14": 1.0
+   }
+  },
+  {
+   "id": "complex_118",
+   "module": 17,
+   "composition": {
+    "E14_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_119",
+   "module": 17,
+   "composition": {
+    "akg[m]": 1.0,
+    "E14_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_120",
+   "module": 17,
+   "composition": {
+    "E14_akg[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_121",
+   "module": 17,
+   "composition": {
+    "lpam[m]": 1.0,
+    "E14_akg[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_122",
+   "module": 0,
+   "composition": {
+    "E14_akg[m]_h[m]_lpam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_123",
+   "module": 0,
+   "composition": {
+    "E14_co2[m]_sdhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_124",
+   "module": 17,
+   "composition": {
+    "co2[m]": 1.0,
+    "E14_sdhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_125",
+   "module": 17,
+   "composition": {
+    "E14_sdhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_126",
+   "module": 17,
+   "composition": {
+    "sdhlam[m]": 1.0,
+    "E_14": 1.0
+   }
+  },
+  {
+   "id": "complex_127",
+   "module": 18,
+   "composition": {
+    "o2[m]": 1.0,
+    "E_43": 1.0
+   }
+  },
+  {
+   "id": "complex_128",
+   "module": 18,
+   "composition": {
+    "E43_o2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_129",
+   "module": 18,
+   "composition": {
+    "q6h2[m]": 2.0,
+    "E43_o2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_130",
+   "module": 0,
+   "composition": {
+    "E43_o2[m]_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_131",
+   "module": 0,
+   "composition": {
+    "E43_h2o[m]_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_132",
+   "module": 18,
+   "composition": {
+    "h2o[m]": 2.0,
+    "E43_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_133",
+   "module": 18,
+   "composition": {
+    "E43_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_134",
+   "module": 18,
+   "composition": {
+    "q6[m]": 2.0,
+    "E_43": 1.0
+   }
+  },
+  {
+   "id": "complex_135",
+   "module": 19,
+   "composition": {
+    "h[m]": 10.0,
+    "E_1": 1.0
+   }
+  },
+  {
+   "id": "complex_136",
+   "module": 19,
+   "composition": {
+    "E1_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_137",
+   "module": 19,
+   "composition": {
+    "o2[m]": 1.0,
+    "E1_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_138",
+   "module": 19,
+   "composition": {
+    "E1_h[m]_o2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_139",
+   "module": 19,
+   "composition": {
+    "focytc[m]": 4.0,
+    "E1_h[m]_o2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_140",
+   "module": 0,
+   "composition": {
+    "E1_focytc[m]_h[m]_o2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_141",
+   "module": 0,
+   "composition": {
+    "E1_ficytc[m]_h2o[m]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_142",
+   "module": 19,
+   "composition": {
+    "h2o[m]": 2.0,
+    "E1_ficytc[m]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_143",
+   "module": 19,
+   "composition": {
+    "E1_ficytc[m]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_144",
+   "module": 19,
+   "composition": {
+    "h[c]": 6.0,
+    "E1_ficytc[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_145",
+   "module": 19,
+   "composition": {
+    "E1_ficytc[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_146",
+   "module": 19,
+   "composition": {
+    "ficytc[m]": 4.0,
+    "E_1": 1.0
+   }
+  },
+  {
+   "id": "complex_147",
+   "module": 20,
+   "composition": {
+    "h[m]": 10.0,
+    "E_63": 1.0
+   }
+  },
+  {
+   "id": "complex_148",
+   "module": 20,
+   "composition": {
+    "E63_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_149",
+   "module": 20,
+   "composition": {
+    "o2[m]": 1.0,
+    "E63_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_150",
+   "module": 20,
+   "composition": {
+    "E63_h[m]_o2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_151",
+   "module": 20,
+   "composition": {
+    "focytc[m]": 4.0,
+    "E63_h[m]_o2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_152",
+   "module": 0,
+   "composition": {
+    "E63_focytc[m]_h[m]_o2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_153",
+   "module": 0,
+   "composition": {
+    "E63_ficytc[m]_h2o[m]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_154",
+   "module": 20,
+   "composition": {
+    "h2o[m]": 2.0,
+    "E63_ficytc[m]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_155",
+   "module": 20,
+   "composition": {
+    "E63_ficytc[m]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_156",
+   "module": 20,
+   "composition": {
+    "h[c]": 6.0,
+    "E63_ficytc[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_157",
+   "module": 20,
+   "composition": {
+    "E63_ficytc[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_158",
+   "module": 20,
+   "composition": {
+    "ficytc[m]": 4.0,
+    "E_63": 1.0
+   }
+  },
+  {
+   "id": "complex_159",
+   "module": 0,
+   "composition": {
+    "b_D_glucose[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_160",
+   "module": 14,
+   "composition": {
+    "b_D_glucose[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_161",
+   "module": 21,
+   "composition": {
+    "13dpg[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_162",
+   "module": 21,
+   "composition": {
+    "13dpg[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_163",
+   "module": 22,
+   "composition": {
+    "q6[m]": 1.0,
+    "E_73": 1.0
+   }
+  },
+  {
+   "id": "complex_164",
+   "module": 22,
+   "composition": {
+    "E73_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_165",
+   "module": 22,
+   "composition": {
+    "fadh2[m]": 1.0,
+    "E73_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_166",
+   "module": 0,
+   "composition": {
+    "E73_fadh2[m]_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_167",
+   "module": 0,
+   "composition": {
+    "E73_fad[m]_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_168",
+   "module": 22,
+   "composition": {
+    "q6h2[m]": 1.0,
+    "E73_fad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_169",
+   "module": 0,
+   "composition": {
+    "E73_fad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_170",
+   "module": 0,
+   "composition": {
+    "fad[m]": 1.0,
+    "E_73": 1.0
+   }
+  },
+  {
+   "id": "complex_171",
+   "module": 23,
+   "composition": {
+    "13dpg[x]": 1.0,
+    "E_50": 1.0
+   }
+  },
+  {
+   "id": "complex_172",
+   "module": 23,
+   "composition": {
+    "E50_13dpg[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_173",
+   "module": 23,
+   "composition": {
+    "adp[x]": 1.0,
+    "E50_13dpg[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_174",
+   "module": 0,
+   "composition": {
+    "E50_13dpg[x]_adp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_175",
+   "module": 0,
+   "composition": {
+    "E50_3pg[x]_atp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_176",
+   "module": 23,
+   "composition": {
+    "3pg[x]": 1.0,
+    "E50_atp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_177",
+   "module": 23,
+   "composition": {
+    "E50_atp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_178",
+   "module": 23,
+   "composition": {
+    "atp[x]": 1.0,
+    "E_50": 1.0
+   }
+  },
+  {
+   "id": "complex_179",
+   "module": 24,
+   "composition": {
+    "mal__L[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_180",
+   "module": 24,
+   "composition": {
+    "mal__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_181",
+   "module": 14,
+   "composition": {
+    "fdp[x]": 1.0,
+    "E_35": 1.0
+   }
+  },
+  {
+   "id": "complex_182",
+   "module": 0,
+   "composition": {
+    "E35_fdp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_183",
+   "module": 0,
+   "composition": {
+    "E35_dhap[x]_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_184",
+   "module": 14,
+   "composition": {
+    "g3p[x]": 1.0,
+    "E35_dhap[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_185",
+   "module": 14,
+   "composition": {
+    "E35_dhap[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_186",
+   "module": 14,
+   "composition": {
+    "dhap[x]": 1.0,
+    "E_35": 1.0
+   }
+  },
+  {
+   "id": "complex_187",
+   "module": -1,
+   "composition": {
+    "gly[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_188",
+   "module": 4,
+   "composition": {
+    "gly[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_189",
+   "module": 10,
+   "composition": {
+    "ru5p__D[c]": 1.0,
+    "E_79": 1.0
+   }
+  },
+  {
+   "id": "complex_190",
+   "module": 0,
+   "composition": {
+    "E79_ru5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_191",
+   "module": 0,
+   "composition": {
+    "E79_xu5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_192",
+   "module": 10,
+   "composition": {
+    "xu5p__D[c]": 1.0,
+    "E_79": 1.0
+   }
+  },
+  {
+   "id": "complex_193",
+   "module": 26,
+   "composition": {
+    "nad[m]": 1.0,
+    "E_56": 1.0
+   }
+  },
+  {
+   "id": "complex_194",
+   "module": 26,
+   "composition": {
+    "E56_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_195",
+   "module": 26,
+   "composition": {
+    "dhlam[m]": 1.0,
+    "E56_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_196",
+   "module": 0,
+   "composition": {
+    "E56_dhlam[m]_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_197",
+   "module": 0,
+   "composition": {
+    "E56_h[m]_lpam[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_198",
+   "module": 26,
+   "composition": {
+    "h[m]": 1.0,
+    "E56_lpam[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_199",
+   "module": 26,
+   "composition": {
+    "E56_lpam[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_200",
+   "module": 26,
+   "composition": {
+    "nadh[m]": 1.0,
+    "E56_lpam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_201",
+   "module": 26,
+   "composition": {
+    "E56_lpam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_202",
+   "module": 26,
+   "composition": {
+    "lpam[m]": 1.0,
+    "E_56": 1.0
+   }
+  },
+  {
+   "id": "complex_203",
+   "module": 27,
+   "composition": {
+    "coa[m]": 1.0,
+    "E_9": 1.0
+   }
+  },
+  {
+   "id": "complex_204",
+   "module": 27,
+   "composition": {
+    "E9_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_205",
+   "module": 27,
+   "composition": {
+    "h[m]": 1.0,
+    "E9_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_206",
+   "module": 27,
+   "composition": {
+    "E9_coa[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_207",
+   "module": 27,
+   "composition": {
+    "adhlam[m]": 1.0,
+    "E9_coa[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_208",
+   "module": 0,
+   "composition": {
+    "E9_adhlam[m]_coa[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_209",
+   "module": 0,
+   "composition": {
+    "E9_accoa[m]_dhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_210",
+   "module": 27,
+   "composition": {
+    "accoa[m]": 1.0,
+    "E9_dhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_211",
+   "module": 27,
+   "composition": {
+    "E9_dhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_212",
+   "module": 27,
+   "composition": {
+    "dhlam[m]": 1.0,
+    "E_9": 1.0
+   }
+  },
+  {
+   "id": "complex_213",
+   "module": 28,
+   "composition": {
+    "coa[m]": 1.0,
+    "E_51": 1.0
+   }
+  },
+  {
+   "id": "complex_214",
+   "module": 28,
+   "composition": {
+    "E51_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_215",
+   "module": 28,
+   "composition": {
+    "h[m]": 1.0,
+    "E51_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_216",
+   "module": 28,
+   "composition": {
+    "E51_coa[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_217",
+   "module": 28,
+   "composition": {
+    "adhlam[m]": 1.0,
+    "E51_coa[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_218",
+   "module": 0,
+   "composition": {
+    "E51_adhlam[m]_coa[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_219",
+   "module": 0,
+   "composition": {
+    "E51_accoa[m]_dhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_220",
+   "module": 28,
+   "composition": {
+    "accoa[m]": 1.0,
+    "E51_dhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_221",
+   "module": 28,
+   "composition": {
+    "E51_dhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_222",
+   "module": 28,
+   "composition": {
+    "dhlam[m]": 1.0,
+    "E_51": 1.0
+   }
+  },
+  {
+   "id": "complex_223",
+   "module": 29,
+   "composition": {
+    "nad[m]": 1.0,
+    "E_48": 1.0
+   }
+  },
+  {
+   "id": "complex_224",
+   "module": 29,
+   "composition": {
+    "E48_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_225",
+   "module": 29,
+   "composition": {
+    "mal__L[m]": 1.0,
+    "E48_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_226",
+   "module": 0,
+   "composition": {
+    "E48_mal__L[m]_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_227",
+   "module": 0,
+   "composition": {
+    "E48_co2[m]_nadh[m]_pyr[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_228",
+   "module": 29,
+   "composition": {
+    "pyr[m]": 1.0,
+    "E48_co2[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_229",
+   "module": 29,
+   "composition": {
+    "E48_co2[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_230",
+   "module": 29,
+   "composition": {
+    "nadh[m]": 1.0,
+    "E48_co2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_231",
+   "module": 29,
+   "composition": {
+    "E48_co2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_232",
+   "module": 29,
+   "composition": {
+    "co2[m]": 1.0,
+    "E_48": 1.0
+   }
+  },
+  {
+   "id": "complex_233",
+   "module": 30,
+   "composition": {
+    "h[c]": 1.0,
+    "pyr[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_234",
+   "module": 30,
+   "composition": {
+    "h[m]": 1.0,
+    "pyr[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_235",
+   "module": 31,
+   "composition": {
+    "mal__L[c]": 1.0,
+    "E_47": 1.0
+   }
+  },
+  {
+   "id": "complex_236",
+   "module": 31,
+   "composition": {
+    "E47_mal__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_237",
+   "module": 31,
+   "composition": {
+    "nad[c]": 1.0,
+    "E47_mal__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_238",
+   "module": 0,
+   "composition": {
+    "E47_mal__L[c]_nad[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_239",
+   "module": 0,
+   "composition": {
+    "E47_co2[c]_nadh[c]_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_240",
+   "module": 31,
+   "composition": {
+    "co2[c]": 1.0,
+    "E47_nadh[c]_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_241",
+   "module": 31,
+   "composition": {
+    "E47_nadh[c]_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_242",
+   "module": 31,
+   "composition": {
+    "pyr[c]": 1.0,
+    "E47_nadh[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_243",
+   "module": 31,
+   "composition": {
+    "E47_nadh[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_244",
+   "module": 31,
+   "composition": {
+    "nadh[c]": 1.0,
+    "E_47": 1.0
+   }
+  },
+  {
+   "id": "complex_245",
+   "module": 32,
+   "composition": {
+    "pro__L[e]": 1.0,
+    "h[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_246",
+   "module": 32,
+   "composition": {
+    "h[c]": 1.0,
+    "pro__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_247",
+   "module": 22,
+   "composition": {
+    "succ[m]": 1.0,
+    "E73_fad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_248",
+   "module": 0,
+   "composition": {
+    "E73_fad[m]_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_249",
+   "module": 0,
+   "composition": {
+    "E73_fadh2[m]_fum[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_250",
+   "module": 22,
+   "composition": {
+    "fadh2[m]": 1.0,
+    "E73_fum[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_251",
+   "module": 22,
+   "composition": {
+    "E73_fum[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_252",
+   "module": 22,
+   "composition": {
+    "fum[m]": 1.0,
+    "E_73": 1.0
+   }
+  },
+  {
+   "id": "complex_253",
+   "module": 33,
+   "composition": {
+    "accoa[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_254",
+   "module": 33,
+   "composition": {
+    "accoa[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_255",
+   "module": 0,
+   "composition": {
+    "E36_f6p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_256",
+   "module": 10,
+   "composition": {
+    "f6p[c]": 1.0,
+    "E_36": 1.0
+   }
+  },
+  {
+   "id": "complex_257",
+   "module": -1,
+   "composition": {
+    "h2o[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_258",
+   "module": 35,
+   "composition": {
+    "h2o[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_259",
+   "module": 33,
+   "composition": {
+    "coa[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_260",
+   "module": 33,
+   "composition": {
+    "coa[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_261",
+   "module": 36,
+   "composition": {
+    "glu__L[c]": 1.0,
+    "asp__L[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_262",
+   "module": 36,
+   "composition": {
+    "glu__L[m]": 1.0,
+    "asp__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_263",
+   "module": 37,
+   "composition": {
+    "gly[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_264",
+   "module": -1,
+   "composition": {
+    "h[c]": 1.0,
+    "pi[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_265",
+   "module": 39,
+   "composition": {
+    "h[m]": 1.0,
+    "pi[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_266",
+   "module": -1,
+   "composition": {
+    "nh4[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_267",
+   "module": 41,
+   "composition": {
+    "nh4[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_268",
+   "module": 42,
+   "composition": {
+    "akg[m]": 1.0,
+    "E_13": 1.0
+   }
+  },
+  {
+   "id": "complex_269",
+   "module": 42,
+   "composition": {
+    "E13_akg[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_270",
+   "module": 42,
+   "composition": {
+    "asp__L[m]": 1.0,
+    "E13_akg[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_271",
+   "module": 0,
+   "composition": {
+    "E13_akg[m]_asp__L[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_272",
+   "module": 0,
+   "composition": {
+    "E13_glu__L[m]_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_273",
+   "module": 42,
+   "composition": {
+    "glu__L[m]": 1.0,
+    "E13_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_274",
+   "module": 42,
+   "composition": {
+    "E13_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_275",
+   "module": 42,
+   "composition": {
+    "oaa[m]": 1.0,
+    "E_13": 1.0
+   }
+  },
+  {
+   "id": "complex_276",
+   "module": 43,
+   "composition": {
+    "akg[m]": 1.0,
+    "E_80": 1.0
+   }
+  },
+  {
+   "id": "complex_277",
+   "module": 43,
+   "composition": {
+    "E80_akg[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_278",
+   "module": 43,
+   "composition": {
+    "asp__L[m]": 1.0,
+    "E80_akg[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_279",
+   "module": 0,
+   "composition": {
+    "E80_akg[m]_asp__L[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_280",
+   "module": 0,
+   "composition": {
+    "E80_glu__L[m]_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_281",
+   "module": 43,
+   "composition": {
+    "glu__L[m]": 1.0,
+    "E80_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_282",
+   "module": 43,
+   "composition": {
+    "E80_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_283",
+   "module": 43,
+   "composition": {
+    "oaa[m]": 1.0,
+    "E_80": 1.0
+   }
+  },
+  {
+   "id": "complex_284",
+   "module": 44,
+   "composition": {
+    "ac[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_285",
+   "module": -1,
+   "composition": {
+    "ac[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_286",
+   "module": 35,
+   "composition": {
+    "succ[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_287",
+   "module": 35,
+   "composition": {
+    "succ[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_288",
+   "module": 46,
+   "composition": {
+    "h[e]": 1.0,
+    "thr__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_289",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "thr__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_290",
+   "module": 39,
+   "composition": {
+    "atp[m]": 1.0,
+    "E_17": 1.0
+   }
+  },
+  {
+   "id": "complex_291",
+   "module": 39,
+   "composition": {
+    "E17_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_292",
+   "module": 39,
+   "composition": {
+    "adp[c]": 1.0,
+    "E17_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_293",
+   "module": 0,
+   "composition": {
+    "E17_adp[c]_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_294",
+   "module": 0,
+   "composition": {
+    "E17_adp[m]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_295",
+   "module": 39,
+   "composition": {
+    "atp[c]": 1.0,
+    "E17_adp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_296",
+   "module": 39,
+   "composition": {
+    "E17_adp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_297",
+   "module": 39,
+   "composition": {
+    "adp[m]": 1.0,
+    "E_17": 1.0
+   }
+  },
+  {
+   "id": "complex_298",
+   "module": 0,
+   "composition": {
+    "o2[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_299",
+   "module": -1,
+   "composition": {
+    "o2[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_300",
+   "module": 0,
+   "composition": {
+    "a_D_glucose[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_301",
+   "module": 2,
+   "composition": {
+    "a_D_glucose[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_302",
+   "module": 49,
+   "composition": {
+    "h[e]": 1.0,
+    "asp__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_303",
+   "module": 49,
+   "composition": {
+    "h[c]": 1.0,
+    "asp__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_304",
+   "module": -1,
+   "composition": {
+    "oaa[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_305",
+   "module": -1,
+   "composition": {
+    "oaa[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_306",
+   "module": 52,
+   "composition": {
+    "nad[m]": 1.0,
+    "E_68": 1.0
+   }
+  },
+  {
+   "id": "complex_307",
+   "module": 52,
+   "composition": {
+    "E68_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_308",
+   "module": 52,
+   "composition": {
+    "mal__L[m]": 1.0,
+    "E68_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_309",
+   "module": 0,
+   "composition": {
+    "E68_mal__L[m]_nad[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_310",
+   "module": 0,
+   "composition": {
+    "E68_h[m]_nadh[m]_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_311",
+   "module": 52,
+   "composition": {
+    "h[m]": 1.0,
+    "E68_nadh[m]_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_312",
+   "module": 52,
+   "composition": {
+    "E68_nadh[m]_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_313",
+   "module": 52,
+   "composition": {
+    "nadh[m]": 1.0,
+    "E68_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_314",
+   "module": 52,
+   "composition": {
+    "E68_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_315",
+   "module": 52,
+   "composition": {
+    "oaa[m]": 1.0,
+    "E_68": 1.0
+   }
+  },
+  {
+   "id": "complex_316",
+   "module": 53,
+   "composition": {
+    "h[c]": 1.0,
+    "E_37": 1.0
+   }
+  },
+  {
+   "id": "complex_317",
+   "module": 53,
+   "composition": {
+    "E37_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_318",
+   "module": 53,
+   "composition": {
+    "pep[c]": 1.0,
+    "E37_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_319",
+   "module": 53,
+   "composition": {
+    "E37_h[c]_pep[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_320",
+   "module": 53,
+   "composition": {
+    "adp[c]": 1.0,
+    "E37_h[c]_pep[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_321",
+   "module": 0,
+   "composition": {
+    "E37_adp[c]_h[c]_pep[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_322",
+   "module": 0,
+   "composition": {
+    "E37_atp[c]_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_323",
+   "module": 53,
+   "composition": {
+    "atp[c]": 1.0,
+    "E37_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_324",
+   "module": 53,
+   "composition": {
+    "E37_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_325",
+   "module": 53,
+   "composition": {
+    "pyr[c]": 1.0,
+    "E_37": 1.0
+   }
+  },
+  {
+   "id": "complex_326",
+   "module": 54,
+   "composition": {
+    "mal__L[x]": 1.0,
+    "E_5": 1.0
+   }
+  },
+  {
+   "id": "complex_327",
+   "module": 54,
+   "composition": {
+    "E5_mal__L[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_328",
+   "module": 54,
+   "composition": {
+    "nad[x]": 1.0,
+    "E5_mal__L[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_329",
+   "module": 0,
+   "composition": {
+    "E5_mal__L[x]_nad[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_330",
+   "module": 0,
+   "composition": {
+    "E5_h[x]_nadh[x]_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_331",
+   "module": 54,
+   "composition": {
+    "h[x]": 1.0,
+    "E5_nadh[x]_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_332",
+   "module": 54,
+   "composition": {
+    "E5_nadh[x]_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_333",
+   "module": 54,
+   "composition": {
+    "oaa[x]": 1.0,
+    "E5_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_334",
+   "module": 54,
+   "composition": {
+    "E5_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_335",
+   "module": 54,
+   "composition": {
+    "nadh[x]": 1.0,
+    "E_5": 1.0
+   }
+  },
+  {
+   "id": "complex_336",
+   "module": 55,
+   "composition": {
+    "mal__L[x]": 1.0,
+    "E_33": 1.0
+   }
+  },
+  {
+   "id": "complex_337",
+   "module": 55,
+   "composition": {
+    "E33_mal__L[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_338",
+   "module": 55,
+   "composition": {
+    "nad[x]": 1.0,
+    "E33_mal__L[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_339",
+   "module": 0,
+   "composition": {
+    "E33_mal__L[x]_nad[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_340",
+   "module": 0,
+   "composition": {
+    "E33_h[x]_nadh[x]_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_341",
+   "module": 55,
+   "composition": {
+    "h[x]": 1.0,
+    "E33_nadh[x]_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_342",
+   "module": 55,
+   "composition": {
+    "E33_nadh[x]_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_343",
+   "module": 55,
+   "composition": {
+    "oaa[x]": 1.0,
+    "E33_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_344",
+   "module": 55,
+   "composition": {
+    "E33_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_345",
+   "module": 55,
+   "composition": {
+    "nadh[x]": 1.0,
+    "E_33": 1.0
+   }
+  },
+  {
+   "id": "complex_346",
+   "module": 56,
+   "composition": {
+    "ala__L[c]": 1.0,
+    "E_49": 1.0
+   }
+  },
+  {
+   "id": "complex_347",
+   "module": 56,
+   "composition": {
+    "E49_ala__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_348",
+   "module": 56,
+   "composition": {
+    "akg[c]": 1.0,
+    "E49_ala__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_349",
+   "module": 0,
+   "composition": {
+    "E49_akg[c]_ala__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_350",
+   "module": 0,
+   "composition": {
+    "E49_glu__L[c]_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_351",
+   "module": 56,
+   "composition": {
+    "glu__L[c]": 1.0,
+    "E49_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_352",
+   "module": 56,
+   "composition": {
+    "E49_pyr[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_353",
+   "module": 56,
+   "composition": {
+    "pyr[c]": 1.0,
+    "E_49": 1.0
+   }
+  },
+  {
+   "id": "complex_354",
+   "module": 14,
+   "composition": {
+    "pi[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_355",
+   "module": 14,
+   "composition": {
+    "pi[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_356",
+   "module": 14,
+   "composition": {
+    "f6p[x]": 1.0,
+    "E_38": 1.0
+   }
+  },
+  {
+   "id": "complex_357",
+   "module": 14,
+   "composition": {
+    "E38_f6p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_358",
+   "module": 14,
+   "composition": {
+    "atp[x]": 1.0,
+    "E38_f6p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_359",
+   "module": 0,
+   "composition": {
+    "E38_atp[x]_f6p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_360",
+   "module": 0,
+   "composition": {
+    "E38_adp[x]_fdp[x]_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_361",
+   "module": 14,
+   "composition": {
+    "fdp[x]": 1.0,
+    "E38_adp[x]_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_362",
+   "module": 14,
+   "composition": {
+    "E38_adp[x]_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_363",
+   "module": 14,
+   "composition": {
+    "h[x]": 1.0,
+    "E38_adp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_364",
+   "module": 14,
+   "composition": {
+    "E38_adp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_365",
+   "module": 14,
+   "composition": {
+    "adp[x]": 1.0,
+    "E_38": 1.0
+   }
+  },
+  {
+   "id": "complex_366",
+   "module": 14,
+   "composition": {
+    "h[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_367",
+   "module": 14,
+   "composition": {
+    "h[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_368",
+   "module": 41,
+   "composition": {
+    "cit[m]": 1.0,
+    "E_67": 1.0
+   }
+  },
+  {
+   "id": "complex_369",
+   "module": 0,
+   "composition": {
+    "E67_cit[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_370",
+   "module": 0,
+   "composition": {
+    "E67_icit[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_371",
+   "module": 41,
+   "composition": {
+    "icit[m]": 1.0,
+    "E_67": 1.0
+   }
+  },
+  {
+   "id": "complex_372",
+   "module": 57,
+   "composition": {
+    "asp__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_373",
+   "module": 57,
+   "composition": {
+    "asp__L[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_374",
+   "module": 21,
+   "composition": {
+    "oaa[x]": 1.0,
+    "E_34": 1.0
+   }
+  },
+  {
+   "id": "complex_375",
+   "module": 21,
+   "composition": {
+    "E34_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_376",
+   "module": 21,
+   "composition": {
+    "atp[x]": 1.0,
+    "E34_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_377",
+   "module": 0,
+   "composition": {
+    "E34_atp[x]_oaa[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_378",
+   "module": 0,
+   "composition": {
+    "E34_adp[x]_co2[x]_pep[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_379",
+   "module": 21,
+   "composition": {
+    "adp[x]": 1.0,
+    "E34_co2[x]_pep[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_380",
+   "module": 21,
+   "composition": {
+    "E34_co2[x]_pep[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_381",
+   "module": 21,
+   "composition": {
+    "pep[x]": 1.0,
+    "E34_co2[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_382",
+   "module": 21,
+   "composition": {
+    "E34_co2[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_383",
+   "module": 21,
+   "composition": {
+    "co2[x]": 1.0,
+    "E_34": 1.0
+   }
+  },
+  {
+   "id": "complex_384",
+   "module": 10,
+   "composition": {
+    "ppi[c]": 1.0,
+    "E_62": 1.0
+   }
+  },
+  {
+   "id": "complex_385",
+   "module": 10,
+   "composition": {
+    "E62_ppi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_386",
+   "module": 10,
+   "composition": {
+    "h2o[c]": 1.0,
+    "E62_ppi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_387",
+   "module": 0,
+   "composition": {
+    "E62_h2o[c]_ppi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_388",
+   "module": 0,
+   "composition": {
+    "E62_h[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_389",
+   "module": 10,
+   "composition": {
+    "h[c]": 1.0,
+    "E62_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_390",
+   "module": 10,
+   "composition": {
+    "E62_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_391",
+   "module": 10,
+   "composition": {
+    "pi[c]": 2.0,
+    "E_62": 1.0
+   }
+  },
+  {
+   "id": "complex_392",
+   "module": 0,
+   "composition": {
+    "h2o[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_393",
+   "module": -1,
+   "composition": {}
+  },
+  {
+   "id": "complex_394",
+   "module": 47,
+   "composition": {
+    "pro__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_395",
+   "module": 15,
+   "composition": {
+    "glu__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_396",
+   "module": 0,
+   "composition": {
+    "nh4[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_397",
+   "module": 0,
+   "composition": {
+    "o2[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_398",
+   "module": -1,
+   "composition": {
+    "h[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_399",
+   "module": 46,
+   "composition": {
+    "thr__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_400",
+   "module": 60,
+   "composition": {
+    "succ[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_401",
+   "module": 0,
+   "composition": {
+    "b_D_glucose[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_402",
+   "module": 49,
+   "composition": {
+    "asp__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_403",
+   "module": 61,
+   "composition": {
+    "pi[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_404",
+   "module": 62,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_27": 1.0
+   }
+  },
+  {
+   "id": "complex_405",
+   "module": 62,
+   "composition": {
+    "E27_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_406",
+   "module": 62,
+   "composition": {
+    "asp__L[c]": 1.0,
+    "E27_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_407",
+   "module": 62,
+   "composition": {
+    "E27_asp__L[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_408",
+   "module": 62,
+   "composition": {
+    "nh3[c]": 1.0,
+    "E27_asp__L[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_409",
+   "module": 0,
+   "composition": {
+    "E27_asp__L[c]_atp[c]_nh3[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_410",
+   "module": 0,
+   "composition": {
+    "E27_adp[c]_asn__L[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_411",
+   "module": 62,
+   "composition": {
+    "asn__L[c]": 1.0,
+    "E27_adp[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_412",
+   "module": 62,
+   "composition": {
+    "E27_adp[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_413",
+   "module": 62,
+   "composition": {
+    "adp[c]": 1.0,
+    "E27_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_414",
+   "module": 62,
+   "composition": {
+    "E27_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_415",
+   "module": 62,
+   "composition": {
+    "pi[c]": 1.0,
+    "E_27": 1.0
+   }
+  },
+  {
+   "id": "complex_416",
+   "module": 63,
+   "composition": {
+    "ala__L[c]": 1.0,
+    "E_7": 1.0
+   }
+  },
+  {
+   "id": "complex_417",
+   "module": 0,
+   "composition": {
+    "E7_ala__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_418",
+   "module": 0,
+   "composition": {
+    "E7_ala__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_419",
+   "module": 63,
+   "composition": {
+    "ala__D[c]": 1.0,
+    "E_7": 1.0
+   }
+  },
+  {
+   "id": "complex_420",
+   "module": 64,
+   "composition": {
+    "ala__L[c]": 1.0,
+    "E_18": 1.0
+   }
+  },
+  {
+   "id": "complex_421",
+   "module": 0,
+   "composition": {
+    "E18_ala__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_422",
+   "module": 0,
+   "composition": {
+    "E18_ala__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_423",
+   "module": 64,
+   "composition": {
+    "ala__D[c]": 1.0,
+    "E_18": 1.0
+   }
+  },
+  {
+   "id": "complex_424",
+   "module": 65,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_20": 1.0
+   }
+  },
+  {
+   "id": "complex_425",
+   "module": 65,
+   "composition": {
+    "E20_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_426",
+   "module": 65,
+   "composition": {
+    "glu__L[c]": 1.0,
+    "E20_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_427",
+   "module": 65,
+   "composition": {
+    "E20_atp[c]_glu__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_428",
+   "module": 65,
+   "composition": {
+    "nh4[c]": 1.0,
+    "E20_atp[c]_glu__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_429",
+   "module": 0,
+   "composition": {
+    "E20_atp[c]_glu__L[c]_nh4[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_430",
+   "module": 0,
+   "composition": {
+    "E20_adp[c]_gln__L[c]_h[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_431",
+   "module": 65,
+   "composition": {
+    "h[c]": 1.0,
+    "E20_adp[c]_gln__L[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_432",
+   "module": 65,
+   "composition": {
+    "E20_adp[c]_gln__L[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_433",
+   "module": 65,
+   "composition": {
+    "gln__L[c]": 1.0,
+    "E20_adp[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_434",
+   "module": 65,
+   "composition": {
+    "E20_adp[c]_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_435",
+   "module": 65,
+   "composition": {
+    "adp[c]": 1.0,
+    "E20_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_436",
+   "module": 65,
+   "composition": {
+    "E20_pi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_437",
+   "module": 65,
+   "composition": {
+    "pi[c]": 1.0,
+    "E_20": 1.0
+   }
+  },
+  {
+   "id": "complex_438",
+   "module": 66,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_3": 1.0
+   }
+  },
+  {
+   "id": "complex_439",
+   "module": 66,
+   "composition": {
+    "E3_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_440",
+   "module": 67,
+   "composition": {
+    "dtdp[c]": 1.0,
+    "E3_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_441",
+   "module": 0,
+   "composition": {
+    "E3_atp[c]_dtdp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_442",
+   "module": 0,
+   "composition": {
+    "E3_adp[c]_dttp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_443",
+   "module": 67,
+   "composition": {
+    "adp[c]": 1.0,
+    "E3_dttp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_444",
+   "module": 67,
+   "composition": {
+    "E3_dttp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_445",
+   "module": 67,
+   "composition": {
+    "dttp[c]": 1.0,
+    "E_3": 1.0
+   }
+  },
+  {
+   "id": "complex_446",
+   "module": 66,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_26": 1.0
+   }
+  },
+  {
+   "id": "complex_447",
+   "module": 66,
+   "composition": {
+    "E26_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_448",
+   "module": 68,
+   "composition": {
+    "dtdp[c]": 1.0,
+    "E26_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_449",
+   "module": 0,
+   "composition": {
+    "E26_atp[c]_dtdp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_450",
+   "module": 0,
+   "composition": {
+    "E26_adp[c]_dttp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_451",
+   "module": 68,
+   "composition": {
+    "adp[c]": 1.0,
+    "E26_dttp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_452",
+   "module": 68,
+   "composition": {
+    "E26_dttp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_453",
+   "module": 68,
+   "composition": {
+    "dttp[c]": 1.0,
+    "E_26": 1.0
+   }
+  },
+  {
+   "id": "complex_454",
+   "module": 69,
+   "composition": {
+    "idp[c]": 1.0,
+    "E3_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_455",
+   "module": 0,
+   "composition": {
+    "E3_atp[c]_idp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_456",
+   "module": 0,
+   "composition": {
+    "E3_adp[c]_itp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_457",
+   "module": 69,
+   "composition": {
+    "adp[c]": 1.0,
+    "E3_itp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_458",
+   "module": 69,
+   "composition": {
+    "E3_itp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_459",
+   "module": 69,
+   "composition": {
+    "itp[c]": 1.0,
+    "E_3": 1.0
+   }
+  },
+  {
+   "id": "complex_460",
+   "module": 70,
+   "composition": {
+    "idp[c]": 1.0,
+    "E26_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_461",
+   "module": 0,
+   "composition": {
+    "E26_atp[c]_idp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_462",
+   "module": 0,
+   "composition": {
+    "E26_adp[c]_itp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_463",
+   "module": 70,
+   "composition": {
+    "adp[c]": 1.0,
+    "E26_itp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_464",
+   "module": 70,
+   "composition": {
+    "E26_itp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_465",
+   "module": 70,
+   "composition": {
+    "itp[c]": 1.0,
+    "E_26": 1.0
+   }
+  },
+  {
+   "id": "complex_466",
+   "module": 71,
+   "composition": {
+    "atp[n]": 1.0,
+    "E_3": 1.0
+   }
+  },
+  {
+   "id": "complex_467",
+   "module": 71,
+   "composition": {
+    "E3_atp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_468",
+   "module": 71,
+   "composition": {
+    "dtdp[n]": 1.0,
+    "E3_atp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_469",
+   "module": 0,
+   "composition": {
+    "E3_atp[n]_dtdp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_470",
+   "module": 0,
+   "composition": {
+    "E3_adp[n]_dttp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_471",
+   "module": 71,
+   "composition": {
+    "adp[n]": 1.0,
+    "E3_dttp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_472",
+   "module": 71,
+   "composition": {
+    "E3_dttp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_473",
+   "module": 71,
+   "composition": {
+    "dttp[n]": 1.0,
+    "E_3": 1.0
+   }
+  },
+  {
+   "id": "complex_474",
+   "module": 72,
+   "composition": {
+    "atp[n]": 1.0,
+    "E_26": 1.0
+   }
+  },
+  {
+   "id": "complex_475",
+   "module": 72,
+   "composition": {
+    "E26_atp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_476",
+   "module": 72,
+   "composition": {
+    "dtdp[n]": 1.0,
+    "E26_atp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_477",
+   "module": 0,
+   "composition": {
+    "E26_atp[n]_dtdp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_478",
+   "module": 0,
+   "composition": {
+    "E26_adp[n]_dttp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_479",
+   "module": 72,
+   "composition": {
+    "adp[n]": 1.0,
+    "E26_dttp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_480",
+   "module": 72,
+   "composition": {
+    "E26_dttp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_481",
+   "module": 72,
+   "composition": {
+    "dttp[n]": 1.0,
+    "E_26": 1.0
+   }
+  },
+  {
+   "id": "complex_482",
+   "module": 73,
+   "composition": {
+    "idp[n]": 1.0,
+    "E_3": 1.0
+   }
+  },
+  {
+   "id": "complex_483",
+   "module": 73,
+   "composition": {
+    "E3_idp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_484",
+   "module": 73,
+   "composition": {
+    "atp[n]": 1.0,
+    "E3_idp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_485",
+   "module": 0,
+   "composition": {
+    "E3_atp[n]_idp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_486",
+   "module": 0,
+   "composition": {
+    "E3_adp[n]_itp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_487",
+   "module": 73,
+   "composition": {
+    "itp[n]": 1.0,
+    "E3_adp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_488",
+   "module": 73,
+   "composition": {
+    "E3_adp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_489",
+   "module": 73,
+   "composition": {
+    "adp[n]": 1.0,
+    "E_3": 1.0
+   }
+  },
+  {
+   "id": "complex_490",
+   "module": 74,
+   "composition": {
+    "idp[n]": 1.0,
+    "E_26": 1.0
+   }
+  },
+  {
+   "id": "complex_491",
+   "module": 74,
+   "composition": {
+    "E26_idp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_492",
+   "module": 74,
+   "composition": {
+    "atp[n]": 1.0,
+    "E26_idp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_493",
+   "module": 0,
+   "composition": {
+    "E26_atp[n]_idp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_494",
+   "module": 0,
+   "composition": {
+    "E26_adp[n]_itp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_495",
+   "module": 74,
+   "composition": {
+    "itp[n]": 1.0,
+    "E26_adp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_496",
+   "module": 74,
+   "composition": {
+    "E26_adp[n]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_497",
+   "module": 74,
+   "composition": {
+    "adp[n]": 1.0,
+    "E_26": 1.0
+   }
+  },
+  {
+   "id": "complex_498",
+   "module": 10,
+   "composition": {
+    "prpp[c]": 1.0,
+    "E_40": 1.0
+   }
+  },
+  {
+   "id": "complex_499",
+   "module": 10,
+   "composition": {
+    "E40_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_500",
+   "module": 10,
+   "composition": {
+    "ura[c]": 1.0,
+    "E40_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_501",
+   "module": 0,
+   "composition": {
+    "E40_prpp[c]_ura[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_502",
+   "module": 0,
+   "composition": {
+    "E40_ppi[c]_ump[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_503",
+   "module": 10,
+   "composition": {
+    "ppi[c]": 1.0,
+    "E40_ump[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_504",
+   "module": 10,
+   "composition": {
+    "E40_ump[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_505",
+   "module": 10,
+   "composition": {
+    "ump[c]": 1.0,
+    "E_40": 1.0
+   }
+  },
+  {
+   "id": "complex_506",
+   "module": 16,
+   "composition": {
+    "coa[m]": 1.0,
+    "E_52": 1.0
+   }
+  },
+  {
+   "id": "complex_507",
+   "module": 16,
+   "composition": {
+    "E52_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_508",
+   "module": 16,
+   "composition": {
+    "atp[m]": 1.0,
+    "E52_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_509",
+   "module": 16,
+   "composition": {
+    "E52_atp[m]_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_510",
+   "module": 16,
+   "composition": {
+    "ac[m]": 1.0,
+    "E52_atp[m]_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_511",
+   "module": 0,
+   "composition": {
+    "E52_ac[m]_atp[m]_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_512",
+   "module": 0,
+   "composition": {
+    "E52_accoa[m]_amp[m]_ppi[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_513",
+   "module": 16,
+   "composition": {
+    "accoa[m]": 1.0,
+    "E52_amp[m]_ppi[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_514",
+   "module": 16,
+   "composition": {
+    "E52_amp[m]_ppi[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_515",
+   "module": 16,
+   "composition": {
+    "ppi[m]": 1.0,
+    "E52_amp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_516",
+   "module": 16,
+   "composition": {
+    "E52_amp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_517",
+   "module": 16,
+   "composition": {
+    "amp[m]": 1.0,
+    "E_52": 1.0
+   }
+  },
+  {
+   "id": "complex_518",
+   "module": 75,
+   "composition": {
+    "idp[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_519",
+   "module": 75,
+   "composition": {
+    "idp[n]": 1.0
+   }
+  },
+  {
+   "id": "complex_520",
+   "module": 75,
+   "composition": {
+    "itp[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_521",
+   "module": 75,
+   "composition": {
+    "itp[n]": 1.0
+   }
+  },
+  {
+   "id": "complex_522",
+   "module": 10,
+   "composition": {
+    "g6p_B[c]": 0.712,
+    "nadph[c]": 14.405,
+    "atp[c]": 35.115,
+    "r5p[c]": 0.445,
+    "g3p[c]": 0.428,
+    "glu__L[c]": 0.2134,
+    "e4p[c]": 0.397,
+    "pep[c]": 0.642,
+    "ala__L[c]": 0.4281,
+    "asp__L[c]": 0.1728,
+    "oaa[c]": 1.785,
+    "pyr[c]": 2.994,
+    "accoa[c]": 2.097,
+    "asn__L[c]": 0.0932,
+    "gly[c]": 0.2297,
+    "cys__L[c]": 0.0672,
+    "akg[c]": 1.236,
+    "gln__L[c]": 0.1458,
+    "arg__L[c]": 0.2557,
+    "3pg[c]": 1.241,
+    "h2o[c]": 33.475,
+    "ser__L[c]": 0.3193,
+    "nad[c]": 3.015,
+    "nh4[c]": 8.066,
+    "thr__L[c]": 0.2134,
+    "pro__L[c]": 0.2059,
+    "phe__L[c]": 0.1049,
+    "ump[c]": 0.0593,
+    "gmp[c]": 0.1023,
+    "his__L[c]": 0.096,
+    "ile__L[c]": 0.106,
+    "leu__L[c]": 0.3271,
+    "lys__L[c]": 0.1184,
+    "ergst[c]": 0.0565,
+    "val__L[c]": 0.255,
+    "met__L[c]": 0.0804
+   }
+  },
+  {
+   "id": "complex_523",
+   "module": 10,
+   "composition": {
+    "h[c]": 33.475,
+    "co2[c]": 2.852,
+    "nadp[c]": 14.405,
+    "coa[c]": 2.097,
+    "adp[c]": 35.115,
+    "pi[c]": 33.475,
+    "nadh[c]": 3.015
+   }
+  },
+  {
+   "id": "complex_524",
+   "module": 76,
+   "composition": {
+    "g6p_B[c]": 0.712,
+    "nadph[c]": 13.135,
+    "atp[c]": 35.115,
+    "glu__L[c]": 0.2134,
+    "pep[c]": 0.642,
+    "ala__L[c]": 0.4281,
+    "asp__L[c]": 0.1728,
+    "oaa[c]": 1.785,
+    "pyr[c]": 2.994,
+    "accoa[c]": 2.097,
+    "asn__L[c]": 0.0932,
+    "gly[c]": 0.2297,
+    "cys__L[c]": 0.0672,
+    "akg[c]": 1.236,
+    "gln__L[c]": 0.1458,
+    "arg__L[c]": 0.2557,
+    "3pg[c]": 1.241,
+    "h2o[c]": 32.205,
+    "ser__L[c]": 0.3193,
+    "nad[c]": 3.015,
+    "nh4[c]": 8.066,
+    "thr__L[c]": 0.2134,
+    "pro__L[c]": 0.2059,
+    "phe__L[c]": 0.1049,
+    "his__L[c]": 0.096,
+    "ile__L[c]": 0.106,
+    "leu__L[c]": 0.3271,
+    "lys__L[c]": 0.1184,
+    "ergst[c]": 0.0565,
+    "val__L[c]": 0.255,
+    "met__L[c]": 0.0804
+   }
+  },
+  {
+   "id": "complex_525",
+   "module": 76,
+   "composition": {
+    "h[c]": 32.205,
+    "co2[c]": 2.852,
+    "nadp[c]": 13.135,
+    "coa[c]": 2.097,
+    "adp[c]": 35.115,
+    "pi[c]": 33.475,
+    "nadh[c]": 3.015
+   }
+  },
+  {
+   "id": "complex_526",
+   "module": 35,
+   "composition": {
+    "h[x]": 1.0,
+    "E_69": 1.0
+   }
+  },
+  {
+   "id": "complex_527",
+   "module": 35,
+   "composition": {
+    "E69_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_528",
+   "module": 35,
+   "composition": {
+    "fum[x]": 1.0,
+    "E69_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_529",
+   "module": 35,
+   "composition": {
+    "E69_fum[x]_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_530",
+   "module": 35,
+   "composition": {
+    "nadh[x]": 1.0,
+    "E69_fum[x]_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_531",
+   "module": 0,
+   "composition": {
+    "E69_fum[x]_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_532",
+   "module": 0,
+   "composition": {
+    "E69_nad[x]_succ[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_533",
+   "module": 35,
+   "composition": {
+    "nad[x]": 1.0,
+    "E69_succ[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_534",
+   "module": 35,
+   "composition": {
+    "E69_succ[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_535",
+   "module": 35,
+   "composition": {
+    "succ[x]": 1.0,
+    "E_69": 1.0
+   }
+  },
+  {
+   "id": "complex_536",
+   "module": 10,
+   "composition": {
+    "r5p[c]": 1.0,
+    "E_65": 1.0
+   }
+  },
+  {
+   "id": "complex_537",
+   "module": 0,
+   "composition": {
+    "E65_r5p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_538",
+   "module": 0,
+   "composition": {
+    "E65_ru5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_539",
+   "module": 10,
+   "composition": {
+    "ru5p__D[c]": 1.0,
+    "E_65": 1.0
+   }
+  },
+  {
+   "id": "complex_540",
+   "module": 77,
+   "composition": {
+    "mal__L[c]": 1.0,
+    "succ[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_541",
+   "module": 77,
+   "composition": {
+    "mal__L[m]": 1.0,
+    "succ[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_542",
+   "module": 14,
+   "composition": {
+    "b_D_glucose[x]": 1.0,
+    "E_44": 1.0
+   }
+  },
+  {
+   "id": "complex_543",
+   "module": 14,
+   "composition": {
+    "E44_b_D_glucose[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_544",
+   "module": 14,
+   "composition": {
+    "atp[x]": 1.0,
+    "E44_b_D_glucose[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_545",
+   "module": 0,
+   "composition": {
+    "E44_atp[x]_b_D_glucose[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_546",
+   "module": 0,
+   "composition": {
+    "E44_adp[x]_g6p_B[x]_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_547",
+   "module": 14,
+   "composition": {
+    "g6p_B[x]": 1.0,
+    "E44_adp[x]_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_548",
+   "module": 14,
+   "composition": {
+    "E44_adp[x]_h[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_549",
+   "module": 14,
+   "composition": {
+    "h[x]": 1.0,
+    "E44_adp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_550",
+   "module": 14,
+   "composition": {
+    "E44_adp[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_551",
+   "module": 14,
+   "composition": {
+    "adp[x]": 1.0,
+    "E_44": 1.0
+   }
+  },
+  {
+   "id": "complex_552",
+   "module": 78,
+   "composition": {
+    "accoa[m]": 1.0,
+    "E_72": 1.0
+   }
+  },
+  {
+   "id": "complex_553",
+   "module": 78,
+   "composition": {
+    "E72_accoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_554",
+   "module": 78,
+   "composition": {
+    "h2o[m]": 1.0,
+    "E72_accoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_555",
+   "module": 78,
+   "composition": {
+    "E72_accoa[m]_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_556",
+   "module": 78,
+   "composition": {
+    "oaa[m]": 1.0,
+    "E72_accoa[m]_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_557",
+   "module": 0,
+   "composition": {
+    "E72_accoa[m]_h2o[m]_oaa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_558",
+   "module": 0,
+   "composition": {
+    "E72_cit[m]_coa[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_559",
+   "module": 78,
+   "composition": {
+    "coa[m]": 1.0,
+    "E72_cit[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_560",
+   "module": 78,
+   "composition": {
+    "E72_cit[m]_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_561",
+   "module": 78,
+   "composition": {
+    "h[m]": 1.0,
+    "E72_cit[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_562",
+   "module": 78,
+   "composition": {
+    "E72_cit[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_563",
+   "module": 78,
+   "composition": {
+    "cit[m]": 1.0,
+    "E_72": 1.0
+   }
+  },
+  {
+   "id": "complex_564",
+   "module": 79,
+   "composition": {
+    "2pg[c]": 1.0,
+    "E_10": 1.0
+   }
+  },
+  {
+   "id": "complex_565",
+   "module": 0,
+   "composition": {
+    "E10_2pg[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_566",
+   "module": 0,
+   "composition": {
+    "E10_3pg[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_567",
+   "module": 79,
+   "composition": {
+    "3pg[c]": 1.0,
+    "E_10": 1.0
+   }
+  },
+  {
+   "id": "complex_568",
+   "module": 80,
+   "composition": {
+    "2pg[c]": 1.0,
+    "E_55": 1.0
+   }
+  },
+  {
+   "id": "complex_569",
+   "module": 0,
+   "composition": {
+    "E55_2pg[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_570",
+   "module": 0,
+   "composition": {
+    "E55_3pg[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_571",
+   "module": 80,
+   "composition": {
+    "3pg[c]": 1.0,
+    "E_55": 1.0
+   }
+  },
+  {
+   "id": "complex_572",
+   "module": 81,
+   "composition": {
+    "2pg[c]": 1.0,
+    "E_57": 1.0
+   }
+  },
+  {
+   "id": "complex_573",
+   "module": 0,
+   "composition": {
+    "E57_2pg[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_574",
+   "module": 0,
+   "composition": {
+    "E57_3pg[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_575",
+   "module": 81,
+   "composition": {
+    "3pg[c]": 1.0,
+    "E_57": 1.0
+   }
+  },
+  {
+   "id": "complex_576",
+   "module": 10,
+   "composition": {
+    "6pgl[c]": 1.0,
+    "E_81": 1.0
+   }
+  },
+  {
+   "id": "complex_577",
+   "module": 10,
+   "composition": {
+    "E81_6pgl[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_578",
+   "module": 10,
+   "composition": {
+    "h2o[c]": 1.0,
+    "E81_6pgl[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_579",
+   "module": 0,
+   "composition": {
+    "E81_6pgl[c]_h2o[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_580",
+   "module": 0,
+   "composition": {
+    "E81_6pgc[c]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_581",
+   "module": 10,
+   "composition": {
+    "h[c]": 1.0,
+    "E81_6pgc[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_582",
+   "module": 10,
+   "composition": {
+    "E81_6pgc[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_583",
+   "module": 10,
+   "composition": {
+    "6pgc[c]": 1.0,
+    "E_81": 1.0
+   }
+  },
+  {
+   "id": "complex_584",
+   "module": 82,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_8": 1.0
+   }
+  },
+  {
+   "id": "complex_585",
+   "module": 82,
+   "composition": {
+    "E8_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_586",
+   "module": 82,
+   "composition": {
+    "3pg[c]": 1.0,
+    "E8_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_587",
+   "module": 0,
+   "composition": {
+    "E8_3pg[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_588",
+   "module": 0,
+   "composition": {
+    "E8_13dpg[c]_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_589",
+   "module": 82,
+   "composition": {
+    "13dpg[c]": 1.0,
+    "E8_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_590",
+   "module": 82,
+   "composition": {
+    "E8_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_591",
+   "module": 82,
+   "composition": {
+    "adp[c]": 1.0,
+    "E_8": 1.0
+   }
+  },
+  {
+   "id": "complex_592",
+   "module": 83,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_46": 1.0
+   }
+  },
+  {
+   "id": "complex_593",
+   "module": 83,
+   "composition": {
+    "E46_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_594",
+   "module": 83,
+   "composition": {
+    "3pg[c]": 1.0,
+    "E46_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_595",
+   "module": 0,
+   "composition": {
+    "E46_3pg[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_596",
+   "module": 0,
+   "composition": {
+    "E46_13dpg[c]_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_597",
+   "module": 83,
+   "composition": {
+    "13dpg[c]": 1.0,
+    "E46_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_598",
+   "module": 83,
+   "composition": {
+    "E46_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_599",
+   "module": 83,
+   "composition": {
+    "adp[c]": 1.0,
+    "E_46": 1.0
+   }
+  },
+  {
+   "id": "complex_600",
+   "module": 0,
+   "composition": {
+    "g6p_A[x]": 1.0,
+    "E_36": 1.0
+   }
+  },
+  {
+   "id": "complex_601",
+   "module": 0,
+   "composition": {
+    "E36_g6p_A[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_602",
+   "module": 0,
+   "composition": {
+    "E36_g6p_B[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_603",
+   "module": 14,
+   "composition": {
+    "g6p_B[x]": 1.0,
+    "E_36": 1.0
+   }
+  },
+  {
+   "id": "complex_604",
+   "module": 0,
+   "composition": {
+    "E36_f6p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_605",
+   "module": 14,
+   "composition": {
+    "f6p[x]": 1.0,
+    "E_36": 1.0
+   }
+  },
+  {
+   "id": "complex_606",
+   "module": -1,
+   "composition": {
+    "ac[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_607",
+   "module": 61,
+   "composition": {
+    "h[e]": 1.0,
+    "pi[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_608",
+   "module": 60,
+   "composition": {
+    "h[e]": 1.0,
+    "succ[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_609",
+   "module": 60,
+   "composition": {
+    "h[c]": 1.0,
+    "succ[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_610",
+   "module": 17,
+   "composition": {
+    "coa[m]": 1.0,
+    "E_71": 1.0
+   }
+  },
+  {
+   "id": "complex_611",
+   "module": 17,
+   "composition": {
+    "E71_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_612",
+   "module": 17,
+   "composition": {
+    "sdhlam[m]": 1.0,
+    "E71_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_613",
+   "module": 0,
+   "composition": {
+    "E71_coa[m]_sdhlam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_614",
+   "module": 0,
+   "composition": {
+    "E71_dhlam[m]_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_615",
+   "module": 17,
+   "composition": {
+    "dhlam[m]": 1.0,
+    "E71_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_616",
+   "module": 17,
+   "composition": {
+    "E71_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_617",
+   "module": 17,
+   "composition": {
+    "succoa[m]": 1.0,
+    "E_71": 1.0
+   }
+  },
+  {
+   "id": "complex_618",
+   "module": 85,
+   "composition": {
+    "coa[m]": 1.0,
+    "E_64": 1.0
+   }
+  },
+  {
+   "id": "complex_619",
+   "module": 85,
+   "composition": {
+    "E64_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_620",
+   "module": 85,
+   "composition": {
+    "atp[m]": 1.0,
+    "E64_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_621",
+   "module": 85,
+   "composition": {
+    "E64_atp[m]_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_622",
+   "module": 85,
+   "composition": {
+    "succ[m]": 1.0,
+    "E64_atp[m]_coa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_623",
+   "module": 0,
+   "composition": {
+    "E64_atp[m]_coa[m]_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_624",
+   "module": 0,
+   "composition": {
+    "E64_adp[m]_pi[m]_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_625",
+   "module": 85,
+   "composition": {
+    "pi[m]": 1.0,
+    "E64_adp[m]_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_626",
+   "module": 85,
+   "composition": {
+    "E64_adp[m]_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_627",
+   "module": 85,
+   "composition": {
+    "adp[m]": 1.0,
+    "E64_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_628",
+   "module": 85,
+   "composition": {
+    "E64_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_629",
+   "module": 85,
+   "composition": {
+    "succoa[m]": 1.0,
+    "E_64": 1.0
+   }
+  },
+  {
+   "id": "complex_630",
+   "module": 2,
+   "composition": {
+    "atp[c]": 1.0,
+    "E_31": 1.0
+   }
+  },
+  {
+   "id": "complex_631",
+   "module": 2,
+   "composition": {
+    "E31_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_632",
+   "module": 2,
+   "composition": {
+    "a_D_glucose[c]": 1.0,
+    "E31_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_633",
+   "module": 0,
+   "composition": {
+    "E31_a_D_glucose[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_634",
+   "module": 0,
+   "composition": {
+    "E31_adp[c]_g6p_A[c]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_635",
+   "module": 2,
+   "composition": {
+    "g6p_A[c]": 1.0,
+    "E31_adp[c]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_636",
+   "module": 2,
+   "composition": {
+    "E31_adp[c]_h[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_637",
+   "module": 2,
+   "composition": {
+    "h[c]": 1.0,
+    "E31_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_638",
+   "module": 2,
+   "composition": {
+    "E31_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_639",
+   "module": 2,
+   "composition": {
+    "adp[c]": 1.0,
+    "E_31": 1.0
+   }
+  },
+  {
+   "id": "complex_640",
+   "module": 21,
+   "composition": {
+    "co2[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_641",
+   "module": -1,
+   "composition": {
+    "co2[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_642",
+   "module": 87,
+   "composition": {
+    "h[m]": 5.0,
+    "E_85": 1.0
+   }
+  },
+  {
+   "id": "complex_643",
+   "module": 87,
+   "composition": {
+    "E85_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_644",
+   "module": 87,
+   "composition": {
+    "nadh[m]": 1.0,
+    "E85_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_645",
+   "module": 87,
+   "composition": {
+    "E85_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_646",
+   "module": 87,
+   "composition": {
+    "q6[m]": 1.0,
+    "E85_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_647",
+   "module": 0,
+   "composition": {
+    "E85_h[m]_nadh[m]_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_648",
+   "module": 0,
+   "composition": {
+    "E85_h[c]_nad[m]_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_649",
+   "module": 87,
+   "composition": {
+    "nad[m]": 1.0,
+    "E85_h[c]_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_650",
+   "module": 87,
+   "composition": {
+    "E85_h[c]_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_651",
+   "module": 87,
+   "composition": {
+    "h[c]": 4.0,
+    "E85_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_652",
+   "module": 87,
+   "composition": {
+    "E85_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_653",
+   "module": 87,
+   "composition": {
+    "q6h2[m]": 1.0,
+    "E_85": 1.0
+   }
+  },
+  {
+   "id": "complex_654",
+   "module": 88,
+   "composition": {
+    "accoa[m]": 1.0,
+    "E_58": 1.0
+   }
+  },
+  {
+   "id": "complex_655",
+   "module": 88,
+   "composition": {
+    "E58_accoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_656",
+   "module": 88,
+   "composition": {
+    "succ[m]": 1.0,
+    "E58_accoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_657",
+   "module": 0,
+   "composition": {
+    "E58_accoa[m]_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_658",
+   "module": 0,
+   "composition": {
+    "E58_ac[m]_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_659",
+   "module": 88,
+   "composition": {
+    "ac[m]": 1.0,
+    "E58_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_660",
+   "module": 88,
+   "composition": {
+    "E58_succoa[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_661",
+   "module": 88,
+   "composition": {
+    "succoa[m]": 1.0,
+    "E_58": 1.0
+   }
+  },
+  {
+   "id": "complex_662",
+   "module": 35,
+   "composition": {
+    "h2o[x]": 1.0,
+    "E_54": 1.0
+   }
+  },
+  {
+   "id": "complex_663",
+   "module": 35,
+   "composition": {
+    "E54_h2o[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_664",
+   "module": 35,
+   "composition": {
+    "fum[x]": 1.0,
+    "E54_h2o[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_665",
+   "module": 0,
+   "composition": {
+    "E54_fum[x]_h2o[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_666",
+   "module": 0,
+   "composition": {
+    "E54_mal__L[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_667",
+   "module": 35,
+   "composition": {
+    "mal__L[x]": 1.0,
+    "E_54": 1.0
+   }
+  },
+  {
+   "id": "complex_668",
+   "module": 89,
+   "composition": {
+    "glu__L[c]": 1.0,
+    "E_19": 1.0
+   }
+  },
+  {
+   "id": "complex_669",
+   "module": 89,
+   "composition": {
+    "E19_glu__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_670",
+   "module": 89,
+   "composition": {
+    "nadp[c]": 1.0,
+    "E19_glu__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_671",
+   "module": 89,
+   "composition": {
+    "E19_glu__L[c]_nadp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_672",
+   "module": 89,
+   "composition": {
+    "h2o[c]": 1.0,
+    "E19_glu__L[c]_nadp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_673",
+   "module": 0,
+   "composition": {
+    "E19_glu__L[c]_h2o[c]_nadp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_674",
+   "module": 0,
+   "composition": {
+    "E19_akg[c]_h[c]_nadph[c]_nh4[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_675",
+   "module": 89,
+   "composition": {
+    "nadph[c]": 1.0,
+    "E19_akg[c]_h[c]_nh4[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_676",
+   "module": 89,
+   "composition": {
+    "E19_akg[c]_h[c]_nh4[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_677",
+   "module": 89,
+   "composition": {
+    "h[c]": 1.0,
+    "E19_akg[c]_nh4[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_678",
+   "module": 89,
+   "composition": {
+    "E19_akg[c]_nh4[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_679",
+   "module": 89,
+   "composition": {
+    "akg[c]": 1.0,
+    "E19_nh4[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_680",
+   "module": 89,
+   "composition": {
+    "E19_nh4[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_681",
+   "module": 89,
+   "composition": {
+    "nh4[c]": 1.0,
+    "E_19": 1.0
+   }
+  },
+  {
+   "id": "complex_682",
+   "module": 5,
+   "composition": {
+    "ala__L[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_683",
+   "module": 90,
+   "composition": {
+    "h2o[m]": 1.0,
+    "E_61": 1.0
+   }
+  },
+  {
+   "id": "complex_684",
+   "module": 90,
+   "composition": {
+    "E61_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_685",
+   "module": 90,
+   "composition": {
+    "fum[m]": 1.0,
+    "E61_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_686",
+   "module": 0,
+   "composition": {
+    "E61_fum[m]_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_687",
+   "module": 0,
+   "composition": {
+    "E61_mal__L[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_688",
+   "module": 90,
+   "composition": {
+    "mal__L[m]": 1.0,
+    "E_61": 1.0
+   }
+  },
+  {
+   "id": "complex_689",
+   "module": -1,
+   "composition": {
+    "h2o[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_690",
+   "module": 41,
+   "composition": {
+    "h2o[m]": 1.0,
+    "E_19": 1.0
+   }
+  },
+  {
+   "id": "complex_691",
+   "module": 41,
+   "composition": {
+    "E19_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_692",
+   "module": 41,
+   "composition": {
+    "glu__L[m]": 1.0,
+    "E19_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_693",
+   "module": 41,
+   "composition": {
+    "E19_glu__L[m]_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_694",
+   "module": 41,
+   "composition": {
+    "nadp[m]": 1.0,
+    "E19_glu__L[m]_h2o[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_695",
+   "module": 0,
+   "composition": {
+    "E19_glu__L[m]_h2o[m]_nadp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_696",
+   "module": 0,
+   "composition": {
+    "E19_akg[m]_h[m]_nadph[m]_nh4[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_697",
+   "module": 41,
+   "composition": {
+    "h[m]": 1.0,
+    "E19_akg[m]_nadph[m]_nh4[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_698",
+   "module": 41,
+   "composition": {
+    "E19_akg[m]_nadph[m]_nh4[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_699",
+   "module": 41,
+   "composition": {
+    "akg[m]": 1.0,
+    "E19_nadph[m]_nh4[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_700",
+   "module": 41,
+   "composition": {
+    "E19_nadph[m]_nh4[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_701",
+   "module": 41,
+   "composition": {
+    "nh4[m]": 1.0,
+    "E19_nadph[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_702",
+   "module": 41,
+   "composition": {
+    "E19_nadph[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_703",
+   "module": 41,
+   "composition": {
+    "nadph[m]": 1.0,
+    "E_19": 1.0
+   }
+  },
+  {
+   "id": "complex_704",
+   "module": 4,
+   "composition": {
+    "h[m]": 1.0,
+    "thr__L[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_705",
+   "module": 92,
+   "composition": {
+    "pro__L[e]": 1.0,
+    "atp[c]": 1.0,
+    "h2o[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_706",
+   "module": 92,
+   "composition": {
+    "h[c]": 1.0,
+    "adp[c]": 1.0,
+    "pi[c]": 1.0,
+    "pro__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_707",
+   "module": 93,
+   "composition": {
+    "2pg[c]": 1.0,
+    "E_4": 1.0
+   }
+  },
+  {
+   "id": "complex_708",
+   "module": 0,
+   "composition": {
+    "E4_2pg[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_709",
+   "module": 0,
+   "composition": {
+    "E4_h2o[c]_pep[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_710",
+   "module": 93,
+   "composition": {
+    "pep[c]": 1.0,
+    "E4_h2o[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_711",
+   "module": 93,
+   "composition": {
+    "E4_h2o[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_712",
+   "module": 93,
+   "composition": {
+    "h2o[c]": 1.0,
+    "E_4": 1.0
+   }
+  },
+  {
+   "id": "complex_713",
+   "module": 94,
+   "composition": {
+    "2pg[c]": 1.0,
+    "E_32": 1.0
+   }
+  },
+  {
+   "id": "complex_714",
+   "module": 0,
+   "composition": {
+    "E32_2pg[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_715",
+   "module": 0,
+   "composition": {
+    "E32_h2o[c]_pep[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_716",
+   "module": 94,
+   "composition": {
+    "pep[c]": 1.0,
+    "E32_h2o[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_717",
+   "module": 94,
+   "composition": {
+    "E32_h2o[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_718",
+   "module": 94,
+   "composition": {
+    "h2o[c]": 1.0,
+    "E_32": 1.0
+   }
+  },
+  {
+   "id": "complex_719",
+   "module": 10,
+   "composition": {
+    "nadp[c]": 1.0,
+    "E_53": 1.0
+   }
+  },
+  {
+   "id": "complex_720",
+   "module": 10,
+   "composition": {
+    "E53_nadp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_721",
+   "module": 10,
+   "composition": {
+    "6pgc[c]": 1.0,
+    "E53_nadp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_722",
+   "module": 0,
+   "composition": {
+    "E53_6pgc[c]_nadp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_723",
+   "module": 0,
+   "composition": {
+    "E53_co2[c]_nadph[c]_ru5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_724",
+   "module": 10,
+   "composition": {
+    "nadph[c]": 1.0,
+    "E53_co2[c]_ru5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_725",
+   "module": 10,
+   "composition": {
+    "E53_co2[c]_ru5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_726",
+   "module": 10,
+   "composition": {
+    "co2[c]": 1.0,
+    "E53_ru5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_727",
+   "module": 10,
+   "composition": {
+    "E53_ru5p__D[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_728",
+   "module": 10,
+   "composition": {
+    "ru5p__D[c]": 1.0,
+    "E_53": 1.0
+   }
+  },
+  {
+   "id": "complex_729",
+   "module": 95,
+   "composition": {
+    "cit[c]": 1.0,
+    "mal__L[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_730",
+   "module": 95,
+   "composition": {
+    "mal__L[c]": 1.0,
+    "cit[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_731",
+   "module": 21,
+   "composition": {
+    "pep[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_732",
+   "module": 21,
+   "composition": {
+    "pep[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_733",
+   "module": 96,
+   "composition": {
+    "h[m]": 1.5,
+    "E_11": 1.0
+   }
+  },
+  {
+   "id": "complex_734",
+   "module": 96,
+   "composition": {
+    "E11_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_735",
+   "module": 96,
+   "composition": {
+    "q6h2[m]": 1.0,
+    "E11_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_736",
+   "module": 96,
+   "composition": {
+    "E11_h[m]_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_737",
+   "module": 96,
+   "composition": {
+    "ficytc[m]": 2.0,
+    "E11_h[m]_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_738",
+   "module": 0,
+   "composition": {
+    "E11_ficytc[m]_h[m]_q6h2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_739",
+   "module": 0,
+   "composition": {
+    "E11_focytc[m]_h[c]_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_740",
+   "module": 96,
+   "composition": {
+    "h[c]": 3.5,
+    "E11_focytc[m]_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_741",
+   "module": 96,
+   "composition": {
+    "E11_focytc[m]_q6[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_742",
+   "module": 96,
+   "composition": {
+    "q6[m]": 1.0,
+    "E11_focytc[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_743",
+   "module": 96,
+   "composition": {
+    "E11_focytc[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_744",
+   "module": 96,
+   "composition": {
+    "focytc[m]": 2.0,
+    "E_11": 1.0
+   }
+  },
+  {
+   "id": "complex_745",
+   "module": 97,
+   "composition": {
+    "h[m]": 1.0,
+    "E_12": 1.0
+   }
+  },
+  {
+   "id": "complex_746",
+   "module": 97,
+   "composition": {
+    "E12_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_747",
+   "module": 97,
+   "composition": {
+    "nadh[m]": 1.0,
+    "E12_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_748",
+   "module": 97,
+   "composition": {
+    "E12_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_749",
+   "module": 97,
+   "composition": {
+    "fum[m]": 1.0,
+    "E12_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_750",
+   "module": 0,
+   "composition": {
+    "E12_fum[m]_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_751",
+   "module": 0,
+   "composition": {
+    "E12_nad[m]_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_752",
+   "module": 97,
+   "composition": {
+    "nad[m]": 1.0,
+    "E12_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_753",
+   "module": 97,
+   "composition": {
+    "E12_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_754",
+   "module": 97,
+   "composition": {
+    "succ[m]": 1.0,
+    "E_12": 1.0
+   }
+  },
+  {
+   "id": "complex_755",
+   "module": 98,
+   "composition": {
+    "h[m]": 1.0,
+    "E_70": 1.0
+   }
+  },
+  {
+   "id": "complex_756",
+   "module": 98,
+   "composition": {
+    "E70_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_757",
+   "module": 98,
+   "composition": {
+    "nadh[m]": 1.0,
+    "E70_h[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_758",
+   "module": 98,
+   "composition": {
+    "E70_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_759",
+   "module": 98,
+   "composition": {
+    "fum[m]": 1.0,
+    "E70_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_760",
+   "module": 0,
+   "composition": {
+    "E70_fum[m]_h[m]_nadh[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_761",
+   "module": 0,
+   "composition": {
+    "E70_nad[m]_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_762",
+   "module": 98,
+   "composition": {
+    "nad[m]": 1.0,
+    "E70_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_763",
+   "module": 98,
+   "composition": {
+    "E70_succ[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_764",
+   "module": 98,
+   "composition": {
+    "succ[m]": 1.0,
+    "E_70": 1.0
+   }
+  },
+  {
+   "id": "complex_765",
+   "module": 99,
+   "composition": {
+    "2ahethmpp[m]": 1.0,
+    "E_59": 1.0
+   }
+  },
+  {
+   "id": "complex_766",
+   "module": 99,
+   "composition": {
+    "E59_2ahethmpp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_767",
+   "module": 99,
+   "composition": {
+    "lpam[m]": 1.0,
+    "E59_2ahethmpp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_768",
+   "module": 0,
+   "composition": {
+    "E59_2ahethmpp[m]_lpam[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_769",
+   "module": 0,
+   "composition": {
+    "E59_adhlam[m]_thmpp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_770",
+   "module": 99,
+   "composition": {
+    "adhlam[m]": 1.0,
+    "E59_thmpp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_771",
+   "module": 99,
+   "composition": {
+    "E59_thmpp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_772",
+   "module": 99,
+   "composition": {
+    "thmpp[m]": 1.0,
+    "E_59": 1.0
+   }
+  },
+  {
+   "id": "complex_773",
+   "module": 10,
+   "composition": {
+    "g3p[c]": 1.0,
+    "E_77": 1.0
+   }
+  },
+  {
+   "id": "complex_774",
+   "module": 10,
+   "composition": {
+    "E77_g3p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_775",
+   "module": 10,
+   "composition": {
+    "s7p[c]": 1.0,
+    "E77_g3p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_776",
+   "module": 0,
+   "composition": {
+    "E77_g3p[c]_s7p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_777",
+   "module": 0,
+   "composition": {
+    "E77_e4p[c]_f6p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_778",
+   "module": 10,
+   "composition": {
+    "e4p[c]": 1.0,
+    "E77_f6p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_779",
+   "module": 10,
+   "composition": {
+    "E77_f6p[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_780",
+   "module": 10,
+   "composition": {
+    "f6p[c]": 1.0,
+    "E_77": 1.0
+   }
+  },
+  {
+   "id": "complex_781",
+   "module": 23,
+   "composition": {
+    "3pg[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_782",
+   "module": 23,
+   "composition": {
+    "3pg[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_783",
+   "module": 99,
+   "composition": {
+    "pyr[m]": 1.0,
+    "E_60": 1.0
+   }
+  },
+  {
+   "id": "complex_784",
+   "module": 99,
+   "composition": {
+    "E60_pyr[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_785",
+   "module": 99,
+   "composition": {
+    "thmpp[m]": 1.0,
+    "E60_pyr[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_786",
+   "module": 0,
+   "composition": {
+    "E60_pyr[m]_thmpp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_787",
+   "module": 0,
+   "composition": {
+    "E60_2ahethmpp[m]_co2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_788",
+   "module": 99,
+   "composition": {
+    "2ahethmpp[m]": 1.0,
+    "E60_co2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_789",
+   "module": 99,
+   "composition": {
+    "E60_co2[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_790",
+   "module": 99,
+   "composition": {
+    "co2[m]": 1.0,
+    "E_60": 1.0
+   }
+  },
+  {
+   "id": "complex_791",
+   "module": 41,
+   "composition": {
+    "icit[m]": 1.0,
+    "E_66": 1.0
+   }
+  },
+  {
+   "id": "complex_792",
+   "module": 41,
+   "composition": {
+    "E66_icit[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_793",
+   "module": 41,
+   "composition": {
+    "nadp[m]": 1.0,
+    "E66_icit[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_794",
+   "module": 0,
+   "composition": {
+    "E66_icit[m]_nadp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_795",
+   "module": 0,
+   "composition": {
+    "E66_akg[m]_co2[m]_nadph[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_796",
+   "module": 41,
+   "composition": {
+    "akg[m]": 1.0,
+    "E66_co2[m]_nadph[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_797",
+   "module": 41,
+   "composition": {
+    "E66_co2[m]_nadph[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_798",
+   "module": 41,
+   "composition": {
+    "co2[m]": 1.0,
+    "E66_nadph[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_799",
+   "module": 41,
+   "composition": {
+    "E66_nadph[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_800",
+   "module": 41,
+   "composition": {
+    "nadph[m]": 1.0,
+    "E_66": 1.0
+   }
+  },
+  {
+   "id": "complex_801",
+   "module": 100,
+   "composition": {
+    "g3p[x]": 1.0,
+    "E_6": 1.0
+   }
+  },
+  {
+   "id": "complex_802",
+   "module": 100,
+   "composition": {
+    "E6_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_803",
+   "module": 100,
+   "composition": {
+    "pi[x]": 1.0,
+    "E6_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_804",
+   "module": 100,
+   "composition": {
+    "E6_g3p[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_805",
+   "module": 100,
+   "composition": {
+    "nad[x]": 1.0,
+    "E6_g3p[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_806",
+   "module": 0,
+   "composition": {
+    "E6_g3p[x]_nad[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_807",
+   "module": 0,
+   "composition": {
+    "E6_13dpg[x]_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_808",
+   "module": 100,
+   "composition": {
+    "13dpg[x]": 1.0,
+    "E6_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_809",
+   "module": 100,
+   "composition": {
+    "E6_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_810",
+   "module": 100,
+   "composition": {
+    "h[x]": 1.0,
+    "E6_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_811",
+   "module": 100,
+   "composition": {
+    "E6_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_812",
+   "module": 100,
+   "composition": {
+    "nadh[x]": 1.0,
+    "E_6": 1.0
+   }
+  },
+  {
+   "id": "complex_813",
+   "module": 101,
+   "composition": {
+    "g3p[x]": 1.0,
+    "E_39": 1.0
+   }
+  },
+  {
+   "id": "complex_814",
+   "module": 101,
+   "composition": {
+    "E39_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_815",
+   "module": 101,
+   "composition": {
+    "pi[x]": 1.0,
+    "E39_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_816",
+   "module": 101,
+   "composition": {
+    "E39_g3p[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_817",
+   "module": 101,
+   "composition": {
+    "nad[x]": 1.0,
+    "E39_g3p[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_818",
+   "module": 0,
+   "composition": {
+    "E39_g3p[x]_nad[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_819",
+   "module": 0,
+   "composition": {
+    "E39_13dpg[x]_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_820",
+   "module": 101,
+   "composition": {
+    "13dpg[x]": 1.0,
+    "E39_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_821",
+   "module": 101,
+   "composition": {
+    "E39_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_822",
+   "module": 101,
+   "composition": {
+    "h[x]": 1.0,
+    "E39_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_823",
+   "module": 101,
+   "composition": {
+    "E39_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_824",
+   "module": 101,
+   "composition": {
+    "nadh[x]": 1.0,
+    "E_39": 1.0
+   }
+  },
+  {
+   "id": "complex_825",
+   "module": 102,
+   "composition": {
+    "g3p[x]": 1.0,
+    "E_41": 1.0
+   }
+  },
+  {
+   "id": "complex_826",
+   "module": 102,
+   "composition": {
+    "E41_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_827",
+   "module": 102,
+   "composition": {
+    "pi[x]": 1.0,
+    "E41_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_828",
+   "module": 102,
+   "composition": {
+    "E41_g3p[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_829",
+   "module": 102,
+   "composition": {
+    "nad[x]": 1.0,
+    "E41_g3p[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_830",
+   "module": 0,
+   "composition": {
+    "E41_g3p[x]_nad[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_831",
+   "module": 0,
+   "composition": {
+    "E41_13dpg[x]_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_832",
+   "module": 102,
+   "composition": {
+    "13dpg[x]": 1.0,
+    "E41_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_833",
+   "module": 102,
+   "composition": {
+    "E41_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_834",
+   "module": 102,
+   "composition": {
+    "h[x]": 1.0,
+    "E41_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_835",
+   "module": 102,
+   "composition": {
+    "E41_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_836",
+   "module": 102,
+   "composition": {
+    "nadh[x]": 1.0,
+    "E_41": 1.0
+   }
+  },
+  {
+   "id": "complex_837",
+   "module": 103,
+   "composition": {
+    "g3p[x]": 1.0,
+    "E_42": 1.0
+   }
+  },
+  {
+   "id": "complex_838",
+   "module": 103,
+   "composition": {
+    "E42_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_839",
+   "module": 103,
+   "composition": {
+    "pi[x]": 1.0,
+    "E42_g3p[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_840",
+   "module": 103,
+   "composition": {
+    "E42_g3p[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_841",
+   "module": 103,
+   "composition": {
+    "nad[x]": 1.0,
+    "E42_g3p[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_842",
+   "module": 0,
+   "composition": {
+    "E42_g3p[x]_nad[x]_pi[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_843",
+   "module": 0,
+   "composition": {
+    "E42_13dpg[x]_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_844",
+   "module": 103,
+   "composition": {
+    "13dpg[x]": 1.0,
+    "E42_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_845",
+   "module": 103,
+   "composition": {
+    "E42_h[x]_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_846",
+   "module": 103,
+   "composition": {
+    "h[x]": 1.0,
+    "E42_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_847",
+   "module": 103,
+   "composition": {
+    "E42_nadh[x]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_848",
+   "module": 103,
+   "composition": {
+    "nadh[x]": 1.0,
+    "E_42": 1.0
+   }
+  },
+  {
+   "id": "complex_849",
+   "module": 104,
+   "composition": {
+    "asp__L[c]": 1.0,
+    "E_13": 1.0
+   }
+  },
+  {
+   "id": "complex_850",
+   "module": 104,
+   "composition": {
+    "E13_asp__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_851",
+   "module": 104,
+   "composition": {
+    "akg[c]": 1.0,
+    "E13_asp__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_852",
+   "module": 0,
+   "composition": {
+    "E13_akg[c]_asp__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_853",
+   "module": 0,
+   "composition": {
+    "E13_glu__L[c]_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_854",
+   "module": 104,
+   "composition": {
+    "glu__L[c]": 1.0,
+    "E13_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_855",
+   "module": 104,
+   "composition": {
+    "E13_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_856",
+   "module": 104,
+   "composition": {
+    "oaa[c]": 1.0,
+    "E_13": 1.0
+   }
+  },
+  {
+   "id": "complex_857",
+   "module": 105,
+   "composition": {
+    "asp__L[c]": 1.0,
+    "E_80": 1.0
+   }
+  },
+  {
+   "id": "complex_858",
+   "module": 105,
+   "composition": {
+    "E80_asp__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_859",
+   "module": 105,
+   "composition": {
+    "akg[c]": 1.0,
+    "E80_asp__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_860",
+   "module": 0,
+   "composition": {
+    "E80_akg[c]_asp__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_861",
+   "module": 0,
+   "composition": {
+    "E80_glu__L[c]_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_862",
+   "module": 105,
+   "composition": {
+    "glu__L[c]": 1.0,
+    "E80_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_863",
+   "module": 105,
+   "composition": {
+    "E80_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_864",
+   "module": 105,
+   "composition": {
+    "oaa[c]": 1.0,
+    "E_80": 1.0
+   }
+  },
+  {
+   "id": "complex_865",
+   "module": 106,
+   "composition": {
+    "acser[c]": 1.0,
+    "E_74": 1.0
+   }
+  },
+  {
+   "id": "complex_866",
+   "module": 106,
+   "composition": {
+    "E74_acser[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_867",
+   "module": 106,
+   "composition": {
+    "h2s[c]": 1.0,
+    "E74_acser[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_868",
+   "module": 0,
+   "composition": {
+    "E74_acser[c]_h2s[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_869",
+   "module": 0,
+   "composition": {
+    "E74_ac[c]_cys__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_870",
+   "module": 106,
+   "composition": {
+    "cys__L[c]": 1.0,
+    "E74_ac[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_871",
+   "module": 106,
+   "composition": {
+    "E74_ac[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_872",
+   "module": 106,
+   "composition": {
+    "ac[c]": 1.0,
+    "E_74": 1.0
+   }
+  },
+  {
+   "id": "complex_873",
+   "module": 106,
+   "composition": {
+    "accoa[c]": 1.0,
+    "E_75": 1.0
+   }
+  },
+  {
+   "id": "complex_874",
+   "module": 106,
+   "composition": {
+    "E75_accoa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_875",
+   "module": 106,
+   "composition": {
+    "ser__L[c]": 1.0,
+    "E75_accoa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_876",
+   "module": 0,
+   "composition": {
+    "E75_accoa[c]_ser__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_877",
+   "module": 0,
+   "composition": {
+    "E75_acser[c]_coa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_878",
+   "module": 106,
+   "composition": {
+    "coa[c]": 1.0,
+    "E75_acser[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_879",
+   "module": 106,
+   "composition": {
+    "E75_acser[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_880",
+   "module": 106,
+   "composition": {
+    "acser[c]": 1.0,
+    "E_75": 1.0
+   }
+  },
+  {
+   "id": "complex_881",
+   "module": 107,
+   "composition": {
+    "gln__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_882",
+   "module": 47,
+   "composition": {
+    "arg__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_883",
+   "module": 47,
+   "composition": {
+    "phe__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_884",
+   "module": 47,
+   "composition": {
+    "ile__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_885",
+   "module": 47,
+   "composition": {
+    "his__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_886",
+   "module": 47,
+   "composition": {
+    "val__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_887",
+   "module": 47,
+   "composition": {
+    "leu__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_888",
+   "module": 47,
+   "composition": {
+    "lys__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_889",
+   "module": 108,
+   "composition": {
+    "ala__D[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_890",
+   "module": 0,
+   "composition": {
+    "ergst[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_891",
+   "module": 109,
+   "composition": {
+    "ser__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_892",
+   "module": 10,
+   "composition": {
+    "ura[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_893",
+   "module": 47,
+   "composition": {
+    "met__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_894",
+   "module": 110,
+   "composition": {
+    "cys__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_895",
+   "module": 111,
+   "composition": {
+    "asn__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_896",
+   "module": 95,
+   "composition": {
+    "cit[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_897",
+   "module": 0,
+   "composition": {
+    "h2s[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_898",
+   "module": 0,
+   "composition": {
+    "nh3[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_899",
+   "module": 10,
+   "composition": {
+    "gua[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_900",
+   "module": 112,
+   "composition": {
+    "mal__L[c]": 1.0,
+    "E_30": 1.0
+   }
+  },
+  {
+   "id": "complex_901",
+   "module": 112,
+   "composition": {
+    "E30_mal__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_902",
+   "module": 112,
+   "composition": {
+    "nad[c]": 1.0,
+    "E30_mal__L[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_903",
+   "module": 0,
+   "composition": {
+    "E30_mal__L[c]_nad[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_904",
+   "module": 0,
+   "composition": {
+    "E30_h[c]_nadh[c]_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_905",
+   "module": 112,
+   "composition": {
+    "h[c]": 1.0,
+    "E30_nadh[c]_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_906",
+   "module": 112,
+   "composition": {
+    "E30_nadh[c]_oaa[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_907",
+   "module": 112,
+   "composition": {
+    "oaa[c]": 1.0,
+    "E30_nadh[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_908",
+   "module": 112,
+   "composition": {
+    "E30_nadh[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_909",
+   "module": 112,
+   "composition": {
+    "nadh[c]": 1.0,
+    "E_30": 1.0
+   }
+  },
+  {
+   "id": "complex_910",
+   "module": -1,
+   "composition": {
+    "h[c]": 1.0,
+    "nh3[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_911",
+   "module": 114,
+   "composition": {
+    "prpp[c]": 1.0,
+    "E_16": 1.0
+   }
+  },
+  {
+   "id": "complex_912",
+   "module": 114,
+   "composition": {
+    "E16_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_913",
+   "module": 114,
+   "composition": {
+    "gua[c]": 1.0,
+    "E16_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_914",
+   "module": 0,
+   "composition": {
+    "E16_gua[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_915",
+   "module": 0,
+   "composition": {
+    "E16_gmp[c]_ppi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_916",
+   "module": 114,
+   "composition": {
+    "ppi[c]": 1.0,
+    "E16_gmp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_917",
+   "module": 114,
+   "composition": {
+    "E16_gmp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_918",
+   "module": 114,
+   "composition": {
+    "gmp[c]": 1.0,
+    "E_16": 1.0
+   }
+  },
+  {
+   "id": "complex_919",
+   "module": 115,
+   "composition": {
+    "prpp[c]": 1.0,
+    "E_86": 1.0
+   }
+  },
+  {
+   "id": "complex_920",
+   "module": 115,
+   "composition": {
+    "E86_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_921",
+   "module": 115,
+   "composition": {
+    "gua[c]": 1.0,
+    "E86_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_922",
+   "module": 0,
+   "composition": {
+    "E86_gua[c]_prpp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_923",
+   "module": 0,
+   "composition": {
+    "E86_gmp[c]_ppi[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_924",
+   "module": 115,
+   "composition": {
+    "ppi[c]": 1.0,
+    "E86_gmp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_925",
+   "module": 115,
+   "composition": {
+    "E86_gmp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_926",
+   "module": 115,
+   "composition": {
+    "gmp[c]": 1.0,
+    "E_86": 1.0
+   }
+  },
+  {
+   "id": "complex_927",
+   "module": 116,
+   "composition": {
+    "amp[c]": 1.0,
+    "E_2": 1.0
+   }
+  },
+  {
+   "id": "complex_928",
+   "module": 116,
+   "composition": {
+    "E2_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_929",
+   "module": 116,
+   "composition": {
+    "atp[c]": 1.0,
+    "E2_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_930",
+   "module": 0,
+   "composition": {
+    "E2_amp[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_931",
+   "module": 0,
+   "composition": {
+    "E2_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_932",
+   "module": 116,
+   "composition": {
+    "adp[c]": 2.0,
+    "E_2": 1.0
+   }
+  },
+  {
+   "id": "complex_933",
+   "module": 117,
+   "composition": {
+    "amp[c]": 1.0,
+    "E_21": 1.0
+   }
+  },
+  {
+   "id": "complex_934",
+   "module": 117,
+   "composition": {
+    "E21_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_935",
+   "module": 117,
+   "composition": {
+    "atp[c]": 1.0,
+    "E21_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_936",
+   "module": 0,
+   "composition": {
+    "E21_amp[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_937",
+   "module": 0,
+   "composition": {
+    "E21_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_938",
+   "module": 117,
+   "composition": {
+    "adp[c]": 2.0,
+    "E_21": 1.0
+   }
+  },
+  {
+   "id": "complex_939",
+   "module": 118,
+   "composition": {
+    "amp[c]": 1.0,
+    "E_22": 1.0
+   }
+  },
+  {
+   "id": "complex_940",
+   "module": 118,
+   "composition": {
+    "E22_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_941",
+   "module": 118,
+   "composition": {
+    "atp[c]": 1.0,
+    "E22_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_942",
+   "module": 0,
+   "composition": {
+    "E22_amp[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_943",
+   "module": 0,
+   "composition": {
+    "E22_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_944",
+   "module": 118,
+   "composition": {
+    "adp[c]": 2.0,
+    "E_22": 1.0
+   }
+  },
+  {
+   "id": "complex_945",
+   "module": 119,
+   "composition": {
+    "amp[c]": 1.0,
+    "E_23": 1.0
+   }
+  },
+  {
+   "id": "complex_946",
+   "module": 119,
+   "composition": {
+    "E23_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_947",
+   "module": 119,
+   "composition": {
+    "atp[c]": 1.0,
+    "E23_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_948",
+   "module": 0,
+   "composition": {
+    "E23_amp[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_949",
+   "module": 0,
+   "composition": {
+    "E23_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_950",
+   "module": 119,
+   "composition": {
+    "adp[c]": 2.0,
+    "E_23": 1.0
+   }
+  },
+  {
+   "id": "complex_951",
+   "module": 120,
+   "composition": {
+    "amp[c]": 1.0,
+    "E_24": 1.0
+   }
+  },
+  {
+   "id": "complex_952",
+   "module": 120,
+   "composition": {
+    "E24_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_953",
+   "module": 120,
+   "composition": {
+    "atp[c]": 1.0,
+    "E24_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_954",
+   "module": 0,
+   "composition": {
+    "E24_amp[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_955",
+   "module": 0,
+   "composition": {
+    "E24_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_956",
+   "module": 120,
+   "composition": {
+    "adp[c]": 2.0,
+    "E_24": 1.0
+   }
+  },
+  {
+   "id": "complex_957",
+   "module": 121,
+   "composition": {
+    "amp[c]": 1.0,
+    "E_25": 1.0
+   }
+  },
+  {
+   "id": "complex_958",
+   "module": 121,
+   "composition": {
+    "E25_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_959",
+   "module": 121,
+   "composition": {
+    "atp[c]": 1.0,
+    "E25_amp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_960",
+   "module": 0,
+   "composition": {
+    "E25_amp[c]_atp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_961",
+   "module": 0,
+   "composition": {
+    "E25_adp[c]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_962",
+   "module": 121,
+   "composition": {
+    "adp[c]": 2.0,
+    "E_25": 1.0
+   }
+  },
+  {
+   "id": "complex_963",
+   "module": 122,
+   "composition": {
+    "atp[m]": 1.0,
+    "E_2": 1.0
+   }
+  },
+  {
+   "id": "complex_964",
+   "module": 122,
+   "composition": {
+    "E2_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_965",
+   "module": 122,
+   "composition": {
+    "amp[m]": 1.0,
+    "E2_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_966",
+   "module": 0,
+   "composition": {
+    "E2_amp[m]_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_967",
+   "module": 0,
+   "composition": {
+    "E2_adp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_968",
+   "module": 122,
+   "composition": {
+    "adp[m]": 2.0,
+    "E_2": 1.0
+   }
+  },
+  {
+   "id": "complex_969",
+   "module": 123,
+   "composition": {
+    "atp[m]": 1.0,
+    "E_21": 1.0
+   }
+  },
+  {
+   "id": "complex_970",
+   "module": 123,
+   "composition": {
+    "E21_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_971",
+   "module": 123,
+   "composition": {
+    "amp[m]": 1.0,
+    "E21_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_972",
+   "module": 0,
+   "composition": {
+    "E21_amp[m]_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_973",
+   "module": 0,
+   "composition": {
+    "E21_adp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_974",
+   "module": 123,
+   "composition": {
+    "adp[m]": 2.0,
+    "E_21": 1.0
+   }
+  },
+  {
+   "id": "complex_975",
+   "module": 124,
+   "composition": {
+    "atp[m]": 1.0,
+    "E_22": 1.0
+   }
+  },
+  {
+   "id": "complex_976",
+   "module": 124,
+   "composition": {
+    "E22_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_977",
+   "module": 124,
+   "composition": {
+    "amp[m]": 1.0,
+    "E22_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_978",
+   "module": 0,
+   "composition": {
+    "E22_amp[m]_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_979",
+   "module": 0,
+   "composition": {
+    "E22_adp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_980",
+   "module": 124,
+   "composition": {
+    "adp[m]": 2.0,
+    "E_22": 1.0
+   }
+  },
+  {
+   "id": "complex_981",
+   "module": 125,
+   "composition": {
+    "atp[m]": 1.0,
+    "E_23": 1.0
+   }
+  },
+  {
+   "id": "complex_982",
+   "module": 125,
+   "composition": {
+    "E23_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_983",
+   "module": 125,
+   "composition": {
+    "amp[m]": 1.0,
+    "E23_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_984",
+   "module": 0,
+   "composition": {
+    "E23_amp[m]_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_985",
+   "module": 0,
+   "composition": {
+    "E23_adp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_986",
+   "module": 125,
+   "composition": {
+    "adp[m]": 2.0,
+    "E_23": 1.0
+   }
+  },
+  {
+   "id": "complex_987",
+   "module": 126,
+   "composition": {
+    "atp[m]": 1.0,
+    "E_24": 1.0
+   }
+  },
+  {
+   "id": "complex_988",
+   "module": 126,
+   "composition": {
+    "E24_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_989",
+   "module": 126,
+   "composition": {
+    "amp[m]": 1.0,
+    "E24_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_990",
+   "module": 0,
+   "composition": {
+    "E24_amp[m]_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_991",
+   "module": 0,
+   "composition": {
+    "E24_adp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_992",
+   "module": 126,
+   "composition": {
+    "adp[m]": 2.0,
+    "E_24": 1.0
+   }
+  },
+  {
+   "id": "complex_993",
+   "module": 127,
+   "composition": {
+    "atp[m]": 1.0,
+    "E_25": 1.0
+   }
+  },
+  {
+   "id": "complex_994",
+   "module": 127,
+   "composition": {
+    "E25_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_995",
+   "module": 127,
+   "composition": {
+    "amp[m]": 1.0,
+    "E25_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_996",
+   "module": 0,
+   "composition": {
+    "E25_amp[m]_atp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_997",
+   "module": 0,
+   "composition": {
+    "E25_adp[m]_complex": 1.0
+   }
+  },
+  {
+   "id": "complex_998",
+   "module": 127,
+   "composition": {
+    "adp[m]": 2.0,
+    "E_25": 1.0
+   }
+  },
+  {
+   "id": "complex_999",
+   "module": 47,
+   "composition": {
+    "h[e]": 1.0,
+    "arg__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1000",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "arg__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1001",
+   "module": 47,
+   "composition": {
+    "h[e]": 1.0,
+    "his__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1002",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "his__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1003",
+   "module": 47,
+   "composition": {
+    "h[e]": 1.0,
+    "ile__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1004",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "ile__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1005",
+   "module": 47,
+   "composition": {
+    "h[e]": 1.0,
+    "leu__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1006",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "leu__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1007",
+   "module": 47,
+   "composition": {
+    "h[e]": 1.0,
+    "lys__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1008",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "lys__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1009",
+   "module": 47,
+   "composition": {
+    "h[e]": 1.0,
+    "phe__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1010",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "phe__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1011",
+   "module": 108,
+   "composition": {
+    "h[e]": 1.0,
+    "ala__D[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1012",
+   "module": 108,
+   "composition": {
+    "h[c]": 1.0,
+    "ala__D[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1013",
+   "module": 12,
+   "composition": {
+    "ala__L[e]": 1.0,
+    "h[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1014",
+   "module": 12,
+   "composition": {
+    "h[c]": 1.0,
+    "ala__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1015",
+   "module": 47,
+   "composition": {
+    "ergst[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1016",
+   "module": 10,
+   "composition": {
+    "h[e]": 1.0,
+    "gua[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1017",
+   "module": 10,
+   "composition": {
+    "h[c]": 1.0,
+    "gua[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1018",
+   "module": 109,
+   "composition": {
+    "h[e]": 1.0,
+    "ser__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1019",
+   "module": 109,
+   "composition": {
+    "h[c]": 1.0,
+    "ser__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1020",
+   "module": 10,
+   "composition": {
+    "h[e]": 1.0,
+    "ura[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1021",
+   "module": 10,
+   "composition": {
+    "h[c]": 1.0,
+    "ura[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1022",
+   "module": 47,
+   "composition": {
+    "h[e]": 1.0,
+    "met__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1023",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "met__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1024",
+   "module": 107,
+   "composition": {
+    "h[e]": 1.0,
+    "gln__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1025",
+   "module": 107,
+   "composition": {
+    "h[c]": 1.0,
+    "gln__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1026",
+   "module": 37,
+   "composition": {
+    "h[e]": 1.0,
+    "gly[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1027",
+   "module": 37,
+   "composition": {
+    "h[c]": 1.0,
+    "gly[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1028",
+   "module": 47,
+   "composition": {
+    "h[e]": 1.0,
+    "val__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1029",
+   "module": 47,
+   "composition": {
+    "h[c]": 1.0,
+    "val__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1030",
+   "module": 111,
+   "composition": {
+    "h[e]": 1.0,
+    "asn__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1031",
+   "module": 111,
+   "composition": {
+    "h[c]": 1.0,
+    "asn__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1032",
+   "module": 110,
+   "composition": {
+    "h[e]": 1.0,
+    "cys__L[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1033",
+   "module": 110,
+   "composition": {
+    "h[c]": 1.0,
+    "cys__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1034",
+   "module": 95,
+   "composition": {
+    "h[e]": 1.0,
+    "cit[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1035",
+   "module": 95,
+   "composition": {
+    "h[c]": 1.0,
+    "cit[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1036",
+   "module": 44,
+   "composition": {
+    "h[e]": 1.0,
+    "ac[e]": 1.0
+   }
+  },
+  {
+   "id": "complex_1037",
+   "module": 44,
+   "composition": {
+    "h[c]": 1.0,
+    "ac[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1038",
+   "module": 106,
+   "composition": {
+    "h2s[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1039",
+   "module": -1,
+   "composition": {
+    "nh3[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1040",
+   "module": -1,
+   "composition": {
+    "oaa[x]": 1.0
+   }
+  },
+  {
+   "id": "complex_1041",
+   "module": 130,
+   "composition": {
+    "glu__L[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1042",
+   "module": 130,
+   "composition": {
+    "glu__L[m]": 1.0
+   }
+  },
+  {
+   "id": "complex_1043",
+   "module": 75,
+   "composition": {
+    "dtdp[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1044",
+   "module": 75,
+   "composition": {
+    "dtdp[n]": 1.0
+   }
+  },
+  {
+   "id": "complex_1045",
+   "module": 75,
+   "composition": {
+    "dttp[c]": 1.0
+   }
+  },
+  {
+   "id": "complex_1046",
+   "module": 75,
+   "composition": {
+    "dttp[n]": 1.0
+   }
+  }
+ ]
+}
