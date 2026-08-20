@@ -221,3 +221,11 @@ benchmarks/results/
 benchmarks/*.log
 benchmarks/julia/Manifest.toml
 benchmarks/published/
+
+# benchmark outputs: large, regenerable, and archived separately by archive_results.sh
+benchmarks/sweep/
+benchmarks/sweep_unblocked/
+benchmarks/triplicate*/
+benchmarks/reference/
+benchmarks/archive/
+benchmarks/unblocked/*.log

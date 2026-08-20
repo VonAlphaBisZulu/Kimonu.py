@@ -29,6 +29,7 @@ import scipy.io as sio
 from scipy import sparse
 
 import kimonu
+from kimonu.io import exact_matrix
 
 
 def read_sparse(group):
@@ -41,23 +42,11 @@ def read_sparse(group):
     return sparse.csc_matrix((data, ir, jc), shape=(nrows, ncols))
 
 
-def to_integer_rows(M):
-    """Scale each row to integers exactly; row scaling does not change ker(M)."""
-    M = M.tocsr()
-    rows, cols, vals = [], [], []
-    for i in range(M.shape[0]):
-        start, end = M.indptr[i], M.indptr[i + 1]
-        if start == end:
-            continue
-        fracs = [Fraction(str(v)) for v in M.data[start:end]]
-        scale = 1
-        for f in fracs:
-            scale = scale * f.denominator // gcd(scale, f.denominator)
-        for j, f in zip(M.indices[start:end], fracs):
-            rows.append(i)
-            cols.append(int(j))
-            vals.append(int(f * scale))
-    return sparse.csr_matrix((vals, (rows, cols)), shape=M.shape, dtype=np.int64)
+def to_exact(M):
+    """Exact rational form of ``M`` for the kernel computation."""
+    M = M.tocoo()
+    return exact_matrix(zip(M.row, M.col, M.data), M.shape)
+
 
 
 def components(adjacency, n, exclude):
@@ -119,7 +108,7 @@ def main():
                 m = fh[key]
                 A = read_sparse(m["A"]).tocsr().astype(np.int64)
                 S = read_sparse(m["S"])
-            N = to_integer_rows(S)
+            N = to_exact(S)
             nc = A.shape[0]
 
             t0 = time.perf_counter()

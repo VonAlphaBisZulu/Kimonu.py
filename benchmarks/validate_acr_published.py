@@ -34,6 +34,7 @@ from scipy import sparse
 import straindesign as sd
 
 import kimonu
+from kimonu.io import exact_matrix
 
 
 def read_sparse(group):
@@ -53,22 +54,11 @@ def read_strings(fh, dataset):
     return out
 
 
-def to_integer_rows(M):
-    M = M.tocsr()
-    rows, cols, vals = [], [], []
-    for i in range(M.shape[0]):
-        start, end = M.indptr[i], M.indptr[i + 1]
-        if start == end:
-            continue
-        fracs = [Fraction(str(v)) for v in M.data[start:end]]
-        scale = 1
-        for f in fracs:
-            scale = scale * f.denominator // gcd(scale, f.denominator)
-        for j, f in zip(M.indices[start:end], fracs):
-            rows.append(i)
-            cols.append(int(j))
-            vals.append(int(f * scale))
-    return sparse.csr_matrix((vals, (rows, cols)), shape=M.shape, dtype=np.int64)
+def to_exact(M):
+    """Exact rational form of ``M`` for the kernel computation."""
+    M = M.tocoo()
+    return exact_matrix(zip(M.row, M.col, M.data), M.shape)
+
 
 
 def read_published(path):
@@ -155,7 +145,7 @@ def main():
                 free_upto = len(mets)
             free = set(mets[:free_upto])
 
-            N = to_integer_rows(S)
+            N = to_exact(S)
             t0 = time.perf_counter()
             conc = kimonu.concordance_from_matrices(A, N)
             nullity = sd.sparse_nullspace(N).shape[1]

@@ -16,6 +16,8 @@ from math import gcd
 import numpy as np
 from scipy import sparse
 
+import straindesign as sd
+
 
 def _exact(coeff):
     """Exact rational value of a stoichiometric coefficient.
@@ -28,6 +30,18 @@ def _exact(coeff):
     return Fraction(str(coeff))
 
 
+def exact_matrix(entries, shape):
+    """A straindesign RationalMatrix from ``(row, col, value)`` triples, holding them exactly.
+
+    Clearing denominators to int64 instead overflows on models whose coefficients are written as
+    15-significant-digit decimals: iYS854's -7.73333333333333e-08 has a denominator of 10**22, and
+    Chlorella_variabilis_iAJ526 mixes seven such terms in one row.
+    """
+    return sd.RationalMatrix.from_fractions(
+        ((int(i), int(j), v if isinstance(v, Fraction) else Fraction(str(v))) for i, j, v in entries),
+        shape)
+
+
 def build_crn(model):
     """Return a namespace with A, Y, N and the id lists.
 
@@ -35,13 +49,11 @@ def build_crn(model):
       A            scipy.csr int  (complexes x reactions), incidence
       Y            scipy.csr float (metabolites x complexes), composition
       N            scipy.csr float (metabolites x reactions) = Y @ A
-      N_integer    scipy.csr int  (metabolites x reactions), N with every row scaled to integers
+      N_exact      straindesign.RationalMatrix (metabolites x reactions), N with exact entries
       complexes    list of canonical complexes (tuple of (met_id, Fraction coeff)), in A's row order
       reaction_ids, metabolite_ids
 
-    ``N_integer`` is what the exact nullspace is computed from. Scaling a row of N by a positive
-    constant leaves ker(N) unchanged, so clearing denominators row by row is exact and keeps the
-    kernel computation in integer arithmetic.
+    ``N_exact`` is what the exact nullspace is computed from.
     """
     met_ids = [m.id for m in model.metabolites]
     met_idx = {m: i for i, m in enumerate(met_ids)}
@@ -95,25 +107,15 @@ def build_crn(model):
                 j = A.indices[k]
                 exact[(i, j)] = exact.get((i, j), Fraction(0)) + Fraction(int(A.data[k])) * coeff
 
-    Ni, Nj, Nv = [], [], []
-    row_terms = {}
-    for (i, j), v in exact.items():
-        if v:
-            row_terms.setdefault(i, []).append((j, v))
-    for i, terms in row_terms.items():
-        scale = 1
-        for _, v in terms:
-            scale = scale * v.denominator // gcd(scale, v.denominator)
-        for j, v in terms:
-            Ni.append(i); Nj.append(j); Nv.append(int(v * scale))
-    N_integer = sparse.csr_matrix((Nv, (Ni, Nj)), shape=(len(met_ids), len(rxn_ids)), dtype=np.int64)
+    N_exact = exact_matrix(((i, j, v) for (i, j), v in exact.items() if v),
+                           (len(met_ids), len(rxn_ids)))
 
     complexes = [tuple(sorted(comp.items())) for comp in complex_comp]
 
     class CRN:
         pass
     out = CRN()
-    out.A, out.Y, out.N, out.N_integer = A, Y, N, N_integer
+    out.A, out.Y, out.N, out.N_exact = A, Y, N, N_exact
     out.complexes = complexes
     out.reaction_ids = rxn_ids
     out.metabolite_ids = met_ids

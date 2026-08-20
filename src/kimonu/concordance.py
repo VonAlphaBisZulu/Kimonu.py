@@ -18,7 +18,7 @@ from kimonu.io import build_crn
 ConcordanceResult = namedtuple(
     "ConcordanceResult",
     ["n_complexes", "n_balanced", "n_modules", "n_concordant_pairs",
-     "modules", "balanced", "complexes", "reaction_ids"],
+     "modules", "balanced", "complexes", "reaction_ids", "nullity"],
 )
 
 
@@ -89,7 +89,7 @@ def concordance(model, preprocess=True, solver=None):
     if preprocess:
         model = _fva_unblocked(model, solver=solver)
     crn = build_crn(model)
-    return concordance_from_matrices(crn.A, crn.N_integer, complexes=crn.complexes,
+    return concordance_from_matrices(crn.A, crn.N_exact, complexes=crn.complexes,
                                      reaction_ids=crn.reaction_ids)
 
 
@@ -128,4 +128,5 @@ def concordance_from_matrices(A, N, complexes=None, reaction_ids=None):
         balanced=balanced,
         complexes=complexes if complexes is not None else list(range(A.shape[0])),
         reaction_ids=reaction_ids if reaction_ids is not None else list(range(A.shape[1])),
+        nullity=K.shape[1],
     )

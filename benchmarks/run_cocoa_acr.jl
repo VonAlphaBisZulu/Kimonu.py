@@ -14,6 +14,34 @@ import COBREXA
 import AbstractFBCModels as A
 using COCOA
 using HiGHS
+using Gurobi
+if get(ENV, "COCOA_SOLVER", "HiGHS") == "CPLEX"
+    using CPLEX
+end
+
+const SOLVER = get(ENV, "COCOA_SOLVER", "HiGHS")
+
+# COCOA batches candidate pairs across Distributed workers; passing an empty vector disables that
+# entirely, which is how every earlier timing here was produced.
+using Distributed
+const SOLVER_EARLY = get(ENV, "COCOA_SOLVER", "HiGHS")
+const NPROCS = parse(Int, get(ENV, "COCOA_PROCS", "0"))
+if NPROCS > 0
+    addprocs(NPROCS; exeflags = "--project=$(Base.active_project())")
+    @everywhere using COCOA
+    @everywhere using HiGHS
+    if SOLVER_EARLY == "Gurobi"
+        @everywhere using Gurobi
+    elseif SOLVER_EARLY == "CPLEX"
+        @everywhere using CPLEX
+    end
+end
+const COCOA_WORKERS = NPROCS > 0 ? workers() : Int[]
+function optimizer()
+    SOLVER == "Gurobi" && return Gurobi.Optimizer
+    SOLVER == "CPLEX" && return Base.invokelatest(getfield, Main, :CPLEX).Optimizer
+    return HiGHS.Optimizer
+end
 using SparseArrays
 using JSON3
 
@@ -51,7 +79,7 @@ end
 # seeded identify_acr_acrr_dce is exported and never reached. So the seed varies the concordance
 # sampler only, which is the stage under comparison.
 t_conc = @elapsed res = activity_concordance_analysis(
-    model; optimizer = HiGHS.Optimizer, workers = Int[], seed = UInt(seed),
+    model; optimizer = optimizer(), workers = COCOA_WORKERS, seed = UInt(seed),
     kinetic_analysis = true, kinetic_efficient = false)
 
 acr = collect(res.acr.metabolite_id)
@@ -62,6 +90,11 @@ giant = isempty(kinetic) ? 0 : maximum([count(==(k), kinetic) for k in unique(ki
 
 open(out_path, "w") do io
     JSON3.write(io, Dict("tool" => "COCOA.jl", "seed" => seed, "seconds" => t_conc,
+                         # per-complex module labels, not just the giant's size: without them a
+                         # disagreement cannot be attributed to the partition rather than to the
+                         # span test that reads it.
+                         "kinetic_module" => kinetic,
+                         "complex_ids" => String.(res.complexes.complex_id),
                          "acr" => acr, "acrr" => acrr, "giant_module" => giant,
                          "n_complexes" => length(kinetic)))
 end

@@ -1,4 +1,4 @@
-function write_results_json(path, crn, model, module_of, seconds, t_balanced, t_concordant, n_pairs)
+function write_results_json(path, crn, model, module_of, seconds, t_balanced, t_concordant, n_pairs, mode, pairs_tested, completed)
 % Write the reference result in the same shape as the Kimonu and COCOA runners.
 %
 % Complexes are keyed by composition rather than by name, matching the other two exporters, so the
@@ -11,6 +11,11 @@ function write_results_json(path, crn, model, module_of, seconds, t_balanced, t_
   fprintf(fid, '  "seconds_balanced": %.6f,\n', t_balanced);
   fprintf(fid, '  "seconds_concordant": %.6f,\n', t_concordant);
   fprintf(fid, '  "candidate_pairs": %d,\n', n_pairs);
+  if nargin >= 9
+    fprintf(fid, '  "mode": "%s",\n', mode);
+    fprintf(fid, '  "pairs_tested": %d,\n', pairs_tested);
+    fprintf(fid, '  "completed": %s,\n', merge(completed, 'true', 'false'));
+  end
   fprintf(fid, '  "n_reactions": %d,\n', crn.n_reactions);
   fprintf(fid, '  "n_metabolites": %d,\n', crn.n_metabolites);
   fprintf(fid, '  "complexes": [\n');

@@ -52,7 +52,8 @@ class _Topology:
     instead of a sweep over every reaction on every round.
     """
 
-    __slots__ = ("succ", "pred", "producers", "substrates", "downstream", "n")
+    __slots__ = ("succ", "pred", "producers", "substrates", "products", "downstream", "n",
+                 "consumers", "_missing", "_broken", "_member", "_seen")
 
     def __init__(self, A):
         rxns = reaction_complexes(A)
@@ -62,15 +63,24 @@ class _Topology:
         self.pred = [set() for _ in range(n)]
         self.producers = [[] for _ in range(n)]      # complex -> reactions producing it
         self.substrates = [s for s, _ in rxns]       # reaction -> substrate complexes
+        self.products = [p for _, p in rxns]         # reaction -> product complexes
         self.downstream = [set() for _ in range(n)]  # complex -> complexes it can strand
+        self.consumers = [[] for _ in range(n)]       # complex -> reactions it is a substrate of
         for j, (subs, prods) in enumerate(rxns):
             for p in prods:
                 self.producers[p].append(j)
             for sc in subs:
+                self.consumers[sc].append(j)
                 for p in prods:
                     self.succ[sc].add(p)
                     self.pred[p].add(sc)
                     self.downstream[sc].add(p)
+        # Scratch, reused across calls: upstream_set runs thousands of times, and dict lookups
+        # keyed by complex or reaction dominated it.
+        self._missing = [0] * len(rxns)
+        self._broken = [0] * n
+        self._member = bytearray(n)
+        self._seen = bytearray(len(rxns))
 
 
 def complex_graph(A):
@@ -135,22 +145,69 @@ def upstream_set(candidates, topology, succ=None):
     succ = topology.succ if succ is None else succ
 
     # phase I: drop entry complexes, to a fixed point, by propagation
+    #
+    # A complex is an entry complex when some reaction producing it draws on a substrate outside
+    # the set. Both halves of that are counted rather than rescanned: `missing` per reaction and
+    # `broken` per complex, so the test is a lookup and each departure costs only the reactions
+    # that actually consumed it. Only reactions producing something in the set are in scope.
     substrates = topology.substrates
+    products = topology.products
     producers = topology.producers
 
-    def is_entry(c):
-        return any(any(s not in current for s in substrates[j]) for j in producers[c])
+    missing = topology._missing
+    broken = topology._broken
+    member = topology._member
+    consumers = topology.consumers
+    for c in current:
+        member[c] = 1
 
-    queue = [c for c in current if is_entry(c)]
+    scope = []
+    seen = topology._seen
+    feeds = {}
+    for c in current:
+        for j in producers[c]:
+            if not seen[j]:
+                seen[j] = 1
+                scope.append(j)
+                absent = 0
+                for sub in substrates[j]:
+                    if member[sub]:
+                        f = feeds.get(sub)
+                        if f is None:
+                            feeds[sub] = [j]
+                        else:
+                            f.append(j)
+                    else:
+                        absent += 1
+                missing[j] = absent
+    for j in scope:
+        if missing[j]:
+            for p in products[j]:
+                if member[p]:
+                    broken[p] += 1
+
+    queue = [c for c in current if broken[c]]
     while queue:
         c = queue.pop()
-        if c not in current:
+        if not member[c]:
             continue
+        member[c] = 0
         current.discard(c)
-        # only what c fed can newly become an entry complex
-        for downstream in topology.downstream[c]:
-            if downstream in current and is_entry(downstream):
-                queue.append(downstream)
+        for j in feeds.get(c, ()):
+            missing[j] += 1
+            if missing[j] == 1:
+                for p in products[j]:
+                    if member[p]:
+                        broken[p] += 1
+                        if broken[p] == 1:
+                            queue.append(p)
+
+    for j in scope:
+        missing[j] = 0
+        seen[j] = 0
+    for c in candidates:
+        broken[c] = 0
+        member[c] = 0
 
     # phase II: drop terminal strongly connected components
     #
@@ -160,7 +217,11 @@ def upstream_set(candidates, topology, succ=None):
     # unravels.
     if current:
         components = _sccs(succ, current)
-        terminal = [c for c in components if not any(succ[v] & (current - c) for v in c)]
+        # Terminality is judged on the full network, not on the candidate set: a component that
+        # feeds something outside the candidate is still feeding, so it is not terminal. Testing
+        # only against `current` calls such a component terminal and deletes it, which strands its
+        # complexes in singleton modules and loses every ACR/ACRR relation among them.
+        terminal = [c for c in components if not any(succ[v] - c for v in c)]
         for component in terminal:
             current -= component
     return current

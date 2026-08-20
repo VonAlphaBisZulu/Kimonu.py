@@ -78,7 +78,7 @@ def kimonu_cell(args, name):
         if status != "ok":
             return {"status": f"export {status}", "seconds": el, "log": log}
     status, el, log = run([sys.executable, os.path.join(HERE, "run_kimonu_crn.py"), crn, out,
-                           "--repeats", str(args.repeats)], args.timeout)
+                           "--repeats", str(args.repeats), "--solver", args.solver], args.timeout)
     rec = {"status": status, "seconds": el, "log": log if status != "ok" else ""}
     if status == "ok" and os.path.isfile(out):
         with open(out) as fh:
@@ -155,6 +155,7 @@ def main():
     ap.add_argument("--repeats", type=int, default=3)
     ap.add_argument("--jobs", type=int, default=1)
     ap.add_argument("--stages", default="kimonu,cocoa,reference")
+    ap.add_argument("--solver", default="gurobi")
     args = ap.parse_args()
 
     os.makedirs(args.workdir, exist_ok=True)

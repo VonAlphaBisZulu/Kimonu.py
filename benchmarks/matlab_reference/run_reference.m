@@ -94,10 +94,40 @@ if size(At, 1) > max_pairs
 end
 
 %% concordance -- reference function, unmodified
+% Two knobs, both off by default. REFERENCE_MODE=sampled uses the reference's own stochastic
+% prefilter, which is what produced the published numbers but makes the run non-deterministic.
+% REFERENCE_TIME_BUDGET caps the wall clock: the pairs are walked in chunks through the same
+% start/stop interface the reference provides for splitting this stage across jobs, so stopping
+% early leaves a partial but valid CC rather than nothing.
+ref_mode = getenv('REFERENCE_MODE');
+if isempty(ref_mode)
+  ref_mode = 'exhaustive';
+end
+if strcmp(ref_mode, 'sampled')
+  t0 = tic;
+  [At, CC] = pre_concordant_sampling(model, 'model', B, 10);
+  printf('sampled candidate pairs: %d (prefilter %.1f s)\n', size(At, 1), toc(t0)); fflush(stdout);
+end
+
+budget = str2double(getenv('REFERENCE_TIME_BUDGET'));
+n_pairs_total = size(At, 1);
+chunk = 5000;
+pairs_tested = 0;
 t0 = tic;
-CC = find_concordant_complexes(model, group, CC, At, 1, size(At, 1));
+while pairs_tested < n_pairs_total
+  stop_at = min(pairs_tested + chunk, n_pairs_total);
+  CC = find_concordant_complexes(model, group, CC, At, pairs_tested + 1, stop_at);
+  pairs_tested = stop_at;
+  if ~isnan(budget) && toc(t0) > budget
+    printf('time budget %.0f s reached after %d of %d pairs\n', budget, pairs_tested, n_pairs_total);
+    fflush(stdout);
+    break
+  end
+end
 t_concordant = toc(t0);
-printf('concordance done in %.1f s\n', t_concordant); fflush(stdout);
+completed = (pairs_tested == n_pairs_total);
+printf('concordance (%s): %d of %d pairs in %.1f s, completed=%d\n', ...
+       ref_mode, pairs_tested, n_pairs_total, t_concordant, completed); fflush(stdout);
 
 %% connected components over the concordance relation
 % Edges are the non-trivial (2) and trivial (-1) concordances; value 1 marks balanced complexes,
@@ -130,7 +160,27 @@ module_of(B) = 0;
 
 printf('modules: %d, balanced: %d\n', next_module, numel(B)); fflush(stdout);
 
+%% hand the concordance to the reference's own kinetic stage
+% code_kineticModule_analysis.R reads Results_balanced.MODEL_r{1}.A and class_with_balanced from a
+% .mat. Writing them here means the R stage runs on the concordance computed above rather than on
+% the authors' precomputed one. Elementary_Kinetic_Param is deliberately absent, as it is in every
+% shipped result file, which leaves the edge-deletion step inert exactly as in the original runs.
+mat_path = getenv('REFERENCE_MAT_OUT');
+if ~isempty(mat_path)
+  Results_balanced = struct();
+  Results_balanced.MODEL_r = {model};
+  class_with_balanced = {};
+  if ~isempty(B)
+    class_with_balanced{end+1} = B(:);
+  end
+  for m = 1:next_module
+    class_with_balanced{end+1} = find(module_of == m)(:);
+  end
+  save('-v7', mat_path, 'Results_balanced', 'class_with_balanced', 'B', 'CC', 'group');
+  printf('written %s (%d classes)\n', mat_path, numel(class_with_balanced)); fflush(stdout);
+end
+
 %% write results in the format the comparison script expects
 write_results_json(out_path, crn, model, module_of, t_balanced + t_concordant, ...
-                   t_balanced, t_concordant, size(At, 1));
+                   t_balanced, t_concordant, n_pairs_total, ref_mode, pairs_tested, completed);
 printf('written %s\n', out_path);
