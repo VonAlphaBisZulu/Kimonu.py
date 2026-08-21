@@ -1,4 +1,4 @@
-function write_results_json(path, crn, model, module_of, seconds, t_balanced, t_concordant, n_pairs, mode, pairs_tested, completed)
+function write_results_json(path, crn, model, module_of, seconds, t_balanced, t_concordant, n_pairs, mode, pairs_tested, completed, n_lp_fail, n_lp_nonopt)
 % Write the reference result in the same shape as the Kimonu and COCOA runners.
 %
 % Complexes are keyed by composition rather than by name, matching the other two exporters, so the
@@ -7,7 +7,15 @@ function write_results_json(path, crn, model, module_of, seconds, t_balanced, t_
   fid = fopen(path, 'w');
   fprintf(fid, '{\n');
   fprintf(fid, '  "tool": "Upstream_Algorithm",\n');
+  if nargin < 12, n_lp_fail = 0; end
+  if nargin < 13, n_lp_nonopt = 0; end
   fprintf(fid, '  "seconds": %.6f,\n', seconds);
+  % A non-optimal LP is mapped to nan by the reference and silently drops the pair or complex, so
+  % the counts travel with the result. lp_nonoptimal includes the infeasible negative branch the
+  % formulation produces on purpose; lp_degraded counts CPX_STAT_OPTIMAL_INFEAS, an optimal basis
+  % carrying small infeasibilities after unscaling, which the 1e9 bounds in the pair LP provoke.
+  fprintf(fid, '  "lp_nonoptimal": %d,\n', n_lp_nonopt);
+  fprintf(fid, '  "lp_degraded": %d,\n', n_lp_fail);
   fprintf(fid, '  "seconds_balanced": %.6f,\n', t_balanced);
   fprintf(fid, '  "seconds_concordant": %.6f,\n', t_concordant);
   fprintf(fid, '  "candidate_pairs": %d,\n', n_pairs);

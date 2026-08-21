@@ -85,6 +85,15 @@ t_conc = @elapsed res = activity_concordance_analysis(
 acr = collect(res.acr.metabolite_id)
 acrr = [[a, b] for (a, b) in zip(res.acrr.metabolite_1, res.acrr.metabolite_2)]
 kinetic = collect(res.complexes.kinetic_module)
+# the concordance partition feeds the kinetic stage; without it a module disagreement cannot be
+# attributed to the concordance step rather than to the upstream construction that consumes it
+conc = if hasproperty(res, :concordance_modules)
+    collect(res.concordance_modules)
+elseif hasproperty(res.complexes, :concordance_module)
+    collect(res.complexes.concordance_module)
+else
+    Int[]
+end
 giant = isempty(kinetic) ? 0 : maximum([count(==(k), kinetic) for k in unique(kinetic) if k > 0];
                                        init = 0)
 
@@ -94,6 +103,7 @@ open(out_path, "w") do io
                          # disagreement cannot be attributed to the partition rather than to the
                          # span test that reads it.
                          "kinetic_module" => kinetic,
+                         "concordance_module" => conc,
                          "complex_ids" => String.(res.complexes.complex_id),
                          "acr" => acr, "acrr" => acrr, "giant_module" => giant,
                          "n_complexes" => length(kinetic)))

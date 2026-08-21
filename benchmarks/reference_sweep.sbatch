@@ -15,6 +15,8 @@ mkdir -p $OUT
 
 # The reference is serial by construction, so the node is filled by running many models at once
 # rather than by giving any one model more cores. Ordered smallest first so results accumulate.
+# Each model's linprog calls go to its own persistent CPLEX worker; glpk both stalled indefinitely
+# on some complexes and returned spurious zeros, inflating the balanced set by 26% on iIT341.
 for f in $(ls -S -r $BASE/benchmarks/unblocked/*_fixed.crn.json); do
   basename $f _fixed.crn.json
 done | xargs -P $JOBS -I{} bash -c '
@@ -24,6 +26,7 @@ done | xargs -P $JOBS -I{} bash -c '
   U=$HOME/pipelines/2026-08_Kimonu/Upstream_Algorithm
   export PATH=$HOME/miniconda3/envs/octave/bin:$PATH
   export OCTAVE_HOME=$HOME/miniconda3/envs/octave
+  export LP_SERVER_PYTHON=$HOME/miniconda3/envs/straindesign/bin/python3
   export UPSTREAM_ALGORITHM=$U
   export REFERENCE_MODE=exhaustive
   export REFERENCE_TIME_BUDGET='"${BUDGET:-86400}"'

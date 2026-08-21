@@ -229,3 +229,4 @@ benchmarks/triplicate*/
 benchmarks/reference/
 benchmarks/archive/
 benchmarks/unblocked/*.log
+octave-workspace

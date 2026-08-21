@@ -60,7 +60,9 @@ printf('complexes %d, reactions %d, metabolites %d\n', nc, nr, nm); fflush(stdou
 t0 = tic;
 [B, group] = find_balanced_complexes(model);
 t_balanced = toc(t0);
-printf('balanced: %d complexes in %.1f s\n', numel(B), t_balanced); fflush(stdout);
+n_lp_fail = linprog('failures');
+printf('balanced: %d complexes in %.1f s (%d LP failures)\n', numel(B), t_balanced, n_lp_fail);
+fflush(stdout);
 
 %% candidate pairs
 % CC encodes the relationships: 1 balanced, -1 trivially concordant, 2 concordant.
@@ -181,6 +183,9 @@ if ~isempty(mat_path)
 end
 
 %% write results in the format the comparison script expects
+n_lp_fail_total = linprog('failures');
+n_lp_nonopt_total = linprog('nonoptimal');
 write_results_json(out_path, crn, model, module_of, t_balanced + t_concordant, ...
-                   t_balanced, t_concordant, n_pairs_total, ref_mode, pairs_tested, completed);
+                   t_balanced, t_concordant, n_pairs_total, ref_mode, pairs_tested, completed, ...
+                   n_lp_fail_total, n_lp_nonopt_total);
 printf('written %s\n', out_path);
