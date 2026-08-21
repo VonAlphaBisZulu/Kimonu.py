@@ -1,7 +1,7 @@
 {
  "tool": "Kimonu.py",
- "seconds": 1.869964572135359,
- "seconds_cold": 1.9799185718875378,
+ "seconds": 1.840092662954703,
+ "seconds_cold": 1.8726742509752512,
  "repeats": 3,
  "n_reactions": 7245,
  "n_metabolites": 4148,
