@@ -78,8 +78,12 @@ end
 # deterministic on this path: kinetic_analysis calls identify_acr_acrr, which uses no RNG. The
 # seeded identify_acr_acrr_dce is exported and never reached. So the seed varies the concordance
 # sampler only, which is the stage under comparison.
+# COCOA's own reproducibility notes report ACRR converging with sample size (iJR904: 1418 -> 1378
+# pairs from 1000 to >=5000), so the default is left at theirs and only raised deliberately.
+const COCOA_SAMPLES = parse(Int, get(ENV, "COCOA_SAMPLES", "1000"))
 t_conc = @elapsed res = activity_concordance_analysis(
     model; optimizer = optimizer(), workers = COCOA_WORKERS, seed = UInt(seed),
+    sample_size = COCOA_SAMPLES,
     kinetic_analysis = true, kinetic_efficient = false)
 
 acr = collect(res.acr.metabolite_id)
@@ -98,7 +102,7 @@ giant = isempty(kinetic) ? 0 : maximum([count(==(k), kinetic) for k in unique(ki
                                        init = 0)
 
 open(out_path, "w") do io
-    JSON3.write(io, Dict("tool" => "COCOA.jl", "seed" => seed, "seconds" => t_conc,
+    JSON3.write(io, Dict("tool" => "COCOA.jl", "seed" => seed, "sample_size" => COCOA_SAMPLES, "seconds" => t_conc,
                          # per-complex module labels, not just the giant's size: without them a
                          # disagreement cannot be attributed to the partition rather than to the
                          # span test that reads it.

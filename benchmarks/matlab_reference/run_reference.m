@@ -106,6 +106,12 @@ if isempty(ref_mode)
   ref_mode = 'exhaustive';
 end
 if strcmp(ref_mode, 'sampled')
+  % pre_concordant_sampling draws its flux samples from rand, so without a seed the candidate set
+  % it hands on -- and therefore the result -- differs run to run.
+  seed = str2double(getenv('REFERENCE_SEED'));
+  if ~isnan(seed)
+    rand('state', seed); randn('state', seed);
+  end
   t0 = tic;
   [At, CC] = pre_concordant_sampling(model, 'model', B, 10);
   printf('sampled candidate pairs: %d (prefilter %.1f s)\n', size(At, 1), toc(t0)); fflush(stdout);

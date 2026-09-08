@@ -15,7 +15,7 @@ Protocol: one text request line per LP, one binary response.
   OR  <slot> <r> <rhs> <k> i v ... | <k2> i v ...   row and objective
 Response: status(f64) fval(f64) x(n * f64), little-endian.
 """
-import sys, json, struct, numpy as np, cplex
+import os, sys, json, struct, numpy as np, cplex
 
 BIG = 1e30
 INF = cplex.infinity
@@ -49,8 +49,9 @@ class Slot:
         c.parameters.threads.set(1)
         # The balanced test classifies at |value| < 5e-10, below default solver tolerances, and a
         # warm start from a neighbouring basis can otherwise stop ~1e-4 short of the true optimum.
-        c.parameters.simplex.tolerances.optimality.set(1e-9)
-        c.parameters.simplex.tolerances.feasibility.set(1e-9)
+        if os.environ.get("LP_TIGHT_TOL", "1") == "1":
+            c.parameters.simplex.tolerances.optimality.set(1e-9)
+            c.parameters.simplex.tolerances.feasibility.set(1e-9)
         n = int(d["n"])
         c.variables.add(obj=[0.0] * n, lb=_fin(_arr(d["lb"])), ub=_fin(_arr(d["ub"])))
         rows, senses, rhs = [], "", []
@@ -146,8 +147,8 @@ def main():
         else:
             continue
         st, fv, x = slots[sid].solve()
-        out.write(struct.pack("<2d", st, fv))
-        out.write(np.asarray(x, dtype="<f8").tobytes())
+        # one write, not two: the reader blocks on each, so a second syscall costs a round trip
+        out.write(struct.pack("<2d", st, fv) + np.asarray(x, dtype="<f8").tobytes())
         out.flush()
 
 
