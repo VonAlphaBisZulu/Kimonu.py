@@ -44,16 +44,9 @@ def reaction_complexes(A):
 
 
 class _Topology:
-    """Reaction adjacency in the form the upstream algorithm needs, built once.
+    """Reaction adjacency in the form the upstream algorithm needs, built once."""
 
-    Phase I is a propagation, not a scan: a complex can only *become* an entry complex when one of
-    the substrates feeding it leaves the set. Keeping, per complex, the reactions that produce it
-    and the complexes it feeds turns each phase into work proportional to what actually changed,
-    instead of a sweep over every reaction on every round.
-    """
-
-    __slots__ = ("succ", "pred", "producers", "substrates", "products", "downstream", "n",
-                 "consumers", "_missing", "_broken", "_member", "_seen")
+    __slots__ = ("succ", "pred", "producers", "substrates", "products", "n")
 
     def __init__(self, A):
         rxns = reaction_complexes(A)
@@ -64,23 +57,13 @@ class _Topology:
         self.producers = [[] for _ in range(n)]      # complex -> reactions producing it
         self.substrates = [s for s, _ in rxns]       # reaction -> substrate complexes
         self.products = [p for _, p in rxns]         # reaction -> product complexes
-        self.downstream = [set() for _ in range(n)]  # complex -> complexes it can strand
-        self.consumers = [[] for _ in range(n)]       # complex -> reactions it is a substrate of
         for j, (subs, prods) in enumerate(rxns):
             for p in prods:
                 self.producers[p].append(j)
             for sc in subs:
-                self.consumers[sc].append(j)
                 for p in prods:
                     self.succ[sc].add(p)
                     self.pred[p].add(sc)
-                    self.downstream[sc].add(p)
-        # Scratch, reused across calls: upstream_set runs thousands of times, and dict lookups
-        # keyed by complex or reaction dominated it.
-        self._missing = [0] * len(rxns)
-        self._broken = [0] * n
-        self._member = bytearray(n)
-        self._seen = bytearray(len(rxns))
 
 
 def complex_graph(A):
@@ -144,70 +127,18 @@ def upstream_set(candidates, topology, succ=None):
     current = set(candidates)
     succ = topology.succ if succ is None else succ
 
-    # phase I: drop entry complexes, to a fixed point, by propagation
+    # phase I: drop entry complexes, to a fixed point
     #
     # A complex is an entry complex when some reaction producing it draws on a substrate outside
-    # the set. Both halves of that are counted rather than rescanned: `missing` per reaction and
-    # `broken` per complex, so the test is a lookup and each departure costs only the reactions
-    # that actually consumed it. Only reactions producing something in the set are in scope.
+    # the set.
     substrates = topology.substrates
-    products = topology.products
     producers = topology.producers
-
-    missing = topology._missing
-    broken = topology._broken
-    member = topology._member
-    consumers = topology.consumers
-    for c in current:
-        member[c] = 1
-
-    scope = []
-    seen = topology._seen
-    feeds = {}
-    for c in current:
-        for j in producers[c]:
-            if not seen[j]:
-                seen[j] = 1
-                scope.append(j)
-                absent = 0
-                for sub in substrates[j]:
-                    if member[sub]:
-                        f = feeds.get(sub)
-                        if f is None:
-                            feeds[sub] = [j]
-                        else:
-                            f.append(j)
-                    else:
-                        absent += 1
-                missing[j] = absent
-    for j in scope:
-        if missing[j]:
-            for p in products[j]:
-                if member[p]:
-                    broken[p] += 1
-
-    queue = [c for c in current if broken[c]]
-    while queue:
-        c = queue.pop()
-        if not member[c]:
-            continue
-        member[c] = 0
-        current.discard(c)
-        for j in feeds.get(c, ()):
-            missing[j] += 1
-            if missing[j] == 1:
-                for p in products[j]:
-                    if member[p]:
-                        broken[p] += 1
-                        if broken[p] == 1:
-                            queue.append(p)
-
-    for j in scope:
-        missing[j] = 0
-        seen[j] = 0
-    for c in candidates:
-        broken[c] = 0
-        member[c] = 0
+    while True:
+        entry = {c for c in current
+                 if any(any(sub not in current for sub in substrates[j]) for j in producers[c])}
+        if not entry:
+            break
+        current -= entry
 
     # phase II: drop terminal strongly connected components
     #
@@ -272,17 +203,6 @@ def classical_deficiency(Y, A, succ, pred, nullity=None):
         nullity = sd.sparse_nullspace((Y @ A).tocsr()).shape[1]
     rank = A.shape[1] - nullity
     return n - linkage - rank
-
-
-def _merge_overlapping(groups):
-    merged = []
-    for group in groups:
-        touching = [m for m in merged if m & group]
-        for m in touching:
-            merged.remove(m)
-            group = group | m
-        merged.append(group)
-    return merged
 
 
 def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20, nullity=None):
