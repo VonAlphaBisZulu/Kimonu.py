@@ -1,14 +1,16 @@
 {
  "tool": "Kimonu.py",
- "seconds": 0.5191293719690293,
- "seconds_cold": 0.53682262590155,
- "seconds_concordance": 0.12231858912855387,
- "seconds_kinetic": 0.37764600897207856,
- "seconds_acr": 0.015706685837358236,
- "repeats": 3,
+ "seconds": 0.26351725397398695,
+ "seconds_cold": 0.2645548759610392,
+ "seconds_concordance": 0.12149427499389276,
+ "seconds_kinetic": 0.12997170904418454,
+ "seconds_acr": 0.01181693997932598,
+ "repeats": 2,
  "n_reactions": 1339,
  "n_metabolites": 708,
- "n_complexes": 1046,
+ "n_complexes": 1045,
+ "n_blocked": 0,
+ "seconds_blocked": 0.7182599609950557,
  "n_balanced": 228,
  "n_concordance_modules": 111,
  "n_concordant_pairs": 5405,
@@ -81,7 +83,7 @@
     "akg[m]": 1.0,
     "mal__L[c]": 1.0
    },
-   "kinetic_module": 33
+   "kinetic_module": 35
   },
   {
    "id": "complex_2",
@@ -90,7 +92,7 @@
     "akg[c]": 1.0,
     "mal__L[m]": 1.0
    },
-   "kinetic_module": 34
+   "kinetic_module": 36
   },
   {
    "id": "complex_3",
@@ -99,7 +101,7 @@
     "g6p_A[c]": 1.0,
     "E_36": 1.0
    },
-   "kinetic_module": 35
+   "kinetic_module": 37
   },
   {
    "id": "complex_4",
@@ -107,7 +109,7 @@
    "composition": {
     "E36_g6p_A[c]_complex": 1.0
    },
-   "kinetic_module": 36
+   "kinetic_module": 38
   },
   {
    "id": "complex_5",
@@ -115,7 +117,7 @@
    "composition": {
     "E36_g6p_B[c]_complex": 1.0
    },
-   "kinetic_module": 37
+   "kinetic_module": 39
   },
   {
    "id": "complex_6",
@@ -124,7 +126,7 @@
     "g6p_B[c]": 1.0,
     "E_36": 1.0
    },
-   "kinetic_module": 38
+   "kinetic_module": 40
   },
   {
    "id": "complex_7",
@@ -133,7 +135,7 @@
     "accoa[m]": 1.0,
     "E_28": 1.0
    },
-   "kinetic_module": 39
+   "kinetic_module": 41
   },
   {
    "id": "complex_8",
@@ -141,7 +143,7 @@
    "composition": {
     "E28_accoa[m]_complex": 1.0
    },
-   "kinetic_module": 40
+   "kinetic_module": 42
   },
   {
    "id": "complex_9",
@@ -150,7 +152,7 @@
     "gly[m]": 1.0,
     "E28_accoa[m]_complex": 1.0
    },
-   "kinetic_module": 41
+   "kinetic_module": 43
   },
   {
    "id": "complex_10",
@@ -158,7 +160,7 @@
    "composition": {
     "E28_accoa[m]_gly[m]_complex": 1.0
    },
-   "kinetic_module": 42
+   "kinetic_module": 44
   },
   {
    "id": "complex_11",
@@ -166,7 +168,7 @@
    "composition": {
     "E28_2aobut[m]_coa[m]_complex": 1.0
    },
-   "kinetic_module": 43
+   "kinetic_module": 45
   },
   {
    "id": "complex_12",
@@ -175,7 +177,7 @@
     "2aobut[m]": 1.0,
     "E28_coa[m]_complex": 1.0
    },
-   "kinetic_module": 44
+   "kinetic_module": 46
   },
   {
    "id": "complex_13",
@@ -183,7 +185,7 @@
    "composition": {
     "E28_coa[m]_complex": 1.0
    },
-   "kinetic_module": 45
+   "kinetic_module": 47
   },
   {
    "id": "complex_14",
@@ -192,7 +194,7 @@
     "coa[m]": 1.0,
     "E_28": 1.0
    },
-   "kinetic_module": 46
+   "kinetic_module": 48
   },
   {
    "id": "complex_15",
@@ -201,7 +203,7 @@
     "akg[m]": 1.0,
     "E_49": 1.0
    },
-   "kinetic_module": 47
+   "kinetic_module": 49
   },
   {
    "id": "complex_16",
@@ -209,7 +211,7 @@
    "composition": {
     "E49_akg[m]_complex": 1.0
    },
-   "kinetic_module": 48
+   "kinetic_module": 50
   },
   {
    "id": "complex_17",
@@ -218,7 +220,7 @@
     "ala__L[m]": 1.0,
     "E49_akg[m]_complex": 1.0
    },
-   "kinetic_module": 49
+   "kinetic_module": 51
   },
   {
    "id": "complex_18",
@@ -226,7 +228,7 @@
    "composition": {
     "E49_akg[m]_ala__L[m]_complex": 1.0
    },
-   "kinetic_module": 50
+   "kinetic_module": 52
   },
   {
    "id": "complex_19",
@@ -234,7 +236,7 @@
    "composition": {
     "E49_glu__L[m]_pyr[m]_complex": 1.0
    },
-   "kinetic_module": 51
+   "kinetic_module": 53
   },
   {
    "id": "complex_20",
@@ -243,7 +245,7 @@
     "glu__L[m]": 1.0,
     "E49_pyr[m]_complex": 1.0
    },
-   "kinetic_module": 52
+   "kinetic_module": 54
   },
   {
    "id": "complex_21",
@@ -251,7 +253,7 @@
    "composition": {
     "E49_pyr[m]_complex": 1.0
    },
-   "kinetic_module": 53
+   "kinetic_module": 55
   },
   {
    "id": "complex_22",
@@ -260,7 +262,7 @@
     "pyr[m]": 1.0,
     "E_49": 1.0
    },
-   "kinetic_module": 54
+   "kinetic_module": 56
   },
   {
    "id": "complex_23",
@@ -269,7 +271,7 @@
     "nad[m]": 1.0,
     "E_29": 1.0
    },
-   "kinetic_module": 55
+   "kinetic_module": 57
   },
   {
    "id": "complex_24",
@@ -277,7 +279,7 @@
    "composition": {
     "E29_nad[m]_complex": 1.0
    },
-   "kinetic_module": 56
+   "kinetic_module": 58
   },
   {
    "id": "complex_25",
@@ -302,7 +304,7 @@
    "composition": {
     "E29_2aobut[m]_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 57
+   "kinetic_module": 59
   },
   {
    "id": "complex_28",
@@ -311,7 +313,7 @@
     "2aobut[m]": 1.0,
     "E29_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 58
+   "kinetic_module": 60
   },
   {
    "id": "complex_29",
@@ -319,7 +321,7 @@
    "composition": {
     "E29_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 59
+   "kinetic_module": 61
   },
   {
    "id": "complex_30",
@@ -328,7 +330,7 @@
     "h[m]": 1.0,
     "E29_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 60
+   "kinetic_module": 62
   },
   {
    "id": "complex_31",
@@ -336,7 +338,7 @@
    "composition": {
     "E29_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 61
+   "kinetic_module": 63
   },
   {
    "id": "complex_32",
@@ -345,7 +347,7 @@
     "nadh[m]": 1.0,
     "E_29": 1.0
    },
-   "kinetic_module": 62
+   "kinetic_module": 64
   },
   {
    "id": "complex_33",
@@ -354,7 +356,7 @@
     "atp[c]": 1.0,
     "E_15": 1.0
    },
-   "kinetic_module": 63
+   "kinetic_module": 65
   },
   {
    "id": "complex_34",
@@ -362,7 +364,7 @@
    "composition": {
     "E15_atp[c]_complex": 1.0
    },
-   "kinetic_module": 64
+   "kinetic_module": 66
   },
   {
    "id": "complex_35",
@@ -371,7 +373,7 @@
     "r5p[c]": 1.0,
     "E15_atp[c]_complex": 1.0
    },
-   "kinetic_module": 65
+   "kinetic_module": 67
   },
   {
    "id": "complex_36",
@@ -379,7 +381,7 @@
    "composition": {
     "E15_atp[c]_r5p[c]_complex": 1.0
    },
-   "kinetic_module": 66
+   "kinetic_module": 68
   },
   {
    "id": "complex_37",
@@ -387,7 +389,7 @@
    "composition": {
     "E15_amp[c]_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 67
+   "kinetic_module": 69
   },
   {
    "id": "complex_38",
@@ -396,7 +398,7 @@
     "amp[c]": 1.0,
     "E15_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 68
+   "kinetic_module": 70
   },
   {
    "id": "complex_39",
@@ -404,7 +406,7 @@
    "composition": {
     "E15_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 69
+   "kinetic_module": 71
   },
   {
    "id": "complex_40",
@@ -413,7 +415,7 @@
     "h[c]": 1.0,
     "E15_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 70
+   "kinetic_module": 72
   },
   {
    "id": "complex_41",
@@ -421,7 +423,7 @@
    "composition": {
     "E15_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 71
+   "kinetic_module": 73
   },
   {
    "id": "complex_42",
@@ -430,7 +432,7 @@
     "prpp[c]": 1.0,
     "E_15": 1.0
    },
-   "kinetic_module": 72
+   "kinetic_module": 74
   },
   {
    "id": "complex_43",
@@ -439,7 +441,7 @@
     "atp[c]": 1.0,
     "E_82": 1.0
    },
-   "kinetic_module": 73
+   "kinetic_module": 75
   },
   {
    "id": "complex_44",
@@ -447,7 +449,7 @@
    "composition": {
     "E82_atp[c]_complex": 1.0
    },
-   "kinetic_module": 74
+   "kinetic_module": 76
   },
   {
    "id": "complex_45",
@@ -456,7 +458,7 @@
     "r5p[c]": 1.0,
     "E82_atp[c]_complex": 1.0
    },
-   "kinetic_module": 75
+   "kinetic_module": 77
   },
   {
    "id": "complex_46",
@@ -464,7 +466,7 @@
    "composition": {
     "E82_atp[c]_r5p[c]_complex": 1.0
    },
-   "kinetic_module": 76
+   "kinetic_module": 78
   },
   {
    "id": "complex_47",
@@ -472,7 +474,7 @@
    "composition": {
     "E82_amp[c]_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 77
+   "kinetic_module": 79
   },
   {
    "id": "complex_48",
@@ -481,7 +483,7 @@
     "amp[c]": 1.0,
     "E82_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 78
+   "kinetic_module": 80
   },
   {
    "id": "complex_49",
@@ -489,7 +491,7 @@
    "composition": {
     "E82_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 79
+   "kinetic_module": 81
   },
   {
    "id": "complex_50",
@@ -498,7 +500,7 @@
     "h[c]": 1.0,
     "E82_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 80
+   "kinetic_module": 82
   },
   {
    "id": "complex_51",
@@ -506,7 +508,7 @@
    "composition": {
     "E82_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 81
+   "kinetic_module": 83
   },
   {
    "id": "complex_52",
@@ -515,7 +517,7 @@
     "prpp[c]": 1.0,
     "E_82": 1.0
    },
-   "kinetic_module": 82
+   "kinetic_module": 84
   },
   {
    "id": "complex_53",
@@ -524,7 +526,7 @@
     "atp[c]": 1.0,
     "E_83": 1.0
    },
-   "kinetic_module": 83
+   "kinetic_module": 85
   },
   {
    "id": "complex_54",
@@ -532,7 +534,7 @@
    "composition": {
     "E83_atp[c]_complex": 1.0
    },
-   "kinetic_module": 84
+   "kinetic_module": 86
   },
   {
    "id": "complex_55",
@@ -541,7 +543,7 @@
     "r5p[c]": 1.0,
     "E83_atp[c]_complex": 1.0
    },
-   "kinetic_module": 85
+   "kinetic_module": 87
   },
   {
    "id": "complex_56",
@@ -549,7 +551,7 @@
    "composition": {
     "E83_atp[c]_r5p[c]_complex": 1.0
    },
-   "kinetic_module": 86
+   "kinetic_module": 88
   },
   {
    "id": "complex_57",
@@ -557,7 +559,7 @@
    "composition": {
     "E83_amp[c]_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 87
+   "kinetic_module": 89
   },
   {
    "id": "complex_58",
@@ -566,7 +568,7 @@
     "amp[c]": 1.0,
     "E83_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 88
+   "kinetic_module": 90
   },
   {
    "id": "complex_59",
@@ -574,7 +576,7 @@
    "composition": {
     "E83_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 89
+   "kinetic_module": 91
   },
   {
    "id": "complex_60",
@@ -583,7 +585,7 @@
     "h[c]": 1.0,
     "E83_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 90
+   "kinetic_module": 92
   },
   {
    "id": "complex_61",
@@ -591,7 +593,7 @@
    "composition": {
     "E83_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 91
+   "kinetic_module": 93
   },
   {
    "id": "complex_62",
@@ -600,7 +602,7 @@
     "prpp[c]": 1.0,
     "E_83": 1.0
    },
-   "kinetic_module": 92
+   "kinetic_module": 94
   },
   {
    "id": "complex_63",
@@ -609,7 +611,7 @@
     "atp[c]": 1.0,
     "E_84": 1.0
    },
-   "kinetic_module": 93
+   "kinetic_module": 95
   },
   {
    "id": "complex_64",
@@ -617,7 +619,7 @@
    "composition": {
     "E84_atp[c]_complex": 1.0
    },
-   "kinetic_module": 94
+   "kinetic_module": 96
   },
   {
    "id": "complex_65",
@@ -626,7 +628,7 @@
     "r5p[c]": 1.0,
     "E84_atp[c]_complex": 1.0
    },
-   "kinetic_module": 95
+   "kinetic_module": 97
   },
   {
    "id": "complex_66",
@@ -634,7 +636,7 @@
    "composition": {
     "E84_atp[c]_r5p[c]_complex": 1.0
    },
-   "kinetic_module": 96
+   "kinetic_module": 98
   },
   {
    "id": "complex_67",
@@ -642,7 +644,7 @@
    "composition": {
     "E84_amp[c]_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 97
+   "kinetic_module": 99
   },
   {
    "id": "complex_68",
@@ -651,7 +653,7 @@
     "amp[c]": 1.0,
     "E84_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 98
+   "kinetic_module": 100
   },
   {
    "id": "complex_69",
@@ -659,7 +661,7 @@
    "composition": {
     "E84_h[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 99
+   "kinetic_module": 101
   },
   {
    "id": "complex_70",
@@ -668,7 +670,7 @@
     "h[c]": 1.0,
     "E84_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 100
+   "kinetic_module": 102
   },
   {
    "id": "complex_71",
@@ -676,7 +678,7 @@
    "composition": {
     "E84_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 101
+   "kinetic_module": 103
   },
   {
    "id": "complex_72",
@@ -685,7 +687,7 @@
     "prpp[c]": 1.0,
     "E_84": 1.0
    },
-   "kinetic_module": 102
+   "kinetic_module": 104
   },
   {
    "id": "complex_73",
@@ -694,7 +696,7 @@
     "r5p[c]": 1.0,
     "E_76": 1.0
    },
-   "kinetic_module": 103
+   "kinetic_module": 105
   },
   {
    "id": "complex_74",
@@ -702,7 +704,7 @@
    "composition": {
     "E76_r5p[c]_complex": 1.0
    },
-   "kinetic_module": 104
+   "kinetic_module": 106
   },
   {
    "id": "complex_75",
@@ -711,7 +713,7 @@
     "xu5p__D[c]": 1.0,
     "E76_r5p[c]_complex": 1.0
    },
-   "kinetic_module": 105
+   "kinetic_module": 107
   },
   {
    "id": "complex_76",
@@ -719,7 +721,7 @@
    "composition": {
     "E76_r5p[c]_xu5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 106
+   "kinetic_module": 108
   },
   {
    "id": "complex_77",
@@ -727,7 +729,7 @@
    "composition": {
     "E76_g3p[c]_s7p[c]_complex": 1.0
    },
-   "kinetic_module": 107
+   "kinetic_module": 109
   },
   {
    "id": "complex_78",
@@ -736,7 +738,7 @@
     "g3p[c]": 1.0,
     "E76_s7p[c]_complex": 1.0
    },
-   "kinetic_module": 108
+   "kinetic_module": 110
   },
   {
    "id": "complex_79",
@@ -744,7 +746,7 @@
    "composition": {
     "E76_s7p[c]_complex": 1.0
    },
-   "kinetic_module": 109
+   "kinetic_module": 111
   },
   {
    "id": "complex_80",
@@ -753,7 +755,7 @@
     "s7p[c]": 1.0,
     "E_76": 1.0
    },
-   "kinetic_module": 110
+   "kinetic_module": 112
   },
   {
    "id": "complex_81",
@@ -762,7 +764,7 @@
     "xu5p__D[c]": 1.0,
     "E_76": 1.0
    },
-   "kinetic_module": 111
+   "kinetic_module": 113
   },
   {
    "id": "complex_82",
@@ -770,7 +772,7 @@
    "composition": {
     "E76_xu5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 112
+   "kinetic_module": 114
   },
   {
    "id": "complex_83",
@@ -779,7 +781,7 @@
     "e4p[c]": 1.0,
     "E76_xu5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 113
+   "kinetic_module": 115
   },
   {
    "id": "complex_84",
@@ -787,7 +789,7 @@
    "composition": {
     "E76_e4p[c]_xu5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 114
+   "kinetic_module": 116
   },
   {
    "id": "complex_85",
@@ -795,7 +797,7 @@
    "composition": {
     "E76_f6p[c]_g3p[c]_complex": 1.0
    },
-   "kinetic_module": 115
+   "kinetic_module": 117
   },
   {
    "id": "complex_86",
@@ -804,7 +806,7 @@
     "g3p[c]": 1.0,
     "E76_f6p[c]_complex": 1.0
    },
-   "kinetic_module": 116
+   "kinetic_module": 118
   },
   {
    "id": "complex_87",
@@ -812,7 +814,7 @@
    "composition": {
     "E76_f6p[c]_complex": 1.0
    },
-   "kinetic_module": 117
+   "kinetic_module": 119
   },
   {
    "id": "complex_88",
@@ -821,7 +823,7 @@
     "f6p[c]": 1.0,
     "E_76": 1.0
    },
-   "kinetic_module": 118
+   "kinetic_module": 120
   },
   {
    "id": "complex_89",
@@ -829,7 +831,7 @@
    "composition": {
     "co2[e]": 1.0
    },
-   "kinetic_module": 119
+   "kinetic_module": 121
   },
   {
    "id": "complex_90",
@@ -837,7 +839,7 @@
    "composition": {
     "co2[c]": 1.0
    },
-   "kinetic_module": 120
+   "kinetic_module": 122
   },
   {
    "id": "complex_91",
@@ -845,7 +847,7 @@
    "composition": {
     "ala__L[e]": 1.0
    },
-   "kinetic_module": 121
+   "kinetic_module": 123
   },
   {
    "id": "complex_92",
@@ -853,7 +855,7 @@
    "composition": {
     "ala__L[c]": 1.0
    },
-   "kinetic_module": 122
+   "kinetic_module": 124
   },
   {
    "id": "complex_93",
@@ -862,7 +864,7 @@
     "g6p_B[c]": 1.0,
     "E_78": 1.0
    },
-   "kinetic_module": 123
+   "kinetic_module": 125
   },
   {
    "id": "complex_94",
@@ -870,7 +872,7 @@
    "composition": {
     "E78_g6p_B[c]_complex": 1.0
    },
-   "kinetic_module": 124
+   "kinetic_module": 126
   },
   {
    "id": "complex_95",
@@ -895,7 +897,7 @@
    "composition": {
     "E78_6pgl[c]_h[c]_nadph[c]_complex": 1.0
    },
-   "kinetic_module": 125
+   "kinetic_module": 127
   },
   {
    "id": "complex_98",
@@ -904,7 +906,7 @@
     "nadph[c]": 1.0,
     "E78_6pgl[c]_h[c]_complex": 1.0
    },
-   "kinetic_module": 126
+   "kinetic_module": 128
   },
   {
    "id": "complex_99",
@@ -912,7 +914,7 @@
    "composition": {
     "E78_6pgl[c]_h[c]_complex": 1.0
    },
-   "kinetic_module": 127
+   "kinetic_module": 129
   },
   {
    "id": "complex_100",
@@ -921,7 +923,7 @@
     "h[c]": 1.0,
     "E78_6pgl[c]_complex": 1.0
    },
-   "kinetic_module": 128
+   "kinetic_module": 130
   },
   {
    "id": "complex_101",
@@ -929,7 +931,7 @@
    "composition": {
     "E78_6pgl[c]_complex": 1.0
    },
-   "kinetic_module": 129
+   "kinetic_module": 131
   },
   {
    "id": "complex_102",
@@ -938,7 +940,7 @@
     "6pgl[c]": 1.0,
     "E_78": 1.0
    },
-   "kinetic_module": 130
+   "kinetic_module": 132
   },
   {
    "id": "complex_103",
@@ -947,7 +949,7 @@
     "dhap[x]": 1.0,
     "E_45": 1.0
    },
-   "kinetic_module": 131
+   "kinetic_module": 133
   },
   {
    "id": "complex_104",
@@ -955,7 +957,7 @@
    "composition": {
     "E45_dhap[x]_complex": 1.0
    },
-   "kinetic_module": 132
+   "kinetic_module": 134
   },
   {
    "id": "complex_105",
@@ -963,7 +965,7 @@
    "composition": {
     "E45_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 133
+   "kinetic_module": 135
   },
   {
    "id": "complex_106",
@@ -972,7 +974,7 @@
     "g3p[x]": 1.0,
     "E_45": 1.0
    },
-   "kinetic_module": 134
+   "kinetic_module": 136
   },
   {
    "id": "complex_107",
@@ -981,7 +983,7 @@
     "glu__L[e]": 1.0,
     "h[e]": 1.0
    },
-   "kinetic_module": 135
+   "kinetic_module": 137
   },
   {
    "id": "complex_108",
@@ -990,7 +992,7 @@
     "h[c]": 1.0,
     "glu__L[c]": 1.0
    },
-   "kinetic_module": 136
+   "kinetic_module": 138
   },
   {
    "id": "complex_109",
@@ -999,7 +1001,7 @@
     "h2o[m]": 1.0,
     "E_62": 1.0
    },
-   "kinetic_module": 137
+   "kinetic_module": 139
   },
   {
    "id": "complex_110",
@@ -1007,7 +1009,7 @@
    "composition": {
     "E62_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 138
+   "kinetic_module": 140
   },
   {
    "id": "complex_111",
@@ -1032,7 +1034,7 @@
    "composition": {
     "E62_h[m]_pi[m]_complex": 1.0
    },
-   "kinetic_module": 139
+   "kinetic_module": 141
   },
   {
    "id": "complex_114",
@@ -1041,7 +1043,7 @@
     "h[m]": 1.0,
     "E62_pi[m]_complex": 1.0
    },
-   "kinetic_module": 140
+   "kinetic_module": 142
   },
   {
    "id": "complex_115",
@@ -1049,7 +1051,7 @@
    "composition": {
     "E62_pi[m]_complex": 1.0
    },
-   "kinetic_module": 141
+   "kinetic_module": 143
   },
   {
    "id": "complex_116",
@@ -1058,7 +1060,7 @@
     "pi[m]": 2.0,
     "E_62": 1.0
    },
-   "kinetic_module": 142
+   "kinetic_module": 144
   },
   {
    "id": "complex_117",
@@ -1067,7 +1069,7 @@
     "h[m]": 1.0,
     "E_14": 1.0
    },
-   "kinetic_module": 143
+   "kinetic_module": 145
   },
   {
    "id": "complex_118",
@@ -1075,7 +1077,7 @@
    "composition": {
     "E14_h[m]_complex": 1.0
    },
-   "kinetic_module": 144
+   "kinetic_module": 146
   },
   {
    "id": "complex_119",
@@ -1084,7 +1086,7 @@
     "akg[m]": 1.0,
     "E14_h[m]_complex": 1.0
    },
-   "kinetic_module": 145
+   "kinetic_module": 147
   },
   {
    "id": "complex_120",
@@ -1092,7 +1094,7 @@
    "composition": {
     "E14_akg[m]_h[m]_complex": 1.0
    },
-   "kinetic_module": 146
+   "kinetic_module": 148
   },
   {
    "id": "complex_121",
@@ -1101,7 +1103,7 @@
     "lpam[m]": 1.0,
     "E14_akg[m]_h[m]_complex": 1.0
    },
-   "kinetic_module": 147
+   "kinetic_module": 149
   },
   {
    "id": "complex_122",
@@ -1109,7 +1111,7 @@
    "composition": {
     "E14_akg[m]_h[m]_lpam[m]_complex": 1.0
    },
-   "kinetic_module": 148
+   "kinetic_module": 150
   },
   {
    "id": "complex_123",
@@ -1117,7 +1119,7 @@
    "composition": {
     "E14_co2[m]_sdhlam[m]_complex": 1.0
    },
-   "kinetic_module": 149
+   "kinetic_module": 151
   },
   {
    "id": "complex_124",
@@ -1126,7 +1128,7 @@
     "co2[m]": 1.0,
     "E14_sdhlam[m]_complex": 1.0
    },
-   "kinetic_module": 150
+   "kinetic_module": 152
   },
   {
    "id": "complex_125",
@@ -1134,7 +1136,7 @@
    "composition": {
     "E14_sdhlam[m]_complex": 1.0
    },
-   "kinetic_module": 151
+   "kinetic_module": 153
   },
   {
    "id": "complex_126",
@@ -1143,7 +1145,7 @@
     "sdhlam[m]": 1.0,
     "E_14": 1.0
    },
-   "kinetic_module": 152
+   "kinetic_module": 154
   },
   {
    "id": "complex_127",
@@ -1152,7 +1154,7 @@
     "o2[m]": 1.0,
     "E_43": 1.0
    },
-   "kinetic_module": 153
+   "kinetic_module": 155
   },
   {
    "id": "complex_128",
@@ -1160,7 +1162,7 @@
    "composition": {
     "E43_o2[m]_complex": 1.0
    },
-   "kinetic_module": 154
+   "kinetic_module": 156
   },
   {
    "id": "complex_129",
@@ -1185,7 +1187,7 @@
    "composition": {
     "E43_h2o[m]_q6[m]_complex": 1.0
    },
-   "kinetic_module": 155
+   "kinetic_module": 157
   },
   {
    "id": "complex_132",
@@ -1194,7 +1196,7 @@
     "h2o[m]": 2.0,
     "E43_q6[m]_complex": 1.0
    },
-   "kinetic_module": 156
+   "kinetic_module": 158
   },
   {
    "id": "complex_133",
@@ -1202,7 +1204,7 @@
    "composition": {
     "E43_q6[m]_complex": 1.0
    },
-   "kinetic_module": 157
+   "kinetic_module": 159
   },
   {
    "id": "complex_134",
@@ -1211,7 +1213,7 @@
     "q6[m]": 2.0,
     "E_43": 1.0
    },
-   "kinetic_module": 158
+   "kinetic_module": 160
   },
   {
    "id": "complex_135",
@@ -1220,7 +1222,7 @@
     "h[m]": 10.0,
     "E_1": 1.0
    },
-   "kinetic_module": 159
+   "kinetic_module": 161
   },
   {
    "id": "complex_136",
@@ -1228,7 +1230,7 @@
    "composition": {
     "E1_h[m]_complex": 1.0
    },
-   "kinetic_module": 160
+   "kinetic_module": 162
   },
   {
    "id": "complex_137",
@@ -1237,7 +1239,7 @@
     "o2[m]": 1.0,
     "E1_h[m]_complex": 1.0
    },
-   "kinetic_module": 161
+   "kinetic_module": 163
   },
   {
    "id": "complex_138",
@@ -1245,7 +1247,7 @@
    "composition": {
     "E1_h[m]_o2[m]_complex": 1.0
    },
-   "kinetic_module": 162
+   "kinetic_module": 164
   },
   {
    "id": "complex_139",
@@ -1270,7 +1272,7 @@
    "composition": {
     "E1_ficytc[m]_h2o[m]_h[c]_complex": 1.0
    },
-   "kinetic_module": 163
+   "kinetic_module": 165
   },
   {
    "id": "complex_142",
@@ -1279,7 +1281,7 @@
     "h2o[m]": 2.0,
     "E1_ficytc[m]_h[c]_complex": 1.0
    },
-   "kinetic_module": 164
+   "kinetic_module": 166
   },
   {
    "id": "complex_143",
@@ -1287,7 +1289,7 @@
    "composition": {
     "E1_ficytc[m]_h[c]_complex": 1.0
    },
-   "kinetic_module": 165
+   "kinetic_module": 167
   },
   {
    "id": "complex_144",
@@ -1296,7 +1298,7 @@
     "h[c]": 6.0,
     "E1_ficytc[m]_complex": 1.0
    },
-   "kinetic_module": 166
+   "kinetic_module": 168
   },
   {
    "id": "complex_145",
@@ -1304,7 +1306,7 @@
    "composition": {
     "E1_ficytc[m]_complex": 1.0
    },
-   "kinetic_module": 167
+   "kinetic_module": 169
   },
   {
    "id": "complex_146",
@@ -1313,7 +1315,7 @@
     "ficytc[m]": 4.0,
     "E_1": 1.0
    },
-   "kinetic_module": 168
+   "kinetic_module": 170
   },
   {
    "id": "complex_147",
@@ -1322,7 +1324,7 @@
     "h[m]": 10.0,
     "E_63": 1.0
    },
-   "kinetic_module": 169
+   "kinetic_module": 171
   },
   {
    "id": "complex_148",
@@ -1330,7 +1332,7 @@
    "composition": {
     "E63_h[m]_complex": 1.0
    },
-   "kinetic_module": 170
+   "kinetic_module": 172
   },
   {
    "id": "complex_149",
@@ -1339,7 +1341,7 @@
     "o2[m]": 1.0,
     "E63_h[m]_complex": 1.0
    },
-   "kinetic_module": 171
+   "kinetic_module": 173
   },
   {
    "id": "complex_150",
@@ -1347,7 +1349,7 @@
    "composition": {
     "E63_h[m]_o2[m]_complex": 1.0
    },
-   "kinetic_module": 172
+   "kinetic_module": 174
   },
   {
    "id": "complex_151",
@@ -1372,7 +1374,7 @@
    "composition": {
     "E63_ficytc[m]_h2o[m]_h[c]_complex": 1.0
    },
-   "kinetic_module": 173
+   "kinetic_module": 175
   },
   {
    "id": "complex_154",
@@ -1381,7 +1383,7 @@
     "h2o[m]": 2.0,
     "E63_ficytc[m]_h[c]_complex": 1.0
    },
-   "kinetic_module": 174
+   "kinetic_module": 176
   },
   {
    "id": "complex_155",
@@ -1389,7 +1391,7 @@
    "composition": {
     "E63_ficytc[m]_h[c]_complex": 1.0
    },
-   "kinetic_module": 175
+   "kinetic_module": 177
   },
   {
    "id": "complex_156",
@@ -1398,7 +1400,7 @@
     "h[c]": 6.0,
     "E63_ficytc[m]_complex": 1.0
    },
-   "kinetic_module": 176
+   "kinetic_module": 178
   },
   {
    "id": "complex_157",
@@ -1406,7 +1408,7 @@
    "composition": {
     "E63_ficytc[m]_complex": 1.0
    },
-   "kinetic_module": 177
+   "kinetic_module": 179
   },
   {
    "id": "complex_158",
@@ -1415,7 +1417,7 @@
     "ficytc[m]": 4.0,
     "E_63": 1.0
    },
-   "kinetic_module": 178
+   "kinetic_module": 180
   },
   {
    "id": "complex_159",
@@ -1423,7 +1425,7 @@
    "composition": {
     "b_D_glucose[c]": 1.0
    },
-   "kinetic_module": 179
+   "kinetic_module": 181
   },
   {
    "id": "complex_160",
@@ -1431,7 +1433,7 @@
    "composition": {
     "b_D_glucose[x]": 1.0
    },
-   "kinetic_module": 180
+   "kinetic_module": 182
   },
   {
    "id": "complex_161",
@@ -1447,7 +1449,7 @@
    "composition": {
     "13dpg[c]": 1.0
    },
-   "kinetic_module": 181
+   "kinetic_module": 183
   },
   {
    "id": "complex_163",
@@ -1456,7 +1458,7 @@
     "q6[m]": 1.0,
     "E_73": 1.0
    },
-   "kinetic_module": 182
+   "kinetic_module": 184
   },
   {
    "id": "complex_164",
@@ -1464,7 +1466,7 @@
    "composition": {
     "E73_q6[m]_complex": 1.0
    },
-   "kinetic_module": 183
+   "kinetic_module": 185
   },
   {
    "id": "complex_165",
@@ -1473,7 +1475,7 @@
     "fadh2[m]": 1.0,
     "E73_q6[m]_complex": 1.0
    },
-   "kinetic_module": 184
+   "kinetic_module": 186
   },
   {
    "id": "complex_166",
@@ -1481,7 +1483,7 @@
    "composition": {
     "E73_fadh2[m]_q6[m]_complex": 1.0
    },
-   "kinetic_module": 185
+   "kinetic_module": 187
   },
   {
    "id": "complex_167",
@@ -1489,7 +1491,7 @@
    "composition": {
     "E73_fad[m]_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 186
+   "kinetic_module": 188
   },
   {
    "id": "complex_168",
@@ -1498,7 +1500,7 @@
     "q6h2[m]": 1.0,
     "E73_fad[m]_complex": 1.0
    },
-   "kinetic_module": 187
+   "kinetic_module": 189
   },
   {
    "id": "complex_169",
@@ -1506,7 +1508,7 @@
    "composition": {
     "E73_fad[m]_complex": 1.0
    },
-   "kinetic_module": 32
+   "kinetic_module": 34
   },
   {
    "id": "complex_170",
@@ -1515,7 +1517,7 @@
     "fad[m]": 1.0,
     "E_73": 1.0
    },
-   "kinetic_module": 32
+   "kinetic_module": 34
   },
   {
    "id": "complex_171",
@@ -1524,7 +1526,7 @@
     "13dpg[x]": 1.0,
     "E_50": 1.0
    },
-   "kinetic_module": 188
+   "kinetic_module": 190
   },
   {
    "id": "complex_172",
@@ -1532,7 +1534,7 @@
    "composition": {
     "E50_13dpg[x]_complex": 1.0
    },
-   "kinetic_module": 189
+   "kinetic_module": 191
   },
   {
    "id": "complex_173",
@@ -1541,7 +1543,7 @@
     "adp[x]": 1.0,
     "E50_13dpg[x]_complex": 1.0
    },
-   "kinetic_module": 190
+   "kinetic_module": 192
   },
   {
    "id": "complex_174",
@@ -1549,7 +1551,7 @@
    "composition": {
     "E50_13dpg[x]_adp[x]_complex": 1.0
    },
-   "kinetic_module": 191
+   "kinetic_module": 193
   },
   {
    "id": "complex_175",
@@ -1557,7 +1559,7 @@
    "composition": {
     "E50_3pg[x]_atp[x]_complex": 1.0
    },
-   "kinetic_module": 192
+   "kinetic_module": 194
   },
   {
    "id": "complex_176",
@@ -1566,7 +1568,7 @@
     "3pg[x]": 1.0,
     "E50_atp[x]_complex": 1.0
    },
-   "kinetic_module": 193
+   "kinetic_module": 195
   },
   {
    "id": "complex_177",
@@ -1574,7 +1576,7 @@
    "composition": {
     "E50_atp[x]_complex": 1.0
    },
-   "kinetic_module": 194
+   "kinetic_module": 196
   },
   {
    "id": "complex_178",
@@ -1583,7 +1585,7 @@
     "atp[x]": 1.0,
     "E_50": 1.0
    },
-   "kinetic_module": 195
+   "kinetic_module": 197
   },
   {
    "id": "complex_179",
@@ -1591,7 +1593,7 @@
    "composition": {
     "mal__L[x]": 1.0
    },
-   "kinetic_module": 196
+   "kinetic_module": 198
   },
   {
    "id": "complex_180",
@@ -1599,7 +1601,7 @@
    "composition": {
     "mal__L[c]": 1.0
    },
-   "kinetic_module": 197
+   "kinetic_module": 199
   },
   {
    "id": "complex_181",
@@ -1608,7 +1610,7 @@
     "fdp[x]": 1.0,
     "E_35": 1.0
    },
-   "kinetic_module": 198
+   "kinetic_module": 200
   },
   {
    "id": "complex_182",
@@ -1616,7 +1618,7 @@
    "composition": {
     "E35_fdp[x]_complex": 1.0
    },
-   "kinetic_module": 199
+   "kinetic_module": 201
   },
   {
    "id": "complex_183",
@@ -1624,7 +1626,7 @@
    "composition": {
     "E35_dhap[x]_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 200
+   "kinetic_module": 202
   },
   {
    "id": "complex_184",
@@ -1633,7 +1635,7 @@
     "g3p[x]": 1.0,
     "E35_dhap[x]_complex": 1.0
    },
-   "kinetic_module": 201
+   "kinetic_module": 203
   },
   {
    "id": "complex_185",
@@ -1641,7 +1643,7 @@
    "composition": {
     "E35_dhap[x]_complex": 1.0
    },
-   "kinetic_module": 202
+   "kinetic_module": 204
   },
   {
    "id": "complex_186",
@@ -1650,7 +1652,7 @@
     "dhap[x]": 1.0,
     "E_35": 1.0
    },
-   "kinetic_module": 203
+   "kinetic_module": 205
   },
   {
    "id": "complex_187",
@@ -1658,7 +1660,7 @@
    "composition": {
     "gly[c]": 1.0
    },
-   "kinetic_module": 204
+   "kinetic_module": 206
   },
   {
    "id": "complex_188",
@@ -1666,7 +1668,7 @@
    "composition": {
     "gly[m]": 1.0
    },
-   "kinetic_module": 205
+   "kinetic_module": 207
   },
   {
    "id": "complex_189",
@@ -1675,7 +1677,7 @@
     "ru5p__D[c]": 1.0,
     "E_79": 1.0
    },
-   "kinetic_module": 206
+   "kinetic_module": 208
   },
   {
    "id": "complex_190",
@@ -1683,7 +1685,7 @@
    "composition": {
     "E79_ru5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 207
+   "kinetic_module": 209
   },
   {
    "id": "complex_191",
@@ -1691,7 +1693,7 @@
    "composition": {
     "E79_xu5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 208
+   "kinetic_module": 210
   },
   {
    "id": "complex_192",
@@ -1700,7 +1702,7 @@
     "xu5p__D[c]": 1.0,
     "E_79": 1.0
    },
-   "kinetic_module": 209
+   "kinetic_module": 211
   },
   {
    "id": "complex_193",
@@ -1709,7 +1711,7 @@
     "nad[m]": 1.0,
     "E_56": 1.0
    },
-   "kinetic_module": 210
+   "kinetic_module": 212
   },
   {
    "id": "complex_194",
@@ -1717,7 +1719,7 @@
    "composition": {
     "E56_nad[m]_complex": 1.0
    },
-   "kinetic_module": 211
+   "kinetic_module": 213
   },
   {
    "id": "complex_195",
@@ -1742,7 +1744,7 @@
    "composition": {
     "E56_h[m]_lpam[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 212
+   "kinetic_module": 214
   },
   {
    "id": "complex_198",
@@ -1751,7 +1753,7 @@
     "h[m]": 1.0,
     "E56_lpam[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 213
+   "kinetic_module": 215
   },
   {
    "id": "complex_199",
@@ -1759,7 +1761,7 @@
    "composition": {
     "E56_lpam[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 214
+   "kinetic_module": 216
   },
   {
    "id": "complex_200",
@@ -1768,7 +1770,7 @@
     "nadh[m]": 1.0,
     "E56_lpam[m]_complex": 1.0
    },
-   "kinetic_module": 215
+   "kinetic_module": 217
   },
   {
    "id": "complex_201",
@@ -1776,7 +1778,7 @@
    "composition": {
     "E56_lpam[m]_complex": 1.0
    },
-   "kinetic_module": 216
+   "kinetic_module": 218
   },
   {
    "id": "complex_202",
@@ -1785,7 +1787,7 @@
     "lpam[m]": 1.0,
     "E_56": 1.0
    },
-   "kinetic_module": 217
+   "kinetic_module": 219
   },
   {
    "id": "complex_203",
@@ -1794,7 +1796,7 @@
     "coa[m]": 1.0,
     "E_9": 1.0
    },
-   "kinetic_module": 218
+   "kinetic_module": 220
   },
   {
    "id": "complex_204",
@@ -1802,7 +1804,7 @@
    "composition": {
     "E9_coa[m]_complex": 1.0
    },
-   "kinetic_module": 219
+   "kinetic_module": 221
   },
   {
    "id": "complex_205",
@@ -1811,7 +1813,7 @@
     "h[m]": 1.0,
     "E9_coa[m]_complex": 1.0
    },
-   "kinetic_module": 220
+   "kinetic_module": 222
   },
   {
    "id": "complex_206",
@@ -1819,7 +1821,7 @@
    "composition": {
     "E9_coa[m]_h[m]_complex": 1.0
    },
-   "kinetic_module": 221
+   "kinetic_module": 223
   },
   {
    "id": "complex_207",
@@ -1844,7 +1846,7 @@
    "composition": {
     "E9_accoa[m]_dhlam[m]_complex": 1.0
    },
-   "kinetic_module": 222
+   "kinetic_module": 224
   },
   {
    "id": "complex_210",
@@ -1853,7 +1855,7 @@
     "accoa[m]": 1.0,
     "E9_dhlam[m]_complex": 1.0
    },
-   "kinetic_module": 223
+   "kinetic_module": 225
   },
   {
    "id": "complex_211",
@@ -1861,7 +1863,7 @@
    "composition": {
     "E9_dhlam[m]_complex": 1.0
    },
-   "kinetic_module": 224
+   "kinetic_module": 226
   },
   {
    "id": "complex_212",
@@ -1870,7 +1872,7 @@
     "dhlam[m]": 1.0,
     "E_9": 1.0
    },
-   "kinetic_module": 225
+   "kinetic_module": 227
   },
   {
    "id": "complex_213",
@@ -1879,7 +1881,7 @@
     "coa[m]": 1.0,
     "E_51": 1.0
    },
-   "kinetic_module": 226
+   "kinetic_module": 228
   },
   {
    "id": "complex_214",
@@ -1887,7 +1889,7 @@
    "composition": {
     "E51_coa[m]_complex": 1.0
    },
-   "kinetic_module": 227
+   "kinetic_module": 229
   },
   {
    "id": "complex_215",
@@ -1896,7 +1898,7 @@
     "h[m]": 1.0,
     "E51_coa[m]_complex": 1.0
    },
-   "kinetic_module": 228
+   "kinetic_module": 230
   },
   {
    "id": "complex_216",
@@ -1904,7 +1906,7 @@
    "composition": {
     "E51_coa[m]_h[m]_complex": 1.0
    },
-   "kinetic_module": 229
+   "kinetic_module": 231
   },
   {
    "id": "complex_217",
@@ -1929,7 +1931,7 @@
    "composition": {
     "E51_accoa[m]_dhlam[m]_complex": 1.0
    },
-   "kinetic_module": 230
+   "kinetic_module": 232
   },
   {
    "id": "complex_220",
@@ -1938,7 +1940,7 @@
     "accoa[m]": 1.0,
     "E51_dhlam[m]_complex": 1.0
    },
-   "kinetic_module": 231
+   "kinetic_module": 233
   },
   {
    "id": "complex_221",
@@ -1946,7 +1948,7 @@
    "composition": {
     "E51_dhlam[m]_complex": 1.0
    },
-   "kinetic_module": 232
+   "kinetic_module": 234
   },
   {
    "id": "complex_222",
@@ -1955,7 +1957,7 @@
     "dhlam[m]": 1.0,
     "E_51": 1.0
    },
-   "kinetic_module": 233
+   "kinetic_module": 235
   },
   {
    "id": "complex_223",
@@ -1964,7 +1966,7 @@
     "nad[m]": 1.0,
     "E_48": 1.0
    },
-   "kinetic_module": 234
+   "kinetic_module": 236
   },
   {
    "id": "complex_224",
@@ -1972,7 +1974,7 @@
    "composition": {
     "E48_nad[m]_complex": 1.0
    },
-   "kinetic_module": 235
+   "kinetic_module": 237
   },
   {
    "id": "complex_225",
@@ -1997,7 +1999,7 @@
    "composition": {
     "E48_co2[m]_nadh[m]_pyr[m]_complex": 1.0
    },
-   "kinetic_module": 236
+   "kinetic_module": 238
   },
   {
    "id": "complex_228",
@@ -2006,7 +2008,7 @@
     "pyr[m]": 1.0,
     "E48_co2[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 237
+   "kinetic_module": 239
   },
   {
    "id": "complex_229",
@@ -2014,7 +2016,7 @@
    "composition": {
     "E48_co2[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 238
+   "kinetic_module": 240
   },
   {
    "id": "complex_230",
@@ -2023,7 +2025,7 @@
     "nadh[m]": 1.0,
     "E48_co2[m]_complex": 1.0
    },
-   "kinetic_module": 239
+   "kinetic_module": 241
   },
   {
    "id": "complex_231",
@@ -2031,7 +2033,7 @@
    "composition": {
     "E48_co2[m]_complex": 1.0
    },
-   "kinetic_module": 240
+   "kinetic_module": 242
   },
   {
    "id": "complex_232",
@@ -2040,7 +2042,7 @@
     "co2[m]": 1.0,
     "E_48": 1.0
    },
-   "kinetic_module": 241
+   "kinetic_module": 243
   },
   {
    "id": "complex_233",
@@ -2058,7 +2060,7 @@
     "h[m]": 1.0,
     "pyr[m]": 1.0
    },
-   "kinetic_module": 242
+   "kinetic_module": 244
   },
   {
    "id": "complex_235",
@@ -2067,7 +2069,7 @@
     "mal__L[c]": 1.0,
     "E_47": 1.0
    },
-   "kinetic_module": 243
+   "kinetic_module": 245
   },
   {
    "id": "complex_236",
@@ -2075,7 +2077,7 @@
    "composition": {
     "E47_mal__L[c]_complex": 1.0
    },
-   "kinetic_module": 244
+   "kinetic_module": 246
   },
   {
    "id": "complex_237",
@@ -2100,7 +2102,7 @@
    "composition": {
     "E47_co2[c]_nadh[c]_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 245
+   "kinetic_module": 247
   },
   {
    "id": "complex_240",
@@ -2109,7 +2111,7 @@
     "co2[c]": 1.0,
     "E47_nadh[c]_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 246
+   "kinetic_module": 248
   },
   {
    "id": "complex_241",
@@ -2117,7 +2119,7 @@
    "composition": {
     "E47_nadh[c]_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 247
+   "kinetic_module": 249
   },
   {
    "id": "complex_242",
@@ -2126,7 +2128,7 @@
     "pyr[c]": 1.0,
     "E47_nadh[c]_complex": 1.0
    },
-   "kinetic_module": 248
+   "kinetic_module": 250
   },
   {
    "id": "complex_243",
@@ -2134,7 +2136,7 @@
    "composition": {
     "E47_nadh[c]_complex": 1.0
    },
-   "kinetic_module": 249
+   "kinetic_module": 251
   },
   {
    "id": "complex_244",
@@ -2143,7 +2145,7 @@
     "nadh[c]": 1.0,
     "E_47": 1.0
    },
-   "kinetic_module": 250
+   "kinetic_module": 252
   },
   {
    "id": "complex_245",
@@ -2152,7 +2154,7 @@
     "pro__L[e]": 1.0,
     "h[e]": 1.0
    },
-   "kinetic_module": 251
+   "kinetic_module": 253
   },
   {
    "id": "complex_246",
@@ -2161,7 +2163,7 @@
     "h[c]": 1.0,
     "pro__L[c]": 1.0
    },
-   "kinetic_module": 252
+   "kinetic_module": 254
   },
   {
    "id": "complex_247",
@@ -2170,7 +2172,7 @@
     "succ[m]": 1.0,
     "E73_fad[m]_complex": 1.0
    },
-   "kinetic_module": 253
+   "kinetic_module": 255
   },
   {
    "id": "complex_248",
@@ -2178,7 +2180,7 @@
    "composition": {
     "E73_fad[m]_succ[m]_complex": 1.0
    },
-   "kinetic_module": 254
+   "kinetic_module": 256
   },
   {
    "id": "complex_249",
@@ -2186,7 +2188,7 @@
    "composition": {
     "E73_fadh2[m]_fum[m]_complex": 1.0
    },
-   "kinetic_module": 255
+   "kinetic_module": 257
   },
   {
    "id": "complex_250",
@@ -2195,7 +2197,7 @@
     "fadh2[m]": 1.0,
     "E73_fum[m]_complex": 1.0
    },
-   "kinetic_module": 256
+   "kinetic_module": 258
   },
   {
    "id": "complex_251",
@@ -2203,7 +2205,7 @@
    "composition": {
     "E73_fum[m]_complex": 1.0
    },
-   "kinetic_module": 257
+   "kinetic_module": 259
   },
   {
    "id": "complex_252",
@@ -2212,7 +2214,7 @@
     "fum[m]": 1.0,
     "E_73": 1.0
    },
-   "kinetic_module": 258
+   "kinetic_module": 260
   },
   {
    "id": "complex_253",
@@ -2220,7 +2222,7 @@
    "composition": {
     "accoa[c]": 1.0
    },
-   "kinetic_module": 259
+   "kinetic_module": 261
   },
   {
    "id": "complex_254",
@@ -2228,7 +2230,7 @@
    "composition": {
     "accoa[m]": 1.0
    },
-   "kinetic_module": 260
+   "kinetic_module": 262
   },
   {
    "id": "complex_255",
@@ -2236,7 +2238,7 @@
    "composition": {
     "E36_f6p[c]_complex": 1.0
    },
-   "kinetic_module": 261
+   "kinetic_module": 263
   },
   {
    "id": "complex_256",
@@ -2245,7 +2247,7 @@
     "f6p[c]": 1.0,
     "E_36": 1.0
    },
-   "kinetic_module": 262
+   "kinetic_module": 264
   },
   {
    "id": "complex_257",
@@ -2253,7 +2255,7 @@
    "composition": {
     "h2o[c]": 1.0
    },
-   "kinetic_module": 263
+   "kinetic_module": 265
   },
   {
    "id": "complex_258",
@@ -2261,7 +2263,7 @@
    "composition": {
     "h2o[x]": 1.0
    },
-   "kinetic_module": 264
+   "kinetic_module": 266
   },
   {
    "id": "complex_259",
@@ -2269,7 +2271,7 @@
    "composition": {
     "coa[c]": 1.0
    },
-   "kinetic_module": 265
+   "kinetic_module": 267
   },
   {
    "id": "complex_260",
@@ -2277,7 +2279,7 @@
    "composition": {
     "coa[m]": 1.0
    },
-   "kinetic_module": 266
+   "kinetic_module": 268
   },
   {
    "id": "complex_261",
@@ -2286,7 +2288,7 @@
     "glu__L[c]": 1.0,
     "asp__L[m]": 1.0
    },
-   "kinetic_module": 267
+   "kinetic_module": 269
   },
   {
    "id": "complex_262",
@@ -2295,7 +2297,7 @@
     "glu__L[m]": 1.0,
     "asp__L[c]": 1.0
    },
-   "kinetic_module": 268
+   "kinetic_module": 270
   },
   {
    "id": "complex_263",
@@ -2303,7 +2305,7 @@
    "composition": {
     "gly[e]": 1.0
    },
-   "kinetic_module": 269
+   "kinetic_module": 271
   },
   {
    "id": "complex_264",
@@ -2312,7 +2314,7 @@
     "h[c]": 1.0,
     "pi[c]": 1.0
    },
-   "kinetic_module": 270
+   "kinetic_module": 272
   },
   {
    "id": "complex_265",
@@ -2321,7 +2323,7 @@
     "h[m]": 1.0,
     "pi[m]": 1.0
    },
-   "kinetic_module": 271
+   "kinetic_module": 273
   },
   {
    "id": "complex_266",
@@ -2329,7 +2331,7 @@
    "composition": {
     "nh4[c]": 1.0
    },
-   "kinetic_module": 272
+   "kinetic_module": 274
   },
   {
    "id": "complex_267",
@@ -2337,7 +2339,7 @@
    "composition": {
     "nh4[m]": 1.0
    },
-   "kinetic_module": 273
+   "kinetic_module": 275
   },
   {
    "id": "complex_268",
@@ -2346,7 +2348,7 @@
     "akg[m]": 1.0,
     "E_13": 1.0
    },
-   "kinetic_module": 274
+   "kinetic_module": 276
   },
   {
    "id": "complex_269",
@@ -2354,7 +2356,7 @@
    "composition": {
     "E13_akg[m]_complex": 1.0
    },
-   "kinetic_module": 275
+   "kinetic_module": 277
   },
   {
    "id": "complex_270",
@@ -2363,7 +2365,7 @@
     "asp__L[m]": 1.0,
     "E13_akg[m]_complex": 1.0
    },
-   "kinetic_module": 276
+   "kinetic_module": 278
   },
   {
    "id": "complex_271",
@@ -2371,7 +2373,7 @@
    "composition": {
     "E13_akg[m]_asp__L[m]_complex": 1.0
    },
-   "kinetic_module": 277
+   "kinetic_module": 279
   },
   {
    "id": "complex_272",
@@ -2379,7 +2381,7 @@
    "composition": {
     "E13_glu__L[m]_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 278
+   "kinetic_module": 280
   },
   {
    "id": "complex_273",
@@ -2388,7 +2390,7 @@
     "glu__L[m]": 1.0,
     "E13_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 279
+   "kinetic_module": 281
   },
   {
    "id": "complex_274",
@@ -2396,7 +2398,7 @@
    "composition": {
     "E13_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 280
+   "kinetic_module": 282
   },
   {
    "id": "complex_275",
@@ -2405,7 +2407,7 @@
     "oaa[m]": 1.0,
     "E_13": 1.0
    },
-   "kinetic_module": 281
+   "kinetic_module": 283
   },
   {
    "id": "complex_276",
@@ -2414,7 +2416,7 @@
     "akg[m]": 1.0,
     "E_80": 1.0
    },
-   "kinetic_module": 282
+   "kinetic_module": 284
   },
   {
    "id": "complex_277",
@@ -2422,7 +2424,7 @@
    "composition": {
     "E80_akg[m]_complex": 1.0
    },
-   "kinetic_module": 283
+   "kinetic_module": 285
   },
   {
    "id": "complex_278",
@@ -2431,7 +2433,7 @@
     "asp__L[m]": 1.0,
     "E80_akg[m]_complex": 1.0
    },
-   "kinetic_module": 284
+   "kinetic_module": 286
   },
   {
    "id": "complex_279",
@@ -2439,7 +2441,7 @@
    "composition": {
     "E80_akg[m]_asp__L[m]_complex": 1.0
    },
-   "kinetic_module": 285
+   "kinetic_module": 287
   },
   {
    "id": "complex_280",
@@ -2447,7 +2449,7 @@
    "composition": {
     "E80_glu__L[m]_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 286
+   "kinetic_module": 288
   },
   {
    "id": "complex_281",
@@ -2456,7 +2458,7 @@
     "glu__L[m]": 1.0,
     "E80_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 287
+   "kinetic_module": 289
   },
   {
    "id": "complex_282",
@@ -2464,7 +2466,7 @@
    "composition": {
     "E80_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 288
+   "kinetic_module": 290
   },
   {
    "id": "complex_283",
@@ -2473,7 +2475,7 @@
     "oaa[m]": 1.0,
     "E_80": 1.0
    },
-   "kinetic_module": 289
+   "kinetic_module": 291
   },
   {
    "id": "complex_284",
@@ -2481,7 +2483,7 @@
    "composition": {
     "ac[e]": 1.0
    },
-   "kinetic_module": 290
+   "kinetic_module": 292
   },
   {
    "id": "complex_285",
@@ -2489,7 +2491,7 @@
    "composition": {
     "ac[c]": 1.0
    },
-   "kinetic_module": 291
+   "kinetic_module": 293
   },
   {
    "id": "complex_286",
@@ -2505,7 +2507,7 @@
    "composition": {
     "succ[c]": 1.0
    },
-   "kinetic_module": 292
+   "kinetic_module": 294
   },
   {
    "id": "complex_288",
@@ -2514,7 +2516,7 @@
     "h[e]": 1.0,
     "thr__L[e]": 1.0
    },
-   "kinetic_module": 293
+   "kinetic_module": 295
   },
   {
    "id": "complex_289",
@@ -2523,7 +2525,7 @@
     "h[c]": 1.0,
     "thr__L[c]": 1.0
    },
-   "kinetic_module": 294
+   "kinetic_module": 296
   },
   {
    "id": "complex_290",
@@ -2532,7 +2534,7 @@
     "atp[m]": 1.0,
     "E_17": 1.0
    },
-   "kinetic_module": 295
+   "kinetic_module": 297
   },
   {
    "id": "complex_291",
@@ -2540,7 +2542,7 @@
    "composition": {
     "E17_atp[m]_complex": 1.0
    },
-   "kinetic_module": 296
+   "kinetic_module": 298
   },
   {
    "id": "complex_292",
@@ -2565,7 +2567,7 @@
    "composition": {
     "E17_adp[m]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 297
+   "kinetic_module": 299
   },
   {
    "id": "complex_295",
@@ -2574,7 +2576,7 @@
     "atp[c]": 1.0,
     "E17_adp[m]_complex": 1.0
    },
-   "kinetic_module": 298
+   "kinetic_module": 300
   },
   {
    "id": "complex_296",
@@ -2582,7 +2584,7 @@
    "composition": {
     "E17_adp[m]_complex": 1.0
    },
-   "kinetic_module": 299
+   "kinetic_module": 301
   },
   {
    "id": "complex_297",
@@ -2591,7 +2593,7 @@
     "adp[m]": 1.0,
     "E_17": 1.0
    },
-   "kinetic_module": 300
+   "kinetic_module": 302
   },
   {
    "id": "complex_298",
@@ -2599,7 +2601,7 @@
    "composition": {
     "o2[c]": 1.0
    },
-   "kinetic_module": 301
+   "kinetic_module": 303
   },
   {
    "id": "complex_299",
@@ -2607,7 +2609,7 @@
    "composition": {
     "o2[m]": 1.0
    },
-   "kinetic_module": 302
+   "kinetic_module": 304
   },
   {
    "id": "complex_300",
@@ -2615,7 +2617,7 @@
    "composition": {
     "a_D_glucose[e]": 1.0
    },
-   "kinetic_module": 303
+   "kinetic_module": 305
   },
   {
    "id": "complex_301",
@@ -2623,7 +2625,7 @@
    "composition": {
     "a_D_glucose[c]": 1.0
    },
-   "kinetic_module": 304
+   "kinetic_module": 306
   },
   {
    "id": "complex_302",
@@ -2632,7 +2634,7 @@
     "h[e]": 1.0,
     "asp__L[e]": 1.0
    },
-   "kinetic_module": 305
+   "kinetic_module": 307
   },
   {
    "id": "complex_303",
@@ -2641,7 +2643,7 @@
     "h[c]": 1.0,
     "asp__L[c]": 1.0
    },
-   "kinetic_module": 306
+   "kinetic_module": 308
   },
   {
    "id": "complex_304",
@@ -2649,7 +2651,7 @@
    "composition": {
     "oaa[c]": 1.0
    },
-   "kinetic_module": 307
+   "kinetic_module": 309
   },
   {
    "id": "complex_305",
@@ -2657,7 +2659,7 @@
    "composition": {
     "oaa[m]": 1.0
    },
-   "kinetic_module": 308
+   "kinetic_module": 310
   },
   {
    "id": "complex_306",
@@ -2666,7 +2668,7 @@
     "nad[m]": 1.0,
     "E_68": 1.0
    },
-   "kinetic_module": 309
+   "kinetic_module": 311
   },
   {
    "id": "complex_307",
@@ -2674,7 +2676,7 @@
    "composition": {
     "E68_nad[m]_complex": 1.0
    },
-   "kinetic_module": 310
+   "kinetic_module": 312
   },
   {
    "id": "complex_308",
@@ -2683,7 +2685,7 @@
     "mal__L[m]": 1.0,
     "E68_nad[m]_complex": 1.0
    },
-   "kinetic_module": 311
+   "kinetic_module": 313
   },
   {
    "id": "complex_309",
@@ -2691,7 +2693,7 @@
    "composition": {
     "E68_mal__L[m]_nad[m]_complex": 1.0
    },
-   "kinetic_module": 312
+   "kinetic_module": 314
   },
   {
    "id": "complex_310",
@@ -2699,7 +2701,7 @@
    "composition": {
     "E68_h[m]_nadh[m]_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 313
+   "kinetic_module": 315
   },
   {
    "id": "complex_311",
@@ -2708,7 +2710,7 @@
     "h[m]": 1.0,
     "E68_nadh[m]_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 314
+   "kinetic_module": 316
   },
   {
    "id": "complex_312",
@@ -2716,7 +2718,7 @@
    "composition": {
     "E68_nadh[m]_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 315
+   "kinetic_module": 317
   },
   {
    "id": "complex_313",
@@ -2725,7 +2727,7 @@
     "nadh[m]": 1.0,
     "E68_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 316
+   "kinetic_module": 318
   },
   {
    "id": "complex_314",
@@ -2733,7 +2735,7 @@
    "composition": {
     "E68_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 317
+   "kinetic_module": 319
   },
   {
    "id": "complex_315",
@@ -2742,7 +2744,7 @@
     "oaa[m]": 1.0,
     "E_68": 1.0
    },
-   "kinetic_module": 318
+   "kinetic_module": 320
   },
   {
    "id": "complex_316",
@@ -2751,7 +2753,7 @@
     "h[c]": 1.0,
     "E_37": 1.0
    },
-   "kinetic_module": 319
+   "kinetic_module": 321
   },
   {
    "id": "complex_317",
@@ -2759,7 +2761,7 @@
    "composition": {
     "E37_h[c]_complex": 1.0
    },
-   "kinetic_module": 320
+   "kinetic_module": 322
   },
   {
    "id": "complex_318",
@@ -2768,7 +2770,7 @@
     "pep[c]": 1.0,
     "E37_h[c]_complex": 1.0
    },
-   "kinetic_module": 321
+   "kinetic_module": 323
   },
   {
    "id": "complex_319",
@@ -2776,7 +2778,7 @@
    "composition": {
     "E37_h[c]_pep[c]_complex": 1.0
    },
-   "kinetic_module": 322
+   "kinetic_module": 324
   },
   {
    "id": "complex_320",
@@ -2801,7 +2803,7 @@
    "composition": {
     "E37_atp[c]_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 323
+   "kinetic_module": 325
   },
   {
    "id": "complex_323",
@@ -2810,7 +2812,7 @@
     "atp[c]": 1.0,
     "E37_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 324
+   "kinetic_module": 326
   },
   {
    "id": "complex_324",
@@ -2818,7 +2820,7 @@
    "composition": {
     "E37_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 325
+   "kinetic_module": 327
   },
   {
    "id": "complex_325",
@@ -2827,7 +2829,7 @@
     "pyr[c]": 1.0,
     "E_37": 1.0
    },
-   "kinetic_module": 326
+   "kinetic_module": 328
   },
   {
    "id": "complex_326",
@@ -2836,7 +2838,7 @@
     "mal__L[x]": 1.0,
     "E_5": 1.0
    },
-   "kinetic_module": 327
+   "kinetic_module": 329
   },
   {
    "id": "complex_327",
@@ -2844,7 +2846,7 @@
    "composition": {
     "E5_mal__L[x]_complex": 1.0
    },
-   "kinetic_module": 328
+   "kinetic_module": 330
   },
   {
    "id": "complex_328",
@@ -2853,7 +2855,7 @@
     "nad[x]": 1.0,
     "E5_mal__L[x]_complex": 1.0
    },
-   "kinetic_module": 329
+   "kinetic_module": 331
   },
   {
    "id": "complex_329",
@@ -2861,7 +2863,7 @@
    "composition": {
     "E5_mal__L[x]_nad[x]_complex": 1.0
    },
-   "kinetic_module": 330
+   "kinetic_module": 332
   },
   {
    "id": "complex_330",
@@ -2869,7 +2871,7 @@
    "composition": {
     "E5_h[x]_nadh[x]_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 331
+   "kinetic_module": 333
   },
   {
    "id": "complex_331",
@@ -2878,7 +2880,7 @@
     "h[x]": 1.0,
     "E5_nadh[x]_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 332
+   "kinetic_module": 334
   },
   {
    "id": "complex_332",
@@ -2886,7 +2888,7 @@
    "composition": {
     "E5_nadh[x]_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 333
+   "kinetic_module": 335
   },
   {
    "id": "complex_333",
@@ -2895,7 +2897,7 @@
     "oaa[x]": 1.0,
     "E5_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 334
+   "kinetic_module": 336
   },
   {
    "id": "complex_334",
@@ -2903,7 +2905,7 @@
    "composition": {
     "E5_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 335
+   "kinetic_module": 337
   },
   {
    "id": "complex_335",
@@ -2912,7 +2914,7 @@
     "nadh[x]": 1.0,
     "E_5": 1.0
    },
-   "kinetic_module": 336
+   "kinetic_module": 338
   },
   {
    "id": "complex_336",
@@ -2921,7 +2923,7 @@
     "mal__L[x]": 1.0,
     "E_33": 1.0
    },
-   "kinetic_module": 337
+   "kinetic_module": 339
   },
   {
    "id": "complex_337",
@@ -2929,7 +2931,7 @@
    "composition": {
     "E33_mal__L[x]_complex": 1.0
    },
-   "kinetic_module": 338
+   "kinetic_module": 340
   },
   {
    "id": "complex_338",
@@ -2938,7 +2940,7 @@
     "nad[x]": 1.0,
     "E33_mal__L[x]_complex": 1.0
    },
-   "kinetic_module": 339
+   "kinetic_module": 341
   },
   {
    "id": "complex_339",
@@ -2946,7 +2948,7 @@
    "composition": {
     "E33_mal__L[x]_nad[x]_complex": 1.0
    },
-   "kinetic_module": 340
+   "kinetic_module": 342
   },
   {
    "id": "complex_340",
@@ -2954,7 +2956,7 @@
    "composition": {
     "E33_h[x]_nadh[x]_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 341
+   "kinetic_module": 343
   },
   {
    "id": "complex_341",
@@ -2963,7 +2965,7 @@
     "h[x]": 1.0,
     "E33_nadh[x]_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 342
+   "kinetic_module": 344
   },
   {
    "id": "complex_342",
@@ -2971,7 +2973,7 @@
    "composition": {
     "E33_nadh[x]_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 343
+   "kinetic_module": 345
   },
   {
    "id": "complex_343",
@@ -2980,7 +2982,7 @@
     "oaa[x]": 1.0,
     "E33_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 344
+   "kinetic_module": 346
   },
   {
    "id": "complex_344",
@@ -2988,7 +2990,7 @@
    "composition": {
     "E33_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 345
+   "kinetic_module": 347
   },
   {
    "id": "complex_345",
@@ -2997,7 +2999,7 @@
     "nadh[x]": 1.0,
     "E_33": 1.0
    },
-   "kinetic_module": 346
+   "kinetic_module": 348
   },
   {
    "id": "complex_346",
@@ -3006,7 +3008,7 @@
     "ala__L[c]": 1.0,
     "E_49": 1.0
    },
-   "kinetic_module": 347
+   "kinetic_module": 349
   },
   {
    "id": "complex_347",
@@ -3014,7 +3016,7 @@
    "composition": {
     "E49_ala__L[c]_complex": 1.0
    },
-   "kinetic_module": 348
+   "kinetic_module": 350
   },
   {
    "id": "complex_348",
@@ -3023,7 +3025,7 @@
     "akg[c]": 1.0,
     "E49_ala__L[c]_complex": 1.0
    },
-   "kinetic_module": 349
+   "kinetic_module": 351
   },
   {
    "id": "complex_349",
@@ -3031,7 +3033,7 @@
    "composition": {
     "E49_akg[c]_ala__L[c]_complex": 1.0
    },
-   "kinetic_module": 350
+   "kinetic_module": 352
   },
   {
    "id": "complex_350",
@@ -3039,7 +3041,7 @@
    "composition": {
     "E49_glu__L[c]_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 351
+   "kinetic_module": 353
   },
   {
    "id": "complex_351",
@@ -3048,7 +3050,7 @@
     "glu__L[c]": 1.0,
     "E49_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 352
+   "kinetic_module": 354
   },
   {
    "id": "complex_352",
@@ -3056,7 +3058,7 @@
    "composition": {
     "E49_pyr[c]_complex": 1.0
    },
-   "kinetic_module": 353
+   "kinetic_module": 355
   },
   {
    "id": "complex_353",
@@ -3065,7 +3067,7 @@
     "pyr[c]": 1.0,
     "E_49": 1.0
    },
-   "kinetic_module": 354
+   "kinetic_module": 356
   },
   {
    "id": "complex_354",
@@ -3073,7 +3075,7 @@
    "composition": {
     "pi[c]": 1.0
    },
-   "kinetic_module": 355
+   "kinetic_module": 357
   },
   {
    "id": "complex_355",
@@ -3081,7 +3083,7 @@
    "composition": {
     "pi[x]": 1.0
    },
-   "kinetic_module": 356
+   "kinetic_module": 358
   },
   {
    "id": "complex_356",
@@ -3090,7 +3092,7 @@
     "f6p[x]": 1.0,
     "E_38": 1.0
    },
-   "kinetic_module": 357
+   "kinetic_module": 359
   },
   {
    "id": "complex_357",
@@ -3098,7 +3100,7 @@
    "composition": {
     "E38_f6p[x]_complex": 1.0
    },
-   "kinetic_module": 358
+   "kinetic_module": 360
   },
   {
    "id": "complex_358",
@@ -3123,7 +3125,7 @@
    "composition": {
     "E38_adp[x]_fdp[x]_h[x]_complex": 1.0
    },
-   "kinetic_module": 359
+   "kinetic_module": 361
   },
   {
    "id": "complex_361",
@@ -3132,7 +3134,7 @@
     "fdp[x]": 1.0,
     "E38_adp[x]_h[x]_complex": 1.0
    },
-   "kinetic_module": 360
+   "kinetic_module": 362
   },
   {
    "id": "complex_362",
@@ -3140,7 +3142,7 @@
    "composition": {
     "E38_adp[x]_h[x]_complex": 1.0
    },
-   "kinetic_module": 361
+   "kinetic_module": 363
   },
   {
    "id": "complex_363",
@@ -3149,7 +3151,7 @@
     "h[x]": 1.0,
     "E38_adp[x]_complex": 1.0
    },
-   "kinetic_module": 362
+   "kinetic_module": 364
   },
   {
    "id": "complex_364",
@@ -3157,7 +3159,7 @@
    "composition": {
     "E38_adp[x]_complex": 1.0
    },
-   "kinetic_module": 363
+   "kinetic_module": 365
   },
   {
    "id": "complex_365",
@@ -3166,7 +3168,7 @@
     "adp[x]": 1.0,
     "E_38": 1.0
    },
-   "kinetic_module": 364
+   "kinetic_module": 366
   },
   {
    "id": "complex_366",
@@ -3174,7 +3176,7 @@
    "composition": {
     "h[c]": 1.0
    },
-   "kinetic_module": 365
+   "kinetic_module": 367
   },
   {
    "id": "complex_367",
@@ -3182,7 +3184,7 @@
    "composition": {
     "h[x]": 1.0
    },
-   "kinetic_module": 366
+   "kinetic_module": 368
   },
   {
    "id": "complex_368",
@@ -3191,7 +3193,7 @@
     "cit[m]": 1.0,
     "E_67": 1.0
    },
-   "kinetic_module": 367
+   "kinetic_module": 369
   },
   {
    "id": "complex_369",
@@ -3199,7 +3201,7 @@
    "composition": {
     "E67_cit[m]_complex": 1.0
    },
-   "kinetic_module": 368
+   "kinetic_module": 370
   },
   {
    "id": "complex_370",
@@ -3207,7 +3209,7 @@
    "composition": {
     "E67_icit[m]_complex": 1.0
    },
-   "kinetic_module": 369
+   "kinetic_module": 371
   },
   {
    "id": "complex_371",
@@ -3216,7 +3218,7 @@
     "icit[m]": 1.0,
     "E_67": 1.0
    },
-   "kinetic_module": 370
+   "kinetic_module": 372
   },
   {
    "id": "complex_372",
@@ -3224,7 +3226,7 @@
    "composition": {
     "asp__L[c]": 1.0
    },
-   "kinetic_module": 371
+   "kinetic_module": 373
   },
   {
    "id": "complex_373",
@@ -3232,7 +3234,7 @@
    "composition": {
     "asp__L[m]": 1.0
    },
-   "kinetic_module": 372
+   "kinetic_module": 374
   },
   {
    "id": "complex_374",
@@ -3241,7 +3243,7 @@
     "oaa[x]": 1.0,
     "E_34": 1.0
    },
-   "kinetic_module": 373
+   "kinetic_module": 375
   },
   {
    "id": "complex_375",
@@ -3249,7 +3251,7 @@
    "composition": {
     "E34_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 374
+   "kinetic_module": 376
   },
   {
    "id": "complex_376",
@@ -3258,7 +3260,7 @@
     "atp[x]": 1.0,
     "E34_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 375
+   "kinetic_module": 377
   },
   {
    "id": "complex_377",
@@ -3266,7 +3268,7 @@
    "composition": {
     "E34_atp[x]_oaa[x]_complex": 1.0
    },
-   "kinetic_module": 376
+   "kinetic_module": 378
   },
   {
    "id": "complex_378",
@@ -3274,7 +3276,7 @@
    "composition": {
     "E34_adp[x]_co2[x]_pep[x]_complex": 1.0
    },
-   "kinetic_module": 377
+   "kinetic_module": 379
   },
   {
    "id": "complex_379",
@@ -3283,7 +3285,7 @@
     "adp[x]": 1.0,
     "E34_co2[x]_pep[x]_complex": 1.0
    },
-   "kinetic_module": 378
+   "kinetic_module": 380
   },
   {
    "id": "complex_380",
@@ -3291,7 +3293,7 @@
    "composition": {
     "E34_co2[x]_pep[x]_complex": 1.0
    },
-   "kinetic_module": 379
+   "kinetic_module": 381
   },
   {
    "id": "complex_381",
@@ -3300,7 +3302,7 @@
     "pep[x]": 1.0,
     "E34_co2[x]_complex": 1.0
    },
-   "kinetic_module": 380
+   "kinetic_module": 382
   },
   {
    "id": "complex_382",
@@ -3308,7 +3310,7 @@
    "composition": {
     "E34_co2[x]_complex": 1.0
    },
-   "kinetic_module": 381
+   "kinetic_module": 383
   },
   {
    "id": "complex_383",
@@ -3317,7 +3319,7 @@
     "co2[x]": 1.0,
     "E_34": 1.0
    },
-   "kinetic_module": 382
+   "kinetic_module": 384
   },
   {
    "id": "complex_384",
@@ -3326,7 +3328,7 @@
     "ppi[c]": 1.0,
     "E_62": 1.0
    },
-   "kinetic_module": 383
+   "kinetic_module": 385
   },
   {
    "id": "complex_385",
@@ -3334,7 +3336,7 @@
    "composition": {
     "E62_ppi[c]_complex": 1.0
    },
-   "kinetic_module": 384
+   "kinetic_module": 386
   },
   {
    "id": "complex_386",
@@ -3359,7 +3361,7 @@
    "composition": {
     "E62_h[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 385
+   "kinetic_module": 387
   },
   {
    "id": "complex_389",
@@ -3368,7 +3370,7 @@
     "h[c]": 1.0,
     "E62_pi[c]_complex": 1.0
    },
-   "kinetic_module": 386
+   "kinetic_module": 388
   },
   {
    "id": "complex_390",
@@ -3376,7 +3378,7 @@
    "composition": {
     "E62_pi[c]_complex": 1.0
    },
-   "kinetic_module": 387
+   "kinetic_module": 389
   },
   {
    "id": "complex_391",
@@ -3385,7 +3387,7 @@
     "pi[c]": 2.0,
     "E_62": 1.0
    },
-   "kinetic_module": 388
+   "kinetic_module": 390
   },
   {
    "id": "complex_392",
@@ -3393,13 +3395,7 @@
    "composition": {
     "h2o[e]": 1.0
    },
-   "kinetic_module": 389
-  },
-  {
-   "id": "complex_393",
-   "module": -1,
-   "composition": {},
-   "kinetic_module": 390
+   "kinetic_module": 391
   },
   {
    "id": "complex_394",
@@ -3407,7 +3403,7 @@
    "composition": {
     "pro__L[e]": 1.0
    },
-   "kinetic_module": 391
+   "kinetic_module": 392
   },
   {
    "id": "complex_395",
@@ -3415,7 +3411,7 @@
    "composition": {
     "glu__L[e]": 1.0
    },
-   "kinetic_module": 392
+   "kinetic_module": 393
   },
   {
    "id": "complex_396",
@@ -3423,7 +3419,7 @@
    "composition": {
     "nh4[e]": 1.0
    },
-   "kinetic_module": 393
+   "kinetic_module": 394
   },
   {
    "id": "complex_397",
@@ -3431,7 +3427,7 @@
    "composition": {
     "o2[e]": 1.0
    },
-   "kinetic_module": 394
+   "kinetic_module": 395
   },
   {
    "id": "complex_398",
@@ -3439,7 +3435,7 @@
    "composition": {
     "h[e]": 1.0
    },
-   "kinetic_module": 395
+   "kinetic_module": 396
   },
   {
    "id": "complex_399",
@@ -3447,7 +3443,7 @@
    "composition": {
     "thr__L[e]": 1.0
    },
-   "kinetic_module": 396
+   "kinetic_module": 22
   },
   {
    "id": "complex_400",
@@ -3463,7 +3459,7 @@
    "composition": {
     "b_D_glucose[e]": 1.0
    },
-   "kinetic_module": 398
+   "kinetic_module": 23
   },
   {
    "id": "complex_402",
@@ -3471,7 +3467,7 @@
    "composition": {
     "asp__L[e]": 1.0
    },
-   "kinetic_module": 399
+   "kinetic_module": 398
   },
   {
    "id": "complex_403",
@@ -3479,7 +3475,7 @@
    "composition": {
     "pi[e]": 1.0
    },
-   "kinetic_module": 400
+   "kinetic_module": 399
   },
   {
    "id": "complex_404",
@@ -3488,7 +3484,7 @@
     "atp[c]": 1.0,
     "E_27": 1.0
    },
-   "kinetic_module": 401
+   "kinetic_module": 400
   },
   {
    "id": "complex_405",
@@ -3496,7 +3492,7 @@
    "composition": {
     "E27_atp[c]_complex": 1.0
    },
-   "kinetic_module": 402
+   "kinetic_module": 401
   },
   {
    "id": "complex_406",
@@ -3505,7 +3501,7 @@
     "asp__L[c]": 1.0,
     "E27_atp[c]_complex": 1.0
    },
-   "kinetic_module": 403
+   "kinetic_module": 402
   },
   {
    "id": "complex_407",
@@ -3513,7 +3509,7 @@
    "composition": {
     "E27_asp__L[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 404
+   "kinetic_module": 403
   },
   {
    "id": "complex_408",
@@ -3522,7 +3518,7 @@
     "nh3[c]": 1.0,
     "E27_asp__L[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 22
+   "kinetic_module": 404
   },
   {
    "id": "complex_409",
@@ -3530,7 +3526,7 @@
    "composition": {
     "E27_asp__L[c]_atp[c]_nh3[c]_complex": 1.0
    },
-   "kinetic_module": 22
+   "kinetic_module": 24
   },
   {
    "id": "complex_410",
@@ -3538,7 +3534,7 @@
    "composition": {
     "E27_adp[c]_asn__L[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 405
+   "kinetic_module": 24
   },
   {
    "id": "complex_411",
@@ -3547,7 +3543,7 @@
     "asn__L[c]": 1.0,
     "E27_adp[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 406
+   "kinetic_module": 405
   },
   {
    "id": "complex_412",
@@ -3555,7 +3551,7 @@
    "composition": {
     "E27_adp[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 407
+   "kinetic_module": 406
   },
   {
    "id": "complex_413",
@@ -3564,7 +3560,7 @@
     "adp[c]": 1.0,
     "E27_pi[c]_complex": 1.0
    },
-   "kinetic_module": 408
+   "kinetic_module": 407
   },
   {
    "id": "complex_414",
@@ -3572,7 +3568,7 @@
    "composition": {
     "E27_pi[c]_complex": 1.0
    },
-   "kinetic_module": 409
+   "kinetic_module": 408
   },
   {
    "id": "complex_415",
@@ -3581,7 +3577,7 @@
     "pi[c]": 1.0,
     "E_27": 1.0
    },
-   "kinetic_module": 410
+   "kinetic_module": 409
   },
   {
    "id": "complex_416",
@@ -3590,7 +3586,7 @@
     "ala__L[c]": 1.0,
     "E_7": 1.0
    },
-   "kinetic_module": 411
+   "kinetic_module": 410
   },
   {
    "id": "complex_417",
@@ -3598,7 +3594,7 @@
    "composition": {
     "E7_ala__L[c]_complex": 1.0
    },
-   "kinetic_module": 412
+   "kinetic_module": 411
   },
   {
    "id": "complex_418",
@@ -3606,7 +3602,7 @@
    "composition": {
     "E7_ala__D[c]_complex": 1.0
    },
-   "kinetic_module": 413
+   "kinetic_module": 412
   },
   {
    "id": "complex_419",
@@ -3615,7 +3611,7 @@
     "ala__D[c]": 1.0,
     "E_7": 1.0
    },
-   "kinetic_module": 414
+   "kinetic_module": 413
   },
   {
    "id": "complex_420",
@@ -3624,7 +3620,7 @@
     "ala__L[c]": 1.0,
     "E_18": 1.0
    },
-   "kinetic_module": 415
+   "kinetic_module": 414
   },
   {
    "id": "complex_421",
@@ -3632,7 +3628,7 @@
    "composition": {
     "E18_ala__L[c]_complex": 1.0
    },
-   "kinetic_module": 416
+   "kinetic_module": 415
   },
   {
    "id": "complex_422",
@@ -3640,7 +3636,7 @@
    "composition": {
     "E18_ala__D[c]_complex": 1.0
    },
-   "kinetic_module": 417
+   "kinetic_module": 416
   },
   {
    "id": "complex_423",
@@ -3649,7 +3645,7 @@
     "ala__D[c]": 1.0,
     "E_18": 1.0
    },
-   "kinetic_module": 418
+   "kinetic_module": 417
   },
   {
    "id": "complex_424",
@@ -3658,7 +3654,7 @@
     "atp[c]": 1.0,
     "E_20": 1.0
    },
-   "kinetic_module": 419
+   "kinetic_module": 418
   },
   {
    "id": "complex_425",
@@ -3666,7 +3662,7 @@
    "composition": {
     "E20_atp[c]_complex": 1.0
    },
-   "kinetic_module": 420
+   "kinetic_module": 419
   },
   {
    "id": "complex_426",
@@ -3675,7 +3671,7 @@
     "glu__L[c]": 1.0,
     "E20_atp[c]_complex": 1.0
    },
-   "kinetic_module": 421
+   "kinetic_module": 420
   },
   {
    "id": "complex_427",
@@ -3683,7 +3679,7 @@
    "composition": {
     "E20_atp[c]_glu__L[c]_complex": 1.0
    },
-   "kinetic_module": 422
+   "kinetic_module": 421
   },
   {
    "id": "complex_428",
@@ -3692,7 +3688,7 @@
     "nh4[c]": 1.0,
     "E20_atp[c]_glu__L[c]_complex": 1.0
    },
-   "kinetic_module": 23
+   "kinetic_module": 422
   },
   {
    "id": "complex_429",
@@ -3700,7 +3696,7 @@
    "composition": {
     "E20_atp[c]_glu__L[c]_nh4[c]_complex": 1.0
    },
-   "kinetic_module": 23
+   "kinetic_module": 25
   },
   {
    "id": "complex_430",
@@ -3708,7 +3704,7 @@
    "composition": {
     "E20_adp[c]_gln__L[c]_h[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 423
+   "kinetic_module": 25
   },
   {
    "id": "complex_431",
@@ -3717,7 +3713,7 @@
     "h[c]": 1.0,
     "E20_adp[c]_gln__L[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 424
+   "kinetic_module": 423
   },
   {
    "id": "complex_432",
@@ -3725,7 +3721,7 @@
    "composition": {
     "E20_adp[c]_gln__L[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 425
+   "kinetic_module": 424
   },
   {
    "id": "complex_433",
@@ -3734,7 +3730,7 @@
     "gln__L[c]": 1.0,
     "E20_adp[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 426
+   "kinetic_module": 425
   },
   {
    "id": "complex_434",
@@ -3742,7 +3738,7 @@
    "composition": {
     "E20_adp[c]_pi[c]_complex": 1.0
    },
-   "kinetic_module": 427
+   "kinetic_module": 426
   },
   {
    "id": "complex_435",
@@ -3751,7 +3747,7 @@
     "adp[c]": 1.0,
     "E20_pi[c]_complex": 1.0
    },
-   "kinetic_module": 428
+   "kinetic_module": 427
   },
   {
    "id": "complex_436",
@@ -3759,7 +3755,7 @@
    "composition": {
     "E20_pi[c]_complex": 1.0
    },
-   "kinetic_module": 429
+   "kinetic_module": 428
   },
   {
    "id": "complex_437",
@@ -3768,7 +3764,7 @@
     "pi[c]": 1.0,
     "E_20": 1.0
    },
-   "kinetic_module": 430
+   "kinetic_module": 429
   },
   {
    "id": "complex_438",
@@ -3777,7 +3773,7 @@
     "atp[c]": 1.0,
     "E_3": 1.0
    },
-   "kinetic_module": 431
+   "kinetic_module": 430
   },
   {
    "id": "complex_439",
@@ -3785,7 +3781,7 @@
    "composition": {
     "E3_atp[c]_complex": 1.0
    },
-   "kinetic_module": 432
+   "kinetic_module": 431
   },
   {
    "id": "complex_440",
@@ -3794,7 +3790,7 @@
     "dtdp[c]": 1.0,
     "E3_atp[c]_complex": 1.0
    },
-   "kinetic_module": 433
+   "kinetic_module": 432
   },
   {
    "id": "complex_441",
@@ -3802,7 +3798,7 @@
    "composition": {
     "E3_atp[c]_dtdp[c]_complex": 1.0
    },
-   "kinetic_module": 434
+   "kinetic_module": 433
   },
   {
    "id": "complex_442",
@@ -3810,7 +3806,7 @@
    "composition": {
     "E3_adp[c]_dttp[c]_complex": 1.0
    },
-   "kinetic_module": 435
+   "kinetic_module": 434
   },
   {
    "id": "complex_443",
@@ -3819,7 +3815,7 @@
     "adp[c]": 1.0,
     "E3_dttp[c]_complex": 1.0
    },
-   "kinetic_module": 436
+   "kinetic_module": 435
   },
   {
    "id": "complex_444",
@@ -3827,7 +3823,7 @@
    "composition": {
     "E3_dttp[c]_complex": 1.0
    },
-   "kinetic_module": 437
+   "kinetic_module": 436
   },
   {
    "id": "complex_445",
@@ -3836,7 +3832,7 @@
     "dttp[c]": 1.0,
     "E_3": 1.0
    },
-   "kinetic_module": 438
+   "kinetic_module": 437
   },
   {
    "id": "complex_446",
@@ -3845,7 +3841,7 @@
     "atp[c]": 1.0,
     "E_26": 1.0
    },
-   "kinetic_module": 439
+   "kinetic_module": 438
   },
   {
    "id": "complex_447",
@@ -3853,7 +3849,7 @@
    "composition": {
     "E26_atp[c]_complex": 1.0
    },
-   "kinetic_module": 440
+   "kinetic_module": 439
   },
   {
    "id": "complex_448",
@@ -3862,7 +3858,7 @@
     "dtdp[c]": 1.0,
     "E26_atp[c]_complex": 1.0
    },
-   "kinetic_module": 441
+   "kinetic_module": 440
   },
   {
    "id": "complex_449",
@@ -3870,7 +3866,7 @@
    "composition": {
     "E26_atp[c]_dtdp[c]_complex": 1.0
    },
-   "kinetic_module": 442
+   "kinetic_module": 441
   },
   {
    "id": "complex_450",
@@ -3878,7 +3874,7 @@
    "composition": {
     "E26_adp[c]_dttp[c]_complex": 1.0
    },
-   "kinetic_module": 443
+   "kinetic_module": 442
   },
   {
    "id": "complex_451",
@@ -3887,7 +3883,7 @@
     "adp[c]": 1.0,
     "E26_dttp[c]_complex": 1.0
    },
-   "kinetic_module": 444
+   "kinetic_module": 443
   },
   {
    "id": "complex_452",
@@ -3895,7 +3891,7 @@
    "composition": {
     "E26_dttp[c]_complex": 1.0
    },
-   "kinetic_module": 445
+   "kinetic_module": 444
   },
   {
    "id": "complex_453",
@@ -3904,7 +3900,7 @@
     "dttp[c]": 1.0,
     "E_26": 1.0
    },
-   "kinetic_module": 446
+   "kinetic_module": 445
   },
   {
    "id": "complex_454",
@@ -3913,7 +3909,7 @@
     "idp[c]": 1.0,
     "E3_atp[c]_complex": 1.0
    },
-   "kinetic_module": 447
+   "kinetic_module": 446
   },
   {
    "id": "complex_455",
@@ -3921,7 +3917,7 @@
    "composition": {
     "E3_atp[c]_idp[c]_complex": 1.0
    },
-   "kinetic_module": 448
+   "kinetic_module": 447
   },
   {
    "id": "complex_456",
@@ -3929,7 +3925,7 @@
    "composition": {
     "E3_adp[c]_itp[c]_complex": 1.0
    },
-   "kinetic_module": 449
+   "kinetic_module": 448
   },
   {
    "id": "complex_457",
@@ -3938,7 +3934,7 @@
     "adp[c]": 1.0,
     "E3_itp[c]_complex": 1.0
    },
-   "kinetic_module": 450
+   "kinetic_module": 449
   },
   {
    "id": "complex_458",
@@ -3946,7 +3942,7 @@
    "composition": {
     "E3_itp[c]_complex": 1.0
    },
-   "kinetic_module": 451
+   "kinetic_module": 450
   },
   {
    "id": "complex_459",
@@ -3955,7 +3951,7 @@
     "itp[c]": 1.0,
     "E_3": 1.0
    },
-   "kinetic_module": 452
+   "kinetic_module": 451
   },
   {
    "id": "complex_460",
@@ -3964,7 +3960,7 @@
     "idp[c]": 1.0,
     "E26_atp[c]_complex": 1.0
    },
-   "kinetic_module": 453
+   "kinetic_module": 452
   },
   {
    "id": "complex_461",
@@ -3972,7 +3968,7 @@
    "composition": {
     "E26_atp[c]_idp[c]_complex": 1.0
    },
-   "kinetic_module": 454
+   "kinetic_module": 453
   },
   {
    "id": "complex_462",
@@ -3980,7 +3976,7 @@
    "composition": {
     "E26_adp[c]_itp[c]_complex": 1.0
    },
-   "kinetic_module": 455
+   "kinetic_module": 454
   },
   {
    "id": "complex_463",
@@ -3989,7 +3985,7 @@
     "adp[c]": 1.0,
     "E26_itp[c]_complex": 1.0
    },
-   "kinetic_module": 456
+   "kinetic_module": 455
   },
   {
    "id": "complex_464",
@@ -3997,7 +3993,7 @@
    "composition": {
     "E26_itp[c]_complex": 1.0
    },
-   "kinetic_module": 457
+   "kinetic_module": 456
   },
   {
    "id": "complex_465",
@@ -4006,7 +4002,7 @@
     "itp[c]": 1.0,
     "E_26": 1.0
    },
-   "kinetic_module": 458
+   "kinetic_module": 457
   },
   {
    "id": "complex_466",
@@ -4015,7 +4011,7 @@
     "atp[n]": 1.0,
     "E_3": 1.0
    },
-   "kinetic_module": 459
+   "kinetic_module": 458
   },
   {
    "id": "complex_467",
@@ -4023,7 +4019,7 @@
    "composition": {
     "E3_atp[n]_complex": 1.0
    },
-   "kinetic_module": 460
+   "kinetic_module": 459
   },
   {
    "id": "complex_468",
@@ -4032,7 +4028,7 @@
     "dtdp[n]": 1.0,
     "E3_atp[n]_complex": 1.0
    },
-   "kinetic_module": 461
+   "kinetic_module": 460
   },
   {
    "id": "complex_469",
@@ -4040,7 +4036,7 @@
    "composition": {
     "E3_atp[n]_dtdp[n]_complex": 1.0
    },
-   "kinetic_module": 462
+   "kinetic_module": 461
   },
   {
    "id": "complex_470",
@@ -4048,7 +4044,7 @@
    "composition": {
     "E3_adp[n]_dttp[n]_complex": 1.0
    },
-   "kinetic_module": 463
+   "kinetic_module": 462
   },
   {
    "id": "complex_471",
@@ -4057,7 +4053,7 @@
     "adp[n]": 1.0,
     "E3_dttp[n]_complex": 1.0
    },
-   "kinetic_module": 464
+   "kinetic_module": 463
   },
   {
    "id": "complex_472",
@@ -4065,7 +4061,7 @@
    "composition": {
     "E3_dttp[n]_complex": 1.0
    },
-   "kinetic_module": 465
+   "kinetic_module": 464
   },
   {
    "id": "complex_473",
@@ -4074,7 +4070,7 @@
     "dttp[n]": 1.0,
     "E_3": 1.0
    },
-   "kinetic_module": 466
+   "kinetic_module": 465
   },
   {
    "id": "complex_474",
@@ -4083,7 +4079,7 @@
     "atp[n]": 1.0,
     "E_26": 1.0
    },
-   "kinetic_module": 467
+   "kinetic_module": 466
   },
   {
    "id": "complex_475",
@@ -4091,7 +4087,7 @@
    "composition": {
     "E26_atp[n]_complex": 1.0
    },
-   "kinetic_module": 468
+   "kinetic_module": 467
   },
   {
    "id": "complex_476",
@@ -4100,7 +4096,7 @@
     "dtdp[n]": 1.0,
     "E26_atp[n]_complex": 1.0
    },
-   "kinetic_module": 469
+   "kinetic_module": 468
   },
   {
    "id": "complex_477",
@@ -4108,7 +4104,7 @@
    "composition": {
     "E26_atp[n]_dtdp[n]_complex": 1.0
    },
-   "kinetic_module": 470
+   "kinetic_module": 469
   },
   {
    "id": "complex_478",
@@ -4116,7 +4112,7 @@
    "composition": {
     "E26_adp[n]_dttp[n]_complex": 1.0
    },
-   "kinetic_module": 471
+   "kinetic_module": 470
   },
   {
    "id": "complex_479",
@@ -4125,7 +4121,7 @@
     "adp[n]": 1.0,
     "E26_dttp[n]_complex": 1.0
    },
-   "kinetic_module": 472
+   "kinetic_module": 471
   },
   {
    "id": "complex_480",
@@ -4133,7 +4129,7 @@
    "composition": {
     "E26_dttp[n]_complex": 1.0
    },
-   "kinetic_module": 473
+   "kinetic_module": 472
   },
   {
    "id": "complex_481",
@@ -4142,7 +4138,7 @@
     "dttp[n]": 1.0,
     "E_26": 1.0
    },
-   "kinetic_module": 474
+   "kinetic_module": 473
   },
   {
    "id": "complex_482",
@@ -4151,7 +4147,7 @@
     "idp[n]": 1.0,
     "E_3": 1.0
    },
-   "kinetic_module": 475
+   "kinetic_module": 474
   },
   {
    "id": "complex_483",
@@ -4159,7 +4155,7 @@
    "composition": {
     "E3_idp[n]_complex": 1.0
    },
-   "kinetic_module": 476
+   "kinetic_module": 475
   },
   {
    "id": "complex_484",
@@ -4168,7 +4164,7 @@
     "atp[n]": 1.0,
     "E3_idp[n]_complex": 1.0
    },
-   "kinetic_module": 477
+   "kinetic_module": 476
   },
   {
    "id": "complex_485",
@@ -4176,7 +4172,7 @@
    "composition": {
     "E3_atp[n]_idp[n]_complex": 1.0
    },
-   "kinetic_module": 478
+   "kinetic_module": 477
   },
   {
    "id": "complex_486",
@@ -4184,7 +4180,7 @@
    "composition": {
     "E3_adp[n]_itp[n]_complex": 1.0
    },
-   "kinetic_module": 479
+   "kinetic_module": 478
   },
   {
    "id": "complex_487",
@@ -4193,7 +4189,7 @@
     "itp[n]": 1.0,
     "E3_adp[n]_complex": 1.0
    },
-   "kinetic_module": 480
+   "kinetic_module": 479
   },
   {
    "id": "complex_488",
@@ -4201,7 +4197,7 @@
    "composition": {
     "E3_adp[n]_complex": 1.0
    },
-   "kinetic_module": 481
+   "kinetic_module": 480
   },
   {
    "id": "complex_489",
@@ -4210,7 +4206,7 @@
     "adp[n]": 1.0,
     "E_3": 1.0
    },
-   "kinetic_module": 482
+   "kinetic_module": 481
   },
   {
    "id": "complex_490",
@@ -4219,7 +4215,7 @@
     "idp[n]": 1.0,
     "E_26": 1.0
    },
-   "kinetic_module": 483
+   "kinetic_module": 482
   },
   {
    "id": "complex_491",
@@ -4227,7 +4223,7 @@
    "composition": {
     "E26_idp[n]_complex": 1.0
    },
-   "kinetic_module": 484
+   "kinetic_module": 483
   },
   {
    "id": "complex_492",
@@ -4236,7 +4232,7 @@
     "atp[n]": 1.0,
     "E26_idp[n]_complex": 1.0
    },
-   "kinetic_module": 485
+   "kinetic_module": 484
   },
   {
    "id": "complex_493",
@@ -4244,7 +4240,7 @@
    "composition": {
     "E26_atp[n]_idp[n]_complex": 1.0
    },
-   "kinetic_module": 486
+   "kinetic_module": 485
   },
   {
    "id": "complex_494",
@@ -4252,7 +4248,7 @@
    "composition": {
     "E26_adp[n]_itp[n]_complex": 1.0
    },
-   "kinetic_module": 487
+   "kinetic_module": 486
   },
   {
    "id": "complex_495",
@@ -4261,7 +4257,7 @@
     "itp[n]": 1.0,
     "E26_adp[n]_complex": 1.0
    },
-   "kinetic_module": 488
+   "kinetic_module": 487
   },
   {
    "id": "complex_496",
@@ -4269,7 +4265,7 @@
    "composition": {
     "E26_adp[n]_complex": 1.0
    },
-   "kinetic_module": 489
+   "kinetic_module": 488
   },
   {
    "id": "complex_497",
@@ -4278,7 +4274,7 @@
     "adp[n]": 1.0,
     "E_26": 1.0
    },
-   "kinetic_module": 490
+   "kinetic_module": 489
   },
   {
    "id": "complex_498",
@@ -4287,7 +4283,7 @@
     "prpp[c]": 1.0,
     "E_40": 1.0
    },
-   "kinetic_module": 491
+   "kinetic_module": 490
   },
   {
    "id": "complex_499",
@@ -4295,7 +4291,7 @@
    "composition": {
     "E40_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 492
+   "kinetic_module": 491
   },
   {
    "id": "complex_500",
@@ -4304,7 +4300,7 @@
     "ura[c]": 1.0,
     "E40_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 493
+   "kinetic_module": 492
   },
   {
    "id": "complex_501",
@@ -4312,7 +4308,7 @@
    "composition": {
     "E40_prpp[c]_ura[c]_complex": 1.0
    },
-   "kinetic_module": 494
+   "kinetic_module": 493
   },
   {
    "id": "complex_502",
@@ -4320,7 +4316,7 @@
    "composition": {
     "E40_ppi[c]_ump[c]_complex": 1.0
    },
-   "kinetic_module": 495
+   "kinetic_module": 494
   },
   {
    "id": "complex_503",
@@ -4329,7 +4325,7 @@
     "ppi[c]": 1.0,
     "E40_ump[c]_complex": 1.0
    },
-   "kinetic_module": 496
+   "kinetic_module": 495
   },
   {
    "id": "complex_504",
@@ -4337,7 +4333,7 @@
    "composition": {
     "E40_ump[c]_complex": 1.0
    },
-   "kinetic_module": 497
+   "kinetic_module": 496
   },
   {
    "id": "complex_505",
@@ -4346,7 +4342,7 @@
     "ump[c]": 1.0,
     "E_40": 1.0
    },
-   "kinetic_module": 498
+   "kinetic_module": 497
   },
   {
    "id": "complex_506",
@@ -4355,7 +4351,7 @@
     "coa[m]": 1.0,
     "E_52": 1.0
    },
-   "kinetic_module": 499
+   "kinetic_module": 498
   },
   {
    "id": "complex_507",
@@ -4363,7 +4359,7 @@
    "composition": {
     "E52_coa[m]_complex": 1.0
    },
-   "kinetic_module": 500
+   "kinetic_module": 499
   },
   {
    "id": "complex_508",
@@ -4372,7 +4368,7 @@
     "atp[m]": 1.0,
     "E52_coa[m]_complex": 1.0
    },
-   "kinetic_module": 501
+   "kinetic_module": 500
   },
   {
    "id": "complex_509",
@@ -4380,7 +4376,7 @@
    "composition": {
     "E52_atp[m]_coa[m]_complex": 1.0
    },
-   "kinetic_module": 502
+   "kinetic_module": 501
   },
   {
    "id": "complex_510",
@@ -4389,7 +4385,7 @@
     "ac[m]": 1.0,
     "E52_atp[m]_coa[m]_complex": 1.0
    },
-   "kinetic_module": 5
+   "kinetic_module": 502
   },
   {
    "id": "complex_511",
@@ -4405,7 +4401,7 @@
    "composition": {
     "E52_accoa[m]_amp[m]_ppi[m]_complex": 1.0
    },
-   "kinetic_module": 503
+   "kinetic_module": 5
   },
   {
    "id": "complex_513",
@@ -4414,7 +4410,7 @@
     "accoa[m]": 1.0,
     "E52_amp[m]_ppi[m]_complex": 1.0
    },
-   "kinetic_module": 504
+   "kinetic_module": 503
   },
   {
    "id": "complex_514",
@@ -4422,7 +4418,7 @@
    "composition": {
     "E52_amp[m]_ppi[m]_complex": 1.0
    },
-   "kinetic_module": 505
+   "kinetic_module": 504
   },
   {
    "id": "complex_515",
@@ -4431,7 +4427,7 @@
     "ppi[m]": 1.0,
     "E52_amp[m]_complex": 1.0
    },
-   "kinetic_module": 506
+   "kinetic_module": 505
   },
   {
    "id": "complex_516",
@@ -4439,7 +4435,7 @@
    "composition": {
     "E52_amp[m]_complex": 1.0
    },
-   "kinetic_module": 507
+   "kinetic_module": 506
   },
   {
    "id": "complex_517",
@@ -4448,7 +4444,7 @@
     "amp[m]": 1.0,
     "E_52": 1.0
    },
-   "kinetic_module": 508
+   "kinetic_module": 507
   },
   {
    "id": "complex_518",
@@ -4456,7 +4452,7 @@
    "composition": {
     "idp[c]": 1.0
    },
-   "kinetic_module": 509
+   "kinetic_module": 508
   },
   {
    "id": "complex_519",
@@ -4464,7 +4460,7 @@
    "composition": {
     "idp[n]": 1.0
    },
-   "kinetic_module": 510
+   "kinetic_module": 509
   },
   {
    "id": "complex_520",
@@ -4472,7 +4468,7 @@
    "composition": {
     "itp[c]": 1.0
    },
-   "kinetic_module": 511
+   "kinetic_module": 510
   },
   {
    "id": "complex_521",
@@ -4480,7 +4476,7 @@
    "composition": {
     "itp[n]": 1.0
    },
-   "kinetic_module": 512
+   "kinetic_module": 511
   },
   {
    "id": "complex_522",
@@ -4523,7 +4519,7 @@
     "val__L[c]": 0.255,
     "met__L[c]": 0.0804
    },
-   "kinetic_module": 3
+   "kinetic_module": 512
   },
   {
    "id": "complex_523",
@@ -4537,7 +4533,7 @@
     "pi[c]": 33.475,
     "nadh[c]": 3.015
    },
-   "kinetic_module": 513
+   "kinetic_module": 3
   },
   {
    "id": "complex_524",
@@ -4575,7 +4571,7 @@
     "val__L[c]": 0.255,
     "met__L[c]": 0.0804
    },
-   "kinetic_module": 24
+   "kinetic_module": 513
   },
   {
    "id": "complex_525",
@@ -4589,7 +4585,7 @@
     "pi[c]": 33.475,
     "nadh[c]": 3.015
    },
-   "kinetic_module": 514
+   "kinetic_module": 26
   },
   {
    "id": "complex_526",
@@ -4598,7 +4594,7 @@
     "h[x]": 1.0,
     "E_69": 1.0
    },
-   "kinetic_module": 515
+   "kinetic_module": 514
   },
   {
    "id": "complex_527",
@@ -4606,7 +4602,7 @@
    "composition": {
     "E69_h[x]_complex": 1.0
    },
-   "kinetic_module": 516
+   "kinetic_module": 515
   },
   {
    "id": "complex_528",
@@ -4615,7 +4611,7 @@
     "fum[x]": 1.0,
     "E69_h[x]_complex": 1.0
    },
-   "kinetic_module": 517
+   "kinetic_module": 516
   },
   {
    "id": "complex_529",
@@ -4623,7 +4619,7 @@
    "composition": {
     "E69_fum[x]_h[x]_complex": 1.0
    },
-   "kinetic_module": 518
+   "kinetic_module": 517
   },
   {
    "id": "complex_530",
@@ -4632,7 +4628,7 @@
     "nadh[x]": 1.0,
     "E69_fum[x]_h[x]_complex": 1.0
    },
-   "kinetic_module": 519
+   "kinetic_module": 518
   },
   {
    "id": "complex_531",
@@ -4640,7 +4636,7 @@
    "composition": {
     "E69_fum[x]_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 520
+   "kinetic_module": 519
   },
   {
    "id": "complex_532",
@@ -4648,7 +4644,7 @@
    "composition": {
     "E69_nad[x]_succ[x]_complex": 1.0
    },
-   "kinetic_module": 521
+   "kinetic_module": 520
   },
   {
    "id": "complex_533",
@@ -4657,7 +4653,7 @@
     "nad[x]": 1.0,
     "E69_succ[x]_complex": 1.0
    },
-   "kinetic_module": 522
+   "kinetic_module": 521
   },
   {
    "id": "complex_534",
@@ -4665,7 +4661,7 @@
    "composition": {
     "E69_succ[x]_complex": 1.0
    },
-   "kinetic_module": 523
+   "kinetic_module": 522
   },
   {
    "id": "complex_535",
@@ -4674,7 +4670,7 @@
     "succ[x]": 1.0,
     "E_69": 1.0
    },
-   "kinetic_module": 524
+   "kinetic_module": 523
   },
   {
    "id": "complex_536",
@@ -4683,7 +4679,7 @@
     "r5p[c]": 1.0,
     "E_65": 1.0
    },
-   "kinetic_module": 525
+   "kinetic_module": 524
   },
   {
    "id": "complex_537",
@@ -4691,7 +4687,7 @@
    "composition": {
     "E65_r5p[c]_complex": 1.0
    },
-   "kinetic_module": 526
+   "kinetic_module": 525
   },
   {
    "id": "complex_538",
@@ -4699,7 +4695,7 @@
    "composition": {
     "E65_ru5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 527
+   "kinetic_module": 526
   },
   {
    "id": "complex_539",
@@ -4708,7 +4704,7 @@
     "ru5p__D[c]": 1.0,
     "E_65": 1.0
    },
-   "kinetic_module": 528
+   "kinetic_module": 527
   },
   {
    "id": "complex_540",
@@ -4717,7 +4713,7 @@
     "mal__L[c]": 1.0,
     "succ[m]": 1.0
    },
-   "kinetic_module": 529
+   "kinetic_module": 528
   },
   {
    "id": "complex_541",
@@ -4726,7 +4722,7 @@
     "mal__L[m]": 1.0,
     "succ[c]": 1.0
    },
-   "kinetic_module": 530
+   "kinetic_module": 529
   },
   {
    "id": "complex_542",
@@ -4735,7 +4731,7 @@
     "b_D_glucose[x]": 1.0,
     "E_44": 1.0
    },
-   "kinetic_module": 531
+   "kinetic_module": 530
   },
   {
    "id": "complex_543",
@@ -4743,7 +4739,7 @@
    "composition": {
     "E44_b_D_glucose[x]_complex": 1.0
    },
-   "kinetic_module": 532
+   "kinetic_module": 531
   },
   {
    "id": "complex_544",
@@ -4752,7 +4748,7 @@
     "atp[x]": 1.0,
     "E44_b_D_glucose[x]_complex": 1.0
    },
-   "kinetic_module": 4
+   "kinetic_module": 532
   },
   {
    "id": "complex_545",
@@ -4768,7 +4764,7 @@
    "composition": {
     "E44_adp[x]_g6p_B[x]_h[x]_complex": 1.0
    },
-   "kinetic_module": 533
+   "kinetic_module": 4
   },
   {
    "id": "complex_547",
@@ -4777,7 +4773,7 @@
     "g6p_B[x]": 1.0,
     "E44_adp[x]_h[x]_complex": 1.0
    },
-   "kinetic_module": 534
+   "kinetic_module": 533
   },
   {
    "id": "complex_548",
@@ -4785,7 +4781,7 @@
    "composition": {
     "E44_adp[x]_h[x]_complex": 1.0
    },
-   "kinetic_module": 535
+   "kinetic_module": 534
   },
   {
    "id": "complex_549",
@@ -4794,7 +4790,7 @@
     "h[x]": 1.0,
     "E44_adp[x]_complex": 1.0
    },
-   "kinetic_module": 536
+   "kinetic_module": 535
   },
   {
    "id": "complex_550",
@@ -4802,7 +4798,7 @@
    "composition": {
     "E44_adp[x]_complex": 1.0
    },
-   "kinetic_module": 537
+   "kinetic_module": 536
   },
   {
    "id": "complex_551",
@@ -4811,7 +4807,7 @@
     "adp[x]": 1.0,
     "E_44": 1.0
    },
-   "kinetic_module": 538
+   "kinetic_module": 537
   },
   {
    "id": "complex_552",
@@ -4820,7 +4816,7 @@
     "accoa[m]": 1.0,
     "E_72": 1.0
    },
-   "kinetic_module": 539
+   "kinetic_module": 538
   },
   {
    "id": "complex_553",
@@ -4828,7 +4824,7 @@
    "composition": {
     "E72_accoa[m]_complex": 1.0
    },
-   "kinetic_module": 540
+   "kinetic_module": 539
   },
   {
    "id": "complex_554",
@@ -4837,7 +4833,7 @@
     "h2o[m]": 1.0,
     "E72_accoa[m]_complex": 1.0
    },
-   "kinetic_module": 541
+   "kinetic_module": 540
   },
   {
    "id": "complex_555",
@@ -4845,7 +4841,7 @@
    "composition": {
     "E72_accoa[m]_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 542
+   "kinetic_module": 541
   },
   {
    "id": "complex_556",
@@ -4854,7 +4850,7 @@
     "oaa[m]": 1.0,
     "E72_accoa[m]_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 25
+   "kinetic_module": 542
   },
   {
    "id": "complex_557",
@@ -4862,7 +4858,7 @@
    "composition": {
     "E72_accoa[m]_h2o[m]_oaa[m]_complex": 1.0
    },
-   "kinetic_module": 25
+   "kinetic_module": 27
   },
   {
    "id": "complex_558",
@@ -4870,7 +4866,7 @@
    "composition": {
     "E72_cit[m]_coa[m]_h[m]_complex": 1.0
    },
-   "kinetic_module": 543
+   "kinetic_module": 27
   },
   {
    "id": "complex_559",
@@ -4879,7 +4875,7 @@
     "coa[m]": 1.0,
     "E72_cit[m]_h[m]_complex": 1.0
    },
-   "kinetic_module": 544
+   "kinetic_module": 543
   },
   {
    "id": "complex_560",
@@ -4887,7 +4883,7 @@
    "composition": {
     "E72_cit[m]_h[m]_complex": 1.0
    },
-   "kinetic_module": 545
+   "kinetic_module": 544
   },
   {
    "id": "complex_561",
@@ -4896,7 +4892,7 @@
     "h[m]": 1.0,
     "E72_cit[m]_complex": 1.0
    },
-   "kinetic_module": 546
+   "kinetic_module": 545
   },
   {
    "id": "complex_562",
@@ -4904,7 +4900,7 @@
    "composition": {
     "E72_cit[m]_complex": 1.0
    },
-   "kinetic_module": 547
+   "kinetic_module": 546
   },
   {
    "id": "complex_563",
@@ -4913,7 +4909,7 @@
     "cit[m]": 1.0,
     "E_72": 1.0
    },
-   "kinetic_module": 548
+   "kinetic_module": 547
   },
   {
    "id": "complex_564",
@@ -4922,7 +4918,7 @@
     "2pg[c]": 1.0,
     "E_10": 1.0
    },
-   "kinetic_module": 549
+   "kinetic_module": 548
   },
   {
    "id": "complex_565",
@@ -4930,7 +4926,7 @@
    "composition": {
     "E10_2pg[c]_complex": 1.0
    },
-   "kinetic_module": 550
+   "kinetic_module": 549
   },
   {
    "id": "complex_566",
@@ -4938,7 +4934,7 @@
    "composition": {
     "E10_3pg[c]_complex": 1.0
    },
-   "kinetic_module": 551
+   "kinetic_module": 550
   },
   {
    "id": "complex_567",
@@ -4947,7 +4943,7 @@
     "3pg[c]": 1.0,
     "E_10": 1.0
    },
-   "kinetic_module": 552
+   "kinetic_module": 551
   },
   {
    "id": "complex_568",
@@ -4956,7 +4952,7 @@
     "2pg[c]": 1.0,
     "E_55": 1.0
    },
-   "kinetic_module": 553
+   "kinetic_module": 552
   },
   {
    "id": "complex_569",
@@ -4964,7 +4960,7 @@
    "composition": {
     "E55_2pg[c]_complex": 1.0
    },
-   "kinetic_module": 554
+   "kinetic_module": 553
   },
   {
    "id": "complex_570",
@@ -4972,7 +4968,7 @@
    "composition": {
     "E55_3pg[c]_complex": 1.0
    },
-   "kinetic_module": 555
+   "kinetic_module": 554
   },
   {
    "id": "complex_571",
@@ -4981,7 +4977,7 @@
     "3pg[c]": 1.0,
     "E_55": 1.0
    },
-   "kinetic_module": 556
+   "kinetic_module": 555
   },
   {
    "id": "complex_572",
@@ -4990,7 +4986,7 @@
     "2pg[c]": 1.0,
     "E_57": 1.0
    },
-   "kinetic_module": 557
+   "kinetic_module": 556
   },
   {
    "id": "complex_573",
@@ -4998,7 +4994,7 @@
    "composition": {
     "E57_2pg[c]_complex": 1.0
    },
-   "kinetic_module": 558
+   "kinetic_module": 557
   },
   {
    "id": "complex_574",
@@ -5006,7 +5002,7 @@
    "composition": {
     "E57_3pg[c]_complex": 1.0
    },
-   "kinetic_module": 559
+   "kinetic_module": 558
   },
   {
    "id": "complex_575",
@@ -5015,7 +5011,7 @@
     "3pg[c]": 1.0,
     "E_57": 1.0
    },
-   "kinetic_module": 560
+   "kinetic_module": 559
   },
   {
    "id": "complex_576",
@@ -5024,7 +5020,7 @@
     "6pgl[c]": 1.0,
     "E_81": 1.0
    },
-   "kinetic_module": 561
+   "kinetic_module": 560
   },
   {
    "id": "complex_577",
@@ -5032,7 +5028,7 @@
    "composition": {
     "E81_6pgl[c]_complex": 1.0
    },
-   "kinetic_module": 562
+   "kinetic_module": 561
   },
   {
    "id": "complex_578",
@@ -5041,7 +5037,7 @@
     "h2o[c]": 1.0,
     "E81_6pgl[c]_complex": 1.0
    },
-   "kinetic_module": 3
+   "kinetic_module": 562
   },
   {
    "id": "complex_579",
@@ -5057,7 +5053,7 @@
    "composition": {
     "E81_6pgc[c]_h[c]_complex": 1.0
    },
-   "kinetic_module": 563
+   "kinetic_module": 3
   },
   {
    "id": "complex_581",
@@ -5066,7 +5062,7 @@
     "h[c]": 1.0,
     "E81_6pgc[c]_complex": 1.0
    },
-   "kinetic_module": 564
+   "kinetic_module": 563
   },
   {
    "id": "complex_582",
@@ -5074,7 +5070,7 @@
    "composition": {
     "E81_6pgc[c]_complex": 1.0
    },
-   "kinetic_module": 565
+   "kinetic_module": 564
   },
   {
    "id": "complex_583",
@@ -5083,7 +5079,7 @@
     "6pgc[c]": 1.0,
     "E_81": 1.0
    },
-   "kinetic_module": 566
+   "kinetic_module": 565
   },
   {
    "id": "complex_584",
@@ -5092,7 +5088,7 @@
     "atp[c]": 1.0,
     "E_8": 1.0
    },
-   "kinetic_module": 567
+   "kinetic_module": 566
   },
   {
    "id": "complex_585",
@@ -5100,7 +5096,7 @@
    "composition": {
     "E8_atp[c]_complex": 1.0
    },
-   "kinetic_module": 568
+   "kinetic_module": 567
   },
   {
    "id": "complex_586",
@@ -5109,7 +5105,7 @@
     "3pg[c]": 1.0,
     "E8_atp[c]_complex": 1.0
    },
-   "kinetic_module": 569
+   "kinetic_module": 568
   },
   {
    "id": "complex_587",
@@ -5117,7 +5113,7 @@
    "composition": {
     "E8_3pg[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 570
+   "kinetic_module": 569
   },
   {
    "id": "complex_588",
@@ -5125,7 +5121,7 @@
    "composition": {
     "E8_13dpg[c]_adp[c]_complex": 1.0
    },
-   "kinetic_module": 571
+   "kinetic_module": 570
   },
   {
    "id": "complex_589",
@@ -5134,7 +5130,7 @@
     "13dpg[c]": 1.0,
     "E8_adp[c]_complex": 1.0
    },
-   "kinetic_module": 572
+   "kinetic_module": 571
   },
   {
    "id": "complex_590",
@@ -5142,7 +5138,7 @@
    "composition": {
     "E8_adp[c]_complex": 1.0
    },
-   "kinetic_module": 573
+   "kinetic_module": 572
   },
   {
    "id": "complex_591",
@@ -5151,7 +5147,7 @@
     "adp[c]": 1.0,
     "E_8": 1.0
    },
-   "kinetic_module": 574
+   "kinetic_module": 573
   },
   {
    "id": "complex_592",
@@ -5160,7 +5156,7 @@
     "atp[c]": 1.0,
     "E_46": 1.0
    },
-   "kinetic_module": 575
+   "kinetic_module": 574
   },
   {
    "id": "complex_593",
@@ -5168,7 +5164,7 @@
    "composition": {
     "E46_atp[c]_complex": 1.0
    },
-   "kinetic_module": 576
+   "kinetic_module": 575
   },
   {
    "id": "complex_594",
@@ -5177,7 +5173,7 @@
     "3pg[c]": 1.0,
     "E46_atp[c]_complex": 1.0
    },
-   "kinetic_module": 577
+   "kinetic_module": 576
   },
   {
    "id": "complex_595",
@@ -5185,7 +5181,7 @@
    "composition": {
     "E46_3pg[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 578
+   "kinetic_module": 577
   },
   {
    "id": "complex_596",
@@ -5193,7 +5189,7 @@
    "composition": {
     "E46_13dpg[c]_adp[c]_complex": 1.0
    },
-   "kinetic_module": 579
+   "kinetic_module": 578
   },
   {
    "id": "complex_597",
@@ -5202,7 +5198,7 @@
     "13dpg[c]": 1.0,
     "E46_adp[c]_complex": 1.0
    },
-   "kinetic_module": 580
+   "kinetic_module": 579
   },
   {
    "id": "complex_598",
@@ -5210,7 +5206,7 @@
    "composition": {
     "E46_adp[c]_complex": 1.0
    },
-   "kinetic_module": 581
+   "kinetic_module": 580
   },
   {
    "id": "complex_599",
@@ -5219,7 +5215,7 @@
     "adp[c]": 1.0,
     "E_46": 1.0
    },
-   "kinetic_module": 582
+   "kinetic_module": 581
   },
   {
    "id": "complex_600",
@@ -5228,7 +5224,7 @@
     "g6p_A[x]": 1.0,
     "E_36": 1.0
    },
-   "kinetic_module": 583
+   "kinetic_module": 582
   },
   {
    "id": "complex_601",
@@ -5236,7 +5232,7 @@
    "composition": {
     "E36_g6p_A[x]_complex": 1.0
    },
-   "kinetic_module": 584
+   "kinetic_module": 583
   },
   {
    "id": "complex_602",
@@ -5244,7 +5240,7 @@
    "composition": {
     "E36_g6p_B[x]_complex": 1.0
    },
-   "kinetic_module": 585
+   "kinetic_module": 584
   },
   {
    "id": "complex_603",
@@ -5253,7 +5249,7 @@
     "g6p_B[x]": 1.0,
     "E_36": 1.0
    },
-   "kinetic_module": 586
+   "kinetic_module": 585
   },
   {
    "id": "complex_604",
@@ -5261,7 +5257,7 @@
    "composition": {
     "E36_f6p[x]_complex": 1.0
    },
-   "kinetic_module": 587
+   "kinetic_module": 586
   },
   {
    "id": "complex_605",
@@ -5270,7 +5266,7 @@
     "f6p[x]": 1.0,
     "E_36": 1.0
    },
-   "kinetic_module": 588
+   "kinetic_module": 587
   },
   {
    "id": "complex_606",
@@ -5278,7 +5274,7 @@
    "composition": {
     "ac[m]": 1.0
    },
-   "kinetic_module": 589
+   "kinetic_module": 588
   },
   {
    "id": "complex_607",
@@ -5287,7 +5283,7 @@
     "h[e]": 1.0,
     "pi[e]": 1.0
    },
-   "kinetic_module": 590
+   "kinetic_module": 589
   },
   {
    "id": "complex_608",
@@ -5296,7 +5292,7 @@
     "h[e]": 1.0,
     "succ[e]": 1.0
    },
-   "kinetic_module": 591
+   "kinetic_module": 590
   },
   {
    "id": "complex_609",
@@ -5305,7 +5301,7 @@
     "h[c]": 1.0,
     "succ[c]": 1.0
    },
-   "kinetic_module": 592
+   "kinetic_module": 591
   },
   {
    "id": "complex_610",
@@ -5314,7 +5310,7 @@
     "coa[m]": 1.0,
     "E_71": 1.0
    },
-   "kinetic_module": 593
+   "kinetic_module": 592
   },
   {
    "id": "complex_611",
@@ -5322,7 +5318,7 @@
    "composition": {
     "E71_coa[m]_complex": 1.0
    },
-   "kinetic_module": 594
+   "kinetic_module": 593
   },
   {
    "id": "complex_612",
@@ -5331,7 +5327,7 @@
     "sdhlam[m]": 1.0,
     "E71_coa[m]_complex": 1.0
    },
-   "kinetic_module": 6
+   "kinetic_module": 594
   },
   {
    "id": "complex_613",
@@ -5347,7 +5343,7 @@
    "composition": {
     "E71_dhlam[m]_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 595
+   "kinetic_module": 6
   },
   {
    "id": "complex_615",
@@ -5356,7 +5352,7 @@
     "dhlam[m]": 1.0,
     "E71_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 596
+   "kinetic_module": 595
   },
   {
    "id": "complex_616",
@@ -5364,7 +5360,7 @@
    "composition": {
     "E71_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 597
+   "kinetic_module": 596
   },
   {
    "id": "complex_617",
@@ -5373,7 +5369,7 @@
     "succoa[m]": 1.0,
     "E_71": 1.0
    },
-   "kinetic_module": 598
+   "kinetic_module": 597
   },
   {
    "id": "complex_618",
@@ -5382,7 +5378,7 @@
     "coa[m]": 1.0,
     "E_64": 1.0
    },
-   "kinetic_module": 599
+   "kinetic_module": 598
   },
   {
    "id": "complex_619",
@@ -5390,7 +5386,7 @@
    "composition": {
     "E64_coa[m]_complex": 1.0
    },
-   "kinetic_module": 600
+   "kinetic_module": 599
   },
   {
    "id": "complex_620",
@@ -5399,7 +5395,7 @@
     "atp[m]": 1.0,
     "E64_coa[m]_complex": 1.0
    },
-   "kinetic_module": 601
+   "kinetic_module": 600
   },
   {
    "id": "complex_621",
@@ -5407,7 +5403,7 @@
    "composition": {
     "E64_atp[m]_coa[m]_complex": 1.0
    },
-   "kinetic_module": 602
+   "kinetic_module": 601
   },
   {
    "id": "complex_622",
@@ -5416,7 +5412,7 @@
     "succ[m]": 1.0,
     "E64_atp[m]_coa[m]_complex": 1.0
    },
-   "kinetic_module": 603
+   "kinetic_module": 602
   },
   {
    "id": "complex_623",
@@ -5424,7 +5420,7 @@
    "composition": {
     "E64_atp[m]_coa[m]_succ[m]_complex": 1.0
    },
-   "kinetic_module": 604
+   "kinetic_module": 603
   },
   {
    "id": "complex_624",
@@ -5432,7 +5428,7 @@
    "composition": {
     "E64_adp[m]_pi[m]_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 605
+   "kinetic_module": 604
   },
   {
    "id": "complex_625",
@@ -5441,7 +5437,7 @@
     "pi[m]": 1.0,
     "E64_adp[m]_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 606
+   "kinetic_module": 605
   },
   {
    "id": "complex_626",
@@ -5449,7 +5445,7 @@
    "composition": {
     "E64_adp[m]_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 607
+   "kinetic_module": 606
   },
   {
    "id": "complex_627",
@@ -5458,7 +5454,7 @@
     "adp[m]": 1.0,
     "E64_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 608
+   "kinetic_module": 607
   },
   {
    "id": "complex_628",
@@ -5466,7 +5462,7 @@
    "composition": {
     "E64_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 609
+   "kinetic_module": 608
   },
   {
    "id": "complex_629",
@@ -5475,7 +5471,7 @@
     "succoa[m]": 1.0,
     "E_64": 1.0
    },
-   "kinetic_module": 610
+   "kinetic_module": 609
   },
   {
    "id": "complex_630",
@@ -5484,7 +5480,7 @@
     "atp[c]": 1.0,
     "E_31": 1.0
    },
-   "kinetic_module": 611
+   "kinetic_module": 610
   },
   {
    "id": "complex_631",
@@ -5492,7 +5488,7 @@
    "composition": {
     "E31_atp[c]_complex": 1.0
    },
-   "kinetic_module": 612
+   "kinetic_module": 611
   },
   {
    "id": "complex_632",
@@ -5501,7 +5497,7 @@
     "a_D_glucose[c]": 1.0,
     "E31_atp[c]_complex": 1.0
    },
-   "kinetic_module": 1
+   "kinetic_module": 612
   },
   {
    "id": "complex_633",
@@ -5517,7 +5513,7 @@
    "composition": {
     "E31_adp[c]_g6p_A[c]_h[c]_complex": 1.0
    },
-   "kinetic_module": 613
+   "kinetic_module": 1
   },
   {
    "id": "complex_635",
@@ -5526,7 +5522,7 @@
     "g6p_A[c]": 1.0,
     "E31_adp[c]_h[c]_complex": 1.0
    },
-   "kinetic_module": 614
+   "kinetic_module": 613
   },
   {
    "id": "complex_636",
@@ -5534,7 +5530,7 @@
    "composition": {
     "E31_adp[c]_h[c]_complex": 1.0
    },
-   "kinetic_module": 615
+   "kinetic_module": 614
   },
   {
    "id": "complex_637",
@@ -5543,7 +5539,7 @@
     "h[c]": 1.0,
     "E31_adp[c]_complex": 1.0
    },
-   "kinetic_module": 616
+   "kinetic_module": 615
   },
   {
    "id": "complex_638",
@@ -5551,7 +5547,7 @@
    "composition": {
     "E31_adp[c]_complex": 1.0
    },
-   "kinetic_module": 617
+   "kinetic_module": 616
   },
   {
    "id": "complex_639",
@@ -5560,7 +5556,7 @@
     "adp[c]": 1.0,
     "E_31": 1.0
    },
-   "kinetic_module": 618
+   "kinetic_module": 617
   },
   {
    "id": "complex_640",
@@ -5568,7 +5564,7 @@
    "composition": {
     "co2[x]": 1.0
    },
-   "kinetic_module": 619
+   "kinetic_module": 618
   },
   {
    "id": "complex_641",
@@ -5576,7 +5572,7 @@
    "composition": {
     "co2[m]": 1.0
    },
-   "kinetic_module": 620
+   "kinetic_module": 619
   },
   {
    "id": "complex_642",
@@ -5585,7 +5581,7 @@
     "h[m]": 5.0,
     "E_85": 1.0
    },
-   "kinetic_module": 621
+   "kinetic_module": 620
   },
   {
    "id": "complex_643",
@@ -5593,7 +5589,7 @@
    "composition": {
     "E85_h[m]_complex": 1.0
    },
-   "kinetic_module": 622
+   "kinetic_module": 621
   },
   {
    "id": "complex_644",
@@ -5602,7 +5598,7 @@
     "nadh[m]": 1.0,
     "E85_h[m]_complex": 1.0
    },
-   "kinetic_module": 623
+   "kinetic_module": 622
   },
   {
    "id": "complex_645",
@@ -5610,7 +5606,7 @@
    "composition": {
     "E85_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 624
+   "kinetic_module": 623
   },
   {
    "id": "complex_646",
@@ -5619,7 +5615,7 @@
     "q6[m]": 1.0,
     "E85_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 26
+   "kinetic_module": 624
   },
   {
    "id": "complex_647",
@@ -5627,7 +5623,7 @@
    "composition": {
     "E85_h[m]_nadh[m]_q6[m]_complex": 1.0
    },
-   "kinetic_module": 26
+   "kinetic_module": 28
   },
   {
    "id": "complex_648",
@@ -5635,7 +5631,7 @@
    "composition": {
     "E85_h[c]_nad[m]_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 625
+   "kinetic_module": 28
   },
   {
    "id": "complex_649",
@@ -5644,7 +5640,7 @@
     "nad[m]": 1.0,
     "E85_h[c]_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 626
+   "kinetic_module": 625
   },
   {
    "id": "complex_650",
@@ -5652,7 +5648,7 @@
    "composition": {
     "E85_h[c]_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 627
+   "kinetic_module": 626
   },
   {
    "id": "complex_651",
@@ -5661,7 +5657,7 @@
     "h[c]": 4.0,
     "E85_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 628
+   "kinetic_module": 627
   },
   {
    "id": "complex_652",
@@ -5669,7 +5665,7 @@
    "composition": {
     "E85_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 629
+   "kinetic_module": 628
   },
   {
    "id": "complex_653",
@@ -5678,7 +5674,7 @@
     "q6h2[m]": 1.0,
     "E_85": 1.0
    },
-   "kinetic_module": 630
+   "kinetic_module": 629
   },
   {
    "id": "complex_654",
@@ -5687,7 +5683,7 @@
     "accoa[m]": 1.0,
     "E_58": 1.0
    },
-   "kinetic_module": 631
+   "kinetic_module": 630
   },
   {
    "id": "complex_655",
@@ -5695,7 +5691,7 @@
    "composition": {
     "E58_accoa[m]_complex": 1.0
    },
-   "kinetic_module": 632
+   "kinetic_module": 631
   },
   {
    "id": "complex_656",
@@ -5704,7 +5700,7 @@
     "succ[m]": 1.0,
     "E58_accoa[m]_complex": 1.0
    },
-   "kinetic_module": 633
+   "kinetic_module": 632
   },
   {
    "id": "complex_657",
@@ -5712,7 +5708,7 @@
    "composition": {
     "E58_accoa[m]_succ[m]_complex": 1.0
    },
-   "kinetic_module": 634
+   "kinetic_module": 633
   },
   {
    "id": "complex_658",
@@ -5720,7 +5716,7 @@
    "composition": {
     "E58_ac[m]_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 635
+   "kinetic_module": 634
   },
   {
    "id": "complex_659",
@@ -5729,7 +5725,7 @@
     "ac[m]": 1.0,
     "E58_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 636
+   "kinetic_module": 635
   },
   {
    "id": "complex_660",
@@ -5737,7 +5733,7 @@
    "composition": {
     "E58_succoa[m]_complex": 1.0
    },
-   "kinetic_module": 637
+   "kinetic_module": 636
   },
   {
    "id": "complex_661",
@@ -5746,7 +5742,7 @@
     "succoa[m]": 1.0,
     "E_58": 1.0
    },
-   "kinetic_module": 638
+   "kinetic_module": 637
   },
   {
    "id": "complex_662",
@@ -5755,7 +5751,7 @@
     "h2o[x]": 1.0,
     "E_54": 1.0
    },
-   "kinetic_module": 639
+   "kinetic_module": 638
   },
   {
    "id": "complex_663",
@@ -5763,7 +5759,7 @@
    "composition": {
     "E54_h2o[x]_complex": 1.0
    },
-   "kinetic_module": 640
+   "kinetic_module": 639
   },
   {
    "id": "complex_664",
@@ -5772,7 +5768,7 @@
     "fum[x]": 1.0,
     "E54_h2o[x]_complex": 1.0
    },
-   "kinetic_module": 641
+   "kinetic_module": 640
   },
   {
    "id": "complex_665",
@@ -5780,7 +5776,7 @@
    "composition": {
     "E54_fum[x]_h2o[x]_complex": 1.0
    },
-   "kinetic_module": 642
+   "kinetic_module": 641
   },
   {
    "id": "complex_666",
@@ -5788,7 +5784,7 @@
    "composition": {
     "E54_mal__L[x]_complex": 1.0
    },
-   "kinetic_module": 643
+   "kinetic_module": 642
   },
   {
    "id": "complex_667",
@@ -5797,7 +5793,7 @@
     "mal__L[x]": 1.0,
     "E_54": 1.0
    },
-   "kinetic_module": 644
+   "kinetic_module": 643
   },
   {
    "id": "complex_668",
@@ -5806,7 +5802,7 @@
     "glu__L[c]": 1.0,
     "E_19": 1.0
    },
-   "kinetic_module": 645
+   "kinetic_module": 644
   },
   {
    "id": "complex_669",
@@ -5814,7 +5810,7 @@
    "composition": {
     "E19_glu__L[c]_complex": 1.0
    },
-   "kinetic_module": 646
+   "kinetic_module": 645
   },
   {
    "id": "complex_670",
@@ -5823,7 +5819,7 @@
     "nadp[c]": 1.0,
     "E19_glu__L[c]_complex": 1.0
    },
-   "kinetic_module": 647
+   "kinetic_module": 646
   },
   {
    "id": "complex_671",
@@ -5831,7 +5827,7 @@
    "composition": {
     "E19_glu__L[c]_nadp[c]_complex": 1.0
    },
-   "kinetic_module": 648
+   "kinetic_module": 647
   },
   {
    "id": "complex_672",
@@ -5840,7 +5836,7 @@
     "h2o[c]": 1.0,
     "E19_glu__L[c]_nadp[c]_complex": 1.0
    },
-   "kinetic_module": 649
+   "kinetic_module": 648
   },
   {
    "id": "complex_673",
@@ -5848,7 +5844,7 @@
    "composition": {
     "E19_glu__L[c]_h2o[c]_nadp[c]_complex": 1.0
    },
-   "kinetic_module": 650
+   "kinetic_module": 649
   },
   {
    "id": "complex_674",
@@ -5856,7 +5852,7 @@
    "composition": {
     "E19_akg[c]_h[c]_nadph[c]_nh4[c]_complex": 1.0
    },
-   "kinetic_module": 651
+   "kinetic_module": 650
   },
   {
    "id": "complex_675",
@@ -5865,7 +5861,7 @@
     "nadph[c]": 1.0,
     "E19_akg[c]_h[c]_nh4[c]_complex": 1.0
    },
-   "kinetic_module": 652
+   "kinetic_module": 651
   },
   {
    "id": "complex_676",
@@ -5873,7 +5869,7 @@
    "composition": {
     "E19_akg[c]_h[c]_nh4[c]_complex": 1.0
    },
-   "kinetic_module": 653
+   "kinetic_module": 652
   },
   {
    "id": "complex_677",
@@ -5882,7 +5878,7 @@
     "h[c]": 1.0,
     "E19_akg[c]_nh4[c]_complex": 1.0
    },
-   "kinetic_module": 654
+   "kinetic_module": 653
   },
   {
    "id": "complex_678",
@@ -5890,7 +5886,7 @@
    "composition": {
     "E19_akg[c]_nh4[c]_complex": 1.0
    },
-   "kinetic_module": 655
+   "kinetic_module": 654
   },
   {
    "id": "complex_679",
@@ -5899,7 +5895,7 @@
     "akg[c]": 1.0,
     "E19_nh4[c]_complex": 1.0
    },
-   "kinetic_module": 656
+   "kinetic_module": 655
   },
   {
    "id": "complex_680",
@@ -5907,7 +5903,7 @@
    "composition": {
     "E19_nh4[c]_complex": 1.0
    },
-   "kinetic_module": 657
+   "kinetic_module": 656
   },
   {
    "id": "complex_681",
@@ -5916,7 +5912,7 @@
     "nh4[c]": 1.0,
     "E_19": 1.0
    },
-   "kinetic_module": 658
+   "kinetic_module": 657
   },
   {
    "id": "complex_682",
@@ -5924,7 +5920,7 @@
    "composition": {
     "ala__L[m]": 1.0
    },
-   "kinetic_module": 659
+   "kinetic_module": 658
   },
   {
    "id": "complex_683",
@@ -5933,7 +5929,7 @@
     "h2o[m]": 1.0,
     "E_61": 1.0
    },
-   "kinetic_module": 660
+   "kinetic_module": 659
   },
   {
    "id": "complex_684",
@@ -5941,7 +5937,7 @@
    "composition": {
     "E61_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 661
+   "kinetic_module": 660
   },
   {
    "id": "complex_685",
@@ -5950,7 +5946,7 @@
     "fum[m]": 1.0,
     "E61_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 662
+   "kinetic_module": 661
   },
   {
    "id": "complex_686",
@@ -5958,7 +5954,7 @@
    "composition": {
     "E61_fum[m]_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 663
+   "kinetic_module": 662
   },
   {
    "id": "complex_687",
@@ -5966,7 +5962,7 @@
    "composition": {
     "E61_mal__L[m]_complex": 1.0
    },
-   "kinetic_module": 664
+   "kinetic_module": 663
   },
   {
    "id": "complex_688",
@@ -5975,7 +5971,7 @@
     "mal__L[m]": 1.0,
     "E_61": 1.0
    },
-   "kinetic_module": 665
+   "kinetic_module": 664
   },
   {
    "id": "complex_689",
@@ -5983,7 +5979,7 @@
    "composition": {
     "h2o[m]": 1.0
    },
-   "kinetic_module": 666
+   "kinetic_module": 665
   },
   {
    "id": "complex_690",
@@ -5992,7 +5988,7 @@
     "h2o[m]": 1.0,
     "E_19": 1.0
    },
-   "kinetic_module": 667
+   "kinetic_module": 666
   },
   {
    "id": "complex_691",
@@ -6000,7 +5996,7 @@
    "composition": {
     "E19_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 668
+   "kinetic_module": 667
   },
   {
    "id": "complex_692",
@@ -6009,7 +6005,7 @@
     "glu__L[m]": 1.0,
     "E19_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 669
+   "kinetic_module": 668
   },
   {
    "id": "complex_693",
@@ -6017,7 +6013,7 @@
    "composition": {
     "E19_glu__L[m]_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 670
+   "kinetic_module": 669
   },
   {
    "id": "complex_694",
@@ -6026,7 +6022,7 @@
     "nadp[m]": 1.0,
     "E19_glu__L[m]_h2o[m]_complex": 1.0
    },
-   "kinetic_module": 671
+   "kinetic_module": 670
   },
   {
    "id": "complex_695",
@@ -6034,7 +6030,7 @@
    "composition": {
     "E19_glu__L[m]_h2o[m]_nadp[m]_complex": 1.0
    },
-   "kinetic_module": 672
+   "kinetic_module": 671
   },
   {
    "id": "complex_696",
@@ -6042,7 +6038,7 @@
    "composition": {
     "E19_akg[m]_h[m]_nadph[m]_nh4[m]_complex": 1.0
    },
-   "kinetic_module": 673
+   "kinetic_module": 672
   },
   {
    "id": "complex_697",
@@ -6051,7 +6047,7 @@
     "h[m]": 1.0,
     "E19_akg[m]_nadph[m]_nh4[m]_complex": 1.0
    },
-   "kinetic_module": 674
+   "kinetic_module": 673
   },
   {
    "id": "complex_698",
@@ -6059,7 +6055,7 @@
    "composition": {
     "E19_akg[m]_nadph[m]_nh4[m]_complex": 1.0
    },
-   "kinetic_module": 675
+   "kinetic_module": 674
   },
   {
    "id": "complex_699",
@@ -6068,7 +6064,7 @@
     "akg[m]": 1.0,
     "E19_nadph[m]_nh4[m]_complex": 1.0
    },
-   "kinetic_module": 676
+   "kinetic_module": 675
   },
   {
    "id": "complex_700",
@@ -6076,7 +6072,7 @@
    "composition": {
     "E19_nadph[m]_nh4[m]_complex": 1.0
    },
-   "kinetic_module": 677
+   "kinetic_module": 676
   },
   {
    "id": "complex_701",
@@ -6085,7 +6081,7 @@
     "nh4[m]": 1.0,
     "E19_nadph[m]_complex": 1.0
    },
-   "kinetic_module": 678
+   "kinetic_module": 677
   },
   {
    "id": "complex_702",
@@ -6093,7 +6089,7 @@
    "composition": {
     "E19_nadph[m]_complex": 1.0
    },
-   "kinetic_module": 679
+   "kinetic_module": 678
   },
   {
    "id": "complex_703",
@@ -6102,7 +6098,7 @@
     "nadph[m]": 1.0,
     "E_19": 1.0
    },
-   "kinetic_module": 680
+   "kinetic_module": 679
   },
   {
    "id": "complex_704",
@@ -6111,7 +6107,7 @@
     "h[m]": 1.0,
     "thr__L[m]": 1.0
    },
-   "kinetic_module": 681
+   "kinetic_module": 680
   },
   {
    "id": "complex_705",
@@ -6121,7 +6117,7 @@
     "atp[c]": 1.0,
     "h2o[c]": 1.0
    },
-   "kinetic_module": 27
+   "kinetic_module": 681
   },
   {
    "id": "complex_706",
@@ -6132,7 +6128,7 @@
     "pi[c]": 1.0,
     "pro__L[c]": 1.0
    },
-   "kinetic_module": 682
+   "kinetic_module": 29
   },
   {
    "id": "complex_707",
@@ -6141,7 +6137,7 @@
     "2pg[c]": 1.0,
     "E_4": 1.0
    },
-   "kinetic_module": 683
+   "kinetic_module": 682
   },
   {
    "id": "complex_708",
@@ -6149,7 +6145,7 @@
    "composition": {
     "E4_2pg[c]_complex": 1.0
    },
-   "kinetic_module": 684
+   "kinetic_module": 683
   },
   {
    "id": "complex_709",
@@ -6157,7 +6153,7 @@
    "composition": {
     "E4_h2o[c]_pep[c]_complex": 1.0
    },
-   "kinetic_module": 685
+   "kinetic_module": 684
   },
   {
    "id": "complex_710",
@@ -6166,7 +6162,7 @@
     "pep[c]": 1.0,
     "E4_h2o[c]_complex": 1.0
    },
-   "kinetic_module": 686
+   "kinetic_module": 685
   },
   {
    "id": "complex_711",
@@ -6174,7 +6170,7 @@
    "composition": {
     "E4_h2o[c]_complex": 1.0
    },
-   "kinetic_module": 687
+   "kinetic_module": 686
   },
   {
    "id": "complex_712",
@@ -6183,7 +6179,7 @@
     "h2o[c]": 1.0,
     "E_4": 1.0
    },
-   "kinetic_module": 688
+   "kinetic_module": 687
   },
   {
    "id": "complex_713",
@@ -6192,7 +6188,7 @@
     "2pg[c]": 1.0,
     "E_32": 1.0
    },
-   "kinetic_module": 689
+   "kinetic_module": 688
   },
   {
    "id": "complex_714",
@@ -6200,7 +6196,7 @@
    "composition": {
     "E32_2pg[c]_complex": 1.0
    },
-   "kinetic_module": 690
+   "kinetic_module": 689
   },
   {
    "id": "complex_715",
@@ -6208,7 +6204,7 @@
    "composition": {
     "E32_h2o[c]_pep[c]_complex": 1.0
    },
-   "kinetic_module": 691
+   "kinetic_module": 690
   },
   {
    "id": "complex_716",
@@ -6217,7 +6213,7 @@
     "pep[c]": 1.0,
     "E32_h2o[c]_complex": 1.0
    },
-   "kinetic_module": 692
+   "kinetic_module": 691
   },
   {
    "id": "complex_717",
@@ -6225,7 +6221,7 @@
    "composition": {
     "E32_h2o[c]_complex": 1.0
    },
-   "kinetic_module": 693
+   "kinetic_module": 692
   },
   {
    "id": "complex_718",
@@ -6234,7 +6230,7 @@
     "h2o[c]": 1.0,
     "E_32": 1.0
    },
-   "kinetic_module": 694
+   "kinetic_module": 693
   },
   {
    "id": "complex_719",
@@ -6243,7 +6239,7 @@
     "nadp[c]": 1.0,
     "E_53": 1.0
    },
-   "kinetic_module": 695
+   "kinetic_module": 694
   },
   {
    "id": "complex_720",
@@ -6251,7 +6247,7 @@
    "composition": {
     "E53_nadp[c]_complex": 1.0
    },
-   "kinetic_module": 696
+   "kinetic_module": 695
   },
   {
    "id": "complex_721",
@@ -6260,7 +6256,7 @@
     "6pgc[c]": 1.0,
     "E53_nadp[c]_complex": 1.0
    },
-   "kinetic_module": 3
+   "kinetic_module": 696
   },
   {
    "id": "complex_722",
@@ -6276,7 +6272,7 @@
    "composition": {
     "E53_co2[c]_nadph[c]_ru5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 697
+   "kinetic_module": 3
   },
   {
    "id": "complex_724",
@@ -6285,7 +6281,7 @@
     "nadph[c]": 1.0,
     "E53_co2[c]_ru5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 698
+   "kinetic_module": 697
   },
   {
    "id": "complex_725",
@@ -6293,7 +6289,7 @@
    "composition": {
     "E53_co2[c]_ru5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 699
+   "kinetic_module": 698
   },
   {
    "id": "complex_726",
@@ -6302,7 +6298,7 @@
     "co2[c]": 1.0,
     "E53_ru5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 700
+   "kinetic_module": 699
   },
   {
    "id": "complex_727",
@@ -6310,7 +6306,7 @@
    "composition": {
     "E53_ru5p__D[c]_complex": 1.0
    },
-   "kinetic_module": 701
+   "kinetic_module": 700
   },
   {
    "id": "complex_728",
@@ -6319,7 +6315,7 @@
     "ru5p__D[c]": 1.0,
     "E_53": 1.0
    },
-   "kinetic_module": 702
+   "kinetic_module": 701
   },
   {
    "id": "complex_729",
@@ -6328,7 +6324,7 @@
     "cit[c]": 1.0,
     "mal__L[m]": 1.0
    },
-   "kinetic_module": 703
+   "kinetic_module": 702
   },
   {
    "id": "complex_730",
@@ -6337,7 +6333,7 @@
     "mal__L[c]": 1.0,
     "cit[m]": 1.0
    },
-   "kinetic_module": 704
+   "kinetic_module": 703
   },
   {
    "id": "complex_731",
@@ -6345,7 +6341,7 @@
    "composition": {
     "pep[c]": 1.0
    },
-   "kinetic_module": 705
+   "kinetic_module": 704
   },
   {
    "id": "complex_732",
@@ -6353,7 +6349,7 @@
    "composition": {
     "pep[x]": 1.0
    },
-   "kinetic_module": 706
+   "kinetic_module": 705
   },
   {
    "id": "complex_733",
@@ -6362,7 +6358,7 @@
     "h[m]": 1.5,
     "E_11": 1.0
    },
-   "kinetic_module": 707
+   "kinetic_module": 706
   },
   {
    "id": "complex_734",
@@ -6370,7 +6366,7 @@
    "composition": {
     "E11_h[m]_complex": 1.0
    },
-   "kinetic_module": 708
+   "kinetic_module": 707
   },
   {
    "id": "complex_735",
@@ -6379,7 +6375,7 @@
     "q6h2[m]": 1.0,
     "E11_h[m]_complex": 1.0
    },
-   "kinetic_module": 709
+   "kinetic_module": 708
   },
   {
    "id": "complex_736",
@@ -6387,7 +6383,7 @@
    "composition": {
     "E11_h[m]_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 710
+   "kinetic_module": 709
   },
   {
    "id": "complex_737",
@@ -6396,7 +6392,7 @@
     "ficytc[m]": 2.0,
     "E11_h[m]_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 28
+   "kinetic_module": 710
   },
   {
    "id": "complex_738",
@@ -6404,7 +6400,7 @@
    "composition": {
     "E11_ficytc[m]_h[m]_q6h2[m]_complex": 1.0
    },
-   "kinetic_module": 28
+   "kinetic_module": 30
   },
   {
    "id": "complex_739",
@@ -6412,7 +6408,7 @@
    "composition": {
     "E11_focytc[m]_h[c]_q6[m]_complex": 1.0
    },
-   "kinetic_module": 711
+   "kinetic_module": 30
   },
   {
    "id": "complex_740",
@@ -6421,7 +6417,7 @@
     "h[c]": 3.5,
     "E11_focytc[m]_q6[m]_complex": 1.0
    },
-   "kinetic_module": 712
+   "kinetic_module": 711
   },
   {
    "id": "complex_741",
@@ -6429,7 +6425,7 @@
    "composition": {
     "E11_focytc[m]_q6[m]_complex": 1.0
    },
-   "kinetic_module": 713
+   "kinetic_module": 712
   },
   {
    "id": "complex_742",
@@ -6438,7 +6434,7 @@
     "q6[m]": 1.0,
     "E11_focytc[m]_complex": 1.0
    },
-   "kinetic_module": 714
+   "kinetic_module": 713
   },
   {
    "id": "complex_743",
@@ -6446,7 +6442,7 @@
    "composition": {
     "E11_focytc[m]_complex": 1.0
    },
-   "kinetic_module": 715
+   "kinetic_module": 714
   },
   {
    "id": "complex_744",
@@ -6455,7 +6451,7 @@
     "focytc[m]": 2.0,
     "E_11": 1.0
    },
-   "kinetic_module": 716
+   "kinetic_module": 715
   },
   {
    "id": "complex_745",
@@ -6464,7 +6460,7 @@
     "h[m]": 1.0,
     "E_12": 1.0
    },
-   "kinetic_module": 717
+   "kinetic_module": 716
   },
   {
    "id": "complex_746",
@@ -6472,7 +6468,7 @@
    "composition": {
     "E12_h[m]_complex": 1.0
    },
-   "kinetic_module": 718
+   "kinetic_module": 717
   },
   {
    "id": "complex_747",
@@ -6481,7 +6477,7 @@
     "nadh[m]": 1.0,
     "E12_h[m]_complex": 1.0
    },
-   "kinetic_module": 719
+   "kinetic_module": 718
   },
   {
    "id": "complex_748",
@@ -6489,7 +6485,7 @@
    "composition": {
     "E12_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 720
+   "kinetic_module": 719
   },
   {
    "id": "complex_749",
@@ -6498,7 +6494,7 @@
     "fum[m]": 1.0,
     "E12_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 29
+   "kinetic_module": 720
   },
   {
    "id": "complex_750",
@@ -6506,7 +6502,7 @@
    "composition": {
     "E12_fum[m]_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 29
+   "kinetic_module": 31
   },
   {
    "id": "complex_751",
@@ -6514,7 +6510,7 @@
    "composition": {
     "E12_nad[m]_succ[m]_complex": 1.0
    },
-   "kinetic_module": 721
+   "kinetic_module": 31
   },
   {
    "id": "complex_752",
@@ -6523,7 +6519,7 @@
     "nad[m]": 1.0,
     "E12_succ[m]_complex": 1.0
    },
-   "kinetic_module": 722
+   "kinetic_module": 721
   },
   {
    "id": "complex_753",
@@ -6531,7 +6527,7 @@
    "composition": {
     "E12_succ[m]_complex": 1.0
    },
-   "kinetic_module": 723
+   "kinetic_module": 722
   },
   {
    "id": "complex_754",
@@ -6540,7 +6536,7 @@
     "succ[m]": 1.0,
     "E_12": 1.0
    },
-   "kinetic_module": 724
+   "kinetic_module": 723
   },
   {
    "id": "complex_755",
@@ -6549,7 +6545,7 @@
     "h[m]": 1.0,
     "E_70": 1.0
    },
-   "kinetic_module": 725
+   "kinetic_module": 724
   },
   {
    "id": "complex_756",
@@ -6557,7 +6553,7 @@
    "composition": {
     "E70_h[m]_complex": 1.0
    },
-   "kinetic_module": 726
+   "kinetic_module": 725
   },
   {
    "id": "complex_757",
@@ -6566,7 +6562,7 @@
     "nadh[m]": 1.0,
     "E70_h[m]_complex": 1.0
    },
-   "kinetic_module": 727
+   "kinetic_module": 726
   },
   {
    "id": "complex_758",
@@ -6574,7 +6570,7 @@
    "composition": {
     "E70_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 728
+   "kinetic_module": 727
   },
   {
    "id": "complex_759",
@@ -6583,7 +6579,7 @@
     "fum[m]": 1.0,
     "E70_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 30
+   "kinetic_module": 728
   },
   {
    "id": "complex_760",
@@ -6591,7 +6587,7 @@
    "composition": {
     "E70_fum[m]_h[m]_nadh[m]_complex": 1.0
    },
-   "kinetic_module": 30
+   "kinetic_module": 32
   },
   {
    "id": "complex_761",
@@ -6599,7 +6595,7 @@
    "composition": {
     "E70_nad[m]_succ[m]_complex": 1.0
    },
-   "kinetic_module": 729
+   "kinetic_module": 32
   },
   {
    "id": "complex_762",
@@ -6608,7 +6604,7 @@
     "nad[m]": 1.0,
     "E70_succ[m]_complex": 1.0
    },
-   "kinetic_module": 730
+   "kinetic_module": 729
   },
   {
    "id": "complex_763",
@@ -6616,7 +6612,7 @@
    "composition": {
     "E70_succ[m]_complex": 1.0
    },
-   "kinetic_module": 731
+   "kinetic_module": 730
   },
   {
    "id": "complex_764",
@@ -6625,7 +6621,7 @@
     "succ[m]": 1.0,
     "E_70": 1.0
    },
-   "kinetic_module": 732
+   "kinetic_module": 731
   },
   {
    "id": "complex_765",
@@ -6634,7 +6630,7 @@
     "2ahethmpp[m]": 1.0,
     "E_59": 1.0
    },
-   "kinetic_module": 733
+   "kinetic_module": 732
   },
   {
    "id": "complex_766",
@@ -6642,7 +6638,7 @@
    "composition": {
     "E59_2ahethmpp[m]_complex": 1.0
    },
-   "kinetic_module": 734
+   "kinetic_module": 733
   },
   {
    "id": "complex_767",
@@ -6651,7 +6647,7 @@
     "lpam[m]": 1.0,
     "E59_2ahethmpp[m]_complex": 1.0
    },
-   "kinetic_module": 735
+   "kinetic_module": 734
   },
   {
    "id": "complex_768",
@@ -6659,7 +6655,7 @@
    "composition": {
     "E59_2ahethmpp[m]_lpam[m]_complex": 1.0
    },
-   "kinetic_module": 736
+   "kinetic_module": 735
   },
   {
    "id": "complex_769",
@@ -6667,7 +6663,7 @@
    "composition": {
     "E59_adhlam[m]_thmpp[m]_complex": 1.0
    },
-   "kinetic_module": 737
+   "kinetic_module": 736
   },
   {
    "id": "complex_770",
@@ -6676,7 +6672,7 @@
     "adhlam[m]": 1.0,
     "E59_thmpp[m]_complex": 1.0
    },
-   "kinetic_module": 738
+   "kinetic_module": 737
   },
   {
    "id": "complex_771",
@@ -6684,7 +6680,7 @@
    "composition": {
     "E59_thmpp[m]_complex": 1.0
    },
-   "kinetic_module": 739
+   "kinetic_module": 738
   },
   {
    "id": "complex_772",
@@ -6693,7 +6689,7 @@
     "thmpp[m]": 1.0,
     "E_59": 1.0
    },
-   "kinetic_module": 740
+   "kinetic_module": 739
   },
   {
    "id": "complex_773",
@@ -6702,7 +6698,7 @@
     "g3p[c]": 1.0,
     "E_77": 1.0
    },
-   "kinetic_module": 741
+   "kinetic_module": 740
   },
   {
    "id": "complex_774",
@@ -6710,7 +6706,7 @@
    "composition": {
     "E77_g3p[c]_complex": 1.0
    },
-   "kinetic_module": 742
+   "kinetic_module": 741
   },
   {
    "id": "complex_775",
@@ -6719,7 +6715,7 @@
     "s7p[c]": 1.0,
     "E77_g3p[c]_complex": 1.0
    },
-   "kinetic_module": 743
+   "kinetic_module": 742
   },
   {
    "id": "complex_776",
@@ -6727,7 +6723,7 @@
    "composition": {
     "E77_g3p[c]_s7p[c]_complex": 1.0
    },
-   "kinetic_module": 744
+   "kinetic_module": 743
   },
   {
    "id": "complex_777",
@@ -6735,7 +6731,7 @@
    "composition": {
     "E77_e4p[c]_f6p[c]_complex": 1.0
    },
-   "kinetic_module": 745
+   "kinetic_module": 744
   },
   {
    "id": "complex_778",
@@ -6744,7 +6740,7 @@
     "e4p[c]": 1.0,
     "E77_f6p[c]_complex": 1.0
    },
-   "kinetic_module": 746
+   "kinetic_module": 745
   },
   {
    "id": "complex_779",
@@ -6752,7 +6748,7 @@
    "composition": {
     "E77_f6p[c]_complex": 1.0
    },
-   "kinetic_module": 747
+   "kinetic_module": 746
   },
   {
    "id": "complex_780",
@@ -6761,7 +6757,7 @@
     "f6p[c]": 1.0,
     "E_77": 1.0
    },
-   "kinetic_module": 748
+   "kinetic_module": 747
   },
   {
    "id": "complex_781",
@@ -6769,7 +6765,7 @@
    "composition": {
     "3pg[x]": 1.0
    },
-   "kinetic_module": 11
+   "kinetic_module": 748
   },
   {
    "id": "complex_782",
@@ -6777,7 +6773,7 @@
    "composition": {
     "3pg[c]": 1.0
    },
-   "kinetic_module": 749
+   "kinetic_module": 11
   },
   {
    "id": "complex_783",
@@ -6786,7 +6782,7 @@
     "pyr[m]": 1.0,
     "E_60": 1.0
    },
-   "kinetic_module": 750
+   "kinetic_module": 749
   },
   {
    "id": "complex_784",
@@ -6794,7 +6790,7 @@
    "composition": {
     "E60_pyr[m]_complex": 1.0
    },
-   "kinetic_module": 751
+   "kinetic_module": 750
   },
   {
    "id": "complex_785",
@@ -6803,7 +6799,7 @@
     "thmpp[m]": 1.0,
     "E60_pyr[m]_complex": 1.0
    },
-   "kinetic_module": 752
+   "kinetic_module": 751
   },
   {
    "id": "complex_786",
@@ -6811,7 +6807,7 @@
    "composition": {
     "E60_pyr[m]_thmpp[m]_complex": 1.0
    },
-   "kinetic_module": 753
+   "kinetic_module": 752
   },
   {
    "id": "complex_787",
@@ -6819,7 +6815,7 @@
    "composition": {
     "E60_2ahethmpp[m]_co2[m]_complex": 1.0
    },
-   "kinetic_module": 754
+   "kinetic_module": 753
   },
   {
    "id": "complex_788",
@@ -6828,7 +6824,7 @@
     "2ahethmpp[m]": 1.0,
     "E60_co2[m]_complex": 1.0
    },
-   "kinetic_module": 755
+   "kinetic_module": 754
   },
   {
    "id": "complex_789",
@@ -6836,7 +6832,7 @@
    "composition": {
     "E60_co2[m]_complex": 1.0
    },
-   "kinetic_module": 756
+   "kinetic_module": 755
   },
   {
    "id": "complex_790",
@@ -6845,7 +6841,7 @@
     "co2[m]": 1.0,
     "E_60": 1.0
    },
-   "kinetic_module": 757
+   "kinetic_module": 756
   },
   {
    "id": "complex_791",
@@ -6854,7 +6850,7 @@
     "icit[m]": 1.0,
     "E_66": 1.0
    },
-   "kinetic_module": 758
+   "kinetic_module": 757
   },
   {
    "id": "complex_792",
@@ -6862,7 +6858,7 @@
    "composition": {
     "E66_icit[m]_complex": 1.0
    },
-   "kinetic_module": 759
+   "kinetic_module": 758
   },
   {
    "id": "complex_793",
@@ -6871,7 +6867,7 @@
     "nadp[m]": 1.0,
     "E66_icit[m]_complex": 1.0
    },
-   "kinetic_module": 20
+   "kinetic_module": 759
   },
   {
    "id": "complex_794",
@@ -6887,7 +6883,7 @@
    "composition": {
     "E66_akg[m]_co2[m]_nadph[m]_complex": 1.0
    },
-   "kinetic_module": 760
+   "kinetic_module": 20
   },
   {
    "id": "complex_796",
@@ -6896,7 +6892,7 @@
     "akg[m]": 1.0,
     "E66_co2[m]_nadph[m]_complex": 1.0
    },
-   "kinetic_module": 761
+   "kinetic_module": 760
   },
   {
    "id": "complex_797",
@@ -6904,7 +6900,7 @@
    "composition": {
     "E66_co2[m]_nadph[m]_complex": 1.0
    },
-   "kinetic_module": 762
+   "kinetic_module": 761
   },
   {
    "id": "complex_798",
@@ -6913,7 +6909,7 @@
     "co2[m]": 1.0,
     "E66_nadph[m]_complex": 1.0
    },
-   "kinetic_module": 763
+   "kinetic_module": 762
   },
   {
    "id": "complex_799",
@@ -6921,7 +6917,7 @@
    "composition": {
     "E66_nadph[m]_complex": 1.0
    },
-   "kinetic_module": 764
+   "kinetic_module": 763
   },
   {
    "id": "complex_800",
@@ -6930,7 +6926,7 @@
     "nadph[m]": 1.0,
     "E_66": 1.0
    },
-   "kinetic_module": 765
+   "kinetic_module": 764
   },
   {
    "id": "complex_801",
@@ -6939,7 +6935,7 @@
     "g3p[x]": 1.0,
     "E_6": 1.0
    },
-   "kinetic_module": 766
+   "kinetic_module": 765
   },
   {
    "id": "complex_802",
@@ -6947,7 +6943,7 @@
    "composition": {
     "E6_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 767
+   "kinetic_module": 766
   },
   {
    "id": "complex_803",
@@ -6956,7 +6952,7 @@
     "pi[x]": 1.0,
     "E6_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 768
+   "kinetic_module": 767
   },
   {
    "id": "complex_804",
@@ -6964,7 +6960,7 @@
    "composition": {
     "E6_g3p[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 769
+   "kinetic_module": 768
   },
   {
    "id": "complex_805",
@@ -6973,7 +6969,7 @@
     "nad[x]": 1.0,
     "E6_g3p[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 770
+   "kinetic_module": 769
   },
   {
    "id": "complex_806",
@@ -6981,7 +6977,7 @@
    "composition": {
     "E6_g3p[x]_nad[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 771
+   "kinetic_module": 770
   },
   {
    "id": "complex_807",
@@ -6989,7 +6985,7 @@
    "composition": {
     "E6_13dpg[x]_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 772
+   "kinetic_module": 771
   },
   {
    "id": "complex_808",
@@ -6998,7 +6994,7 @@
     "13dpg[x]": 1.0,
     "E6_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 773
+   "kinetic_module": 772
   },
   {
    "id": "complex_809",
@@ -7006,7 +7002,7 @@
    "composition": {
     "E6_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 774
+   "kinetic_module": 773
   },
   {
    "id": "complex_810",
@@ -7015,7 +7011,7 @@
     "h[x]": 1.0,
     "E6_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 775
+   "kinetic_module": 774
   },
   {
    "id": "complex_811",
@@ -7023,7 +7019,7 @@
    "composition": {
     "E6_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 776
+   "kinetic_module": 775
   },
   {
    "id": "complex_812",
@@ -7032,7 +7028,7 @@
     "nadh[x]": 1.0,
     "E_6": 1.0
    },
-   "kinetic_module": 777
+   "kinetic_module": 776
   },
   {
    "id": "complex_813",
@@ -7041,7 +7037,7 @@
     "g3p[x]": 1.0,
     "E_39": 1.0
    },
-   "kinetic_module": 778
+   "kinetic_module": 777
   },
   {
    "id": "complex_814",
@@ -7049,7 +7045,7 @@
    "composition": {
     "E39_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 779
+   "kinetic_module": 778
   },
   {
    "id": "complex_815",
@@ -7058,7 +7054,7 @@
     "pi[x]": 1.0,
     "E39_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 780
+   "kinetic_module": 779
   },
   {
    "id": "complex_816",
@@ -7066,7 +7062,7 @@
    "composition": {
     "E39_g3p[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 781
+   "kinetic_module": 780
   },
   {
    "id": "complex_817",
@@ -7075,7 +7071,7 @@
     "nad[x]": 1.0,
     "E39_g3p[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 782
+   "kinetic_module": 781
   },
   {
    "id": "complex_818",
@@ -7083,7 +7079,7 @@
    "composition": {
     "E39_g3p[x]_nad[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 783
+   "kinetic_module": 782
   },
   {
    "id": "complex_819",
@@ -7091,7 +7087,7 @@
    "composition": {
     "E39_13dpg[x]_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 784
+   "kinetic_module": 783
   },
   {
    "id": "complex_820",
@@ -7100,7 +7096,7 @@
     "13dpg[x]": 1.0,
     "E39_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 785
+   "kinetic_module": 784
   },
   {
    "id": "complex_821",
@@ -7108,7 +7104,7 @@
    "composition": {
     "E39_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 786
+   "kinetic_module": 785
   },
   {
    "id": "complex_822",
@@ -7117,7 +7113,7 @@
     "h[x]": 1.0,
     "E39_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 787
+   "kinetic_module": 786
   },
   {
    "id": "complex_823",
@@ -7125,7 +7121,7 @@
    "composition": {
     "E39_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 788
+   "kinetic_module": 787
   },
   {
    "id": "complex_824",
@@ -7134,7 +7130,7 @@
     "nadh[x]": 1.0,
     "E_39": 1.0
    },
-   "kinetic_module": 789
+   "kinetic_module": 788
   },
   {
    "id": "complex_825",
@@ -7143,7 +7139,7 @@
     "g3p[x]": 1.0,
     "E_41": 1.0
    },
-   "kinetic_module": 790
+   "kinetic_module": 789
   },
   {
    "id": "complex_826",
@@ -7151,7 +7147,7 @@
    "composition": {
     "E41_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 791
+   "kinetic_module": 790
   },
   {
    "id": "complex_827",
@@ -7160,7 +7156,7 @@
     "pi[x]": 1.0,
     "E41_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 792
+   "kinetic_module": 791
   },
   {
    "id": "complex_828",
@@ -7168,7 +7164,7 @@
    "composition": {
     "E41_g3p[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 793
+   "kinetic_module": 792
   },
   {
    "id": "complex_829",
@@ -7177,7 +7173,7 @@
     "nad[x]": 1.0,
     "E41_g3p[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 794
+   "kinetic_module": 793
   },
   {
    "id": "complex_830",
@@ -7185,7 +7181,7 @@
    "composition": {
     "E41_g3p[x]_nad[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 795
+   "kinetic_module": 794
   },
   {
    "id": "complex_831",
@@ -7193,7 +7189,7 @@
    "composition": {
     "E41_13dpg[x]_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 796
+   "kinetic_module": 795
   },
   {
    "id": "complex_832",
@@ -7202,7 +7198,7 @@
     "13dpg[x]": 1.0,
     "E41_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 797
+   "kinetic_module": 796
   },
   {
    "id": "complex_833",
@@ -7210,7 +7206,7 @@
    "composition": {
     "E41_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 798
+   "kinetic_module": 797
   },
   {
    "id": "complex_834",
@@ -7219,7 +7215,7 @@
     "h[x]": 1.0,
     "E41_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 799
+   "kinetic_module": 798
   },
   {
    "id": "complex_835",
@@ -7227,7 +7223,7 @@
    "composition": {
     "E41_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 800
+   "kinetic_module": 799
   },
   {
    "id": "complex_836",
@@ -7236,7 +7232,7 @@
     "nadh[x]": 1.0,
     "E_41": 1.0
    },
-   "kinetic_module": 801
+   "kinetic_module": 800
   },
   {
    "id": "complex_837",
@@ -7245,7 +7241,7 @@
     "g3p[x]": 1.0,
     "E_42": 1.0
    },
-   "kinetic_module": 802
+   "kinetic_module": 801
   },
   {
    "id": "complex_838",
@@ -7253,7 +7249,7 @@
    "composition": {
     "E42_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 803
+   "kinetic_module": 802
   },
   {
    "id": "complex_839",
@@ -7262,7 +7258,7 @@
     "pi[x]": 1.0,
     "E42_g3p[x]_complex": 1.0
    },
-   "kinetic_module": 804
+   "kinetic_module": 803
   },
   {
    "id": "complex_840",
@@ -7270,7 +7266,7 @@
    "composition": {
     "E42_g3p[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 805
+   "kinetic_module": 804
   },
   {
    "id": "complex_841",
@@ -7279,7 +7275,7 @@
     "nad[x]": 1.0,
     "E42_g3p[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 806
+   "kinetic_module": 805
   },
   {
    "id": "complex_842",
@@ -7287,7 +7283,7 @@
    "composition": {
     "E42_g3p[x]_nad[x]_pi[x]_complex": 1.0
    },
-   "kinetic_module": 807
+   "kinetic_module": 806
   },
   {
    "id": "complex_843",
@@ -7295,7 +7291,7 @@
    "composition": {
     "E42_13dpg[x]_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 808
+   "kinetic_module": 807
   },
   {
    "id": "complex_844",
@@ -7304,7 +7300,7 @@
     "13dpg[x]": 1.0,
     "E42_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 809
+   "kinetic_module": 808
   },
   {
    "id": "complex_845",
@@ -7312,7 +7308,7 @@
    "composition": {
     "E42_h[x]_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 810
+   "kinetic_module": 809
   },
   {
    "id": "complex_846",
@@ -7321,7 +7317,7 @@
     "h[x]": 1.0,
     "E42_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 811
+   "kinetic_module": 810
   },
   {
    "id": "complex_847",
@@ -7329,7 +7325,7 @@
    "composition": {
     "E42_nadh[x]_complex": 1.0
    },
-   "kinetic_module": 812
+   "kinetic_module": 811
   },
   {
    "id": "complex_848",
@@ -7338,7 +7334,7 @@
     "nadh[x]": 1.0,
     "E_42": 1.0
    },
-   "kinetic_module": 813
+   "kinetic_module": 812
   },
   {
    "id": "complex_849",
@@ -7347,7 +7343,7 @@
     "asp__L[c]": 1.0,
     "E_13": 1.0
    },
-   "kinetic_module": 814
+   "kinetic_module": 813
   },
   {
    "id": "complex_850",
@@ -7355,7 +7351,7 @@
    "composition": {
     "E13_asp__L[c]_complex": 1.0
    },
-   "kinetic_module": 815
+   "kinetic_module": 814
   },
   {
    "id": "complex_851",
@@ -7364,7 +7360,7 @@
     "akg[c]": 1.0,
     "E13_asp__L[c]_complex": 1.0
    },
-   "kinetic_module": 816
+   "kinetic_module": 815
   },
   {
    "id": "complex_852",
@@ -7372,7 +7368,7 @@
    "composition": {
     "E13_akg[c]_asp__L[c]_complex": 1.0
    },
-   "kinetic_module": 817
+   "kinetic_module": 816
   },
   {
    "id": "complex_853",
@@ -7380,7 +7376,7 @@
    "composition": {
     "E13_glu__L[c]_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 818
+   "kinetic_module": 817
   },
   {
    "id": "complex_854",
@@ -7389,7 +7385,7 @@
     "glu__L[c]": 1.0,
     "E13_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 819
+   "kinetic_module": 818
   },
   {
    "id": "complex_855",
@@ -7397,7 +7393,7 @@
    "composition": {
     "E13_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 820
+   "kinetic_module": 819
   },
   {
    "id": "complex_856",
@@ -7406,7 +7402,7 @@
     "oaa[c]": 1.0,
     "E_13": 1.0
    },
-   "kinetic_module": 821
+   "kinetic_module": 820
   },
   {
    "id": "complex_857",
@@ -7415,7 +7411,7 @@
     "asp__L[c]": 1.0,
     "E_80": 1.0
    },
-   "kinetic_module": 822
+   "kinetic_module": 821
   },
   {
    "id": "complex_858",
@@ -7423,7 +7419,7 @@
    "composition": {
     "E80_asp__L[c]_complex": 1.0
    },
-   "kinetic_module": 823
+   "kinetic_module": 822
   },
   {
    "id": "complex_859",
@@ -7432,7 +7428,7 @@
     "akg[c]": 1.0,
     "E80_asp__L[c]_complex": 1.0
    },
-   "kinetic_module": 824
+   "kinetic_module": 823
   },
   {
    "id": "complex_860",
@@ -7440,7 +7436,7 @@
    "composition": {
     "E80_akg[c]_asp__L[c]_complex": 1.0
    },
-   "kinetic_module": 825
+   "kinetic_module": 824
   },
   {
    "id": "complex_861",
@@ -7448,7 +7444,7 @@
    "composition": {
     "E80_glu__L[c]_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 826
+   "kinetic_module": 825
   },
   {
    "id": "complex_862",
@@ -7457,7 +7453,7 @@
     "glu__L[c]": 1.0,
     "E80_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 827
+   "kinetic_module": 826
   },
   {
    "id": "complex_863",
@@ -7465,7 +7461,7 @@
    "composition": {
     "E80_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 828
+   "kinetic_module": 827
   },
   {
    "id": "complex_864",
@@ -7474,7 +7470,7 @@
     "oaa[c]": 1.0,
     "E_80": 1.0
    },
-   "kinetic_module": 829
+   "kinetic_module": 828
   },
   {
    "id": "complex_865",
@@ -7483,7 +7479,7 @@
     "acser[c]": 1.0,
     "E_74": 1.0
    },
-   "kinetic_module": 830
+   "kinetic_module": 829
   },
   {
    "id": "complex_866",
@@ -7491,7 +7487,7 @@
    "composition": {
     "E74_acser[c]_complex": 1.0
    },
-   "kinetic_module": 831
+   "kinetic_module": 830
   },
   {
    "id": "complex_867",
@@ -7500,7 +7496,7 @@
     "h2s[c]": 1.0,
     "E74_acser[c]_complex": 1.0
    },
-   "kinetic_module": 31
+   "kinetic_module": 831
   },
   {
    "id": "complex_868",
@@ -7508,7 +7504,7 @@
    "composition": {
     "E74_acser[c]_h2s[c]_complex": 1.0
    },
-   "kinetic_module": 31
+   "kinetic_module": 33
   },
   {
    "id": "complex_869",
@@ -7516,7 +7512,7 @@
    "composition": {
     "E74_ac[c]_cys__L[c]_complex": 1.0
    },
-   "kinetic_module": 832
+   "kinetic_module": 33
   },
   {
    "id": "complex_870",
@@ -7525,7 +7521,7 @@
     "cys__L[c]": 1.0,
     "E74_ac[c]_complex": 1.0
    },
-   "kinetic_module": 833
+   "kinetic_module": 832
   },
   {
    "id": "complex_871",
@@ -7533,7 +7529,7 @@
    "composition": {
     "E74_ac[c]_complex": 1.0
    },
-   "kinetic_module": 834
+   "kinetic_module": 833
   },
   {
    "id": "complex_872",
@@ -7542,7 +7538,7 @@
     "ac[c]": 1.0,
     "E_74": 1.0
    },
-   "kinetic_module": 835
+   "kinetic_module": 834
   },
   {
    "id": "complex_873",
@@ -7551,7 +7547,7 @@
     "accoa[c]": 1.0,
     "E_75": 1.0
    },
-   "kinetic_module": 836
+   "kinetic_module": 835
   },
   {
    "id": "complex_874",
@@ -7559,7 +7555,7 @@
    "composition": {
     "E75_accoa[c]_complex": 1.0
    },
-   "kinetic_module": 837
+   "kinetic_module": 836
   },
   {
    "id": "complex_875",
@@ -7568,7 +7564,7 @@
     "ser__L[c]": 1.0,
     "E75_accoa[c]_complex": 1.0
    },
-   "kinetic_module": 838
+   "kinetic_module": 837
   },
   {
    "id": "complex_876",
@@ -7576,7 +7572,7 @@
    "composition": {
     "E75_accoa[c]_ser__L[c]_complex": 1.0
    },
-   "kinetic_module": 839
+   "kinetic_module": 838
   },
   {
    "id": "complex_877",
@@ -7584,7 +7580,7 @@
    "composition": {
     "E75_acser[c]_coa[c]_complex": 1.0
    },
-   "kinetic_module": 840
+   "kinetic_module": 839
   },
   {
    "id": "complex_878",
@@ -7593,7 +7589,7 @@
     "coa[c]": 1.0,
     "E75_acser[c]_complex": 1.0
    },
-   "kinetic_module": 841
+   "kinetic_module": 840
   },
   {
    "id": "complex_879",
@@ -7601,7 +7597,7 @@
    "composition": {
     "E75_acser[c]_complex": 1.0
    },
-   "kinetic_module": 842
+   "kinetic_module": 841
   },
   {
    "id": "complex_880",
@@ -7610,7 +7606,7 @@
     "acser[c]": 1.0,
     "E_75": 1.0
    },
-   "kinetic_module": 843
+   "kinetic_module": 842
   },
   {
    "id": "complex_881",
@@ -7618,7 +7614,7 @@
    "composition": {
     "gln__L[e]": 1.0
    },
-   "kinetic_module": 844
+   "kinetic_module": 843
   },
   {
    "id": "complex_882",
@@ -7626,7 +7622,7 @@
    "composition": {
     "arg__L[e]": 1.0
    },
-   "kinetic_module": 845
+   "kinetic_module": 844
   },
   {
    "id": "complex_883",
@@ -7634,7 +7630,7 @@
    "composition": {
     "phe__L[e]": 1.0
    },
-   "kinetic_module": 846
+   "kinetic_module": 845
   },
   {
    "id": "complex_884",
@@ -7642,7 +7638,7 @@
    "composition": {
     "ile__L[e]": 1.0
    },
-   "kinetic_module": 847
+   "kinetic_module": 846
   },
   {
    "id": "complex_885",
@@ -7650,7 +7646,7 @@
    "composition": {
     "his__L[e]": 1.0
    },
-   "kinetic_module": 848
+   "kinetic_module": 847
   },
   {
    "id": "complex_886",
@@ -7658,7 +7654,7 @@
    "composition": {
     "val__L[e]": 1.0
    },
-   "kinetic_module": 849
+   "kinetic_module": 848
   },
   {
    "id": "complex_887",
@@ -7666,7 +7662,7 @@
    "composition": {
     "leu__L[e]": 1.0
    },
-   "kinetic_module": 850
+   "kinetic_module": 849
   },
   {
    "id": "complex_888",
@@ -7674,7 +7670,7 @@
    "composition": {
     "lys__L[e]": 1.0
    },
-   "kinetic_module": 851
+   "kinetic_module": 850
   },
   {
    "id": "complex_889",
@@ -7682,7 +7678,7 @@
    "composition": {
     "ala__D[e]": 1.0
    },
-   "kinetic_module": 852
+   "kinetic_module": 851
   },
   {
    "id": "complex_890",
@@ -7690,7 +7686,7 @@
    "composition": {
     "ergst[e]": 1.0
    },
-   "kinetic_module": 853
+   "kinetic_module": 852
   },
   {
    "id": "complex_891",
@@ -7698,7 +7694,7 @@
    "composition": {
     "ser__L[e]": 1.0
    },
-   "kinetic_module": 854
+   "kinetic_module": 853
   },
   {
    "id": "complex_892",
@@ -7706,7 +7702,7 @@
    "composition": {
     "ura[e]": 1.0
    },
-   "kinetic_module": 855
+   "kinetic_module": 854
   },
   {
    "id": "complex_893",
@@ -7714,7 +7710,7 @@
    "composition": {
     "met__L[e]": 1.0
    },
-   "kinetic_module": 856
+   "kinetic_module": 855
   },
   {
    "id": "complex_894",
@@ -7722,7 +7718,7 @@
    "composition": {
     "cys__L[e]": 1.0
    },
-   "kinetic_module": 857
+   "kinetic_module": 856
   },
   {
    "id": "complex_895",
@@ -7730,7 +7726,7 @@
    "composition": {
     "asn__L[e]": 1.0
    },
-   "kinetic_module": 858
+   "kinetic_module": 857
   },
   {
    "id": "complex_896",
@@ -7738,7 +7734,7 @@
    "composition": {
     "cit[e]": 1.0
    },
-   "kinetic_module": 859
+   "kinetic_module": 858
   },
   {
    "id": "complex_897",
@@ -7746,7 +7742,7 @@
    "composition": {
     "h2s[e]": 1.0
    },
-   "kinetic_module": 860
+   "kinetic_module": 859
   },
   {
    "id": "complex_898",
@@ -7754,7 +7750,7 @@
    "composition": {
     "nh3[e]": 1.0
    },
-   "kinetic_module": 861
+   "kinetic_module": 860
   },
   {
    "id": "complex_899",
@@ -7762,7 +7758,7 @@
    "composition": {
     "gua[e]": 1.0
    },
-   "kinetic_module": 862
+   "kinetic_module": 861
   },
   {
    "id": "complex_900",
@@ -7771,7 +7767,7 @@
     "mal__L[c]": 1.0,
     "E_30": 1.0
    },
-   "kinetic_module": 863
+   "kinetic_module": 862
   },
   {
    "id": "complex_901",
@@ -7779,7 +7775,7 @@
    "composition": {
     "E30_mal__L[c]_complex": 1.0
    },
-   "kinetic_module": 864
+   "kinetic_module": 863
   },
   {
    "id": "complex_902",
@@ -7788,7 +7784,7 @@
     "nad[c]": 1.0,
     "E30_mal__L[c]_complex": 1.0
    },
-   "kinetic_module": 865
+   "kinetic_module": 864
   },
   {
    "id": "complex_903",
@@ -7796,7 +7792,7 @@
    "composition": {
     "E30_mal__L[c]_nad[c]_complex": 1.0
    },
-   "kinetic_module": 866
+   "kinetic_module": 865
   },
   {
    "id": "complex_904",
@@ -7804,7 +7800,7 @@
    "composition": {
     "E30_h[c]_nadh[c]_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 867
+   "kinetic_module": 866
   },
   {
    "id": "complex_905",
@@ -7813,7 +7809,7 @@
     "h[c]": 1.0,
     "E30_nadh[c]_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 868
+   "kinetic_module": 867
   },
   {
    "id": "complex_906",
@@ -7821,7 +7817,7 @@
    "composition": {
     "E30_nadh[c]_oaa[c]_complex": 1.0
    },
-   "kinetic_module": 869
+   "kinetic_module": 868
   },
   {
    "id": "complex_907",
@@ -7830,7 +7826,7 @@
     "oaa[c]": 1.0,
     "E30_nadh[c]_complex": 1.0
    },
-   "kinetic_module": 870
+   "kinetic_module": 869
   },
   {
    "id": "complex_908",
@@ -7838,7 +7834,7 @@
    "composition": {
     "E30_nadh[c]_complex": 1.0
    },
-   "kinetic_module": 871
+   "kinetic_module": 870
   },
   {
    "id": "complex_909",
@@ -7847,7 +7843,7 @@
     "nadh[c]": 1.0,
     "E_30": 1.0
    },
-   "kinetic_module": 872
+   "kinetic_module": 871
   },
   {
    "id": "complex_910",
@@ -7856,7 +7852,7 @@
     "h[c]": 1.0,
     "nh3[c]": 1.0
    },
-   "kinetic_module": 873
+   "kinetic_module": 872
   },
   {
    "id": "complex_911",
@@ -7865,7 +7861,7 @@
     "prpp[c]": 1.0,
     "E_16": 1.0
    },
-   "kinetic_module": 874
+   "kinetic_module": 873
   },
   {
    "id": "complex_912",
@@ -7873,7 +7869,7 @@
    "composition": {
     "E16_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 875
+   "kinetic_module": 874
   },
   {
    "id": "complex_913",
@@ -7882,7 +7878,7 @@
     "gua[c]": 1.0,
     "E16_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 876
+   "kinetic_module": 875
   },
   {
    "id": "complex_914",
@@ -7890,7 +7886,7 @@
    "composition": {
     "E16_gua[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 877
+   "kinetic_module": 876
   },
   {
    "id": "complex_915",
@@ -7898,7 +7894,7 @@
    "composition": {
     "E16_gmp[c]_ppi[c]_complex": 1.0
    },
-   "kinetic_module": 878
+   "kinetic_module": 877
   },
   {
    "id": "complex_916",
@@ -7907,7 +7903,7 @@
     "ppi[c]": 1.0,
     "E16_gmp[c]_complex": 1.0
    },
-   "kinetic_module": 879
+   "kinetic_module": 878
   },
   {
    "id": "complex_917",
@@ -7915,7 +7911,7 @@
    "composition": {
     "E16_gmp[c]_complex": 1.0
    },
-   "kinetic_module": 880
+   "kinetic_module": 879
   },
   {
    "id": "complex_918",
@@ -7924,7 +7920,7 @@
     "gmp[c]": 1.0,
     "E_16": 1.0
    },
-   "kinetic_module": 881
+   "kinetic_module": 880
   },
   {
    "id": "complex_919",
@@ -7933,7 +7929,7 @@
     "prpp[c]": 1.0,
     "E_86": 1.0
    },
-   "kinetic_module": 882
+   "kinetic_module": 881
   },
   {
    "id": "complex_920",
@@ -7941,7 +7937,7 @@
    "composition": {
     "E86_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 883
+   "kinetic_module": 882
   },
   {
    "id": "complex_921",
@@ -7950,7 +7946,7 @@
     "gua[c]": 1.0,
     "E86_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 884
+   "kinetic_module": 883
   },
   {
    "id": "complex_922",
@@ -7958,7 +7954,7 @@
    "composition": {
     "E86_gua[c]_prpp[c]_complex": 1.0
    },
-   "kinetic_module": 885
+   "kinetic_module": 884
   },
   {
    "id": "complex_923",
@@ -7966,7 +7962,7 @@
    "composition": {
     "E86_gmp[c]_ppi[c]_complex": 1.0
    },
-   "kinetic_module": 886
+   "kinetic_module": 885
   },
   {
    "id": "complex_924",
@@ -7975,7 +7971,7 @@
     "ppi[c]": 1.0,
     "E86_gmp[c]_complex": 1.0
    },
-   "kinetic_module": 887
+   "kinetic_module": 886
   },
   {
    "id": "complex_925",
@@ -7983,7 +7979,7 @@
    "composition": {
     "E86_gmp[c]_complex": 1.0
    },
-   "kinetic_module": 888
+   "kinetic_module": 887
   },
   {
    "id": "complex_926",
@@ -7992,7 +7988,7 @@
     "gmp[c]": 1.0,
     "E_86": 1.0
    },
-   "kinetic_module": 889
+   "kinetic_module": 888
   },
   {
    "id": "complex_927",
@@ -8001,7 +7997,7 @@
     "amp[c]": 1.0,
     "E_2": 1.0
    },
-   "kinetic_module": 890
+   "kinetic_module": 889
   },
   {
    "id": "complex_928",
@@ -8009,7 +8005,7 @@
    "composition": {
     "E2_amp[c]_complex": 1.0
    },
-   "kinetic_module": 891
+   "kinetic_module": 890
   },
   {
    "id": "complex_929",
@@ -8018,7 +8014,7 @@
     "atp[c]": 1.0,
     "E2_amp[c]_complex": 1.0
    },
-   "kinetic_module": 892
+   "kinetic_module": 891
   },
   {
    "id": "complex_930",
@@ -8026,7 +8022,7 @@
    "composition": {
     "E2_amp[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 893
+   "kinetic_module": 892
   },
   {
    "id": "complex_931",
@@ -8034,7 +8030,7 @@
    "composition": {
     "E2_adp[c]_complex": 1.0
    },
-   "kinetic_module": 894
+   "kinetic_module": 893
   },
   {
    "id": "complex_932",
@@ -8043,7 +8039,7 @@
     "adp[c]": 2.0,
     "E_2": 1.0
    },
-   "kinetic_module": 895
+   "kinetic_module": 894
   },
   {
    "id": "complex_933",
@@ -8052,7 +8048,7 @@
     "amp[c]": 1.0,
     "E_21": 1.0
    },
-   "kinetic_module": 896
+   "kinetic_module": 895
   },
   {
    "id": "complex_934",
@@ -8060,7 +8056,7 @@
    "composition": {
     "E21_amp[c]_complex": 1.0
    },
-   "kinetic_module": 897
+   "kinetic_module": 896
   },
   {
    "id": "complex_935",
@@ -8069,7 +8065,7 @@
     "atp[c]": 1.0,
     "E21_amp[c]_complex": 1.0
    },
-   "kinetic_module": 898
+   "kinetic_module": 897
   },
   {
    "id": "complex_936",
@@ -8077,7 +8073,7 @@
    "composition": {
     "E21_amp[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 899
+   "kinetic_module": 898
   },
   {
    "id": "complex_937",
@@ -8085,7 +8081,7 @@
    "composition": {
     "E21_adp[c]_complex": 1.0
    },
-   "kinetic_module": 900
+   "kinetic_module": 899
   },
   {
    "id": "complex_938",
@@ -8094,7 +8090,7 @@
     "adp[c]": 2.0,
     "E_21": 1.0
    },
-   "kinetic_module": 901
+   "kinetic_module": 900
   },
   {
    "id": "complex_939",
@@ -8103,7 +8099,7 @@
     "amp[c]": 1.0,
     "E_22": 1.0
    },
-   "kinetic_module": 902
+   "kinetic_module": 901
   },
   {
    "id": "complex_940",
@@ -8111,7 +8107,7 @@
    "composition": {
     "E22_amp[c]_complex": 1.0
    },
-   "kinetic_module": 903
+   "kinetic_module": 902
   },
   {
    "id": "complex_941",
@@ -8120,7 +8116,7 @@
     "atp[c]": 1.0,
     "E22_amp[c]_complex": 1.0
    },
-   "kinetic_module": 904
+   "kinetic_module": 903
   },
   {
    "id": "complex_942",
@@ -8128,7 +8124,7 @@
    "composition": {
     "E22_amp[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 905
+   "kinetic_module": 904
   },
   {
    "id": "complex_943",
@@ -8136,7 +8132,7 @@
    "composition": {
     "E22_adp[c]_complex": 1.0
    },
-   "kinetic_module": 906
+   "kinetic_module": 905
   },
   {
    "id": "complex_944",
@@ -8145,7 +8141,7 @@
     "adp[c]": 2.0,
     "E_22": 1.0
    },
-   "kinetic_module": 907
+   "kinetic_module": 906
   },
   {
    "id": "complex_945",
@@ -8154,7 +8150,7 @@
     "amp[c]": 1.0,
     "E_23": 1.0
    },
-   "kinetic_module": 908
+   "kinetic_module": 907
   },
   {
    "id": "complex_946",
@@ -8162,7 +8158,7 @@
    "composition": {
     "E23_amp[c]_complex": 1.0
    },
-   "kinetic_module": 909
+   "kinetic_module": 908
   },
   {
    "id": "complex_947",
@@ -8171,7 +8167,7 @@
     "atp[c]": 1.0,
     "E23_amp[c]_complex": 1.0
    },
-   "kinetic_module": 910
+   "kinetic_module": 909
   },
   {
    "id": "complex_948",
@@ -8179,7 +8175,7 @@
    "composition": {
     "E23_amp[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 911
+   "kinetic_module": 910
   },
   {
    "id": "complex_949",
@@ -8187,7 +8183,7 @@
    "composition": {
     "E23_adp[c]_complex": 1.0
    },
-   "kinetic_module": 912
+   "kinetic_module": 911
   },
   {
    "id": "complex_950",
@@ -8196,7 +8192,7 @@
     "adp[c]": 2.0,
     "E_23": 1.0
    },
-   "kinetic_module": 913
+   "kinetic_module": 912
   },
   {
    "id": "complex_951",
@@ -8205,7 +8201,7 @@
     "amp[c]": 1.0,
     "E_24": 1.0
    },
-   "kinetic_module": 914
+   "kinetic_module": 913
   },
   {
    "id": "complex_952",
@@ -8213,7 +8209,7 @@
    "composition": {
     "E24_amp[c]_complex": 1.0
    },
-   "kinetic_module": 915
+   "kinetic_module": 914
   },
   {
    "id": "complex_953",
@@ -8222,7 +8218,7 @@
     "atp[c]": 1.0,
     "E24_amp[c]_complex": 1.0
    },
-   "kinetic_module": 916
+   "kinetic_module": 915
   },
   {
    "id": "complex_954",
@@ -8230,7 +8226,7 @@
    "composition": {
     "E24_amp[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 917
+   "kinetic_module": 916
   },
   {
    "id": "complex_955",
@@ -8238,7 +8234,7 @@
    "composition": {
     "E24_adp[c]_complex": 1.0
    },
-   "kinetic_module": 918
+   "kinetic_module": 917
   },
   {
    "id": "complex_956",
@@ -8247,7 +8243,7 @@
     "adp[c]": 2.0,
     "E_24": 1.0
    },
-   "kinetic_module": 919
+   "kinetic_module": 918
   },
   {
    "id": "complex_957",
@@ -8256,7 +8252,7 @@
     "amp[c]": 1.0,
     "E_25": 1.0
    },
-   "kinetic_module": 920
+   "kinetic_module": 919
   },
   {
    "id": "complex_958",
@@ -8264,7 +8260,7 @@
    "composition": {
     "E25_amp[c]_complex": 1.0
    },
-   "kinetic_module": 921
+   "kinetic_module": 920
   },
   {
    "id": "complex_959",
@@ -8273,7 +8269,7 @@
     "atp[c]": 1.0,
     "E25_amp[c]_complex": 1.0
    },
-   "kinetic_module": 922
+   "kinetic_module": 921
   },
   {
    "id": "complex_960",
@@ -8281,7 +8277,7 @@
    "composition": {
     "E25_amp[c]_atp[c]_complex": 1.0
    },
-   "kinetic_module": 923
+   "kinetic_module": 922
   },
   {
    "id": "complex_961",
@@ -8289,7 +8285,7 @@
    "composition": {
     "E25_adp[c]_complex": 1.0
    },
-   "kinetic_module": 924
+   "kinetic_module": 923
   },
   {
    "id": "complex_962",
@@ -8298,7 +8294,7 @@
     "adp[c]": 2.0,
     "E_25": 1.0
    },
-   "kinetic_module": 925
+   "kinetic_module": 924
   },
   {
    "id": "complex_963",
@@ -8307,7 +8303,7 @@
     "atp[m]": 1.0,
     "E_2": 1.0
    },
-   "kinetic_module": 926
+   "kinetic_module": 925
   },
   {
    "id": "complex_964",
@@ -8315,7 +8311,7 @@
    "composition": {
     "E2_atp[m]_complex": 1.0
    },
-   "kinetic_module": 927
+   "kinetic_module": 926
   },
   {
    "id": "complex_965",
@@ -8324,7 +8320,7 @@
     "amp[m]": 1.0,
     "E2_atp[m]_complex": 1.0
    },
-   "kinetic_module": 928
+   "kinetic_module": 927
   },
   {
    "id": "complex_966",
@@ -8332,7 +8328,7 @@
    "composition": {
     "E2_amp[m]_atp[m]_complex": 1.0
    },
-   "kinetic_module": 929
+   "kinetic_module": 928
   },
   {
    "id": "complex_967",
@@ -8340,7 +8336,7 @@
    "composition": {
     "E2_adp[m]_complex": 1.0
    },
-   "kinetic_module": 930
+   "kinetic_module": 929
   },
   {
    "id": "complex_968",
@@ -8349,7 +8345,7 @@
     "adp[m]": 2.0,
     "E_2": 1.0
    },
-   "kinetic_module": 931
+   "kinetic_module": 930
   },
   {
    "id": "complex_969",
@@ -8358,7 +8354,7 @@
     "atp[m]": 1.0,
     "E_21": 1.0
    },
-   "kinetic_module": 932
+   "kinetic_module": 931
   },
   {
    "id": "complex_970",
@@ -8366,7 +8362,7 @@
    "composition": {
     "E21_atp[m]_complex": 1.0
    },
-   "kinetic_module": 933
+   "kinetic_module": 932
   },
   {
    "id": "complex_971",
@@ -8375,7 +8371,7 @@
     "amp[m]": 1.0,
     "E21_atp[m]_complex": 1.0
    },
-   "kinetic_module": 934
+   "kinetic_module": 933
   },
   {
    "id": "complex_972",
@@ -8383,7 +8379,7 @@
    "composition": {
     "E21_amp[m]_atp[m]_complex": 1.0
    },
-   "kinetic_module": 935
+   "kinetic_module": 934
   },
   {
    "id": "complex_973",
@@ -8391,7 +8387,7 @@
    "composition": {
     "E21_adp[m]_complex": 1.0
    },
-   "kinetic_module": 936
+   "kinetic_module": 935
   },
   {
    "id": "complex_974",
@@ -8400,7 +8396,7 @@
     "adp[m]": 2.0,
     "E_21": 1.0
    },
-   "kinetic_module": 937
+   "kinetic_module": 936
   },
   {
    "id": "complex_975",
@@ -8409,7 +8405,7 @@
     "atp[m]": 1.0,
     "E_22": 1.0
    },
-   "kinetic_module": 938
+   "kinetic_module": 937
   },
   {
    "id": "complex_976",
@@ -8417,7 +8413,7 @@
    "composition": {
     "E22_atp[m]_complex": 1.0
    },
-   "kinetic_module": 939
+   "kinetic_module": 938
   },
   {
    "id": "complex_977",
@@ -8426,7 +8422,7 @@
     "amp[m]": 1.0,
     "E22_atp[m]_complex": 1.0
    },
-   "kinetic_module": 940
+   "kinetic_module": 939
   },
   {
    "id": "complex_978",
@@ -8434,7 +8430,7 @@
    "composition": {
     "E22_amp[m]_atp[m]_complex": 1.0
    },
-   "kinetic_module": 941
+   "kinetic_module": 940
   },
   {
    "id": "complex_979",
@@ -8442,7 +8438,7 @@
    "composition": {
     "E22_adp[m]_complex": 1.0
    },
-   "kinetic_module": 942
+   "kinetic_module": 941
   },
   {
    "id": "complex_980",
@@ -8451,7 +8447,7 @@
     "adp[m]": 2.0,
     "E_22": 1.0
    },
-   "kinetic_module": 943
+   "kinetic_module": 942
   },
   {
    "id": "complex_981",
@@ -8460,7 +8456,7 @@
     "atp[m]": 1.0,
     "E_23": 1.0
    },
-   "kinetic_module": 944
+   "kinetic_module": 943
   },
   {
    "id": "complex_982",
@@ -8468,7 +8464,7 @@
    "composition": {
     "E23_atp[m]_complex": 1.0
    },
-   "kinetic_module": 945
+   "kinetic_module": 944
   },
   {
    "id": "complex_983",
@@ -8477,7 +8473,7 @@
     "amp[m]": 1.0,
     "E23_atp[m]_complex": 1.0
    },
-   "kinetic_module": 946
+   "kinetic_module": 945
   },
   {
    "id": "complex_984",
@@ -8485,7 +8481,7 @@
    "composition": {
     "E23_amp[m]_atp[m]_complex": 1.0
    },
-   "kinetic_module": 947
+   "kinetic_module": 946
   },
   {
    "id": "complex_985",
@@ -8493,7 +8489,7 @@
    "composition": {
     "E23_adp[m]_complex": 1.0
    },
-   "kinetic_module": 948
+   "kinetic_module": 947
   },
   {
    "id": "complex_986",
@@ -8502,7 +8498,7 @@
     "adp[m]": 2.0,
     "E_23": 1.0
    },
-   "kinetic_module": 949
+   "kinetic_module": 948
   },
   {
    "id": "complex_987",
@@ -8511,7 +8507,7 @@
     "atp[m]": 1.0,
     "E_24": 1.0
    },
-   "kinetic_module": 950
+   "kinetic_module": 949
   },
   {
    "id": "complex_988",
@@ -8519,7 +8515,7 @@
    "composition": {
     "E24_atp[m]_complex": 1.0
    },
-   "kinetic_module": 951
+   "kinetic_module": 950
   },
   {
    "id": "complex_989",
@@ -8528,7 +8524,7 @@
     "amp[m]": 1.0,
     "E24_atp[m]_complex": 1.0
    },
-   "kinetic_module": 952
+   "kinetic_module": 951
   },
   {
    "id": "complex_990",
@@ -8536,7 +8532,7 @@
    "composition": {
     "E24_amp[m]_atp[m]_complex": 1.0
    },
-   "kinetic_module": 953
+   "kinetic_module": 952
   },
   {
    "id": "complex_991",
@@ -8544,7 +8540,7 @@
    "composition": {
     "E24_adp[m]_complex": 1.0
    },
-   "kinetic_module": 954
+   "kinetic_module": 953
   },
   {
    "id": "complex_992",
@@ -8553,7 +8549,7 @@
     "adp[m]": 2.0,
     "E_24": 1.0
    },
-   "kinetic_module": 955
+   "kinetic_module": 954
   },
   {
    "id": "complex_993",
@@ -8562,7 +8558,7 @@
     "atp[m]": 1.0,
     "E_25": 1.0
    },
-   "kinetic_module": 956
+   "kinetic_module": 955
   },
   {
    "id": "complex_994",
@@ -8570,7 +8566,7 @@
    "composition": {
     "E25_atp[m]_complex": 1.0
    },
-   "kinetic_module": 957
+   "kinetic_module": 956
   },
   {
    "id": "complex_995",
@@ -8579,7 +8575,7 @@
     "amp[m]": 1.0,
     "E25_atp[m]_complex": 1.0
    },
-   "kinetic_module": 958
+   "kinetic_module": 957
   },
   {
    "id": "complex_996",
@@ -8587,7 +8583,7 @@
    "composition": {
     "E25_amp[m]_atp[m]_complex": 1.0
    },
-   "kinetic_module": 959
+   "kinetic_module": 958
   },
   {
    "id": "complex_997",
@@ -8595,7 +8591,7 @@
    "composition": {
     "E25_adp[m]_complex": 1.0
    },
-   "kinetic_module": 960
+   "kinetic_module": 959
   },
   {
    "id": "complex_998",
@@ -8604,7 +8600,7 @@
     "adp[m]": 2.0,
     "E_25": 1.0
    },
-   "kinetic_module": 961
+   "kinetic_module": 960
   },
   {
    "id": "complex_999",
@@ -8613,7 +8609,7 @@
     "h[e]": 1.0,
     "arg__L[e]": 1.0
    },
-   "kinetic_module": 962
+   "kinetic_module": 961
   },
   {
    "id": "complex_1000",
@@ -8622,7 +8618,7 @@
     "h[c]": 1.0,
     "arg__L[c]": 1.0
    },
-   "kinetic_module": 963
+   "kinetic_module": 962
   },
   {
    "id": "complex_1001",
@@ -8631,7 +8627,7 @@
     "h[e]": 1.0,
     "his__L[e]": 1.0
    },
-   "kinetic_module": 964
+   "kinetic_module": 963
   },
   {
    "id": "complex_1002",
@@ -8640,7 +8636,7 @@
     "h[c]": 1.0,
     "his__L[c]": 1.0
    },
-   "kinetic_module": 965
+   "kinetic_module": 964
   },
   {
    "id": "complex_1003",
@@ -8649,7 +8645,7 @@
     "h[e]": 1.0,
     "ile__L[e]": 1.0
    },
-   "kinetic_module": 966
+   "kinetic_module": 965
   },
   {
    "id": "complex_1004",
@@ -8658,7 +8654,7 @@
     "h[c]": 1.0,
     "ile__L[c]": 1.0
    },
-   "kinetic_module": 967
+   "kinetic_module": 966
   },
   {
    "id": "complex_1005",
@@ -8667,7 +8663,7 @@
     "h[e]": 1.0,
     "leu__L[e]": 1.0
    },
-   "kinetic_module": 968
+   "kinetic_module": 967
   },
   {
    "id": "complex_1006",
@@ -8676,7 +8672,7 @@
     "h[c]": 1.0,
     "leu__L[c]": 1.0
    },
-   "kinetic_module": 969
+   "kinetic_module": 968
   },
   {
    "id": "complex_1007",
@@ -8685,7 +8681,7 @@
     "h[e]": 1.0,
     "lys__L[e]": 1.0
    },
-   "kinetic_module": 970
+   "kinetic_module": 969
   },
   {
    "id": "complex_1008",
@@ -8694,7 +8690,7 @@
     "h[c]": 1.0,
     "lys__L[c]": 1.0
    },
-   "kinetic_module": 971
+   "kinetic_module": 970
   },
   {
    "id": "complex_1009",
@@ -8703,7 +8699,7 @@
     "h[e]": 1.0,
     "phe__L[e]": 1.0
    },
-   "kinetic_module": 972
+   "kinetic_module": 971
   },
   {
    "id": "complex_1010",
@@ -8712,7 +8708,7 @@
     "h[c]": 1.0,
     "phe__L[c]": 1.0
    },
-   "kinetic_module": 973
+   "kinetic_module": 972
   },
   {
    "id": "complex_1011",
@@ -8721,7 +8717,7 @@
     "h[e]": 1.0,
     "ala__D[e]": 1.0
    },
-   "kinetic_module": 974
+   "kinetic_module": 973
   },
   {
    "id": "complex_1012",
@@ -8730,7 +8726,7 @@
     "h[c]": 1.0,
     "ala__D[c]": 1.0
    },
-   "kinetic_module": 975
+   "kinetic_module": 974
   },
   {
    "id": "complex_1013",
@@ -8739,7 +8735,7 @@
     "ala__L[e]": 1.0,
     "h[e]": 1.0
    },
-   "kinetic_module": 976
+   "kinetic_module": 975
   },
   {
    "id": "complex_1014",
@@ -8748,7 +8744,7 @@
     "h[c]": 1.0,
     "ala__L[c]": 1.0
    },
-   "kinetic_module": 977
+   "kinetic_module": 976
   },
   {
    "id": "complex_1015",
@@ -8756,7 +8752,7 @@
    "composition": {
     "ergst[c]": 1.0
    },
-   "kinetic_module": 978
+   "kinetic_module": 977
   },
   {
    "id": "complex_1016",
@@ -8765,7 +8761,7 @@
     "h[e]": 1.0,
     "gua[e]": 1.0
    },
-   "kinetic_module": 3
+   "kinetic_module": 978
   },
   {
    "id": "complex_1017",
@@ -8774,7 +8770,7 @@
     "h[c]": 1.0,
     "gua[c]": 1.0
    },
-   "kinetic_module": 979
+   "kinetic_module": 3
   },
   {
    "id": "complex_1018",
@@ -8783,7 +8779,7 @@
     "h[e]": 1.0,
     "ser__L[e]": 1.0
    },
-   "kinetic_module": 980
+   "kinetic_module": 979
   },
   {
    "id": "complex_1019",
@@ -8792,7 +8788,7 @@
     "h[c]": 1.0,
     "ser__L[c]": 1.0
    },
-   "kinetic_module": 981
+   "kinetic_module": 980
   },
   {
    "id": "complex_1020",
@@ -8801,7 +8797,7 @@
     "h[e]": 1.0,
     "ura[e]": 1.0
    },
-   "kinetic_module": 3
+   "kinetic_module": 981
   },
   {
    "id": "complex_1021",
@@ -8810,7 +8806,7 @@
     "h[c]": 1.0,
     "ura[c]": 1.0
    },
-   "kinetic_module": 982
+   "kinetic_module": 3
   },
   {
    "id": "complex_1022",
@@ -8819,7 +8815,7 @@
     "h[e]": 1.0,
     "met__L[e]": 1.0
    },
-   "kinetic_module": 983
+   "kinetic_module": 982
   },
   {
    "id": "complex_1023",
@@ -8828,7 +8824,7 @@
     "h[c]": 1.0,
     "met__L[c]": 1.0
    },
-   "kinetic_module": 984
+   "kinetic_module": 983
   },
   {
    "id": "complex_1024",
@@ -8837,7 +8833,7 @@
     "h[e]": 1.0,
     "gln__L[e]": 1.0
    },
-   "kinetic_module": 985
+   "kinetic_module": 984
   },
   {
    "id": "complex_1025",
@@ -8846,7 +8842,7 @@
     "h[c]": 1.0,
     "gln__L[c]": 1.0
    },
-   "kinetic_module": 986
+   "kinetic_module": 985
   },
   {
    "id": "complex_1026",
@@ -8855,7 +8851,7 @@
     "h[e]": 1.0,
     "gly[e]": 1.0
    },
-   "kinetic_module": 987
+   "kinetic_module": 986
   },
   {
    "id": "complex_1027",
@@ -8864,7 +8860,7 @@
     "h[c]": 1.0,
     "gly[c]": 1.0
    },
-   "kinetic_module": 988
+   "kinetic_module": 987
   },
   {
    "id": "complex_1028",
@@ -8873,7 +8869,7 @@
     "h[e]": 1.0,
     "val__L[e]": 1.0
    },
-   "kinetic_module": 989
+   "kinetic_module": 988
   },
   {
    "id": "complex_1029",
@@ -8882,7 +8878,7 @@
     "h[c]": 1.0,
     "val__L[c]": 1.0
    },
-   "kinetic_module": 990
+   "kinetic_module": 989
   },
   {
    "id": "complex_1030",
@@ -8891,7 +8887,7 @@
     "h[e]": 1.0,
     "asn__L[e]": 1.0
    },
-   "kinetic_module": 991
+   "kinetic_module": 990
   },
   {
    "id": "complex_1031",
@@ -8900,7 +8896,7 @@
     "h[c]": 1.0,
     "asn__L[c]": 1.0
    },
-   "kinetic_module": 992
+   "kinetic_module": 991
   },
   {
    "id": "complex_1032",
@@ -8909,7 +8905,7 @@
     "h[e]": 1.0,
     "cys__L[e]": 1.0
    },
-   "kinetic_module": 993
+   "kinetic_module": 992
   },
   {
    "id": "complex_1033",
@@ -8918,7 +8914,7 @@
     "h[c]": 1.0,
     "cys__L[c]": 1.0
    },
-   "kinetic_module": 994
+   "kinetic_module": 993
   },
   {
    "id": "complex_1034",
@@ -8927,7 +8923,7 @@
     "h[e]": 1.0,
     "cit[e]": 1.0
    },
-   "kinetic_module": 995
+   "kinetic_module": 994
   },
   {
    "id": "complex_1035",
@@ -8936,7 +8932,7 @@
     "h[c]": 1.0,
     "cit[c]": 1.0
    },
-   "kinetic_module": 996
+   "kinetic_module": 995
   },
   {
    "id": "complex_1036",
@@ -8945,7 +8941,7 @@
     "h[e]": 1.0,
     "ac[e]": 1.0
    },
-   "kinetic_module": 997
+   "kinetic_module": 996
   },
   {
    "id": "complex_1037",
@@ -8954,7 +8950,7 @@
     "h[c]": 1.0,
     "ac[c]": 1.0
    },
-   "kinetic_module": 998
+   "kinetic_module": 997
   },
   {
    "id": "complex_1038",
@@ -8962,7 +8958,7 @@
    "composition": {
     "h2s[c]": 1.0
    },
-   "kinetic_module": 999
+   "kinetic_module": 998
   },
   {
    "id": "complex_1039",
@@ -8970,7 +8966,7 @@
    "composition": {
     "nh3[c]": 1.0
    },
-   "kinetic_module": 1000
+   "kinetic_module": 999
   },
   {
    "id": "complex_1040",
@@ -8978,7 +8974,7 @@
    "composition": {
     "oaa[x]": 1.0
    },
-   "kinetic_module": 1001
+   "kinetic_module": 1000
   },
   {
    "id": "complex_1041",
@@ -8986,7 +8982,7 @@
    "composition": {
     "glu__L[c]": 1.0
    },
-   "kinetic_module": 1002
+   "kinetic_module": 1001
   },
   {
    "id": "complex_1042",
@@ -8994,7 +8990,7 @@
    "composition": {
     "glu__L[m]": 1.0
    },
-   "kinetic_module": 1003
+   "kinetic_module": 1002
   },
   {
    "id": "complex_1043",
@@ -9002,7 +8998,7 @@
    "composition": {
     "dtdp[c]": 1.0
    },
-   "kinetic_module": 1004
+   "kinetic_module": 1003
   },
   {
    "id": "complex_1044",
@@ -9010,7 +9006,7 @@
    "composition": {
     "dtdp[n]": 1.0
    },
-   "kinetic_module": 1005
+   "kinetic_module": 1004
   },
   {
    "id": "complex_1045",
@@ -9018,7 +9014,7 @@
    "composition": {
     "dttp[c]": 1.0
    },
-   "kinetic_module": 1006
+   "kinetic_module": 1005
   },
   {
    "id": "complex_1046",
@@ -9026,7 +9022,7 @@
    "composition": {
     "dttp[n]": 1.0
    },
-   "kinetic_module": 1007
+   "kinetic_module": 1006
   }
  ]
 }

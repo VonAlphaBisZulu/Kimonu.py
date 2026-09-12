@@ -81,10 +81,14 @@ end
 # COCOA's own reproducibility notes report ACRR converging with sample size (iJR904: 1418 -> 1378
 # pairs from 1000 to >=5000), so the default is left at theirs and only raised deliberately.
 const COCOA_SAMPLES = parse(Int, get(ENV, "COCOA_SAMPLES", "1000"))
+# COCOA's own docs: the fast path (efficient=true, its default) "can under-report ACR metabolites /
+# ACRR pairs". We default to the exhaustive path, and run the fast one as its own arm so the cost of
+# that choice is measured rather than assumed.
+const COCOA_EFFICIENT = get(ENV, "COCOA_EFFICIENT", "false") == "true" 
 t_conc = @elapsed res = activity_concordance_analysis(
     model; optimizer = optimizer(), workers = COCOA_WORKERS, seed = UInt(seed),
     sample_size = COCOA_SAMPLES,
-    kinetic_analysis = true, kinetic_efficient = false)
+    kinetic_analysis = true, kinetic_efficient = COCOA_EFFICIENT)
 
 acr = collect(res.acr.metabolite_id)
 acrr = [[a, b] for (a, b) in zip(res.acrr.metabolite_1, res.acrr.metabolite_2)]
@@ -102,7 +106,7 @@ giant = isempty(kinetic) ? 0 : maximum([count(==(k), kinetic) for k in unique(ki
                                        init = 0)
 
 open(out_path, "w") do io
-    JSON3.write(io, Dict("tool" => "COCOA.jl", "seed" => seed, "sample_size" => COCOA_SAMPLES, "seconds" => t_conc,
+    JSON3.write(io, Dict("tool" => "COCOA.jl", "seed" => seed, "sample_size" => COCOA_SAMPLES, "kinetic_efficient" => COCOA_EFFICIENT, "seconds" => t_conc,
                          # per-complex module labels, not just the giant's size: without them a
                          # disagreement cannot be attributed to the partition rather than to the
                          # span test that reads it.
