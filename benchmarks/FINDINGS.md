@@ -131,3 +131,63 @@ the definition alone.
 Kimonu is structurally immune. It groups identical normalised rows of M = A.K, computing the
 equivalence classes directly, so there is no pairwise verdict that could be wrong and nothing for
 transitivity to propagate.
+
+### The pairwise test, and why it fails in both directions
+
+`find_concordant_complexes.m` decides a pair by maximising and minimising the activity ratio
+under a Charnes-Cooper transformation and comparing the two results **rounded to two decimals**:
+
+```matlab
+CC(i,j) = (round(Maximum_c_p,2) == round(Minimum_c_p,2))*2;
+```
+
+That single line is an absolute tolerance of 5e-3 on the ratio, and it is the false-positive
+source. It is maximally permissive near zero, where a pair whose ratio is not constant at all
+still lands in the same bin. Reproducing the reference's own LP on pairs that bridge different
+Kimonu classes inside the iLJ478 blob:
+
+```
+    2244,1625   max 0.00000049   min  0.00000000   round2 equal -> concordant
+    2403,3295   max 0.00000000   min -0.00012865   round2 equal -> concordant
+```
+
+Ten of the twelve bridging pairs sampled are rejected outright, with ratio spreads of 10^2 to
+10^4. They are in the blob anyway, reached through chains -- which is the cascade: connected
+components needs only a handful of edges like the two above to fuse 184 true classes into one.
+
+The false negatives come from a different line. When a complex is in neither the all-positive nor
+the all-negative group, the verdict ANDs the two sign branches:
+
+```matlab
+CC(i,j) = (round(Maximum_c_p,2) == round(Minimum_c_p,2) & ...
+           round(Maximum_c_n,2) == round(Minimum_c_n,2) & ...
+           round(Maximum_c_p,2) == round(Minimum_c_n,2))*2;
+```
+
+An infeasible branch leaves `Maximum = Inf, Minimum = -Inf`, so the first clause fails and the
+pair is rejected however well the other branch behaved. Reproducing the LP on Kimonu class 204 of
+iLJ478, the twelve complexes the reference cuts into six pairs:
+
+```
+  kept  (58,58)   t>0: ratio -1.0 constant     t<0: infeasible
+  split (58,59)   t>0: infeasible              t<0: ratio 1.0 constant
+  split (58,60)   t>0: infeasible              t<0: ratio 1.0 constant
+  split (59,60)   t>0: infeasible              t<0: ratio 1.0 constant
+```
+
+The pairs it keeps are normalisable with t > 0; the ones it drops are normalisable only with
+t < 0. Nothing about them is numerically marginal -- the surviving branch returns exactly 1.0.
+
+### Kimonu is right in both directions
+
+Checked against the definition with flux vectors, not against either tool:
+
+- Every Kimonu class the reference splits is genuinely **one** proportional direction. Over 48-64
+  flux points including targeted extremes, the worst ratio spread across all six cases is 6.3e-11,
+  and four of the six are exactly 0.
+- The reference's iLJ478 blob is genuinely **19** directions among the 169 of its 2194 members
+  that carry activity. A concordance class must be one.
+
+So the reference over-merges by rounding and under-merges by branch ANDing, and Kimonu matches the
+definition on both counts. Its grouping of identical normalised rows of M = A.K has no pairwise
+verdict to get wrong and no tolerance to tune.
