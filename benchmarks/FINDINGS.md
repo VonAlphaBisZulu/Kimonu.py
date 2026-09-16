@@ -82,3 +82,52 @@ Kimonu's modules (iJB785 to 1091, iSynCJ816 to 1267). The published reference gi
 COCOA's `complex_ids` drop stoichiometric coefficients, so distinct complexes can share a name
 (~300 of 14973 on iAF1260b). Cross-tool comparisons by name must either skip the collisions or
 accept them only when every candidate on both sides sits in one block.
+
+## The reference: exact on balanced, cascading on concordance
+
+Nine models now have a complete exhaustive reference run -- the four iIS312 variants, plus
+Saha2011iRS1597, iCN900, iIT341, iJB785 and iLJ478 from `reference_full/`, each 82-138 h.
+
+**Balanced complexes agree exactly on all nine.** 379, 315, 379, 228, 817, 744, 696, 4285, 778 --
+Kimonu reproduces every one, in 0.3-10 s against 3.7-138 h. That stage of the reference uses no
+pair LP, and it is solid.
+
+Concordance diverges on three models, and the divergence has a single shape:
+
+| model | ref classes | K classes | ref largest | K largest | LP non-optimal |
+|---|---|---|---|---|---|
+| iCN900 | 353 | 353 | 71 | 71 | 0.2% |
+| iIS312 | 199 | 199 | 99 | 99 | 3.1% |
+| iJB785 | 217 | 228 | 149 | 90 | 21.7% |
+| iLJ478 | 91 | 268 | 2194 | 777 | 8.9% |
+| Saha2011iRS1597 | 169 | 362 | 1916 | 603 | 16.1% |
+| iIT341 | 29 | 174 | 2315 | 913 | 9.8% |
+
+Note that the LP failure rate does not predict the divergence: iJB785 has the worst rate and
+nearly agrees, iCN900 and iIS312 agree exactly, iLJ478 diverges most at 8.9%.
+
+### Mechanism
+
+`run_reference.m` builds the concordance relation pairwise by LP, then forms classes as connected
+components of that graph (`E = (CC == 2) | (CC == -1)`, symmetrised, BFS). Concordance is an
+equivalence relation, so imposing transitivity this way is sound only if the pairwise test has no
+false positives. It does have them, and a single spurious edge fuses two entire classes
+irreversibly.
+
+That predicts the observed shape, and the shape is what we see:
+
+- The damage is concentrated, not diffuse. On iLJ478 only one reference class merges Kimonu
+  classes -- but it absorbs 184 of them, Kimonu's true 777-complex class plus 183 others.
+- Blowup happens only where a large true class already exists. A class of n complexes carries
+  O(n^2) pairs, so it is the likeliest place for a spurious edge to attach, and once attached the
+  component grows. Largest true class 603/913/777 becomes 1916/2315/2194; largest true class
+  71/99/65 stays 71/99/65.
+
+Checked against the definition rather than against Kimonu: of the 2194 complexes in the iLJ478
+blob, 169 carry nonzero activity over 90 random flux vertices, and those 169 span **19 distinct
+proportional directions**. A concordance class must span one. The merge is provably wrong, from
+the definition alone.
+
+Kimonu is structurally immune. It groups identical normalised rows of M = A.K, computing the
+equivalence classes directly, so there is no pairwise verdict that could be wrong and nothing for
+transitivity to propagate.
