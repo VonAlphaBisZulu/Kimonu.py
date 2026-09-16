@@ -132,6 +132,28 @@ Kimonu is structurally immune. It groups identical normalised rows of M = A.K, c
 equivalence classes directly, so there is no pairwise verdict that could be wrong and nothing for
 transitivity to propagate.
 
+### Root cause: the scaling variable sits in the objective
+
+The rounding below is real but secondary. The primary defect is the objective vector of the pair
+LP. Charnes-Cooper turns max (A_i.v + alpha)/(A_j.v) with A_j.w = 1 into max A_i.w + alpha*t; the
+numerator has no constant term, so alpha = 0 and the scaling variable must not appear. The code
+uses `[-A_i 1]`, so the solver trades the ratio off against t and stops somewhere that is not the
+ratio's extremum. The reported range collapses towards zero, always in the same direction:
+
+```
+pair (1842,2368)   [-A_i 1]: max 0          min 0            -> "constant", accepted
+                   [-A_i 0]: max 0          min -7.299e-06   -> varies
+pair (2244,1625)   [-A_i 1]: max 4.912e-07  min 0
+                   [-A_i 0]: max 6.090e-01  min 0
+pair (2403,3295)   [-A_i 1]: max 0          min -1.287e-04
+                   [-A_i 0]: max 0          min -1.840e+02
+```
+
+Six orders of magnitude on the last two. This is why the false positives cluster near zero, and
+why `round(.,2)` then waves them through: the objective squashes the range into the bin before the
+tolerance ever looks at it. Correcting the tolerance alone does not fix the pair (1842,2368),
+whose collapsed bounds are exactly equal; correcting the objective does.
+
 ### The pairwise test, and why it fails in both directions
 
 `find_concordant_complexes.m` decides a pair by maximising and minimising the activity ratio
