@@ -274,3 +274,39 @@ measurement.
 The NAs also propagate. In the published script they are carried into the pairwise-intersection
 matrix and the connected-components merge that follows, which is how 352 sets of median size 3
 end up as a single module of 626.
+
+### Kinetic stage, second finding: phase III's output bypasses the terminal filter
+
+With the NA subscript corrected, the reference's kinetic partition still differs from Kimonu's on
+iCN900: 246 non-singleton modules against 250, covering 583 complexes against 591, with 96 of the
+modules differing by a single complex at their boundary.
+
+Two things had to be matched first. `class_with_balanced` stores only the non-singleton
+concordance classes -- `module_of` is -1 for singletons -- so the R stage seeds 352 upstream sets
+where Kimonu seeds 372. Adding the 20 singleton classes as seeds brings the aggregate figures into
+line: 257 sets, union 594, zero overlap, on both sides.
+
+What remains is directional. Of the complexes the reference keeps and Kimonu does not, **105 of
+105 are globally terminal**; of those Kimonu keeps and the reference does not, 7 of 113 are. The
+return value explains it:
+
+```r
+phaseIII <- setdiff(x1, x)        # what phase III removed, returned unfiltered
+phaseIV  <- x[terminal[x] == 0]   # survivors, terminal filter applied here only
+return(union(phaseIII, phaseIV))
+```
+
+Terminal complexes removed by phase III re-enter through `phaseIII` and never meet the filter that
+phase IV exists to apply. Kimonu and COCOA both report 250 modules with a largest of 19 on this
+model; the reference is the outlier.
+
+Hypotheses tested and refuted on the way, recorded so they are not retried: Kimonu's coupling and
+deficiency merges (identical with Y=None), the iteration count (identical at max_iterations=1),
+index misalignment (zero composition mismatches), phase II's out-degree-zero removal (none of the
+differing complexes have out-degree zero), the phase structure itself (a two-phase reimplementation
+in R gives results identical to the four-phase one), and computing strong components on the induced
+subgraph rather than the full graph (far worse: 305 sets spanning 1480 complexes).
+
+Neither `union(phaseIII, phaseIV)` nor `phaseIV` alone reproduces Kimonu -- the latter is too
+aggressive, giving 238 sets with a largest of 12 -- so the correct single-line form is not yet
+settled and no fix is proposed here.
