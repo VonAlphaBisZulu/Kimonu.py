@@ -151,9 +151,19 @@ Kimonu classes inside the iLJ478 blob:
     2403,3295   max 0.00000000   min -0.00012865   round2 equal -> concordant
 ```
 
-Ten of the twelve bridging pairs sampled are rejected outright, with ratio spreads of 10^2 to
-10^4. They are in the blob anyway, reached through chains -- which is the cascade: connected
-components needs only a handful of edges like the two above to fuse 184 true classes into one.
+That is not a rare event. Of the 482,007 pairs the LP accepts on iLJ478, **188,877 bridge two
+different Kimonu classes** -- 39% of every edge it draws. The same count is 285,606 of 659,005 on
+iIT341 and 219,009 of 404,760 on Saha2011iRS1597, against 297 of 15,130 on iJB785 and **zero** on
+iCN900, the two models that agree.
+
+Sampling 24 of those accepted bridging edges on iLJ478 and asking the definition: 16 have a
+demonstrably non-constant ratio, 3 are genuinely concordant, 5 are inactive on the sampled fluxes
+and stay undecided. Every failing ratio sits near zero with a spread inside one rounding bin --
+2.1e-6, 2.6e-7, 7.3e-6, 1.1e-4, 3.4e-3 -- which is exactly where `round(.,2)` cannot tell a
+varying ratio from a constant one.
+
+So the blob is not a cascade from a few bad edges. The pairwise test accepts wrong pairs by the
+hundred thousand, and connected components merely assembles them.
 
 The false negatives come from a different line. When a complex is in neither the all-positive nor
 the all-negative group, the verdict ANDs the two sign branches:
