@@ -223,3 +223,54 @@ Checked against the definition with flux vectors, not against either tool:
 So the reference over-merges by rounding and under-merges by branch ANDing, and Kimonu matches the
 definition on both counts. Its grouping of identical normalised rows of M = A.K has no pairwise
 verdict to get wrong and no tolerance to tune.
+
+## The reference's kinetic stage: one line of NA indexing
+
+The R stage was never run during the earlier work, so its numbers were taken from the published
+`.RData` files. Running it is cheap -- about five minutes a model -- and `run_reference.m` already
+writes the `.mat` it consumes.
+
+On iCN900 all three implementations agree **exactly** on concordance: 353 classes, largest 71. The
+kinetic stage then diverges by a factor of 33.
+
+| | modules | giant |
+|---|---|---|
+| Kimonu | 250 | 19 |
+| COCOA | 250 | 19 |
+| reference | 1 | 626 |
+
+The inputs are not the problem: the R graph and its strong components match Kimonu exactly -- 1601
+SCCs, largest 8, 1287 terminal, 744 balanced, 353 classes. The cause is a single line in
+`autonom`, phase IV:
+
+```r
+terminal <- rep(1, length(clust$membership))   % one entry per complex in the whole graph
+...
+phaseIV <- x[terminal == 0]                    %%which complexes are non-terminal
+```
+
+`x` holds complex ids; `terminal` is a mask over every complex in the graph. Indexing `x` by a
+logical of a different length selects members of `x` by *position* and pads with `NA` past its
+end, so phase IV returns a positional sample of the set plus one NA. The comment states the
+intent, which is `terminal[x]`.
+
+Correcting that one subscript, with nothing else touched:
+
+```
+as published       NAs 352 | sets 352 total 958 union 625 overlap 333 | blocks 185 largest  93
+terminal[x] == 0   NAs   0 | sets 253 total 586 union 586 overlap   0 | blocks 253 largest  19
+Kimonu             NAs   - | sets 257 total 594 union 594 overlap   0 | blocks 250 largest  19
+```
+
+The NAs disappear, the upstream sets become pairwise disjoint as Kimonu's already are, and the
+largest kinetic module matches Kimonu and COCOA exactly. Module counts remain 3 apart, 253 against
+250, which is not yet explained.
+
+Worth being clear about why this is not circular: the correction follows from the code's own
+comment and from R's indexing semantics, not from comparing against Kimonu. Agreement with Kimonu
+is the result, not the criterion, so a corrected R stage still counts as an independent third
+measurement.
+
+The NAs also propagate. In the published script they are carried into the pairwise-intersection
+matrix and the connected-components merge that follows, which is how 352 sets of median size 3
+end up as a single module of 626.
