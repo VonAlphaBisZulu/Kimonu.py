@@ -474,3 +474,35 @@ R code and COCOA all add as modules and the tentative reimplementation did not. 
 
 `coupling_exact/` matrices are now also copied after the writer finishes; the first ACR chain
 raced it on iJB785.
+
+### Retraction: COCOA does not retain terminal complexes in its kinetic modules
+
+Earlier sections here report COCOA keeping 113 / 550 / 664 / 1027 globally terminal, non-balanced
+complexes in its kinetic modules on iCN900, iAB_RBC_283, Chlorella_variabilis_iAJ526 and iAF1260b,
+and treat that as an open defect. Those figures were produced by intersecting COCOA's module
+membership, mapped into the Kimonu-JSON index space (zero complex dropped), with a terminality set
+computed in CRN index space (zero complex present). Above the zero complex the two spaces are off
+by one. The Kimonu and tentative-algorithm figures in the same tables were computed in CRN space
+throughout and stand.
+
+Redone in one space, COCOA's modules retain 8 / 0 / 10 / 4 globally terminal complexes -- exactly
+Kimonu's 8 / 0 / 10 / 4, and all of them balanced linkage-class modules. COCOA's balanced set is
+identical to Kimonu's exact one on all four models. And fed Kimonu's exact concordance partition
+directly, COCOA's kinetic stage returns 249 non-singleton modules, largest 19, covering 589, with
+8 terminal inside, at both `efficient` settings, against Kimonu's 250 / 19 / 591 / 8; the two
+complexes' difference is within the two names the bijection could not match. There is no COCOA
+kinetic defect to instrument.
+
+This is the fourth cross-tool join error in this file. The three before it were name parsing.
+The safeguard now: every cross-tool comparison converts to CRN index space before any set
+operation, and the conversion is asserted against complex compositions.
+
+### Gate and ACR containment, continued
+
+iIS312_Trypomastigote on the fixed algorithm and the fixed bridge: balanced 228/228, classes
+111/111 identical, and `lp_nonoptimal 0, lp_degraded 0` where the old bridge logged 4363 / 2640.
+Amastigote is running.
+
+iJB785's reference ACR stage: giant 33 against Kimonu's 22, inherited from its 297 false-positive
+concordance edges; ACR 0 on both; 17 ACRR pairs, all 17 in Kimonu's `acrr` (14 in `acrr_free`).
+Containment now holds on all six models with sound-or-adjudicated concordance.
