@@ -104,7 +104,17 @@ class Slot:
         try:
             self.c.solve()
             st = self.c.solution.get_status()
-            if st in (1, 101, 102):
+            if st not in (1, 101, 102):
+                # A warm basis can leave CPLEX at OPTIMAL_INFEAS (5): optimal in scaled space,
+                # slightly infeasible after unscaling. Which basis the slot carried in decides
+                # whether that happens, so the verdict would depend on solve order. A solve from
+                # scratch does not.
+                adv = self.c.parameters.advance.get()
+                self.c.parameters.advance.set(0)
+                self.c.solve()
+                self.c.parameters.advance.set(adv)
+                st = self.c.solution.get_status()
+            if st in (1, 5, 101, 102):
                 return float(st), self.c.solution.get_objective_value(), self.c.solution.get_values()
             return float(st), 0.0, [0.0] * self.n
         except cplex.exceptions.errors.CplexSolverError as e:

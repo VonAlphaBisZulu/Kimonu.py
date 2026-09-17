@@ -378,3 +378,47 @@ Settling it needs COCOA instrumented at that point, not more inference from its 
 `compare_kinetic_partitions.py` holds the corrected bijection and `tentative_upstream.py` the
 S.2.2 algorithm implemented against Kimonu's topology, which reproduces the reference exactly
 (246 / 19 / 583).
+
+### The CPLEX bridge was order-dependent
+
+`lp_server.py` accepted only CPLEX statuses 1/101/102. Status 5, OPTIMAL_INFEAS -- an optimal
+basis carrying small infeasibilities after unscaling, which the pair LP's 1e9 bounds provoke --
+was returned as a failed solve, and whether a given LP landed on 1 or 5 depended on the warm basis
+the slot carried in. So a pair's verdict depended on which pairs came before it.
+
+Measured on iCN900 with all three concordance fixes in: the first pair of a cold process,
+(233,243), came back non-concordant, then concordant on the immediately following identical run.
+A cold, independent solve gives t<0 max = min = 1.0 exactly and Kimonu places both complexes in one
+10-complex module, so the cold-start verdict was the wrong one. Over 300 random accepted pairs on a
+warm process there were no flips, so the exposure is cold starts and slot evictions rather than
+steady state; but on Saha2011iRS1597 and iJB785 14.8% of pairs hit status 5.
+
+This also explains why the sampled mode had accepted edges the exhaustive mode rejected (312 on
+Saha2011iRS1597, 4864 on iIT341): those are the same LP solved from different slot states. The
+prefilter itself only removes pairs from `At` and never sets `CC`, as documented.
+
+Fix: on any status outside 1/101/102 the worker re-solves from scratch (`advance = 0`), which does
+not depend on order, and the shim accepts 5 after that and counts it separately (`linprog('degraded')`).
+After the patch: (233,243) = 2 in both runs, 15/15 and 300/300 with zero disagreements.
+`test_determinism.m` is the check. Every reference concordance run before this patch is suspect
+at the level of individual marginal pairs; the two full-model reruns in `reference_fixed2/` are
+the gate before any of the nine is redone.
+
+### Kimonu's two deviations from Remark S2-1, measured across the 33
+
+The outer iteration loop in `kinetic_modules` changes the partition on **0 of 33** models. It can
+be documented as inert on this benchmark or removed.
+
+Judging phase IV terminality on the reduced graph `G_{C-4}` rather than the full network changes
+the partition on **32 of 33** models and the giant on most of them (iJB785 22 to 20, iAF1260b 96
+to 93, the iAM_P* family 100 to 98). The choice is not cosmetic. It stays as it is: the definition
+of an upstream set requires every complex to have a path leading to 𝒞 \ C_up, and a component that
+still feeds complexes outside the candidate set satisfies that regardless of what the reduced graph
+shows. COCOA reads the remark the same way and says so in its source.
+
+### The tentative and Upstream algorithms across the 33
+
+Running the §S.2.2 four-phase algorithm inside Kimonu on every model: the giant agrees with the
+two-phase Upstream Algorithm on 25 of 33 and differs by 1-4 complexes on the other 8 (the iAM_P*
+family, iJR904, iSB619, iYO844). Module counts differ far more on iJB785 (135 vs 1905) and
+iSynCJ816 (296 vs 1597) with the giant unchanged; that gap is not yet explained.

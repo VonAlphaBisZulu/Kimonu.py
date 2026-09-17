@@ -17,6 +17,9 @@ function [x, fval, exitflag] = linprog(f, A, b, Aeq, beq, lb, ub, options)
     return
   end
 
+  if nargin == 1 && ischar(f) && strcmp(f, 'degraded')
+    varargout{1} = S.ndeg; return
+  end
   if nargin == 1 && ischar(f) && strcmp(f, 'nonoptimal')
     if isempty(S), x = 0; else x = S.ninf; end
     return
@@ -69,6 +72,7 @@ function [x, fval, exitflag] = linprog(f, A, b, Aeq, beq, lb, ub, options)
     S.rv = [];
     S.cnt = struct('NEW',0,'OBJ',0,'ROW',0,'OR',0);
     S.nfail = 0; S.ninf = 0; S.sthist = containers.Map('KeyType','double','ValueType','double');
+    S.ndeg = 0;
     S.t_sel=0; S.t_io=0; S.t_msg=0;
   end
   S.tick = S.tick + 1;
@@ -174,6 +178,12 @@ function [x, fval, exitflag] = linprog(f, A, b, Aeq, beq, lb, ub, options)
   st = hdr(1);
   if st == 1 || st == 101 || st == 102
     exitflag = 1;
+  elseif st == 5
+    % OPTIMAL_INFEAS after the worker's cold re-solve: an optimal basis carrying small unscaled
+    % infeasibilities. Usable; counted so the exposure stays visible.
+    exitflag = 1;
+    S.ndeg = S.ndeg + 1;
+    if S.sthist.isKey(st), S.sthist(st) = S.sthist(st) + 1; else S.sthist(st) = 1; end
   else
     exitflag = 0;
     % 2/3/4 are unbounded / infeasible / either: outcomes the reference's own formulation produces
