@@ -422,3 +422,24 @@ Running the §S.2.2 four-phase algorithm inside Kimonu on every model: the giant
 two-phase Upstream Algorithm on 25 of 33 and differs by 1-4 complexes on the other 8 (the iAM_P*
 family, iJR904, iSB619, iYO844). Module counts differ far more on iJB785 (135 vs 1905) and
 iSynCJ816 (296 vs 1597) with the giant unchanged; that gap is not yet explained.
+
+### The 8 terminal complexes in Kimonu's modules are by design; COCOA's are not the same thing
+
+Traced on iCN900: all 8 are balanced, sit in two-complex terminal strong linkage classes, and
+appear in **none** of the raw `upstream_set` outputs. They enter at `kinetic.py:303`, which adds
+every weak linkage class composed entirely of balanced complexes as its own module -- the step the
+reference's R code performs at its lines 141-155 and COCOA in `add_singleton_balanced`. So the
+earlier note calling this a Kimonu deviation is withdrawn: Phase I reaches a fixed point, no
+terminal class straddles the candidate set, and `upstream_set` itself never returns a terminal
+complex. Full-graph terminality stays.
+
+COCOA's retained terminal complexes are a different population: of the 113 on iCN900, 664 on
+Chlorella_variabilis_iAJ526, 550 on iAB_RBC_283 and 1027 on iAF1260b, only 0-6% are balanced. Its
+`compute_global_terminal_complexes` and `add_singleton_balanced` both read correctly, so they enter
+through the merge or the per-complex label mapping. Still needs COCOA instrumented.
+
+### The reference ACR stage needs metabolite names in the saved model
+
+`Get_excel_tables_kinetic_modules.R` reads `MODEL_r{1}.metNames`; `run_reference.m` saved only
+`A Y S lb ub b c complexes`. Names are now written (`mets`, `metNames`, `rxns`) and the six
+existing files were patched with `patch_mat_names.m`.

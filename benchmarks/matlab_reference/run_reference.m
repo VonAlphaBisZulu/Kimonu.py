@@ -53,6 +53,10 @@ model.ub = crn.ub(:);
 model.b = zeros(nm, 1);
 model.c = zeros(nr, 1);
 model.complexes = 1:nc;
+% Get_excel_tables_kinetic_modules.R reads these names from the saved model.
+model.mets = crn.metabolites(:);
+model.metNames = crn.metabolites(:);
+model.rxns = crn.reactions(:);
 
 printf('complexes %d, reactions %d, metabolites %d\n', nc, nr, nm); fflush(stdout);
 
