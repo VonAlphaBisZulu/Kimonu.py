@@ -328,18 +328,25 @@ Kimonu implements this. `code_kineticModule_analysis.R` implements the tentative
 version instead, so its `union(phaseIII, phaseIV)` is faithful to the algorithm it implements --
 that line is not a bug, and an earlier note here suspecting it was wrong.
 
-Which output is correct is settled by the paper without reference to either implementation:
+Running the tentative algorithm inside Kimonu's own framework reproduces the reference exactly --
+246 non-singleton modules, largest 19, covering 583 complexes, against the R stage's 246 / 19 / 583.
+Both implementations are therefore correct for the algorithm each one runs; the only thing
+separating them is which of the paper's two algorithms they chose.
 
-> Lemma S2-4. Any complex in an upstream set of complexes C_0 is nonterminal.
+With that established, the outputs differ by exactly 8 complexes, and the tentative result is a
+strict subset of the Upstream Algorithm's:
 
-Of the complexes the R stage returns and Kimonu does not, 105 of 105 are globally terminal. Its
-output therefore is not an upstream set. Remark S2-2 asserts the two versions are "absolutely
-identical" in their input-output behaviour; on iCN900 they are not. The stated justification is
-that "the exit complexes included in Phase III are clearly nonterminal", which holds for the first
-pass but not for the cascade: later iterations remove complexes whose only exits lead to complexes
-already removed earlier in Phase III, and those need not be nonterminal. Those are the 105.
+```
+tentative (S.2.2)      246 non-singleton   covered 583   globally terminal inside 0
+Upstream Alg (S2-1)    250 non-singleton   covered 591   globally terminal inside 8
+```
 
-So the reference's kinetic modules differ from Kimonu's because the implementation follows the
-tentative algorithm rather than the Upstream Algorithm, and the tentative one does not satisfy
-Lemma S2-4 in the cascading case. Kimonu and COCOA both report a giant of 19 on iCN900 against the
-reference's 626 before the NA fix and 583-covering partition after it.
+Lemma S2-4 says any complex in an upstream set is nonterminal, so those 8 should not be there. They
+survive because Kimonu's phase IV tests `succ[v] - c` against the whole network: a strong component
+whose members have successors outside the candidate set is judged nonterminal and kept, where the
+specification asks for terminal strong linkage classes of `G_{C_-4}`, the reduction of the network
+to the candidate set. A component with no successor inside the set but successors outside it is
+terminal in `G_{C_-4}` and nonterminal under Kimonu's test.
+
+This is small -- 8 complexes of 3329 on iCN900, and the giant is 19 either way -- but it is a
+deviation in Kimonu, not in the reference.
