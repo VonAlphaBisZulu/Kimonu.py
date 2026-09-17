@@ -27,13 +27,15 @@ for comp in _sccs(succ, set(range(nc))):
         term |= comp
 
 kim = json.load(open(f"{B}/sweep_shared/kimonu_{M}.json"))["complexes"]
-def name(comp):
+def cocoa_name(comp):
+    """COCOA's complex id: species sorted, coefficient as a prefix -- `2_h[c]`, `4.5_h[c]`, none for 1."""
     parts = []
     for sp, v in comp.items():
         v = float(v)
-        parts.append(sp if v == 1 else f"{int(v)}_{sp}")
+        parts.append(sp if v == 1 else f"{int(v) if v.is_integer() else v}_{sp}")
     return "+".join(sorted(parts))
-ours = [name(c["composition"]) for c in kim]
+
+ours = [cocoa_name(c["composition"]) for c in kim]
 co = json.load(open(f"{B}/sweep/cocoa_eff/cocoa_eff_{M}_HiGHS_p64_seed1234.json"))
 ids = ["+".join(sorted(s.split("+"))) for s in co["complex_ids"]]
 assert len(ids) == len(ours)
