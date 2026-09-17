@@ -350,3 +350,31 @@ terminal in `G_{C_-4}` and nonterminal under Kimonu's test.
 
 This is small -- 8 complexes of 3329 on iCN900, and the giant is 19 either way -- but it is a
 deviation in Kimonu, not in the reference.
+
+### A naming mismatch invalidated several comparisons here
+
+COCOA writes a stoichiometric coefficient as a prefix on the species, `2_glu__L[c]`, where the
+Kimonu export carries it as a separate field. Comparisons that matched complexes by name with the
+coefficient dropped therefore failed on every multi-coefficient complex -- 54 of 3328 on iCN900,
+and precisely the boundary complexes the partitions disagree about. Several per-complex figures
+reported in earlier revisions of this file were produced that way and were wrong.
+
+Rendering both sides with the same convention leaves 2 complexes of 3328 unmatched and no name
+collisions. On that bijection:
+
+| | non-singleton | largest | covered | globally terminal inside |
+|---|---|---|---|---|
+| tentative (S.2.2) | 246 | 19 | 583 | 0 |
+| Kimonu (S2-1) | 250 | 19 | 591 | 8 |
+| COCOA | 249 | 19 | 589 | 113 |
+
+The giant is 19 in all three. The terminal content is not explained: all three implement a phase IV
+that removes terminal complexes, and COCOA's does so against the full network unconditionally
+(`setdiff!(current_indices, network.global_terminal)`), yet its reported modules retain 113. The
+`kinetic_module` labels in the output files are a partition of every complex rather than the raw
+upstream sets, so the difference may sit in what happens after phase IV rather than in phase IV.
+Settling it needs COCOA instrumented at that point, not more inference from its output.
+
+`compare_kinetic_partitions.py` holds the corrected bijection and `tentative_upstream.py` the
+S.2.2 algorithm implemented against Kimonu's topology, which reproduces the reference exactly
+(246 / 19 / 583).
