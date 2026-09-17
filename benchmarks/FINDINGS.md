@@ -310,3 +310,36 @@ subgraph rather than the full graph (far worse: 305 sets spanning 1480 complexes
 Neither `union(phaseIII, phaseIV)` nor `phaseIV` alone reproduces Kimonu -- the latter is too
 aggressive, giving 238 sets with a largest of 12 -- so the correct single-line form is not yet
 settled and no fix is proposed here.
+
+### Resolved against the specification: the R stage runs the wrong algorithm
+
+Langary et al. (2025), Supplementary Material S.2.2-S.2.3, gives two algorithms. Section S.2.2
+presents a *tentative* four-phase version finalising as `C_up = C_-4 u C_-3`; Remark S2-1 then
+gives the one the paper names the **Upstream Algorithm**:
+
+```
+1. Phase I : exclusion of entry complexes, to a fixed point
+2. Phase IV: exclusion of terminal complexes
+             identify all terminal strong linkage classes in G_{C_-4}, remove them all
+3. Finalization: C_up = C_-4
+```
+
+Kimonu implements this. `code_kineticModule_analysis.R` implements the tentative four-phase
+version instead, so its `union(phaseIII, phaseIV)` is faithful to the algorithm it implements --
+that line is not a bug, and an earlier note here suspecting it was wrong.
+
+Which output is correct is settled by the paper without reference to either implementation:
+
+> Lemma S2-4. Any complex in an upstream set of complexes C_0 is nonterminal.
+
+Of the complexes the R stage returns and Kimonu does not, 105 of 105 are globally terminal. Its
+output therefore is not an upstream set. Remark S2-2 asserts the two versions are "absolutely
+identical" in their input-output behaviour; on iCN900 they are not. The stated justification is
+that "the exit complexes included in Phase III are clearly nonterminal", which holds for the first
+pass but not for the cascade: later iterations remove complexes whose only exits lead to complexes
+already removed earlier in Phase III, and those need not be nonterminal. Those are the 105.
+
+So the reference's kinetic modules differ from Kimonu's because the implementation follows the
+tentative algorithm rather than the Upstream Algorithm, and the tentative one does not satisfy
+Lemma S2-4 in the cascading case. Kimonu and COCOA both report a giant of 19 on iCN900 against the
+reference's 626 before the NA fix and 583-covering partition after it.
