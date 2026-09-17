@@ -443,3 +443,34 @@ through the merge or the per-complex label mapping. Still needs COCOA instrument
 `Get_excel_tables_kinetic_modules.R` reads `MODEL_r{1}.metNames`; `run_reference.m` saved only
 `A Y S lb ub b c complexes`. Names are now written (`mets`, `metNames`, `rxns`) and the six
 existing files were patched with `patch_mat_names.m`.
+
+### Reference ACR stage: first numbers, and how they relate to Kimonu's
+
+With metabolite names in the saved model the reference's ACR script runs. On the five models with
+sound concordance it reports ACR = 0 everywhere and ACRR = 1, 1, 1, 1, 3 (iCN900, iIS312,
+Epimastigote, Amastigote, Trypomastigote). Two output quirks matter for reading it: `OverviewTable[15]`
+is set to 1 when `unique(diff_two_met[,1:2])` collapses to a vector, which happens for exactly one
+pair, not zero -- the empty case never enters that branch -- and `write.table` writes a single pair
+as a two-row column rather than one row.
+
+The definitions differ. The reference calls a species ACR when two complexes in one kinetic module
+differ in exactly that species, and a pair ACRR when two complexes differ in exactly those two,
+one each -- the combinatorial sufficient condition of Corollary S2-10. Kimonu tests
+e_i in im(Y Delta) on the kernel, which is the necessary-and-sufficient criterion for a coupled
+module. So the reference's sets should be contained in Kimonu's, and they are, by name, on all
+five models (table in `acr_contain.txt` at the time of writing): every reference ACRR pair is in
+Kimonu's `acrr`, and the reference's ACR set is empty where Kimonu's is empty. Kimonu additionally
+finds 8 / 5 / 4 / 4 / 1 free ACRR pairs the combinatorial test cannot see.
+
+Kimonu's `acr`/`acrr` count enzyme pseudo-species; the reference's tables also do, so those are
+the comparable columns. The `_free` counts are what both prior papers report.
+
+### The module-count gap between the two algorithms is the balanced linkage classes
+
+The 4-phase run inside Kimonu gave 135 modules on iJB785 against Kimonu's 1905, and 296 against
+1597 on iSynCJ816, with identical giants. The difference is exactly the number of weak linkage
+classes composed entirely of balanced complexes -- 1770 and 1301 -- which Kimonu, the reference's
+R code and COCOA all add as modules and the tentative reimplementation did not. Not a discrepancy.
+
+`coupling_exact/` matrices are now also copied after the writer finishes; the first ACR chain
+raced it on iJB785.
