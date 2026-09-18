@@ -1,0 +1,10 @@
+iS_1188: 2077 seeds, 3841 balanced
+tentative (S.2.2)   sets 1108  total  2577  union  2577  overlap     0
+  after overlap merge: blocks 1108  non-singleton 1006  largest   94  covered  2475
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 12839  non-singleton 1009  largest   94  covered  2481
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 2577  upstream-alg 2481
+  only in tentative: 102  of which globally terminal 0
+  only in upstream : 6  of which globally terminal 6

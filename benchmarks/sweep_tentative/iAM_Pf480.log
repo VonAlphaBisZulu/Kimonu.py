@@ -1,0 +1,10 @@
+iAM_Pf480: 1346 seeds, 2273 balanced
+tentative (S.2.2)   sets  698  total  1575  union  1575  overlap     0
+  after overlap merge: blocks  698  non-singleton  674  largest   96  covered  1551
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 7743  non-singleton  667  largest  100  covered  1553
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 1575  upstream-alg 1553
+  only in tentative: 24  of which globally terminal 0
+  only in upstream : 2  of which globally terminal 2

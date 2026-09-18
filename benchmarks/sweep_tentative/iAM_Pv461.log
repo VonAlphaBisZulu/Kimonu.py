@@ -1,0 +1,10 @@
+iAM_Pv461: 1237 seeds, 2098 balanced
+tentative (S.2.2)   sets  590  total  1359  union  1359  overlap     0
+  after overlap merge: blocks  590  non-singleton  566  largest   96  covered  1335
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 7166  non-singleton  561  largest  100  covered  1341
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 1359  upstream-alg 1341
+  only in tentative: 24  of which globally terminal 0
+  only in upstream : 6  of which globally terminal 6

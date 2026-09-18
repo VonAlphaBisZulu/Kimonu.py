@@ -1,0 +1,10 @@
+iJB785: 250 seeds, 4285 balanced
+tentative (S.2.2)   sets  169  total   412  union   412  overlap     0
+  after overlap merge: blocks  169  non-singleton  135  largest   22  covered   378
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 3950  non-singleton 1905  largest   22  covered  4069
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 412  upstream-alg 4069
+  only in tentative: 34  of which globally terminal 0
+  only in upstream : 3691  of which globally terminal 3691

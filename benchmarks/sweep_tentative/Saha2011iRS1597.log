@@ -1,0 +1,10 @@
+Saha2011iRS1597: 403 seeds, 817 balanced
+tentative (S.2.2)   sets  171  total   445  union   445  overlap     0
+  after overlap merge: blocks  171  non-singleton  158  largest  101  covered   432
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 3364  non-singleton  162  largest  101  covered   440
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 445  upstream-alg 440
+  only in tentative: 13  of which globally terminal 0
+  only in upstream : 8  of which globally terminal 8

@@ -1,0 +1,10 @@
+iAB_RBC_283: 894 seeds, 1570 balanced
+tentative (S.2.2)   sets  512  total  1101  union  1101  overlap     0
+  after overlap merge: blocks  512  non-singleton  498  largest   17  covered  1087
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 5445  non-singleton  498  largest   17  covered  1087
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 1101  upstream-alg 1087
+  only in tentative: 14  of which globally terminal 0
+  only in upstream : 0  of which globally terminal 0

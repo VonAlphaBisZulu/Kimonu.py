@@ -1,0 +1,472 @@
+<title>Kinetic Module Pipeline Ledger</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #F6F8F6;
+    --surface: #FFFFFF;
+    --ink: #151E1A;
+    --body: #2B3833;
+    --muted: #5E6E67;
+    --rule: #DBE3DE;
+    --rule-soft: #EAEFEB;
+    --accent: #1C6B58;
+    --accent-soft: #E4F0EA;
+    --ok: #2C7355;
+    --warn: #96701A;
+    --bad: #9C3A30;
+    --unknown: #6E7F78;
+    --ok-bg: #E6F1EA;
+    --warn-bg: #F7EFDC;
+    --bad-bg: #F6E5E2;
+    --unknown-bg: #EAEEEC;
+    --serif: "Spectral", Georgia, "Times New Roman", serif;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101714;
+      --surface: #16201C;
+      --ink: #EAF1ED;
+      --body: #C6D3CD;
+      --muted: #8C9C95;
+      --rule: #29352F;
+      --rule-soft: #1E2925;
+      --accent: #5FBF9F;
+      --accent-soft: #1A2E27;
+      --ok: #62BC92;
+      --warn: #D6AC55;
+      --bad: #E08377;
+      --unknown: #8C9C95;
+      --ok-bg: #162B22;
+      --warn-bg: #2C2417;
+      --bad-bg: #2E1D1A;
+      --unknown-bg: #1D2723;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #101714;
+    --surface: #16201C;
+    --ink: #EAF1ED;
+    --body: #C6D3CD;
+    --muted: #8C9C95;
+    --rule: #29352F;
+    --rule-soft: #1E2925;
+    --accent: #5FBF9F;
+    --accent-soft: #1A2E27;
+    --ok: #62BC92;
+    --warn: #D6AC55;
+    --bad: #E08377;
+    --unknown: #8C9C95;
+    --ok-bg: #162B22;
+    --warn-bg: #2C2417;
+    --bad-bg: #2E1D1A;
+    --unknown-bg: #1D2723;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--body);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 96px; }
+
+  h1, h2, h3 { color: var(--ink); text-wrap: balance; margin: 0; }
+  h1 { font-family: var(--serif); font-size: clamp(30px, 5vw, 42px); font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+  h2 { font-family: var(--serif); font-size: clamp(22px, 3.4vw, 27px); font-weight: 600; line-height: 1.25; }
+  h3 { font-family: var(--sans); font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
+  p { margin: 0; max-width: 68ch; }
+  a { color: var(--accent); }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  }
+  .lede { font-family: var(--serif); font-size: 18px; line-height: 1.55; color: var(--body); max-width: 62ch; }
+
+  header { display: flex; flex-direction: column; gap: 14px; padding-bottom: 28px; border-bottom: 2px solid var(--ink); }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+  section { margin-top: 52px; display: flex; flex-direction: column; gap: 18px; }
+  .sec-head { display: flex; flex-direction: column; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+
+  /* stage blocks: severity stripe encodes trust, not decoration */
+  .stage { display: grid; grid-template-columns: 4px 1fr; gap: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; }
+  .stage > .stripe { background: var(--unknown); }
+  .stage.is-ok > .stripe { background: var(--ok); }
+  .stage.is-warn > .stripe { background: var(--warn); }
+  .stage.is-bad > .stripe { background: var(--bad); }
+  .stage-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+  .stage-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+  .stage-n { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+    padding: 2px 8px; border-radius: 2px; white-space: nowrap;
+    background: var(--unknown-bg); color: var(--unknown);
+  }
+  .pill.ok { background: var(--ok-bg); color: var(--ok); }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); }
+  .pill.bad { background: var(--bad-bg); color: var(--bad); }
+  .pill::before { content: "●"; font-size: 8px; line-height: 1; }
+
+  dl.facts { margin: 0; display: grid; grid-template-columns: 150px 1fr; gap: 7px 18px; font-size: 14px; }
+  dl.facts dt { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+  dl.facts dd { margin: 0; }
+  @media (max-width: 560px) { dl.facts { grid-template-columns: 1fr; gap: 2px 0; } dl.facts dd { margin-bottom: 10px; } }
+
+  code, .m { font-family: var(--mono); font-size: 0.88em; }
+  code { background: var(--rule-soft); padding: 1px 4px; border-radius: 2px; }
+
+  .scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule-soft); white-space: nowrap; }
+  th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; background: var(--rule-soft); }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: none; }
+  td.wrap-ok { white-space: normal; min-width: 220px; }
+
+  ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px; max-width: 68ch; }
+  li::marker { color: var(--muted); }
+
+  /* phase ladder — order is real: each phase consumes the previous set */
+  .phases { display: flex; flex-direction: column; gap: 0; border-left: 2px solid var(--rule); }
+  .phase { display: grid; grid-template-columns: 78px 1fr; gap: 16px; padding: 12px 0 12px 18px; position: relative; }
+  .phase + .phase { border-top: 1px solid var(--rule-soft); }
+  .phase-id { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 500; }
+  .phase-body { display: flex; flex-direction: column; gap: 4px; }
+  .phase-title { color: var(--ink); font-weight: 500; }
+  .phase-note { font-size: 13.5px; color: var(--muted); }
+  @media (max-width: 560px) { .phase { grid-template-columns: 1fr; gap: 3px; } }
+
+  .callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; border-radius: 0 3px 3px 0; display: flex; flex-direction: column; gap: 8px; }
+  .callout .eyebrow { color: var(--accent); }
+
+  .task { display: grid; grid-template-columns: auto 1fr auto; gap: 8px 14px; align-items: start; padding: 13px 0; border-bottom: 1px solid var(--rule-soft); }
+  .task:last-child { border-bottom: none; }
+  .task-n { font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 2px; }
+  .task-main { display: flex; flex-direction: column; gap: 4px; }
+  .task-title { color: var(--ink); font-weight: 500; }
+  .task-note { font-size: 13.5px; color: var(--muted); max-width: 60ch; }
+  .task-cost { font-family: var(--mono); font-size: 11.5px; color: var(--muted); white-space: nowrap; padding-top: 3px; }
+  @media (max-width: 620px) { .task { grid-template-columns: auto 1fr; } .task-cost { grid-column: 2; padding-top: 0; } }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Benchmark inventory &amp; roadmap · 17 Sep 2026</div>
+  <h1>Kinetic Module Pipeline Ledger</h1>
+  <p class="lede">Every stage of the three-way comparison, every number it produces, and how far each one can currently be trusted. Nothing here assumes an implementation is correct — including ours.</p>
+  <div class="meta">
+    <span>33 networks</span>
+    <span>Kimonu.py · COCOA.jl v1.1.0 · Upstream_Algorithm</span>
+    <span>9 models with complete exhaustive reference · 3 sampled seeds each</span>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Orientation</div>
+    <h2>How the pipeline is shaped</h2>
+  </div>
+  <p>Five stages run strictly in sequence, and each consumes only the previous stage's output. That matters for the roadmap: a defect at stage 2 invalidates stages 3 and 4 regardless of whether those stages are themselves correct. Concordance is a <em>fixed input</em> to the kinetic stage in the published formulation — it is computed once and never revised.</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Stage</th><th>Produces</th><th>Kimonu</th><th>Reference</th><th>COCOA</th></tr></thead>
+      <tbody>
+        <tr><td>0 · Network prep</td><td class="num">A, Y, S, bounds</td><td>shared input</td><td>shared input</td><td>shared input</td></tr>
+        <tr><td>1 · Balanced complexes</td><td class="num">n_balanced</td><td>exact kernel</td><td>LP per complex</td><td>sampling</td></tr>
+        <tr><td>2 · Concordance</td><td class="num">modules, pairs</td><td>exact kernel</td><td>pairwise LP + CC</td><td>sampled ratios</td></tr>
+        <tr><td>3 · Kinetic modules</td><td class="num">modules, giant</td><td>Upstream (S2-1)</td><td>tentative (S.2.2)</td><td>Upstream (S2-1)</td></tr>
+        <tr><td>4 · ACR / ACRR</td><td class="num">acr, acrr</td><td>exact kernel</td><td>not yet run</td><td>sampled</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Stage by stage</div>
+    <h2>What each stage computes, and what it's worth</h2>
+  </div>
+
+  <div class="stage is-ok">
+    <div class="stripe"></div>
+    <div class="stage-body">
+      <div class="stage-head">
+        <span class="stage-n">Stage 0</span>
+        <h3>Network preparation</h3>
+        <span class="pill ok">inputs verified identical</span>
+      </div>
+      <dl class="facts">
+        <dt>Numbers</dt><dd><span class="m">n_complexes</span>, <span class="m">n_reactions</span>, <span class="m">n_metabolites</span>, <span class="m">n_blocked</span>, <span class="m">seconds_blocked</span></dd>
+        <dt>Used for</dt><dd>The x-axis of every size-vs-time plot, and the denominator of every coverage fraction.</dd>
+        <dt>Settled</dt><dd>All three tools compute on the same network for all 33 models. Kimonu's own FVA reproduces the pre-stripped <code>unblocked/</code> copies with <strong>identical reaction sets</strong> (iJB785 6882, iSynCJ816 8688), so results and timings are comparable. Preprocessing is costed once, outside every arm.</dd>
+        <dt>Watch</dt><dd>The <code>sweep/</code> CRNs for iJB785 and iSynCJ816 still carry 363 and 280 blocked reactions. Any analysis that loads from there without the FVA is on the wrong network. The shipped F2C2 coupling matrix for iJB785 has this problem: 7245 reactions against our 6882.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="stage is-ok">
+    <div class="stripe"></div>
+    <div class="stage-body">
+      <div class="stage-head">
+        <span class="stage-n">Stage 1</span>
+        <h3>Balanced complexes</h3>
+        <span class="pill ok">exact agreement, 9 / 9</span>
+      </div>
+      <dl class="facts">
+        <dt>Definition</dt><dd>A<sub>c</sub>·v = 0 across the flux space, equivalently a zero row of M = A·K.</dd>
+        <dt>Numbers</dt><dd><span class="m">n_balanced</span></dd>
+        <dt>Used for</dt><dd>Reported directly, and it seeds every kinetic module (each is built from 𝒞<sub>b</sub> ∪ 𝒞<sub>m</sub>).</dd>
+        <dt>Settled</dt><dd>Exact agreement with the reference on all nine complete models — 379, 315, 379, 228, 817, 744, 696, 4285, 778. Kimonu computes these in 0.3–10 s against 3.7–138 h. This stage uses no pair LP, which is why it is the clean one.</dd>
+        <dt>Outstanding</dt><dd>Nothing. This column is publication-ready.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="stage is-warn">
+    <div class="stripe"></div>
+    <div class="stage-body">
+      <div class="stage-head">
+        <span class="stage-n">Stage 2</span>
+        <h3>Concordance</h3>
+        <span class="pill warn">sound on 6 of 9</span>
+      </div>
+      <dl class="facts">
+        <dt>Definition</dt><dd>Complexes i, j are concordant when rows i, j of M = A·K are proportional.</dd>
+        <dt>Numbers</dt><dd><span class="m">n_concordance_modules</span> (non-singleton classes), <span class="m">n_concordant_pairs</span></dd>
+        <dt>Used for</dt><dd>Reported, and it is the sole input to stage 3. Errors here propagate everywhere downstream.</dd>
+        <dt>Reference defects</dt><dd>Four, all in <code>find_concordant_complexes.m</code>: unswapped flux bounds in the negative Charnes-Cooper branch; the scaling variable left in the objective (<code>[-A_i 1]</code> where α = 0), which collapses the reported ratio range toward zero by up to six orders of magnitude; <code>round(x,2)</code> equality as an absolute 5×10⁻³ tolerance; and an infeasible branch injecting <span class="m">±Inf</span> that vetoes a clean one.</dd>
+        <dt>Validated</dt><dd>With all three fixes, the reference reproduces Kimonu's concordance partition <strong>exactly</strong> on two full models: iIS312_Trypomastigote 111/111 classes and iIS312_Amastigote 165/165, zero differences either way, balanced counts matching. Unfixed it gave 109 and 161.</dd>
+        <dt>Outstanding</dt><dd>Three models — iLJ478, Saha2011iRS1597, iIT341 — have 39–54% of accepted edges bridging true classes and need reruns at 82–138 h each to be sound.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="stage is-warn">
+    <div class="stripe"></div>
+    <div class="stage-body">
+      <div class="stage-head">
+        <span class="stage-n">Stage 3</span>
+        <h3>Kinetic modules · the Upstream Algorithm</h3>
+        <span class="pill warn">algorithm choice to state; implementations agree</span>
+      </div>
+      <dl class="facts">
+        <dt>Numbers</dt><dd><span class="m">n_kinetic_modules</span>, <span class="m">giant_kinetic_module</span>, <span class="m">n_sccs</span>, <span class="m">largest_scc</span>, <span class="m">n_terminal_sccs</span>, <span class="m">deficiency</span>, <span class="m">kinetic_iterations</span></dd>
+        <dt>Used for</dt><dd>The giant is the headline figure in the reference's Table S1 and in COCOA's Supplementary Figures 1 and 2. It is also the number this project has most often mis-stated.</dd>
+      </dl>
+      <p>Langary et al. publish <em>two</em> algorithms. §S.2.2 gives a four-phase version explicitly framed as scaffolding — <span class="m">"we take baby steps"</span>. Remark S2-1 then gives the simplified version and names it the Upstream Algorithm.</p>
+      <div class="phases">
+        <div class="phase"><div class="phase-id">Phase I</div><div class="phase-body"><div class="phase-title">Exclude entry complexes, to a fixed point</div><div class="phase-note">A complex with an incoming reaction from outside 𝒞₀. Buys autonomy. Present in both versions.</div></div></div>
+        <div class="phase"><div class="phase-id">Phase II</div><div class="phase-body"><div class="phase-title">Exclude non-reactant complexes</div><div class="phase-note">Only incoming, no outgoing reactions anywhere. Single pass. Tentative version only.</div></div></div>
+        <div class="phase"><div class="phase-id">Phase III</div><div class="phase-body"><div class="phase-title">Include exit complexes, to a fixed point</div><div class="phase-note">Removed from 𝒞₃ but collected into 𝒞₋₃ and returned. Tentative version only.</div></div></div>
+        <div class="phase"><div class="phase-id">Phase IV</div><div class="phase-body"><div class="phase-title">Exclude terminal strong linkage classes</div><div class="phase-note">Buys the feeding property. In the tentative version the non-terminal survivors become 𝒞₋₄; in Remark S2-1 this is the only step after Phase I.</div></div></div>
+        <div class="phase"><div class="phase-id">Final</div><div class="phase-body"><div class="phase-title">𝒞<sub>up</sub> = 𝒞₋₄ ∪ 𝒞₋₃ &nbsp;·&nbsp; or just 𝒞₋₄</div><div class="phase-note">The tentative version unions both collections; the Upstream Algorithm returns the Phase IV result alone.</div></div></div>
+      </div>
+      <p>The reference implements the tentative version. Kimonu and COCOA both target Remark S2-1. Remark S2-2 asserts the two are "absolutely identical" in input–output; on iCN900 they are not, and the stated justification — that Phase III's exit complexes are "clearly nonterminal" — holds for the first pass but not through the cascade.</p>
+      <div class="callout">
+        <div class="eyebrow">Mutual validation — the one result here that is robust</div>
+        <p>Kimonu running the reference's own algorithm reproduces the reference exactly: <strong>246 non-singleton modules, largest 19, covering 583 complexes</strong>, against the R stage's 246 / 19 / 583. Both implementations are correct <em>for the algorithm each runs</em>. The only thing separating them is which published algorithm they chose. This is a same-framework swap, so it is not exposed to the cross-tool joining bugs below.</p>
+      </div>
+      <dl class="facts">
+        <dt>Reference defect</dt><dd>One, found and fixed: Phase IV wrote <code>x[terminal == 0]</code>, indexing a vector of complex ids by a mask over every complex in the graph. R selects by position and pads with <span class="m">NA</span>. 352 NAs per run on iCN900, which then propagate into the overlap merge and fuse the partition into a single 626-complex blob. The comment on the line states the intent: <code>terminal[x]</code>.</dd>
+        <dt>Kimonu deviations</dt><dd>Two, both real and neither yet measured across the 33. Phase IV tests <code>succ[v] - c</code> against the <em>whole</em> network, where Remark S2-1 asks for terminal strong linkage classes of G<sub>𝒞₋₄</sub>, the network reduced to the candidate set. And <code>kinetic_modules</code> wraps the whole thing in an outer loop that rebuilds the concordance partition from merged upstream sets and re-runs — not in the specification. On iCN900 the loop changes nothing.</dd>
+      </dl>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>iCN900 · exact bijection</th><th>Non-singleton</th><th>Largest</th><th>Covered</th><th>Globally terminal inside</th></tr></thead>
+          <tbody>
+            <tr><td>tentative (S.2.2)</td><td class="num">246</td><td class="num">19</td><td class="num">583</td><td class="num">0</td></tr>
+            <tr><td>Kimonu (Remark S2-1)</td><td class="num">250</td><td class="num">19</td><td class="num">591</td><td class="num">8</td></tr>
+            <tr><td>COCOA</td><td class="num">249</td><td class="num">19</td><td class="num">589</td><td class="num">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>The giant is 19 in all three, and the terminal content agrees too</strong> — 0 / 8 / 8, the 8 being the balanced linkage-class modules all three implementations add by design. An earlier version of this page reported COCOA retaining 113 terminal complexes here; that was an index-space error in the comparison (Kimonu-JSON indices against CRN-space terminality, off by one above the zero complex), not a COCOA behaviour. Fed Kimonu's exact concordance partition directly, COCOA's kinetic stage returns <strong>250 / 19 / 591 / 8 at both <span class="m">efficient</span> settings — identical to Kimonu</strong> once the complex bijection is complete.</p>
+      <p>The large module-count gaps between the two algorithms — 135 vs 1905 on iJB785, 296 vs 1597 on iSynCJ816, giants unchanged — are exactly the weak linkage classes composed entirely of balanced complexes (1770 and 1301), which Kimonu, the reference's R code and COCOA all add as modules. Kimonu's "8 deviant terminal complexes" on iCN900 are four of those classes. Not a discrepancy.</p>
+    </div>
+  </div>
+
+  <div class="stage is-ok">
+    <div class="stripe"></div>
+    <div class="stage-body">
+      <div class="stage-head">
+        <span class="stage-n">Stage 4</span>
+        <h3>ACR and ACRR</h3>
+        <span class="pill ok">reference column computed on 6 of 6</span>
+      </div>
+      <dl class="facts">
+        <dt>Definition</dt><dd>ACR ⟺ e<sub>i</sub> ∈ im(YΔ) ⟺ a zero row of L = ker(YΔᵀ); ACRR ⟺ two equal rows.</dd>
+        <dt>Numbers</dt><dd><span class="m">acr</span>, <span class="m">acrr</span>, <span class="m">acr_free</span>, <span class="m">acrr_free</span></dd>
+        <dt>Free counts</dt><dd>"Free" excludes the <span class="m">E_1, E_2…</span> enzyme pseudo-metabolites introduced by the elementary-step split. Both prior papers report free counts, so these are the comparable ones.</dd>
+        <dt>Blocked on</dt><dd>The reference's ACR lives in a <em>second</em> R script, <code>Get_excel_tables_kinetic_modules.R</code>, which loads a <code>stoichiometric_coupling/*.mat</code> produced by <span class="m">F2C2('glpk', network)</span>. F2C2 is not in the tree.</dd>
+        <dt>Now running</dt><dd>Coupling matrices generated exactly from the nullspace (identical to shipped F2C2 on iCN900; ours finds 4 reactions F2C2 missed on each iIS312 variant). The reference's ACR script also needed metabolite names in the saved model, which our writer never stored — fixed at the writer, patched for the six files on disk.</dd>
+        <dt>First numbers</dt><dd>On the five models with sound concordance: reference ACR = 0 everywhere, ACRR = 1 / 1 / 1 / 1 / 3. Kimonu: ACR 0, ACRR (free) 8 / 5 / 4 / 4 / 1. <strong>Every reference ACRR pair is in Kimonu's set by name — 6 of 6 models</strong>, including iJB785 (17 of 17; its giant of 33 vs Kimonu's 22 is inherited from its 297 adjudicated false-positive concordance edges). Expected — the reference's criterion is combinatorial (two complexes in a module differing in exactly one species, Corollary S2-10), a sufficient condition; Kimonu's kernel test e<sub>i</sub> ∈ im(YΔ) is necessary and sufficient, so it finds the rest.</dd>
+        <dt>Reading its tables</dt><dd><span class="m">OverviewTable[15] = 1</span> means exactly one ACRR pair, not none — the empty case never enters that branch — and <span class="m">write.table</span> emits a single pair as a two-row column.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Trust ledger</div>
+    <h2>Where each implementation is known to be wrong</h2>
+  </div>
+  <p>None of the three has earned the benefit of the doubt. Every entry below was found by measurement, not inspection.</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Implementation</th><th class="wrap-ok">Known defects</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Upstream_Algorithm</td><td class="wrap-ok">4 concordance defects; 1 kinetic NA-indexing defect; implements the tentative algorithm rather than the one the paper names</td><td>fixes on our fork, unmerged</td></tr>
+        <tr><td>Kimonu.py</td><td class="wrap-ok">Phase IV terminality scoped to the full graph, not G<sub>𝒞₋₄</sub>; undocumented outer iteration loop</td><td>unmeasured across 33</td></tr>
+        <tr><td>COCOA.jl</td><td class="wrap-ok">Sampled concordance both splits verified-concordant classes and merges non-concordant ones; one seed in three cascades on iIT341 and iHN637 (giant 523 / 825 vs 185–213 in the other seeds), and iJN678 over-merges in every seed (188k such edges are the reference's problem, not COCOA's; COCOA's are far fewer). Balanced set equals Kimonu's exact one; kinetic stage matches Kimonu on identical input</td><td>concordance is sampling-limited; stages 1 and 3 clean</td></tr>
+        <tr><td>Our LP bridge</td><td class="wrap-ok">CPLEX status 5 (OPTIMAL_INFEAS) was treated as a failed solve, and whether a solve landed on 1 or 5 depended on the slot's warm basis — verdicts were order-dependent. Fixed: cold re-solve on any non-optimal status, validated 315/315 pairs with zero flips</td><td>fixed; all prior reference concordance runs suspect at marginal pairs</td></tr>
+        <tr><td>Our comparison tooling</td><td class="wrap-ok">Four cross-tool join errors: three name-parsing (coefficients dropped; model names split on <span class="m">_</span>; wrong directory names), one index-space mix (Kimonu-JSON vs CRN indices). Each produced a false finding before being caught. Rule now: convert to CRN index space before any set operation, assert against compositions; the complex bijection is now exact (COCOA writes fractional coefficients as <span class="m">4.5_h[c]</span>)</td><td>fixed; affected figures retracted</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>That last row is the important one. It invalidated several per-complex figures reported during this work before it was caught. Any number below that is <em>not</em> marked verified should be treated as provisional until re-derived on the corrected join.</p>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Figure plan</div>
+    <h2>Six arms, five figures</h2>
+  </div>
+  <p><a href="https://claude.ai/artifact/JvoAa9HHVaCUoJmM2VyjNv">Preliminary figures F1–F5</a> are drawn from <span class="m">benchmarks/figdata.json</span> by <span class="m">figures/make_prelim.py</span>.</p>
+  <p>Three of the six arms are deterministic and three are stochastic. That distinction decides where error bars belong, and it is worth making visible rather than hiding: a bar with no error bar is reproducible by construction, not a bar whose variance was never measured.</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Arm</th><th>Models</th><th>At 3 seeds</th><th>Error bars</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Kimonu · 2-phase (Remark S2-1)</td><td class="num">33</td><td class="num">n/a</td><td>none — exact</td><td>ready</td></tr>
+        <tr><td>Kimonu · 4-phase (§S.2.2) <strong>*</strong></td><td class="num">33</td><td class="num">n/a</td><td>none — exact</td><td>ready · giant agrees on 25 / 33</td></tr>
+        <tr><td>COCOA · <span class="m">efficient=false</span></td><td class="num">30</td><td class="num">30</td><td>seeds</td><td>3 models queued</td></tr>
+        <tr><td>COCOA · <span class="m">efficient=true</span></td><td class="num">13</td><td class="num">12</td><td>seeds</td><td>20 models running</td></tr>
+        <tr><td>Reference · exhaustive</td><td class="num">9</td><td class="num">n/a</td><td>none — complete</td><td>needs rerun on the fixed bridge</td></tr>
+        <tr><td>Reference · sampled <strong>*</strong></td><td class="num">9</td><td class="num">9</td><td>seeds</td><td>needs rerun on the fixed bridge</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>*</strong> marks an arm that exists for comparability rather than as a recommendation: the 4-phase Kimonu run reproduces the reference's algorithm and is not offered as a public option, and the reference's sampled mode is the stochastic prefilter that produced the published Table S1.</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Figure</th><th>Quantity</th><th>Models</th><th>Blocked by</th></tr></thead>
+      <tbody>
+        <tr><td>F1</td><td>Balanced complexes</td><td class="num">33 / 9</td><td>nothing</td></tr>
+        <tr><td>F2</td><td>Concordance modules</td><td class="num">33 / 6</td><td>nothing</td></tr>
+        <tr><td>F3</td><td>Giant kinetic module</td><td class="num">33 / 9</td><td>4-phase run</td></tr>
+        <tr><td>F4</td><td>ACR free · ACRR free (two panels)</td><td class="num">33 / 6</td><td>coupling matrices</td></tr>
+        <tr><td>F5</td><td>Runtime vs size, log y, + stage split</td><td class="num">33 / 9</td><td>nothing</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <div class="eyebrow">The runtime story is an inversion, not a ranking</div>
+    <p>The reference spends essentially <strong>100%</strong> of its time in concordance — balanced takes 0.003–0.022 h against 3.7–138 h for the pairwise LP. Kimonu's exact concordance is nearly free, so its dominant stage is the kinetic graph traversal: <strong>64%</strong> kinetic, 32% concordance, 4% ACR, and kinetic dominates on all 33 models. F5 should carry a stacked-stage panel showing that, because it explains the speedup rather than just asserting it.</p>
+  </div>
+  <p>The reference exists on 9 models and cannot be made to exist on 33, so a three-way figure across the full set is not available. The shape that works: <strong>main text</strong> carries Kimonu vs COCOA across 33 models; <strong>supplementary</strong> carries the three-way comparison on the 9 with a complete reference, of which 6 have sound concordance.</p>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Roadmap</div>
+    <h2>Path to publishable figures</h2>
+  </div>
+  <p>Ordered by what blocks a figure. The first three are cheap and unblock three of the five.</p>
+
+  <div>
+    <div class="task">
+      <div class="task-n">01</div>
+      <div class="task-main">
+        <div class="task-title">Run the 4-phase variant across all 33 models</div>
+        <div class="task-note">The algorithm is already written against Kimonu's topology and reproduces the reference exactly on iCN900. Running it everywhere gives F3 its second Kimonu bar and turns the algorithm difference from a caveat into a measured quantity.</div>
+      </div>
+      <div class="task-cost">minutes · unblocks F3</div>
+    </div>
+    <div class="task">
+      <div class="task-n">02</div>
+      <div class="task-main">
+        <div class="task-title">Rerun the reference on the fixed bridge — exhaustive and sampled — once the gate passes</div>
+        <div class="task-note">Three seeds of sampled mode already exist on all 9 models, but every run predates the bridge fix and is suspect at marginal pairs. Trypomastigote has passed the gate — 111/111 classes, <span class="m">lp_degraded 0</span> where the old bridge logged 2640; Amastigote is running. If it also reproduces Kimonu exactly, rerun the 9 exhaustive (≈450 h CPU, 2-CPU jobs, one node, ~6 days wall) and the 27 sampled seeds (≈240 h CPU) on the fixed bridge. Since ~100% of reference time is concordance, this is the only rerun the reference will ever need. Both launch scripts are written and committed (<span class="m">ref_final.sbatch</span>, <span class="m">ref_final_sampled.sbatch</span>), not submitted.</div></div>
+    </div>
+    <div class="task">
+      <div class="task-n">03</div>
+      <div class="task-main">
+        <div class="task-title">Generate coupling matrices from the nullspace, then run the reference ACR stage</div>
+        <div class="task-note">Verified identical to the shipped F2C2 output on iCN900. Gives the reference an ACR/ACRR column for the first time on the six models whose concordance is sound.</div>
+      </div>
+      <div class="task-cost">done · 6 of 6</div>
+    </div>
+    <div class="task">
+      <div class="task-n">04</div>
+      <div class="task-main">
+        <div class="task-title">Finish the COCOA sweep</div>
+        <div class="task-note"><span class="m">efficient=false</span> is at 30 of 33 with three seeds each; the last three are queued. <span class="m">efficient=true</span> is at 13, with 20 running in array 547571. Non-finishers stay unreported rather than being marked.</div></div>
+    </div>
+    <div class="task">
+      <div class="task-n">05</div>
+      <div class="task-main">
+        <div class="task-title">Closed — COCOA's kinetic stage is correct</div>
+        <div class="task-note">Fed Kimonu's exact concordance partition, it reproduces Kimonu's modules (249 / 19 / 589 vs 250 / 19 / 591, within the two unmatched names). The retained-terminal finding was a comparison error, retracted.</div></div>
+    </div>
+    <div class="task">
+      <div class="task-n">06</div>
+      <div class="task-main">
+        <div class="task-title">Measure Kimonu's two deviations from Remark S2-1 across the 33</div>
+        <div class="task-note">Full-graph vs reduced-graph terminality in Phase IV, and the undocumented outer loop. Both are known on one model only. Needed before the methods section can claim conformance.</div>
+      </div>
+      <div class="task-cost">~1 h</div>
+    </div>
+    <div class="task">
+      <div class="task-n">07</div>
+      <div class="task-main">
+        <div class="task-title">Open the upstream PR</div>
+        <div class="task-note">Four commits, validated 8/8 on hand-adjudicated pairs and end-to-end on two full models where the fixed reference now reproduces Kimonu's concordance exactly. The algorithm-choice question stays out of it.</div>
+      </div>
+      <div class="task-cost">ready</div>
+    </div>
+    <div class="task">
+      <div class="task-n">08</div>
+      <div class="task-main">
+        <div class="task-title">Optional — rerun concordance on the three affected models</div>
+        <div class="task-note">iLJ478, Saha2011iRS1597, iIT341 at 82–138 h each. Takes the supplementary three-way from six sound models to nine.</div>
+      </div>
+      <div class="task-cost">~350 h</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Currently running</div>
+    <h2>Cluster state</h2>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Job</th><th>What</th><th>State</th></tr></thead>
+      <tbody>
+        <tr><td class="num">547571</td><td>COCOA <span class="m">efficient=true</span>, 91 cells</td><td>running, 3 concurrent</td></tr>
+        <tr><td class="num">547570 / 547572</td><td>COCOA <span class="m">efficient=false</span> seeds; iAF1260b</td><td>running</td></tr>
+        <tr><td class="num">548401 / 548402</td><td>Gap cells — iSDY_1059, iS_1188, iIS312_Amastigote</td><td>running / queued</td></tr>
+        <tr><td class="num">548721 / 548722</td><td>Exhaustive reference, iNF517 and iSB619</td><td>17 h in, 14-day cap</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Node reservation holding: node05–07 and node12–16 excluded throughout.</p>
+</section>
+
+<footer>
+  Sources: <span class="m">benchmarks/FINDINGS.md</span>, <span class="m">matlab_reference/FINDINGS.md</span>, Langary et al. (2025) Supplementary §S.2.2–S.2.3, COCOA.jl Supplementary Table 1. Figures marked verified were re-derived on the corrected complex bijection; everything else is provisional.
+</footer>
+
+</div>

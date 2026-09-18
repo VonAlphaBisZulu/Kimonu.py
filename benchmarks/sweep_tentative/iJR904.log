@@ -1,0 +1,10 @@
+iJR904: 680 seeds, 1430 balanced
+tentative (S.2.2)   sets  423  total  1037  union  1037  overlap     0
+  after overlap merge: blocks  423  non-singleton  367  largest  144  covered   981
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 5672  non-singleton  367  largest  146  covered   983
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 1037  upstream-alg 983
+  only in tentative: 54  of which globally terminal 0
+  only in upstream : 0  of which globally terminal 0

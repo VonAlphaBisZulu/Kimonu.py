@@ -1,0 +1,10 @@
+iCN900: 372 seeds, 744 balanced
+tentative (S.2.2)   sets  257  total   594  union   594  overlap     0
+  after overlap merge: blocks  257  non-singleton  246  largest   19  covered   583
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 2988  non-singleton  250  largest   19  covered   591
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 594  upstream-alg 591
+  only in tentative: 11  of which globally terminal 0
+  only in upstream : 8  of which globally terminal 8

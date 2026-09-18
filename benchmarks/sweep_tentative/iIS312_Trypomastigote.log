@@ -1,0 +1,10 @@
+iIS312_Trypomastigote: 130 seeds, 228 balanced
+tentative (S.2.2)   sets   33  total    71  union    71  overlap     0
+  after overlap merge: blocks   33  non-singleton   25  largest   11  covered    63
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 1007  non-singleton   26  largest   11  covered    65
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 71  upstream-alg 65
+  only in tentative: 8  of which globally terminal 0
+  only in upstream : 2  of which globally terminal 2

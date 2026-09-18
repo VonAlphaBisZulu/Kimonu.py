@@ -24,14 +24,14 @@ ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#1C6B58", ""),
         "cocoa_true":  ("COCOA efficient=true",         "#E0A26A", ""),
         "ref_exh":     ("Reference exhaustive",         "#4A5A88", ""),
         "ref_sampled": ("Reference sampled*",           "#9AA6C8", "//")}
-BASE = "Error bars: min–max over seeds; exact arms have none by construction.  * comparability-only arm."
+BASE = "Stochastic arms: bar at the median over seeds, each seed a point; exact arms have no spread by construction.  * comparability-only arm."
 
 def val(arm, m, key):
     if arm == "kimonu":  v = D["kimonu"].get(m, {}).get(key); return None if v is None else (v, None, None)
     if arm == "kimonu4": v = D["kimonu"].get(m, {}).get("giant_4phase") if key == "giant" else None; return None if v is None else (v, None, None)
     if arm == "ref_exh": v = D["ref_exh"].get(m, {}).get(key); return None if v is None else (v, None, None)
     runs = [r[key] for r in D[arm].get(m, []) if r.get(key) is not None]
-    return None if not runs else (float(np.mean(runs)), float(min(runs)), float(max(runs)))
+    return None if not runs else (float(np.median(runs)), float(min(runs)), float(max(runs)), runs)
 
 def grouped(ax, key, arms, scale="linear", title="", ylabel="count", labels=None):
     labels = labels or {}; n = len(arms); w = 0.8 / n; x = np.arange(len(models)); drawn = {a: 0 for a in arms}
@@ -40,10 +40,10 @@ def grouped(ax, key, arms, scale="linear", title="", ylabel="count", labels=None
         for j, m in enumerate(models):
             v = val(a, m, key)
             if v is None: continue
-            mean, lo, hi = v; drawn[a] += 1; xx = x[j] + (i - n / 2 + 0.5) * w
-            ax.bar(xx, mean, w, color=col, hatch=hatch, edgecolor=col if hatch else "white", linewidth=0.4)
-            if lo is not None and hi > lo:
-                ax.errorbar(xx, mean, yerr=[[mean - lo], [hi - mean]], fmt="none", ecolor="#222", elinewidth=0.7, capsize=1.5)
+            med, lo, hi = v[0], v[1], v[2]; runs = v[3] if len(v) > 3 else None; drawn[a] += 1; xx = x[j] + (i - n / 2 + 0.5) * w
+            ax.bar(xx, med, w, color=col, hatch=hatch, edgecolor=col if hatch else "white", linewidth=0.4)
+            if runs and len(runs) > 1:
+                ax.scatter([xx] * len(runs), runs, s=6, color="#222", zorder=3, linewidths=0)
     ax.set_xticks(x); ax.set_xticklabels(models, rotation=65, ha="right", fontsize=7)
     ax.set_ylabel(ylabel); ax.set_title(title, loc="left", fontsize=11)
     if scale == "log": ax.set_yscale("log")
@@ -80,8 +80,9 @@ for a in ["kimonu", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"]:
     for m in models:
         v = val(a, m, "sec_conc" if a == "ref_exh" else "seconds")
         if v is None: continue
-        xs.append(nC[m]); ys.append(v[0]); lo.append(v[0] - (v[1] if v[1] is not None else v[0])); hi.append((v[2] if v[2] is not None else v[0]) - v[0])
-    if xs: a1.errorbar(xs, ys, yerr=[lo, hi], fmt="o", ms=4.5, color=col, ecolor=col, elinewidth=0.7, capsize=1.5, label=f"{lab} (n={len(xs)})")
+        xs.append(nC[m]); ys.append(v[0])
+        if len(v) > 3: a1.scatter([nC[m]] * len(v[3]), v[3], s=7, color=col, alpha=0.45, linewidths=0, zorder=2)
+    if xs: a1.scatter(xs, ys, s=22, color=col, label=f"{lab} (n={len(xs)})", zorder=3, edgecolor="white", linewidths=0.4)
 a1.set_xscale("log"); a1.set_yscale("log"); a1.set_xlabel("complexes"); a1.set_ylabel("seconds"); a1.set_title("F5a  Runtime vs network size", loc="left", fontsize=11)
 for y, t in [(60, "1 min"), (3600, "1 h"), (86400, "1 day"), (604800, "1 week")]:
     a1.axhline(y, color="#ddd", lw=0.6); a1.text(1050, y * 1.15, t, fontsize=6.5, color="#888")
@@ -93,7 +94,7 @@ for i, (lab, col) in enumerate([("concordance", "#1C6B58"), ("kinetic", "#7FB8A6
 a2.set_xticks(x); a2.set_xticklabels(models, rotation=65, ha="right", fontsize=6); a2.set_ylabel("fraction of Kimonu runtime"); a2.set_title("F5b  Where Kimonu spends its time", loc="left", fontsize=11)
 a2.legend(fontsize=7, frameon=False, loc="lower left"); [a2.spines[s].set_visible(False) for s in ("top", "right")]
 rf = [D["ref_exh"][m]["sec_conc"] / D["ref_exh"][m]["seconds"] for m in D["ref_exh"]]
-save(fig, "F5_runtime", f"Reference spends {100*min(rf):.1f}–{100*max(rf):.1f}% of its time in concordance (9 models); reference times are from the pre-fix bridge.  Error bars: min–max over seeds.")
+save(fig, "F5_runtime", f"Reference spends {100*min(rf):.1f}–{100*max(rf):.1f}% of its time in concordance (9 models); reference times are from the pre-fix bridge.  Stochastic arms: median marker, seeds as faint points.")
 print("rendered:", sorted(os.listdir("figures/prelim")))
 # the discrepancies F4 makes visible, for the record
 for m in ["iIT341", "iHN637", "iJN678", "iLJ478"]:

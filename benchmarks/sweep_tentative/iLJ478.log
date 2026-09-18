@@ -1,0 +1,10 @@
+iLJ478: 288 seeds, 778 balanced
+tentative (S.2.2)   sets  143  total   491  union   491  overlap     0
+  after overlap merge: blocks  143  non-singleton  138  largest  158  covered   486
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 3092  non-singleton  138  largest  158  covered   486
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 491  upstream-alg 486
+  only in tentative: 5  of which globally terminal 0
+  only in upstream : 0  of which globally terminal 0

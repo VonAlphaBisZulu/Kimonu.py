@@ -1,0 +1,10 @@
+iAF1260b: 2089 seeds, 4004 balanced
+tentative (S.2.2)   sets 1225  total  2796  union  2796  overlap     0
+  after overlap merge: blocks 1225  non-singleton 1110  largest   96  covered  2681
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 13400  non-singleton 1112  largest   96  covered  2685
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 2796  upstream-alg 2685
+  only in tentative: 115  of which globally terminal 0
+  only in upstream : 4  of which globally terminal 4

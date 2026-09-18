@@ -1,0 +1,10 @@
+iJN678: 462 seeds, 1414 balanced
+tentative (S.2.2)   sets  290  total  1138  union  1138  overlap     0
+  after overlap merge: blocks  290  non-singleton  278  largest  551  covered  1126
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 5266  non-singleton  280  largest  551  covered  1130
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 1138  upstream-alg 1130
+  only in tentative: 12  of which globally terminal 0
+  only in upstream : 4  of which globally terminal 4

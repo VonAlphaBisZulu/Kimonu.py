@@ -1,0 +1,10 @@
+iSB619: 395 seeds, 903 balanced
+tentative (S.2.2)   sets  201  total   573  union   573  overlap     0
+  after overlap merge: blocks  201  non-singleton  175  largest  139  covered   547
+  complexes in the result that are globally terminal (Lemma S2-4 violations): 0
+Upstream Alg (S2-1) blocks 3710  non-singleton  175  largest  140  covered   548
+reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583
+
+coverage: tentative 573  upstream-alg 548
+  only in tentative: 25  of which globally terminal 0
+  only in upstream : 0  of which globally terminal 0
