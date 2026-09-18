@@ -517,3 +517,17 @@ difference therefore lives upstream in the concordance input, not in either kine
 
 `reference_sampled_seeds/` holds seeds 2026 and 31337 for eight of the nine models; iLJ478 has
 only seed 1234. The staged final sampled rerun covers all 27 cells regardless.
+
+### What the preliminary figures make visible about COCOA's seeds
+
+COCOA `efficient=false` has occasional catastrophic seeds. On iIT341 one seed of three returns a
+giant of 523 with 31 free ACR metabolites and 2089 free ACRR pairs; the other two return 185-190,
+0 and 20-24, against Kimonu's 195, 0 and 24. On iHN637 likewise: one seed 825 / 25 / 2211, the
+other two 211-213 / 0 / 116, against Kimonu's 243 / 0 / 121. In both cases a single sampled
+concordance partition over-merged and everything downstream inflated with it. On iJN678 the
+over-merge is stable across all three seeds (giant 1183, ACRR 2484, against 551 and 236), so it is
+a property of that model under sampling rather than seed luck.
+
+For the paper this argues for reporting the median over seeds with the individual seeds shown as
+points, rather than mean with min-max bars: a mean of (523, 185, 190) is not a number anyone
+computed. The preliminary figures still use mean and min-max.
