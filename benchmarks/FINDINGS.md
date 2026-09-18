@@ -531,3 +531,14 @@ a property of that model under sampling rather than seed luck.
 For the paper this argues for reporting the median over seeds with the individual seeds shown as
 points, rather than mean with min-max bars: a mean of (523, 185, 190) is not a number anyone
 computed. The preliminary figures still use mean and min-max.
+
+### Gate passed; final reference reruns launched (2026-09-18)
+
+iIS312_Amastigote on the fixed algorithm and the fixed bridge: balanced 315/315, classes 165/165
+identical, zero differences, `lp_degraded 0` (`lp_nonoptimal 27` are the deliberately infeasible
+negative branches, not failures). With Trypomastigote this makes two complete models reproducing
+Kimonu's concordance exactly on the final pipeline.
+
+Launched: nine exhaustive runs, jobs 549251-549259 (`ref_final.sbatch`, 14-day cap, output
+`reference_final/`), and the 27-cell sampled array 549260 (`ref_final_sampled.sbatch`, 7-day cap,
+output `reference_final_sampled/`). These replace every earlier reference concordance run.

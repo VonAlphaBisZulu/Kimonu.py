@@ -41,9 +41,9 @@ All runs before commit `3ea2bf7` used an order-dependent bridge and are suspect 
 | `reference/` | exhaustive, 24 h cap; 4 iIS312 models complete (tracked), 29 truncated (ignored) | unfixed / old | the 4 complete are ground truth for balanced |
 | `reference_sampled/` (seed 1234) + `reference_sampled_seeds/` (2026, 31337) | sampled mode, 9 models | unfixed / old | 8 at 3 seeds, iLJ478 at 1 |
 | `reference_fixed/` | 3 concordance fixes, old bridge — Trypomastigote, Amastigote | fixed / old | both reproduce Kimonu exactly |
-| `reference_fixed2/` | 3 fixes + fixed bridge — **the gate** | fixed / fixed | Trypomastigote exact, 0 degraded LPs; Amastigote running (549188) |
+| `reference_fixed2/` | 3 fixes + fixed bridge — **the gate** | fixed / fixed | both models exact vs Kimonu, 0 degraded LPs — passed |
 | `reference_acr/` | corrected R kinetic + ACR stage on the 6 sound models, with README on reading the tables | corrected R | done 6/6; every ACRR pair ⊆ Kimonu's |
-| `ref_final.sbatch`, `ref_final_sampled.sbatch`, `final_*.txt` | **the final reruns — written, not submitted** | fixed / fixed | launch after the gate: 9 exhaustive (14-day cap), 27 sampled cells |
+| `reference_final/`, `reference_final_sampled/` | **the final reruns** — jobs 549251–549259 (9 exhaustive, 14-day cap) and array 549260 (27 sampled cells, 7-day cap) | fixed / fixed | launched 2026-09-18 after both gate models matched Kimonu exactly |
 
 Code: `matlab_reference/run_reference.m` (harness; now saves metabolite names), `compat/` (CPLEX bridge, two-arg `round`), `test_determinism.m`, `test_fixed_verdict.m`, `patch_mat_names.m`, `write_coupling_exact.py`, `compare_kinetic_partitions.py`, `PR_DRAFT.md`.
 Upstream: fork `VonAlphaBisZulu/Upstream_Algorithm`, branch `fix/negative-branch-charnes-cooper`, 4 commits, pushed, no PR. `~/pipelines/2026-08_Kimonu/Upstream_Algorithm_benchmark` is pinned at 088d827 for reproducing old runs only.
@@ -54,13 +54,13 @@ Upstream: fork `VonAlphaBisZulu/Upstream_Algorithm`, branch `fix/negative-branch
 
 ## In flight
 
-- 549188 Amastigote gate on node01 · 547571 COCOA `efficient=true` · 548401/548402 COCOA gap cells · 547572 iAF1260b `efficient=false` · 548721/548722 iNF517/iSB619 exhaustive (14-day cap, old bridge — will be superseded).
+- 549251–549259 + 549260 final reference reruns on node01 · 547571 COCOA `efficient=true` · 548401/548402 COCOA gap cells · 547572 iAF1260b `efficient=false` · 548721/548722 iNF517/iSB619 exhaustive (14-day cap, old bridge — will be superseded).
 - Node reservation: node05–07 and node12–16 excluded throughout.
 
 ## The handful to bring home
 
-1. Amastigote passes → launch the two final rerun scripts (one command each).
-2. Reruns land (~6 days) → regenerate `figdata.json`, re-render, reference columns become final.
+1. ~~Gate~~ passed; reruns launched 2026-09-18.
+2. Reruns land (~6 days, by ~24 Sep) → regenerate `figdata.json`, re-render, reference columns become final.
 3. COCOA `efficient=true` completes on its own.
 4. Methods text: Kimonu implements Remark S2-1 (two phases, full-graph terminality); the reference implements the §S.2.2 tentative version; Remark S2-2's equivalence claim has a counterexample.
 5. PR when told.
