@@ -555,3 +555,27 @@ The reference jobs requested 16 GB each; a completed gate run's MaxRSS was 151 M
 jobs that booked 240 of node01's 257 GB while using 30 of 64 CPUs, so the added runs sat pending.
 Pending jobs and array elements were reduced to 4 GB in place and both scripts now request 4 GB;
 the nine already running keep their 16 GB until they finish.
+
+### Thirteen sampled cells out of memory at 4 GB; resubmitted per model (2026-09-18)
+
+The 4 GB right-sizing was taken from an *exhaustive* gate run (151 MB). Sampled mode is different:
+`pre_concordant_sampling.m` line 84-85 forms `(sample+eps)./(sample_reshaped+eps)`, an m x 10 x m
+dense double array (m = complexes), twice per round (`std` and `mean`), so the prefilter peaks at
+about 7 x m^2 x 80 B. Measured: iIS312_Epimastigote 1738 complexes 1.5 GB, iCN900 3329 6.0 GB,
+iJB785 6114 20.4 GB (old whole-node run 546238_15). Cells 17-23 and 27-32 (iIT341 seed 31337,
+iJB785, iLJ478, iNF517, iSB619) were killed in rounds 1-4 of the prefilter; nothing was written.
+
+Cells 15, 16 (iIT341) and 24-26 (Saha2011iRS1597) survived at 4 GB only because node01 has 16 GB
+of swap: their prefilter ran at the cgroup cap (sstat MaxRSS 4.18 GB) and took 1160-2770 s. They
+are now in the concordance phase at 200-430 MB RSS and their results are unaffected (swapping
+changes time, not arithmetic); only their prefilter wall time is inflated, about 1-2% of the cell's
+total runtime on the old-run scale (iIT341 sampled took 21 h whole-node).
+
+Resubmitted with per-model memory (8 x m^2 x 80 B + 0.5 GB, rounded up), same script, same cells,
+same seeds, `--mem` on the sbatch command line: 549880 (cell 17, 8 GB), 549881 (18-20 iJB785,
+26 GB), 549882 (21-23 iLJ478, 9 GB), 549883 (27-29 iNF517, 12 GB), 549884 (30-32 iSB619, 12 GB).
+The script default is now 8 GB with the scaling rule in a comment. iJB785 books 26 GB for a run that
+needs it for the first ~45 min only; single-job simplicity was preferred over splitting the
+prefilter into its own job. Node01 is memory-bound by the running 16 GB exhaustive jobs (booked
+204 GB / 257 GB), so the 26 GB and 12 GB cells start as the iIS312-family exhaustive runs finish.
+Running jobs cannot be shrunk (`scontrol`: "Job is no longer pending execution").

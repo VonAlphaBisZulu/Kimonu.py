@@ -2,7 +2,9 @@
 #SBATCH --job-name=reffinal-s
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=4G
+#SBATCH --mem=8G
+# peak RAM is the sampling prefilter's m x 10 x m ratio array (~7 * complexes^2 * 80 B);
+# override --mem per model on the sbatch command line
 #SBATCH --partition=sadreyevlab
 #SBATCH --output=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks/reference_final_sampled/s_%A_%a.log
 set -u
