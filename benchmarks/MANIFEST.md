@@ -43,7 +43,7 @@ All runs before commit `3ea2bf7` used an order-dependent bridge and are suspect 
 | `reference_fixed/` | 3 concordance fixes, old bridge — Trypomastigote, Amastigote | fixed / old | both reproduce Kimonu exactly |
 | `reference_fixed2/` | 3 fixes + fixed bridge — **the gate** | fixed / fixed | both models exact vs Kimonu, 0 degraded LPs — passed |
 | `reference_acr/` | corrected R kinetic + ACR stage on the 6 sound models, with README on reading the tables | corrected R | done 6/6; every ACRR pair ⊆ Kimonu's |
-| `reference_final/`, `reference_final_sampled/` | **the final reruns** — jobs 549287–549295 (9 exhaustive, 14-day cap) and array 549296 (27 sampled cells, 7-day cap) | fixed / fixed | launched 2026-09-18 after both gate models matched Kimonu exactly |
+| `reference_final/`, `reference_final_sampled/` | **the final reruns** — jobs 549287–549295 + 549302/549303 (11 exhaustive; 14-day cap, 21 for iNF517/iSB619) and arrays 549296 + 549304 (33 sampled cells, 7-day cap) | fixed / fixed | launched 2026-09-18 after both gate models matched Kimonu exactly |
 
 Code: `matlab_reference/run_reference.m` (harness; now saves metabolite names), `compat/` (CPLEX bridge, two-arg `round`), `test_determinism.m`, `test_fixed_verdict.m`, `patch_mat_names.m`, `write_coupling_exact.py`, `compare_kinetic_partitions.py`, `PR_DRAFT.md`.
 Upstream: fork `VonAlphaBisZulu/Upstream_Algorithm`, branch `fix/negative-branch-charnes-cooper`, 4 commits, pushed, no PR. `~/pipelines/2026-08_Kimonu/Upstream_Algorithm_benchmark` is pinned at 088d827 for reproducing old runs only.
@@ -54,7 +54,7 @@ Upstream: fork `VonAlphaBisZulu/Upstream_Algorithm`, branch `fix/negative-branch
 
 ## In flight
 
-- 549287–549295 + 549296 final reference reruns on node01 · 547571 COCOA `efficient=true` · 548401/548402 COCOA gap cells · 547572 iAF1260b `efficient=false` · 548721/548722 iNF517/iSB619 exhaustive (14-day cap, old bridge — will be superseded).
+- 549287–549295 + 549296 final reference reruns on node01 · 547571 COCOA `efficient=true` · 548401/548402 COCOA gap cells · 547572 iAF1260b `efficient=false` · iNF517/iSB619 now in the final rerun (old-bridge jobs cancelled).
 - Node reservation: node05–07 and node12–16 excluded throughout.
 
 ## The handful to bring home

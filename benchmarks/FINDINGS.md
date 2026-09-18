@@ -546,3 +546,7 @@ output `reference_final_sampled/`). These replace every earlier reference concor
 The first submission (549251-549260) failed at once with no log: both scripts write their Slurm
 log into the output directory, which the script itself creates only after Slurm has tried to open
 the log. Directories created, resubmitted as 549287-549295 and array 549296.
+
+Old-bridge exhaustive runs 548721 (iNF517) and 548722 (iSB619) cancelled at ~1.8 days; both models
+added to the fixed rerun instead: exhaustive 549302 549303 (21-day cap) and six sampled cells as array 549304
+(cells 27-32). The final reference set is therefore 11 models.
