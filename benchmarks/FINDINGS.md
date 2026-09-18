@@ -506,3 +506,14 @@ Amastigote is running.
 iJB785's reference ACR stage: giant 33 against Kimonu's 22, inherited from its 297 false-positive
 concordance edges; ACR 0 on both; 17 ACRR pairs, all 17 in Kimonu's `acrr` (14 in `acrr_free`).
 Containment now holds on all six models with sound-or-adjudicated concordance.
+
+### On identical input the two kinetic stages agree exactly
+
+With the complex bijection completed (fractional coefficients rendered as COCOA writes them), COCOA's
+kinetic stage fed Kimonu's exact concordance partition for iCN900 returns 250 non-singleton
+modules, largest 19, covering 591 complexes, 8 globally terminal inside -- at both `efficient`
+settings -- which is Kimonu's result to the complex. Every earlier Kimonu-vs-COCOA kinetic
+difference therefore lives upstream in the concordance input, not in either kinetic stage.
+
+`reference_sampled_seeds/` holds seeds 2026 and 31337 for eight of the nine models; iLJ478 has
+only seed 1234. The staged final sampled rerun covers all 27 cells regardless.
