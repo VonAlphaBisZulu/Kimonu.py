@@ -539,6 +539,10 @@ identical, zero differences, `lp_degraded 0` (`lp_nonoptimal 27` are the deliber
 negative branches, not failures). With Trypomastigote this makes two complete models reproducing
 Kimonu's concordance exactly on the final pipeline.
 
-Launched: nine exhaustive runs, jobs 549251-549259 (`ref_final.sbatch`, 14-day cap, output
-`reference_final/`), and the 27-cell sampled array 549260 (`ref_final_sampled.sbatch`, 7-day cap,
+Launched: nine exhaustive runs, jobs 549287-549295 (`ref_final.sbatch`, 14-day cap, output
+`reference_final/`), and the 27-cell sampled array 549296 (`ref_final_sampled.sbatch`, 7-day cap,
 output `reference_final_sampled/`). These replace every earlier reference concordance run.
+
+The first submission (549251-549260) failed at once with no log: both scripts write their Slurm
+log into the output directory, which the script itself creates only after Slurm has tried to open
+the log. Directories created, resubmitted as 549287-549295 and array 549296.

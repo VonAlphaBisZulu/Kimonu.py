@@ -6,6 +6,7 @@
 #SBATCH --partition=sadreyevlab
 #SBATCH --output=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks/reference_final_sampled/s_%A_%a.log
 set -u
+# the log directory must exist before Slurm opens the log; see FINDINGS
 BASE=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py
 OUT=$BASE/benchmarks/reference_final_sampled; mkdir -p $OUT
 mapfile -t CELLS < $BASE/benchmarks/final_sampled_cells.txt
