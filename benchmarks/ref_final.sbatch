@@ -3,7 +3,7 @@
 #SBATCH --nodes=1
 
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=16G
+#SBATCH --mem=4G
 #SBATCH --partition=sadreyevlab
 #SBATCH --output=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks/reference_final/full_%j.log
 set -u

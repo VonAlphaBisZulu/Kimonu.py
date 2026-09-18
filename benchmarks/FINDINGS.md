@@ -550,3 +550,8 @@ the log. Directories created, resubmitted as 549287-549295 and array 549296.
 Old-bridge exhaustive runs 548721 (iNF517) and 548722 (iSB619) cancelled at ~1.8 days; both models
 added to the fixed rerun instead: exhaustive 549302 549303 (21-day cap) and six sampled cells as array 549304
 (cells 27-32). The final reference set is therefore 11 models.
+
+The reference jobs requested 16 GB each; a completed gate run's MaxRSS was 151 MB. With fifteen
+jobs that booked 240 of node01's 257 GB while using 30 of 64 CPUs, so the added runs sat pending.
+Pending jobs and array elements were reduced to 4 GB in place and both scripts now request 4 GB;
+the nine already running keep their 16 GB until they finish.
