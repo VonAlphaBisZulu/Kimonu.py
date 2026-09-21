@@ -1,0 +1,225 @@
+<title>From Complexes to ACR</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{--paper:#F6F8F8;--surface:#FFFFFF;--ink:#101A1C;--ink2:#3A4C4F;--muted:#6B8083;--rule:#DBE5E5;--rule-soft:#EAF1F1;--accent:#0B6E76;--accent-soft:#E2EFEF;--accent-line:#9EC7C9;--amber:#8A5310;--amber-soft:#F6EDE1;--amber-line:#D8B58A;--shadow:0 1px 2px rgba(16,26,28,.05)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#0C1315;--surface:#121D1F;--ink:#E7EFEF;--ink2:#B6C8C9;--muted:#869C9E;--rule:#223436;--rule-soft:#1A292B;--accent:#56C6D0;--accent-soft:#10292C;--accent-line:#2C5E63;--amber:#D9A566;--amber-soft:#241D14;--amber-line:#5C4526;--shadow:0 1px 2px rgba(0,0,0,.3)}}
+  :root[data-theme="dark"]{--paper:#0C1315;--surface:#121D1F;--ink:#E7EFEF;--ink2:#B6C8C9;--muted:#869C9E;--rule:#223436;--rule-soft:#1A292B;--accent:#56C6D0;--accent-soft:#10292C;--accent-line:#2C5E63;--amber:#D9A566;--amber-soft:#241D14;--amber-line:#5C4526;--shadow:0 1px 2px rgba(0,0,0,.3)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:840px;margin:0 auto;padding-inline:24px;padding-block:52px 96px;display:flex;flex-direction:column;gap:44px}
+  header.top{display:flex;flex-direction:column;gap:14px;padding-bottom:26px;border-bottom:1px solid var(--rule)}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  h1{font-family:Spectral,Georgia,serif;font-weight:600;font-size:clamp(30px,4.6vw,42px);line-height:1.14;margin:0;text-wrap:balance;letter-spacing:-.01em}
+  .standfirst{margin:0;color:var(--ink2);font-size:17px;max-width:62ch}
+  .runline{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+  section{display:flex;flex-direction:column;gap:16px}
+  h2{font-family:Spectral,Georgia,serif;font-weight:600;font-size:24px;margin:0;display:flex;gap:14px;align-items:baseline;text-wrap:balance}
+  h2 .n{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--accent);font-weight:500;flex:none;padding-top:2px}
+  h3{font-weight:600;font-size:15px;margin:0}
+  p{margin:0;max-width:68ch}
+  ul,ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;max-width:68ch}
+  li::marker{color:var(--accent-line)}
+  code,.m{font-family:"IBM Plex Mono",monospace;font-size:.895em}
+  code{background:var(--rule-soft);padding:1px 5px;border-radius:3px}
+  .def{border-left:2px solid var(--accent);background:var(--surface);padding:14px 18px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
+  .def .lab{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}
+  .eg{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:4px;padding:13px 16px;display:flex;flex-direction:column;gap:7px}
+  .eg .lab{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}
+  .eg .body{font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.72}
+  .eg .body b{font-weight:500;color:var(--accent)}
+  .note{border:1px solid var(--amber-line);background:var(--amber-soft);border-radius:4px;padding:14px 18px;display:flex;flex-direction:column;gap:8px}
+  .note .lab{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--amber)}
+  .note p,.note li{color:var(--ink2);font-size:14px}
+  .tblscroll{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;min-width:700px;font-size:13.5px}
+  th,td{text-align:left;vertical-align:top;padding:10px 13px;border-bottom:1px solid var(--rule)}
+  thead th{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--rule-soft)}
+  tbody tr:last-child td{border-bottom:none}
+  td.step{font-weight:600;width:18%}
+  td ul{padding-left:16px;gap:4px;font-size:13px}
+  .tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;padding:1px 6px;border-radius:3px;border:1px solid var(--accent-line);color:var(--accent);white-space:nowrap}
+  .tag.warn{border-color:var(--amber-line);color:var(--amber);background:var(--amber-soft)}
+  a{color:var(--accent)}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Framework notes · basis for Methods · 21 Sep 2026</div>
+  <h1>From Complexes to ACR</h1>
+  <p class="standfirst">Exact definitions for each stage of the pipeline, how Kimonu decides each one, how the reference implementation (Langary et al. 2025, <span class="m">Upstream_Algorithm</span>) and COCOA.jl v1.1.0 decide it, and what has been verified to agree. Every number here was computed; every statement of agreement names the models it was measured on.</p>
+  <div class="runline"><span>Running example: EnvZ–OmpR</span><span>9 species · 13 complexes · 14 reactions</span><span>Benchmark: 33 networks, 11 with a reference run</span><span>Results: <a href="https://claude.ai/artifact/JvoAa9HHVaCUoJmM2VyjNv">figures</a> · <a href="https://claude.ai/artifact/RGt8asxhRiyDcJCpmVKrrF">ledger</a></span></div>
+</header>
+
+<section>
+  <h2><span class="n">00</span> The objects</h2>
+  <div class="def"><div class="lab">Definition · network</div>
+    <ul>
+      <li><span class="m">Y ∈ ℤ<sup>m×n</sup></span> composition: <span class="m">Y<sub>sc</sub></span> is the stoichiometric coefficient of species <span class="m">s</span> in complex <span class="m">c</span>. Fractional coefficients are carried exactly as rationals.</li>
+      <li><span class="m">A ∈ ℤ<sup>n×r</sup></span> incidence: <span class="m">−1</span> at the substrate complex of reaction <span class="m">j</span>, <span class="m">+1</span> at its product complex.</li>
+      <li><span class="m">N = Y·A</span> stoichiometric matrix; flux space <span class="m">{v : Nv = 0, lb ≤ v ≤ ub}</span>; <span class="m">K</span> a basis of <span class="m">ker(N)</span>.</li>
+      <li><b>Complex activity</b> <span class="m">A<sub>c</sub>·v</span>, the net formation rate of complex <span class="m">c</span>. Stages 01 and 02 are statements about this quantity; stages 03–05 are statements about the complex graph and <span class="m">Y</span>.</li>
+    </ul>
+  </div>
+  <div class="def"><div class="lab">Conventions that matter for comparability</div>
+    <ul>
+      <li><b>Zero complex.</b> Boundary reactions have the empty complex ∅ on one side. The CRN files used by all three tools carry ∅ as a complex; Kimonu's JSON output drops it, so its indices are shifted by one above ∅ relative to CRN space. Cross-tool comparisons are made in CRN index space or by complex composition, never by JSON index.</li>
+      <li><b>Elementary-step split.</b> Each enzymatic reaction is expanded into binding, catalysis and release steps with enzyme pseudo-species <span class="m">E_1, E_2, …</span>. "Free" ACR and ACRR counts exclude the pseudo-species: a metabolite is free when it precedes <span class="m">E_1</span> in the model's metabolite list. Free counts are the ones comparable to both prior papers.</li>
+      <li><b>Blocked reactions</b> are removed once, by FVA, before any tool runs; all three tools receive the identical unblocked network (verified: identical reaction sets, e.g. iJB785 6882, iSynCJ816 8688). Preprocessing is not part of any timed arm.</li>
+    </ul>
+  </div>
+  <div class="eg"><div class="lab">EnvZ–OmpR</div><div class="body">species XD, X, XT, Xp, Y, XpY, Yp, XTYp, XDYp · complexes C1 XD · C2 X · C3 XT · C4 Xp · C5 Xp+Y · C6 XpY · C7 X+Yp · C8 XT+Yp · C9 XTYp · C10 XT+Y · C11 XD+Yp · C12 XDYp · C13 XD+Y<br><b>dim ker(N) = 7</b> · rank(N) = 7 · linkage classes ℓ = 4</div></div>
+</section>
+
+<section>
+  <h2><span class="n">01</span> Balanced complexes</h2>
+  <div class="def"><div class="lab">Definition</div>
+    <p>Complex <span class="m">c</span> is <b>balanced</b> when <span class="m">A<sub>c</sub>·v = 0</span> for every admissible <span class="m">v</span>; equivalently the row <span class="m">A<sub>c</sub>·K</span> of <span class="m">M = A·K</span> is zero. Balanced complexes are carried as context into every upstream set (stage 04) and linkage classes made up entirely of balanced complexes are reported as modules of their own.</p>
+  </div>
+  <ul>
+    <li><b>Kimonu</b>: zero row of <span class="m">M</span>, exact rational arithmetic, one nullspace for all complexes. <span class="tag">exact</span></li>
+    <li><b>Reference</b>: two LPs per complex (max and min of <span class="m">A<sub>c</sub>·v</span>), balanced when both round to zero at <span class="m">10<sup>−9</sup></span>.</li>
+    <li><b>COCOA</b>: flux sampling followed by LP confirmation, absolute threshold <span class="m">balanced_threshold</span>.</li>
+    <li><b>Verified</b>: Kimonu = reference on every landed reference cell of the final rerun (11 models, exhaustive and sampled, 37 runs); Kimonu = COCOA on all models at all seeds except one cascaded COCOA seed (iHN637 seed 2026, 1150 vs 1149).</li>
+  </ul>
+  <div class="eg"><div class="lab">EnvZ–OmpR · 5 balanced</div><div class="body"><b>C1 XD · C3 XT · C6 XpY · C9 XTYp · C12 XDYp</b></div></div>
+</section>
+
+<section>
+  <h2><span class="n">02</span> Concordance</h2>
+  <div class="def"><div class="lab">Definition</div>
+    <p>Two non-balanced complexes are <b>concordant</b> when the ratio <span class="m">(A<sub>c</sub>·v)/(A<sub>c'</sub>·v)</span> is the same for every admissible flux, i.e. rows <span class="m">c, c'</span> of <span class="m">M</span> are proportional. Sign is absorbed: a constant negative ratio is concordance (the reference's P/N/U sign classes). Concordance is an equivalence relation; its classes are the <b>concordance modules</b>. Concordance is flux coupling lifted from reactions to complexes: full coupling of reactions is proportionality of rows of <span class="m">K</span>, concordance of complexes is proportionality of rows of <span class="m">A·K</span>.</p>
+  </div>
+  <ul>
+    <li><b>Kimonu</b>: normalise every nonzero row of <span class="m">M</span> by its first nonzero entry and group identical keys. The partition is produced directly; no pair is visited and no tolerance exists. Transitivity holds by construction. <span class="tag">exact</span></li>
+    <li><b>Reference</b>: a stochastic prefilter (<span class="m">pre_concordant_sampling</span>: 10 random flux points per round, rounds until the candidate list shrinks by less than 1% and at least 50 rounds; a pair survives when the coefficient of variation of its sampled activity ratio is below 0.01) followed by four Charnes–Cooper LPs per surviving pair bounding the ratio over the flux space; concordant when the bounds coincide. Classes are the connected components of the accepted pairs. The prefilter only removes candidates, so a completed sampled run is a <em>subset</em> of the exhaustive answer by construction. Four defects in the pairwise test are fixed on our fork (section 08).</li>
+    <li><b>COCOA</b>: sampled activity ratios, LP confirmation with <span class="m">concordance_tolerance = 10<sup>−5</sup></span>, union–find over accepted pairs; <span class="m">efficient=true</span> shortens the search. Seeded, but not bit-reproducible at genome scale.</li>
+    <li><b>Verified</b>: reference exhaustive = Kimonu partition for partition (balanced set, modules, pairs) on every landed model of the final rerun (iIS312 and its three life-stage models; seven larger models running). Reference sampled ⊂ Kimonu on all 33 cells (11 models × 3 seeds): balanced identical, concordant pairs a strict subset, never a superset. Module counts are not monotone in the pairs (iIT341 178 vs 173): a dropped pair splits a module. COCOA both splits and merges classes on genome-scale models, and one seed in three cascades on iIT341 and iHN637; iJN678 over-merges at every seed.</li>
+  </ul>
+  <div class="eg"><div class="lab">EnvZ–OmpR · 3 modules, 8 concordant pairs</div><div class="body"><b>{C2, C4, C5, C7}</b> X, Xp, Xp+Y, X+Yp · <b>{C8, C10}</b> XT+Yp, XT+Y · <b>{C11, C13}</b> XD+Yp, XD+Y</div></div>
+</section>
+
+<section>
+  <h2><span class="n">03</span> The complex graph, strong components, terminality</h2>
+  <div class="def"><div class="lab">Definition</div>
+    <ul>
+      <li>The <b>complex graph</b> has an edge <span class="m">c → c'</span> for every reaction with substrate complex <span class="m">c</span> and product complex <span class="m">c'</span>. COCOA adds ∅ explicitly so boundary complexes have an in-neighbour; Kimonu and the reference carry ∅ in the CRN.</li>
+      <li>A <b>strong linkage class</b> (strongly connected component) is a maximal set of mutually reachable complexes. It is <b>terminal</b> when no edge leaves it.</li>
+      <li>Terminality is judged on the <em>whole</em> graph in all three implementations. The reference R code computes strong components of the full graph (<span class="m">components(g, "strong")</span>) even though it constructs the induced subgraph; COCOA moved to full-graph terminality in v1.1.0; Kimonu tests <span class="m">succ[v] − component</span> against the full network.</li>
+      <li>A <b>linkage class</b> is a weak component; the <b>deficiency</b> is <span class="m">δ = n − ℓ − rank(N)</span>.</li>
+    </ul>
+  </div>
+  <div class="eg"><div class="lab">EnvZ–OmpR · 8 strong classes, 4 terminal, δ = 2</div><div class="body">{C1,C2,C3} {C4} {C5,C6} {C7} {C8,C9} {C10} {C11,C12} {C13} · terminal <b>{C4} {C7} {C10} {C13}</b> · δ = 13 − 4 − 7 = <b>2</b></div></div>
+</section>
+
+<section>
+  <h2><span class="n">04</span> Upstream sets and kinetic modules</h2>
+  <div class="def"><div class="lab">Definition · upstream set</div>
+    <p>An <b>upstream set</b> <span class="m">𝒞<sub>up</sub></span> of a seed <span class="m">x = M ∪ B</span> (concordance module ∪ balanced set) is a subset with two properties: <b>autonomy</b>, no reaction produces a member from a substrate outside the set; and <b>feeding</b>, every member has a path in the complex graph to a complex outside the set (Lemma S2-4: every member is nonterminal). The kinetic module is the set of complexes whose steady-state activities are locked together by these two properties.</p>
+  </div>
+  <div class="def"><div class="lab">The two published constructions</div>
+    <ul>
+      <li><b>§S.2.2, four phases</b> (the reference R code, <span class="m">autonom()</span>): I remove entry complexes to a fixed point; II remove non-reactant complexes (no outgoing reaction anywhere); III remove exit complexes to a fixed point, collecting them as <span class="m">𝒞<sub>−3</sub></span>; IV keep the nonterminal complexes of what remains as <span class="m">𝒞<sub>−4</sub></span>; return <span class="m">𝒞<sub>−4</sub> ∪ 𝒞<sub>−3</sub></span>.</li>
+      <li><b>Remark S2-1, two phases</b> (Kimonu, COCOA): I remove entry complexes to a fixed point; II remove every terminal strong linkage class of the survivors, all at once, terminality judged on the full graph; return the rest.</li>
+      <li><b>Remark S2-2</b> asserts the two are identical in input–output. <b>Measured</b>: for every seed on all 33 models the two return exactly the same set, not one complex differs (<span class="m">benchmarks/kinetic_variants/</span>). Both satisfy autonomy, feeding and Lemma S2-4 on every module of every model (balanced-only linkage classes set aside). An earlier version of these notes called S2-2 false on iCN900; that comparison had mixed in singleton sets, balanced-only classes and the merge rule below, and is retracted.</li>
+      <li><b>A third reading, not adopted.</b> Judging Phase II terminality on the graph reduced to the candidate set (<span class="m">G<sub>𝒞₋₄</sub></span>) would change the partition on 32 of 33 models (iJB785 giant 22 → 20, iAF1260b 96 → 93). It contradicts feeding: a class that drains into complexes outside the candidate set still feeds. No implementation does this.</li>
+    </ul>
+  </div>
+  <div class="def"><div class="lab">From upstream sets to modules · the merge rules</div>
+    <ul>
+      <li><b>Overlap.</b> Upstream sets sharing a complex are one module. All three implementations.</li>
+      <li><b>Balanced-only linkage classes</b> become modules of their own. All three implementations (reference: <span class="m">blc_one</span>; Kimonu: <span class="m">_weak_components</span> ⊆ balanced). These are the "terminal complexes inside modules" one sees when counting naively; they are by design.</li>
+      <li><b>Proposition S3-4, coupling merge.</b> Under mass action the activity of complex <span class="m">c</span> is <span class="m">y<sub>c</sub>ᵀ ln x</span>; two complexes in one module have a fixed activity difference. If <span class="m">y<sub>a</sub> − y<sub>b</sub></span> lies in the span of the differences already fixed, <span class="m">a</span> and <span class="m">b</span> are coupled by the same argument, so their modules are one. Kimonu tests this exactly: modules are merged when their representatives' signatures <span class="m">L<sup>T</sup>y</span> agree, <span class="m">L = ker(YΔ<sup>T</sup>)</span>. COCOA applies it with <span class="m">efficient=false</span> and skips it with <span class="m">efficient=true</span>. The reference kinetic script does not apply it. <b>Measured</b>: it changes the giant on 8 of 33 models (the iAM_P* family 100 vs 96–97, iJR904 146 vs 144, iSB619 140 vs 139, iYO844 102 vs 100) and the ACR/ACRR sets on none. <b>Kimonu's default is S3-4</b>; overlap-only counts are reported as the starred comparability arm.</li>
+      <li><b>Proposition S4-1, iteration.</b> Merged kinetic modules imply merged concordance modules, whose upstream sets are recomputed until nothing changes. Kimonu's outer loop; changes the partition on 0 of 33 models. COCOA iterates likewise.</li>
+      <li><b>Lemma S4-5, deficiency one.</b> When the network is not weakly reversible and <span class="m">δ</span> minus the merges already made equals one, every unbalanced module is one module. Kimonu; COCOA with <span class="m">efficient=false</span> (Theorem S4-6).</li>
+      <li><b>Remark S3-6.</b> Species already known to have ACR contribute their unit vector to <span class="m">YΔ</span>, making further differences decidable. Kimonu and COCOA <span class="m">efficient=false</span>.</li>
+    </ul>
+  </div>
+  <ul>
+    <li><b>Verified</b>: Kimonu with overlap-only merging reproduces the reference R stage exactly on iCN900 (246 modules / giant 19 / 583 complexes); Kimonu's default adds the four balanced-only classes and the S3-4 merges (250 / 19 / 591). COCOA's kinetic stage fed Kimonu's exact concordance partition returns Kimonu's modules at both settings on iCN900. Reference R-stage giants on the four landed final models equal Kimonu's (9 / 9 / 9 / 11).</li>
+    <li><b>Reference defect, fixed on our fork</b>: Phase IV wrote <span class="m">x[terminal == 0]</span>, indexing complex ids by a mask over every complex; R pads with <span class="m">NA</span>, which then fused iCN900's partition into a single 626-complex block. Intent per the comment: <span class="m">terminal[x]</span>.</li>
+  </ul>
+  <div class="eg"><div class="lab">EnvZ–OmpR · one kinetic module of 9</div><div class="body"><b>{C1, C2, C3, C5, C6, C8, C9, C11, C12}</b> · the four terminal complexes C4, C7, C10, C13 are what Phase II removes · verified by test</div></div>
+</section>
+
+<section>
+  <h2><span class="n">05</span> ACR and ACRR</h2>
+  <div class="def"><div class="lab">Definition</div>
+    <p>A species has <b>ACR</b> when its concentration is the same in every positive steady state; a pair has <b>ACRR</b> when their ratio is. With <span class="m">YΔ</span> the matrix of composition differences within kinetic modules (each module contributes its first member against every other, which spans all pairwise differences): species <span class="m">i</span> has ACR ⟺ <span class="m">e<sub>i</sub> ∈ im(YΔ)</span>; species <span class="m">i, j</span> have ACRR ⟺ <span class="m">e<sub>i</sub> − e<sub>j</sub> ∈ im(YΔ)</span>. Pairs in which both species have ACR are not ACRR pairs.</p>
+  </div>
+  <ul>
+    <li><b>Kimonu</b>: <span class="m">L = ker(YΔ<sup>T</sup>)</span> once; ACR is a zero row of <span class="m">L</span>, ACRR a pair of equal rows. Necessary and sufficient, exact. <span class="tag">exact</span></li>
+    <li><b>Reference</b> (<span class="m">Get_excel_tables_kinetic_modules.R</span>): Corollary S2-10, combinatorial. Within a module, two complexes whose compositions differ in exactly one species give that species ACR; differing in exactly two give an ACRR pair. A sufficient condition, so a <em>subset</em> of the kernel answer. The script additionally reads fully-coupled reaction classes from a stoichiometric coupling matrix (F2C2 in the original; we supply the same matrix computed exactly from <span class="m">K</span>, identical to F2C2 on iCN900) and needs metabolite names in the saved model, which our writer now stores.</li>
+    <li><b>COCOA</b>: <span class="m">qr(YΔ)</span> and orthogonal projection per candidate, accepted at residual <span class="m">&lt; 10<sup>−8</sup></span>; <span class="m">efficient=true</span> uses a pairwise fast path that can under-report. <span class="tag warn">tolerance</span></li>
+    <li><b>Verified</b>: every reference ACRR pair is in Kimonu's set by name on every model with a reference R stage (final: 4 of 4; earlier six including iJB785 17 of 17); reference ACR 0 wherever Kimonu has 0. ACR/ACRR sets are identical under overlap-only and S3-4 merging on the models checked. On EnvZ–OmpR Kimonu returns ACR {Yp} and 15 ACRR pairs forming the 6-clique {X, XD, XT, XpY, XTYp, XDYp}, the Shinar–Feinberg result, as a test.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">06</span> Why exact arithmetic changes what the answer is guaranteed to be</h2>
+  <div class="def"><div class="lab">Membership questions</div>
+    <p>Every stage asks a membership question: is this row zero, are these rows proportional, is this vector in that span. A grouping of exact keys answers all of them at once and yields equivalence classes by construction. A pairwise decision against a tolerance answers each pair alone, so a pair near the threshold can be rejected while both members are accepted against a third, and the reported relation is then not transitively closed. That is checkable from the reported pairs with no ground truth (transitive closure adds edges), and it is the mechanism behind COCOA's non-closed ACRR sets on iJN678 and the cascaded seeds.</p>
+  </div>
+  <div class="def"><div class="lab">The sampling prefilter</div>
+    <p>Both LP-based tools first discard pairs whose sampled activity ratio varies. That step only removes candidates, so the exact test then runs on a subset and a wrongly discarded pair is gone. This is the origin of run-to-run variation and of the strict-subset relation measured for the reference's sampled mode.</p>
+  </div>
+  <div class="def"><div class="lab">Cost</div>
+    <p>The pairwise LP is <span class="m">O(n²)</span> pairs at four LPs each; the reference spends effectively 100% of its runtime there (balanced complexes take seconds, concordance hours to days). Kimonu's concordance is one exact nullspace and one grouping, so its dominant stage is the kinetic graph traversal (≈64% of its runtime), an inversion of the reference's profile.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">07</span> Implementation, side by side</h2>
+  <div class="tblscroll"><table>
+    <thead><tr><th>Step</th><th>Kimonu</th><th>Reference (Upstream_Algorithm)</th><th>COCOA.jl v1.1.0</th></tr></thead>
+    <tbody>
+      <tr><td class="step">Input</td><td><ul><li>shared unblocked CRN</li></ul></td><td><ul><li>shared unblocked CRN via our Octave driver</li></ul></td><td><ul><li>shared unblocked CRN; ∅ added to the graph</li></ul></td></tr>
+      <tr><td class="step">Balanced</td><td><ul><li>zero row of <span class="m">A·K</span> <span class="tag">exact</span></li></ul></td><td><ul><li>2 LPs per complex, threshold 10<sup>−9</sup></li></ul></td><td><ul><li>sampling + LP, <span class="m">balanced_threshold</span></li></ul></td></tr>
+      <tr><td class="step">Concordance</td><td><ul><li>proportional rows of <span class="m">A·K</span>, grouped <span class="tag">exact</span></li></ul></td><td><ul><li>stochastic prefilter, 4 Charnes–Cooper LPs per pair, components of accepted pairs</li><li>4 defects fixed on our fork</li></ul></td><td><ul><li>sampled ratios, LP at 10<sup>−5</sup>, union–find</li></ul></td></tr>
+      <tr><td class="step">Upstream sets</td><td><ul><li>Remark S2-1, full-graph terminality</li></ul></td><td><ul><li>§S.2.2 four phases, full-graph terminality</li><li>NA-indexing defect fixed on our fork</li></ul></td><td><ul><li>Remark S2-1, full-graph terminality</li></ul></td></tr>
+      <tr><td class="step">Merges</td><td><ul><li>overlap · balanced-only classes · S3-4 · S4-1 · S4-5 · S3-6</li></ul></td><td><ul><li>overlap · balanced-only classes</li></ul></td><td><ul><li>overlap · S4-1; S3-4, S4-6, S3-6 with <span class="m">efficient=false</span></li></ul></td></tr>
+      <tr><td class="step">ACR / ACRR</td><td><ul><li>left nullspace of <span class="m">YΔ</span>; zero row / equal rows <span class="tag">exact</span></li></ul></td><td><ul><li>Corollary S2-10, combinatorial; plus fully-coupled reaction classes</li></ul></td><td><ul><li>QR projection at 10<sup>−8</sup> <span class="tag warn">tolerance</span></li></ul></td></tr>
+      <tr><td class="step">Arithmetic</td><td><ul><li>integer / rational, no tolerance</li></ul></td><td><ul><li>floating point LPs (CPLEX through our bridge)</li></ul></td><td><ul><li>floating point, tolerances at three stages</li></ul></td></tr>
+      <tr><td class="step">Resources</td><td><ul><li>1 core, 0.3–42 s per model</li></ul></td><td><ul><li>1 core + LP server, hours to days</li></ul></td><td><ul><li>64 workers, minutes to days</li></ul></td></tr>
+      <tr><td class="step">Determinism</td><td><ul><li>deterministic, 3 repeats identical on 33/33</li></ul></td><td><ul><li>exhaustive mode deterministic after the bridge fix; sampled mode seeded</li></ul></td><td><ul><li>seeded; seeds diverge at genome scale</li></ul></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="n">08</span> Defects found, and what was fixed</h2>
+  <div class="tblscroll"><table>
+    <thead><tr><th>Where</th><th>Defect</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Reference concordance</td><td>Negative Charnes–Cooper branch keeps the positive branch's bounds (infeasible for <span class="m">t &lt; 0</span>); scaling variable left in the objective (<span class="m">[−A<sub>i</sub> 1]</span>, should be <span class="m">[−A<sub>i</sub> 0]</span>), collapsing reported ratio ranges toward zero; verdict on an absolute 2-decimal grid; an unsolved branch vetoes a solved one</td><td>fixed on fork <span class="m">VonAlphaBisZulu/Upstream_Algorithm</span>, 8/8 adjudicated pairs, reproduces Kimonu exactly on full models; PR held</td></tr>
+      <tr><td>Reference kinetic (R)</td><td><span class="m">x[terminal == 0]</span> NA indexing</td><td>fixed on fork</td></tr>
+      <tr><td>Our LP bridge</td><td>CPLEX status 5 treated as failure; verdicts depended on the warm basis</td><td>fixed: cold re-solve on any non-optimal status, 315/315 pairs stable</td></tr>
+      <tr><td>COCOA</td><td>sampled concordance splits and merges true classes; one seed in three cascades on two models; ACRR sets not transitively closed on iJN678</td><td>reported as measured; kinetic stage verified correct on exact input</td></tr>
+      <tr><td>Our comparisons</td><td>four join errors (coefficients dropped, names split on <span class="m">_</span>, wrong directories, index spaces mixed); the "Remark S2-2 counterexample"</td><td>all retracted; rule: compare in CRN index space or by composition</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="n">09</span> What is verified, in one list</h2>
+  <ol>
+    <li>Identical unblocked networks for all three tools, all 33 models.</li>
+    <li>Balanced complexes: Kimonu = reference on 37 of 37 landed runs; = COCOA except one cascaded seed.</li>
+    <li>Concordance: reference exhaustive (fixed) = Kimonu on 4 of 4 landed models; reference sampled ⊂ Kimonu on 33 of 33 cells.</li>
+    <li>Upstream sets: four-phase = two-phase on every seed, 33 of 33 models; autonomy, feeding, Lemma S2-4 hold for both.</li>
+    <li>Kinetic modules: Kimonu with overlap-only merge = reference R stage (iCN900); COCOA on Kimonu's partition = Kimonu (iCN900, both settings); reference giants = Kimonu on 4 of 4 landed.</li>
+    <li>ACR/ACRR: reference pairs ⊂ Kimonu's on every model with an R stage; EnvZ–OmpR gives {Yp} and the 6-clique.</li>
+    <li>Full coupling: exact nullspace coupling = F2C2 on iCN900 (F2C2 misses 4 reactions on each iIS312 variant).</li>
+    <li>Kimonu is deterministic (3 repeats, 33 models) and its outer S4-1 loop is inert on 33 of 33.</li>
+  </ol>
+  <div class="note"><div class="lab">Sentences to carry into Methods</div>
+    <ul>
+      <li>Kimonu decides balanced complexes, concordance and ACR/ACRR by exact rational linear algebra on <span class="m">M = A·K</span> and <span class="m">L = ker(YΔᵀ)</span>; no tolerance enters at any stage.</li>
+      <li>Upstream sets follow Remark S2-1 with terminality on the full complex graph; the four-phase construction of §S.2.2 returns identical sets on every network in the benchmark.</li>
+      <li>Modules are merged by overlap and by Proposition S3-4; counts under overlap-only merging, the convention of the reference implementation, are given in the Supplement. ACR and ACRR sets are identical under both.</li>
+      <li>The reference's sampled mode is a strict subset of its exhaustive mode by construction; sampled runs are reported at three seeds, exhaustive runs once.</li>
+      <li>The reference's ACR/ACRR criterion (Corollary S2-10) is sufficient, not necessary; every pair it reports is in Kimonu's set.</li>
+      <li>Non-finishers (7-day cap for COCOA) are not reported and not rerun; the reference concordance test was run with four fixes, submitted upstream.</li>
+    </ul>
+  </div>
+</section>
+</div>

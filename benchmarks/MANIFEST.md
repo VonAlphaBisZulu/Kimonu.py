@@ -44,6 +44,7 @@ All runs before commit `3ea2bf7` used an order-dependent bridge and are suspect 
 | `reference_fixed/` | 3 concordance fixes, old bridge — Trypomastigote, Amastigote | fixed / old | both reproduce Kimonu exactly |
 | `reference_fixed2/` | 3 fixes + fixed bridge — **the gate** | fixed / fixed | both models exact vs Kimonu, 0 degraded LPs — passed |
 | `reference_acr/` | corrected R kinetic + ACR stage on the 6 sound models, with README on reading the tables | corrected R | done 6/6; every ACRR pair ⊆ Kimonu's |
+| `docs/theory_methods.html` | Methods-basis page (definitions, per-tool decisions, verified agreements, retractions); artifact 1B1RaRSL4B4DdNnZEaeHfq | n/a | current 2026-09-21 |
 | `figures/gather_figdata.py` → `figdata.json` → `figures/make_prelim.py` | figure data rebuilt from the result directories; `--check` diffs the Kimonu/COCOA arms against the committed file | n/a | regression-clean 2026-09-21 |
 | `reference_final/`, `reference_final_sampled/` | **the final reruns** — jobs 549287–549295 + 549302/549303 (11 exhaustive; 14-day cap, 21 for iNF517/iSB619) and arrays 549296 + 549304 (33 sampled cells, 7-day cap; 13 cells OOM at 4 GB and resubmitted per model as 549880-549884, see FINDINGS) | fixed / fixed | sampled **complete** 33/33 (2026-09-21), exhaustive 4/11 landed (iIS312 family) — all identical to Kimonu; `reference_final/acr/` holds the R kinetic + ACR stage on the landed exhaustive .mat files (fork's fixed R code, exact coupling from `coupling_exact/`) |
 

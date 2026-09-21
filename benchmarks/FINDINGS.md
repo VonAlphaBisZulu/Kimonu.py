@@ -646,3 +646,11 @@ concordance is a flux property, not adjacency. Decision: S3-4 stays the default 
 closure of the coupling relation and the published theory; overlap-only giants are reported as the
 starred comparability arm (F3) with one Methods sentence. `figdata.json` key renamed
 `giant_4phase` -> `giant_overlap`.
+
+### Roadmap additions (2026-09-21)
+
+- F2C2 agreement figure for the Supplement: exact full coupling (proportional rows of K) vs the
+  shipped F2C2 matrices, per model. Verified identical on iCN900; F2C2 misses 4 reactions on each
+  iIS312 variant. Not yet drawn.
+- Idea for StrainDesign: an F2C2-type exact flux-coupling function (full/partial/directional
+  coupling from the exact nullspace). Community-facing; exactness is the selling point.
