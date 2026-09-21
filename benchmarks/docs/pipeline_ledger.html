@@ -257,7 +257,7 @@
       <div class="stage-head">
         <span class="stage-n">Stage 3</span>
         <h3>Kinetic modules · the Upstream Algorithm</h3>
-        <span class="pill warn">algorithm choice to state; implementations agree</span>
+        <span class="pill ok">upstream sets identical on 33 / 33; only the merge rule differs</span>
       </div>
       <dl class="facts">
         <dt>Numbers</dt><dd><span class="m">n_kinetic_modules</span>, <span class="m">giant_kinetic_module</span>, <span class="m">n_sccs</span>, <span class="m">largest_scc</span>, <span class="m">n_terminal_sccs</span>, <span class="m">deficiency</span>, <span class="m">kinetic_iterations</span></dd>
@@ -271,10 +271,10 @@
         <div class="phase"><div class="phase-id">Phase IV</div><div class="phase-body"><div class="phase-title">Exclude terminal strong linkage classes</div><div class="phase-note">Buys the feeding property. In the tentative version the non-terminal survivors become 𝒞₋₄; in Remark S2-1 this is the only step after Phase I.</div></div></div>
         <div class="phase"><div class="phase-id">Final</div><div class="phase-body"><div class="phase-title">𝒞<sub>up</sub> = 𝒞₋₄ ∪ 𝒞₋₃ &nbsp;·&nbsp; or just 𝒞₋₄</div><div class="phase-note">The tentative version unions both collections; the Upstream Algorithm returns the Phase IV result alone.</div></div></div>
       </div>
-      <p>The reference implements the tentative version. Kimonu and COCOA both target Remark S2-1. Remark S2-2 asserts the two are "absolutely identical" in input–output; on iCN900 they are not, and the stated justification — that Phase III's exit complexes are "clearly nonterminal" — holds for the first pass but not through the cascade.</p>
+      <p>The reference implements the tentative version; Kimonu and COCOA target Remark S2-1. Remark S2-2 asserts the two are identical in input–output, and measured seed by seed on all 33 models they are: not one complex differs (<span class="m">kinetic_variants/</span>). An earlier version of this page called the remark false on iCN900. That comparison had mixed singleton sets, balanced-only linkage classes and the merge rule into the algorithm, and is retracted.</p>
       <div class="callout">
         <div class="eyebrow">Mutual validation — the one result here that is robust</div>
-        <p>Kimonu running the reference's own algorithm reproduces the reference exactly: <strong>246 non-singleton modules, largest 19, covering 583 complexes</strong>, against the R stage's 246 / 19 / 583. Both implementations are correct <em>for the algorithm each runs</em>. The only thing separating them is which published algorithm they chose. This is a same-framework swap, so it is not exposed to the cross-tool joining bugs below.</p>
+        <p>Kimonu with overlap-only merging reproduces the reference exactly: <strong>246 non-singleton modules, largest 19, covering 583 complexes</strong> against the R stage's 246 / 19 / 583. Kimonu's default differs from that only by the four balanced-only linkage classes it adds as modules and by the Proposition S3-4 coupling merge. The upstream algorithm itself is the same in all three implementations. What separates Kimonu and COCOA <span class="m">efficient=false</span> from the reference at this stage is that they implement the published S3-4 merge and the reference kinetic script merges by overlap only.</p>
       </div>
       <dl class="facts">
         <dt>Reference defect</dt><dd>One, found and fixed: Phase IV wrote <code>x[terminal == 0]</code>, indexing a vector of complex ids by a mask over every complex in the graph. R selects by position and pads with <span class="m">NA</span>. 352 NAs per run on iCN900, which then propagate into the overlap merge and fuse the partition into a single 626-complex blob. The comment on the line states the intent: <code>terminal[x]</code>.</dd>
@@ -284,14 +284,14 @@
         <table>
           <thead><tr><th>iCN900 · exact bijection</th><th>Non-singleton</th><th>Largest</th><th>Covered</th><th>Globally terminal inside</th></tr></thead>
           <tbody>
-            <tr><td>tentative (S.2.2)</td><td class="num">246</td><td class="num">19</td><td class="num">583</td><td class="num">0</td></tr>
+            <tr><td>overlap merge only (reference rule)</td><td class="num">246</td><td class="num">19</td><td class="num">583</td><td class="num">0</td></tr>
             <tr><td>Kimonu (Remark S2-1)</td><td class="num">250</td><td class="num">19</td><td class="num">591</td><td class="num">8</td></tr>
             <tr><td>COCOA</td><td class="num">249</td><td class="num">19</td><td class="num">589</td><td class="num">8</td></tr>
           </tbody>
         </table>
       </div>
       <p><strong>The giant is 19 in all three, and the terminal content agrees too</strong> — 0 / 8 / 8, the 8 being the balanced linkage-class modules all three implementations add by design. An earlier version of this page reported COCOA retaining 113 terminal complexes here; that was an index-space error in the comparison (Kimonu-JSON indices against CRN-space terminality, off by one above the zero complex), not a COCOA behaviour. Fed Kimonu's exact concordance partition directly, COCOA's kinetic stage returns <strong>250 / 19 / 591 / 8 at both <span class="m">efficient</span> settings — identical to Kimonu</strong> once the complex bijection is complete.</p>
-      <p>The large module-count gaps between the two algorithms — 135 vs 1905 on iJB785, 296 vs 1597 on iSynCJ816, giants unchanged — are exactly the weak linkage classes composed entirely of balanced complexes (1770 and 1301), which Kimonu, the reference's R code and COCOA all add as modules. Kimonu's "8 deviant terminal complexes" on iCN900 are four of those classes. Not a discrepancy.</p>
+      <p>The large module-count gaps between Kimonu and the reference — 135 vs 1905 on iJB785, 296 vs 1597 on iSynCJ816, giants unchanged — are exactly the weak linkage classes composed entirely of balanced complexes (1770 and 1301), which Kimonu, the reference's R code and COCOA all add as modules. Kimonu's "8 deviant terminal complexes" on iCN900 are four of those classes. Not a discrepancy.</p>
     </div>
   </div>
 
@@ -326,7 +326,7 @@
     <table>
       <thead><tr><th>Implementation</th><th class="wrap-ok">Known defects</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>Upstream_Algorithm</td><td class="wrap-ok">4 concordance defects; 1 kinetic NA-indexing defect; implements the tentative algorithm rather than the one the paper names</td><td>fixes on our fork; PR held until go</td></tr>
+        <tr><td>Upstream_Algorithm</td><td class="wrap-ok">4 concordance defects; 1 kinetic NA-indexing defect; kinetic script merges modules by overlap only, without the paper's Proposition S3-4 merge</td><td>fixes on our fork; PR held until go</td></tr>
         <tr><td>Kimonu.py</td><td class="wrap-ok">Phase IV terminality scoped to the full graph, not G<sub>𝒞₋₄</sub> (deliberate; reduced graph would change 32/33); outer iteration loop inert on 0/33</td><td>measured across 33; both to be stated in Methods</td></tr>
         <tr><td>COCOA.jl</td><td class="wrap-ok">Sampled concordance both splits verified-concordant classes and merges non-concordant ones; one seed in three cascades on iIT341 and iHN637 (giant 523 / 825 vs 185–213 in the other seeds), and iJN678 over-merges in every seed (188k such edges are the reference's problem, not COCOA's; COCOA's are far fewer). Balanced set equals Kimonu's exact one; kinetic stage matches Kimonu on identical input</td><td>concordance is sampling-limited; stages 1 and 3 clean</td></tr>
         <tr><td>Our LP bridge</td><td class="wrap-ok">CPLEX status 5 (OPTIMAL_INFEAS) was treated as a failed solve, and whether a solve landed on 1 or 5 depended on the slot's warm basis — verdicts were order-dependent. Fixed: cold re-solve on any non-optimal status, validated 315/315 pairs with zero flips</td><td>fixed; all prior reference concordance runs suspect at marginal pairs</td></tr>
@@ -349,7 +349,7 @@
       <thead><tr><th>Arm</th><th>Models</th><th>At 3 seeds</th><th>Error bars</th><th>Status</th></tr></thead>
       <tbody>
         <tr><td>Kimonu · 2-phase (Remark S2-1)</td><td class="num">33</td><td class="num">n/a</td><td>none — exact</td><td>ready</td></tr>
-        <tr><td>Kimonu · 4-phase (§S.2.2) <strong>*</strong></td><td class="num">33</td><td class="num">n/a</td><td>none — exact</td><td>ready · giant agrees on 25 / 33</td></tr>
+        <tr><td>Kimonu · overlap merge only <strong>*</strong></td><td class="num">33</td><td class="num">n/a</td><td>none — exact</td><td>ready · equals Kimonu on 25 / 33; the 8 differences are the S3-4 merge</td></tr>
         <tr><td>COCOA · <span class="m">efficient=false</span></td><td class="num">30</td><td class="num">30</td><td>seeds</td><td>iSDY_1059 and iS_1188 running at 4–5 days of a 7-day cap; iAF1260b seed 0 timed out at 7 days (non-finisher), seed 1 running. The two largest arms may end 30 / 33.</td></tr>
         <tr><td>COCOA · <span class="m">efficient=true</span></td><td class="num">31</td><td class="num">30</td><td>seeds</td><td>iJR904 third seed running; iSDY_1059 and iS_1188 in gap array 548402 (first cell 2.5 days in)</td></tr>
         <tr><td>Reference · exhaustive</td><td class="num">4 of 11</td><td class="num">n/a</td><td>none — complete</td><td>final rerun landed on the iIS312 family, identical to Kimonu partition for partition; 7 running (549287, 549292–549295, 549302, 549303)</td></tr>
@@ -357,7 +357,7 @@
       </tbody>
     </table>
   </div>
-  <p><strong>*</strong> marks an arm that exists for comparability rather than as a recommendation: the 4-phase Kimonu run reproduces the reference's algorithm and is not offered as a public option, and the reference's sampled mode is the stochastic prefilter that produced the published Table S1.</p>
+  <p><strong>*</strong> marks an arm that exists for comparability rather than as a recommendation: the overlap-only Kimonu run reproduces the reference's merge rule and is not offered as a public option, and the reference's sampled mode is the stochastic prefilter that produced the published Table S1.</p>
   <div class="scroll">
     <table>
       <thead><tr><th>Figure</th><th>Quantity</th><th>Models</th><th>Blocked by</th></tr></thead>
@@ -388,8 +388,8 @@
     <div class="task">
       <div class="task-n">01</div>
       <div class="task-main">
-        <div class="task-title">Run the 4-phase variant across all 33 models</div>
-        <div class="task-note">The algorithm is already written against Kimonu's topology and reproduces the reference exactly on iCN900. Done on all 33 (<span class="m">sweep_tentative/</span>): giants agree with the two-phase algorithm on 25 of 33 and differ by 1–4 complexes on the other 8. F3 carries both Kimonu bars.</div>
+        <div class="task-title">Run the four-phase variant across all 33 models</div>
+        <div class="task-note">The algorithm is already written against Kimonu's topology and reproduces the reference exactly on iCN900. Done on all 33: upstream sets identical to the two-phase algorithm on every seed (<span class="m">kinetic_variants/</span>). The 8 giant differences are the S3-4 merge, so F3's starred bar is now "overlap merge only".</div>
       </div>
       <div class="task-cost">done · 33 / 33</div>
     </div>

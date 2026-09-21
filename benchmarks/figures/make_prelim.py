@@ -19,7 +19,7 @@ from matplotlib.patches import Patch
 D = json.load(open("figdata.json")); nC = D["n_complexes"]
 models = sorted(D["models"], key=lambda m: nC[m]); os.makedirs("figures/prelim", exist_ok=True)
 ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#1C6B58", ""),
-        "kimonu4":     ("Kimonu (tentative §S.2.2)*",   "#7FB8A6", "//"),
+        "kimonu4":     ("Kimonu, overlap merge only*",   "#7FB8A6", "//"),
         "cocoa_false": ("COCOA efficient=false",        "#B8641E", ""),
         "cocoa_true":  ("COCOA efficient=true",         "#E0A26A", ""),
         "ref_exh":     ("Reference exhaustive",         "#4A5A88", ""),
@@ -67,7 +67,7 @@ fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "conc", ["kimonu", "cocoa_f
 save(fig, "F2_concordance", BASE + "  Reference concordance is the final rerun: exhaustive is identical to Kimonu on every landed model (4 of 11 so far); sampled (11 models, 3 seeds) is a strict subset of Kimonu's pairs on every cell, as its prefilter can only remove candidates.")
 fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "giant", ["kimonu", "kimonu4", "cocoa_false", "cocoa_true", "ref_exh"], "log", "F3  Largest kinetic module", "count (log)",
         labels={"ref_exh": "Reference (R stage, corrected NA)*"})
-save(fig, "F3_giant", BASE + "  Reference giants are from the corrected R stage on the final exhaustive concordance (4 models so far), equal to Kimonu on each.")
+save(fig, "F3_giant", BASE + "  * Kimonu without the Proposition S3-4 coupling merge = the reference's merge rule; the four-phase and two-phase upstream sets are identical on all 33 models. Reference giants: corrected R stage on the final exhaustive concordance (4 models so far), equal to Kimonu on each.")
 # F4: ACR linear (mostly zeros), ACRR symlog
 fig, axs = plt.subplots(2, 1, figsize=(14, 8.5)); a4 = ["kimonu", "cocoa_false", "cocoa_true", "ref_exh"]; lab4 = {"ref_exh": "Reference exhaustive †"}
 grouped(axs[0], "acr_free", a4, "linear", "F4a  ACR metabolites (free)", labels=lab4)

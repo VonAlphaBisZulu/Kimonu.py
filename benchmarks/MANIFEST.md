@@ -10,6 +10,7 @@ Live pages: ledger https://claude.ai/artifact/RGt8asxhRiyDcJCpmVKrrF · figures 
 |---|---|---|
 | `unblocked/<m>_fixed.crn.json` | the 33 networks, blocked reactions removed. **Every arm reads these.** | yes |
 | `sweep/<m>_fixed.crn.json` | same networks before blocked-reaction removal; iJB785 and iSynCJ816 still carry 363 / 280. Do not analyse from here without the FVA. | yes |
+| `kinetic_variants/` | four-phase vs two-phase seed-level identity on 33/33 and the merge-rule separation of the giants (scripts + logs) | n/a | done 2026-09-21 |
 | `coupling_exact/` | full flux-coupling matrices from the exact nullspace for the 6 sound models (F2C2-shaped, code 1 only) | yes |
 
 ## Kimonu

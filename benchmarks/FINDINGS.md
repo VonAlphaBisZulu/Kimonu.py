@@ -606,3 +606,32 @@ COCOA efficient=true is at 31/33 (30 at three seeds). It has the same seed-outli
 efficient=false: iHN637 seed 2026 gives balanced 1150 (others 1149), giant 808 (213-216), ACRR
 88019 (5616-5722), ACR 7 (0). iAF1260b efficient=true giant 40/52/40 over seeds, ACRR 766/953/789.
 COCOA efficient=false iAF1260b cell 0 hit its 7-day cap: a non-finisher, not reported, not redone.
+
+### Four-phase and two-phase upstream sets are identical on all 33; the giant difference is the merge rule (2026-09-21)
+
+Measured seed by seed (`kinetic_variants/measure_phases.py`): for every concordance module ∪
+balanced seed on every one of the 33 models, the four-phase algorithm of S.2.2 and the two-phase
+algorithm of Remark S2-1 return the same upstream set. Zero complexes on either side, 33/33. The
+final modules of both satisfy autonomy, feeding and Lemma S2-4 on every model once balanced-only
+linkage classes are set aside. Remark S2-2's equivalence claim therefore holds on this benchmark.
+
+**Retraction.** Earlier entries here and in the ledger called Remark S2-2 false ("on iCN900 they are
+not identical", "giants agree on 25 of 33"). The comparison behind that mixed three bookkeeping
+differences into the algorithm: singleton upstream sets counted on one side only, balanced-only
+linkage classes added by Kimonu but not by the tentative script (iCN900 246 → 250 modules, 583 → 591
+covered, the "8 terminal complexes"), and above all the merge rule. `kinetic_variants/giant_merge.py`
+separates them: on all 33 models the four-phase and two-phase giants agree under overlap-only
+merging, and the eight models where Kimonu's giant differs (iAM_Pb448/Pc455/Pf480/Pk459/Pv461 100–101
+vs 96–97, iJR904 146 vs 144, iSB619 140 vs 139, iYO844 102 vs 100) differ only because Kimonu also
+merges by Proposition S3-4 (modules whose representative composition difference lies in im(YΔ)).
+The reference's R kinetic script merges by overlap only (`km_fixed.R`, `mdiff`/`intersect`); COCOA
+applies the S3-4 merge with `efficient=false` and skips it with `efficient=true`
+(`kinetic_analysis.jl` docstring). The "tentative vs S2-1" framing is withdrawn; the arm previously
+labelled "Kimonu (tentative §S.2.2)*" is Kimonu with overlap-only merging, i.e. the reference's merge
+rule, and is relabelled as such. `sweep_tentative/` logs remain valid as that arm's numbers.
+
+Consequence for the paper: there is no algorithm choice to defend. Kimonu, COCOA and the reference
+compute the same upstream sets; the published theory's S3-4 merge is implemented by Kimonu and
+COCOA (`efficient=false`) and not by the reference code. The earlier finding that reduced-graph
+terminality in Phase IV would change 32/33 partitions is unaffected (that variant is a third,
+unpublished reading and stays unadopted).
