@@ -1,6 +1,6 @@
 """Build figdata.json (schema in make_prelim.py) from the benchmark result directories.
 
-Arms: kimonu from sweep_shared/ (giant_4phase from the sweep_tentative/ logs), COCOA from sweep/cocoa_v110 (efficient=false) and sweep/cocoa_eff
+Arms: kimonu from sweep_shared/ (giant_overlap from the sweep_tentative/ logs), COCOA from sweep/cocoa_v110 (efficient=false) and sweep/cocoa_eff
 (efficient=true), reference from reference_final/ (exhaustive, fixed algorithm and bridge) and
 reference_final_sampled/. Earlier reference runs are not read: they predate the concordance fixes.
 Free metabolites are those listed before "E_1" in the model's own metabolite list.
@@ -25,10 +25,10 @@ def kimonu_rec(m):
     return dict(balanced=d["n_balanced"], conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
                 acr_free=n_free(d["acr_free"], free), acrr_free=n_free(d["acrr_free"], free),
                 acr=len(d["acr"]), acrr=len(d["acrr"]), seconds=d["seconds"], sec_conc=d["seconds_concordance"],
-                sec_kin=d["seconds_kinetic"], sec_acr=d["seconds_acr"], giant_4phase=giant_4phase(m)), d["n_complexes"]
+                sec_kin=d["seconds_kinetic"], sec_acr=d["seconds_acr"], giant_overlap=giant_overlap(m)), d["n_complexes"]
 
-def giant_4phase(m):
-    """Largest module of the four-phase tentative algorithm (S.2.2) run on Kimonu's topology, from sweep_tentative/."""
+def giant_overlap(m):
+    """Largest module under overlap-only merging (the reference's rule), from the sweep_tentative/ logs; the four-phase and two-phase upstream sets are identical, see kinetic_variants/."""
     for line in open(f"sweep_tentative/{m}.log"):
         if "after overlap merge" in line:
             return int(re.search(r"largest\s+(\d+)", line).group(1))

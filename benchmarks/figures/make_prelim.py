@@ -6,7 +6,7 @@ appear only on stochastic arms; exact arms have none by construction.
 
 figdata.json schema:
   models, n_complexes[m]
-  kimonu[m]: balanced, conc, giant, giant_4phase, acr, acrr, acr_free, acrr_free, seconds, sec_conc, sec_kin, sec_acr
+  kimonu[m]: balanced, conc, giant, giant_overlap, acr, acrr, acr_free, acrr_free, seconds, sec_conc, sec_kin, sec_acr
   cocoa_false[m] / cocoa_true[m]: [{seed, balanced, conc, giant, acr, acrr, acr_free, acrr_free, seconds}, ...]
   ref_exh[m]: balanced, conc, seconds, sec_conc (+ giant, acr, acrr, acr_free, acrr_free where the R stage ran)
   ref_sampled[m]: [{seed, balanced, conc, seconds}, ...]
@@ -28,7 +28,7 @@ BASE = "Stochastic arms: bar at the median over seeds, each seed a point; exact 
 
 def val(arm, m, key):
     if arm == "kimonu":  v = D["kimonu"].get(m, {}).get(key); return None if v is None else (v, None, None)
-    if arm == "kimonu4": v = D["kimonu"].get(m, {}).get("giant_4phase") if key == "giant" else None; return None if v is None else (v, None, None)
+    if arm == "kimonu4": v = D["kimonu"].get(m, {}).get("giant_overlap") if key == "giant" else None; return None if v is None else (v, None, None)
     if arm == "ref_exh": v = D["ref_exh"].get(m, {}).get(key); return None if v is None else (v, None, None)
     runs = [r[key] for r in D[arm].get(m, []) if r.get(key) is not None]
     return None if not runs else (float(np.median(runs)), float(min(runs)), float(max(runs)), runs)

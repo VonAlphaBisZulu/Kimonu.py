@@ -635,3 +635,14 @@ compute the same upstream sets; the published theory's S3-4 merge is implemented
 COCOA (`efficient=false`) and not by the reference code. The earlier finding that reduced-graph
 terminality in Phase IV would change 32/33 partitions is unaffected (that variant is a third,
 unpublished reading and stays unadopted).
+
+### Decision: Proposition S3-4 merge stays Kimonu's default (2026-09-21)
+
+Measured on the affected models: the S3-4 merge and overlap-only merging give identical ACR and
+ACRR sets (iAM_Pb448 1422/1422, iJR904 2553/2553, iSB619 1841/1841, iYO844 1140/1140 ACRR; ACR
+0/0 or 3/3), so the rule changes only how coupled complexes are grouped, never the reported
+metabolites. Modules disconnected in the reaction graph occur under both rules (24-33 per model):
+concordance is a flux property, not adjacency. Decision: S3-4 stays the default because it is the
+closure of the coupling relation and the published theory; overlap-only giants are reported as the
+starred comparability arm (F3) with one Methods sentence. `figdata.json` key renamed
+`giant_4phase` -> `giant_overlap`.

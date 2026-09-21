@@ -82,7 +82,7 @@
    "sec_conc": 3.3389371669618413,
    "sec_kin": 5.413696613977663,
    "sec_acr": 0.3388061230070889,
-   "giant_4phase": 18
+   "giant_overlap": 18
   },
   "Chlorella_variabilis_iAJ526": {
    "balanced": 1657,
@@ -96,7 +96,7 @@
    "sec_conc": 3.799719291040674,
    "sec_kin": 6.981426161946729,
    "sec_acr": 0.5538948409957811,
-   "giant_4phase": 95
+   "giant_overlap": 95
   },
   "Saha2011iRS1597": {
    "balanced": 817,
@@ -110,7 +110,7 @@
    "sec_conc": 0.7137574580265209,
    "sec_kin": 1.281642965041101,
    "sec_acr": 0.09637945902068168,
-   "giant_4phase": 101
+   "giant_overlap": 101
   },
   "iAB_RBC_283": {
    "balanced": 1570,
@@ -124,7 +124,7 @@
    "sec_conc": 2.2218490190571174,
    "sec_kin": 4.716841130983084,
    "sec_acr": 0.27139732195064425,
-   "giant_4phase": 17
+   "giant_overlap": 17
   },
   "iAF1260b": {
    "balanced": 4004,
@@ -138,7 +138,7 @@
    "sec_conc": 13.149293190916069,
    "sec_kin": 26.613356719026342,
    "sec_acr": 1.5895877949660644,
-   "giant_4phase": 96
+   "giant_overlap": 96
   },
   "iAM_Pb448": {
    "balanced": 1986,
@@ -152,7 +152,7 @@
    "sec_conc": 4.173841116018593,
    "sec_kin": 8.179044132004492,
    "sec_acr": 0.42466198198962957,
-   "giant_4phase": 97
+   "giant_overlap": 97
   },
   "iAM_Pc455": {
    "balanced": 2077,
@@ -166,7 +166,7 @@
    "sec_conc": 4.584560477989726,
    "sec_kin": 9.367424809955992,
    "sec_acr": 0.4744667880004272,
-   "giant_4phase": 96
+   "giant_overlap": 96
   },
   "iAM_Pf480": {
    "balanced": 2273,
@@ -180,7 +180,7 @@
    "sec_conc": 5.499829323031008,
    "sec_kin": 10.771436414914206,
    "sec_acr": 0.5672463370719925,
-   "giant_4phase": 96
+   "giant_overlap": 96
   },
   "iAM_Pk459": {
    "balanced": 2060,
@@ -194,7 +194,7 @@
    "sec_conc": 4.122573034954257,
    "sec_kin": 8.789728663978167,
    "sec_acr": 0.4761784579604864,
-   "giant_4phase": 96
+   "giant_overlap": 96
   },
   "iAM_Pv461": {
    "balanced": 2098,
@@ -208,7 +208,7 @@
    "sec_conc": 4.10944816598203,
    "sec_kin": 8.082588086021133,
    "sec_acr": 0.4188998459139839,
-   "giant_4phase": 96
+   "giant_overlap": 96
   },
   "iCN718": {
    "balanced": 1318,
@@ -222,7 +222,7 @@
    "sec_conc": 2.561881201923825,
    "sec_kin": 3.902314775972627,
    "sec_acr": 0.2224318099906668,
-   "giant_4phase": 46
+   "giant_overlap": 46
   },
   "iCN900": {
    "balanced": 744,
@@ -236,7 +236,7 @@
    "sec_conc": 0.6483669040026143,
    "sec_kin": 1.0995945850154385,
    "sec_acr": 0.16074264294002205,
-   "giant_4phase": 19
+   "giant_overlap": 19
   },
   "iHN637": {
    "balanced": 1149,
@@ -250,7 +250,7 @@
    "sec_conc": 1.408986021997407,
    "sec_kin": 3.465063852025196,
    "sec_acr": 0.4877097699791193,
-   "giant_4phase": 243
+   "giant_overlap": 243
   },
   "iIS312": {
    "balanced": 379,
@@ -264,7 +264,7 @@
    "sec_conc": 0.2706799739971757,
    "sec_kin": 0.29272207897156477,
    "sec_acr": 0.019981666933745146,
-   "giant_4phase": 9
+   "giant_overlap": 9
   },
   "iIS312_Amastigote": {
    "balanced": 315,
@@ -278,7 +278,7 @@
    "sec_conc": 0.19282949797343463,
    "sec_kin": 0.20997567009180784,
    "sec_acr": 0.014655341976322234,
-   "giant_4phase": 9
+   "giant_overlap": 9
   },
   "iIS312_Epimastigote": {
    "balanced": 379,
@@ -292,7 +292,7 @@
    "sec_conc": 0.25715895101893693,
    "sec_kin": 0.3035491449991241,
    "sec_acr": 0.023690492031164467,
-   "giant_4phase": 9
+   "giant_overlap": 9
   },
   "iIS312_Trypomastigote": {
    "balanced": 228,
@@ -306,7 +306,7 @@
    "sec_conc": 0.12422074901405722,
    "sec_kin": 0.1331600999692455,
    "sec_acr": 0.012135499971918762,
-   "giant_4phase": 11
+   "giant_overlap": 11
   },
   "iIT341": {
    "balanced": 696,
@@ -320,7 +320,7 @@
    "sec_conc": 0.5545093819964677,
    "sec_kin": 0.8488793490687385,
    "sec_acr": 0.11176532204262912,
-   "giant_4phase": 195
+   "giant_overlap": 195
   },
   "iJB785": {
    "balanced": 4285,
@@ -334,7 +334,7 @@
    "sec_conc": 1.669949256000109,
    "sec_kin": 7.749168792972341,
    "sec_acr": 0.7487478939583525,
-   "giant_4phase": 22
+   "giant_overlap": 22
   },
   "iJN678": {
    "balanced": 1414,
@@ -348,7 +348,7 @@
    "sec_conc": 2.319782137987204,
    "sec_kin": 3.456527065951377,
    "sec_acr": 0.3866967250360176,
-   "giant_4phase": 551
+   "giant_overlap": 551
   },
   "iJN746": {
    "balanced": 1403,
@@ -362,7 +362,7 @@
    "sec_conc": 1.8461641090689227,
    "sec_kin": 3.0186855470528826,
    "sec_acr": 0.2831742890411988,
-   "giant_4phase": 203
+   "giant_overlap": 203
   },
   "iJR904": {
    "balanced": 1430,
@@ -376,7 +376,7 @@
    "sec_conc": 2.1204645560355857,
    "sec_kin": 3.690016990993172,
    "sec_acr": 0.2855606509838253,
-   "giant_4phase": 144
+   "giant_overlap": 144
   },
   "iLJ478": {
    "balanced": 778,
@@ -390,7 +390,7 @@
    "sec_conc": 0.7053564399247989,
    "sec_kin": 0.9902660850202665,
    "sec_acr": 0.11373031802941114,
-   "giant_4phase": 158
+   "giant_overlap": 158
   },
   "iMM904": {
    "balanced": 2023,
@@ -404,7 +404,7 @@
    "sec_conc": 3.7054574550129473,
    "sec_kin": 7.51966218999587,
    "sec_acr": 0.5483157960698009,
-   "giant_4phase": 22
+   "giant_overlap": 22
   },
   "iND750": {
    "balanced": 1401,
@@ -418,7 +418,7 @@
    "sec_conc": 1.976770336041227,
    "sec_kin": 3.395707093994133,
    "sec_acr": 0.2900072489865124,
-   "giant_4phase": 32
+   "giant_overlap": 32
   },
   "iNF517": {
    "balanced": 912,
@@ -432,7 +432,7 @@
    "sec_conc": 0.9210509560070932,
    "sec_kin": 1.6177640600362793,
    "sec_acr": 0.17618469998706132,
-   "giant_4phase": 153
+   "giant_overlap": 153
   },
   "iNJ661": {
    "balanced": 1339,
@@ -446,7 +446,7 @@
    "sec_conc": 2.1204025220358744,
    "sec_kin": 3.534894744050689,
    "sec_acr": 0.3467296939343214,
-   "giant_4phase": 197
+   "giant_overlap": 197
   },
   "iSB619": {
    "balanced": 903,
@@ -460,7 +460,7 @@
    "sec_conc": 0.8964111190289259,
    "sec_kin": 1.4511666509788483,
    "sec_acr": 0.13218380906619132,
-   "giant_4phase": 139
+   "giant_overlap": 139
   },
   "iSDY_1059": {
    "balanced": 3399,
@@ -474,7 +474,7 @@
    "sec_conc": 10.973751295008697,
    "sec_kin": 20.371150347054936,
    "sec_acr": 1.1556122290203348,
-   "giant_4phase": 107
+   "giant_overlap": 107
   },
   "iS_1188": {
    "balanced": 3841,
@@ -488,7 +488,7 @@
    "sec_conc": 13.660691356984898,
    "sec_kin": 26.277339109918103,
    "sec_acr": 1.404907942051068,
-   "giant_4phase": 94
+   "giant_overlap": 94
   },
   "iSynCJ816": {
    "balanced": 3770,
@@ -502,7 +502,7 @@
    "sec_conc": 2.631823585019447,
    "sec_kin": 11.686990158981644,
    "sec_acr": 0.771962356986478,
-   "giant_4phase": 30
+   "giant_overlap": 30
   },
   "iYO844": {
    "balanced": 1362,
@@ -516,7 +516,7 @@
    "sec_conc": 2.031151083065197,
    "sec_kin": 3.2306721239583567,
    "sec_acr": 0.29132962599396706,
-   "giant_4phase": 100
+   "giant_overlap": 100
   },
   "iYS854": {
    "balanced": 1829,
@@ -530,7 +530,7 @@
    "sec_conc": 3.5933588740881532,
    "sec_kin": 5.633076995029114,
    "sec_acr": 0.4868975329445675,
-   "giant_4phase": 315
+   "giant_overlap": 315
   }
  },
  "cocoa_false": {
