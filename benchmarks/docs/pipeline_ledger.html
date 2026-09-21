@@ -220,13 +220,13 @@
       <div class="stage-head">
         <span class="stage-n">Stage 1</span>
         <h3>Balanced complexes</h3>
-        <span class="pill ok">exact agreement, 9 / 9</span>
+        <span class="pill ok">exact agreement on every landed cell, 11 models</span>
       </div>
       <dl class="facts">
         <dt>Definition</dt><dd>A<sub>c</sub>·v = 0 across the flux space, equivalently a zero row of M = A·K.</dd>
         <dt>Numbers</dt><dd><span class="m">n_balanced</span></dd>
         <dt>Used for</dt><dd>Reported directly, and it seeds every kinetic module (each is built from 𝒞<sub>b</sub> ∪ 𝒞<sub>m</sub>).</dd>
-        <dt>Settled</dt><dd>Exact agreement with the reference on all nine complete models — 379, 315, 379, 228, 817, 744, 696, 4285, 778. Kimonu computes these in 0.3–10 s against 3.7–138 h. This stage uses no pair LP, which is why it is the clean one.</dd>
+        <dt>Settled</dt><dd>Exact agreement with the reference on all 11 models of the final rerun: 33 sampled cells and the 4 landed exhaustive runs. Kimonu computes these in 0.3–10 s against 15–45 s of LPs inside a run that then spends days on concordance. This stage uses no pair LP, which is why it is the clean one.</dd>
         <dt>Outstanding</dt><dd>Nothing. This column is publication-ready.</dd>
       </dl>
     </div>
@@ -238,7 +238,7 @@
       <div class="stage-head">
         <span class="stage-n">Stage 2</span>
         <h3>Concordance</h3>
-        <span class="pill warn">sound on 6 of 9</span>
+        <span class="pill ok">final rerun: identical on 4 of 11, 7 running</span>
       </div>
       <dl class="facts">
         <dt>Definition</dt><dd>Complexes i, j are concordant when rows i, j of M = A·K are proportional.</dd>
@@ -246,7 +246,7 @@
         <dt>Used for</dt><dd>Reported, and it is the sole input to stage 3. Errors here propagate everywhere downstream.</dd>
         <dt>Reference defects</dt><dd>Four, all in <code>find_concordant_complexes.m</code>: unswapped flux bounds in the negative Charnes-Cooper branch; the scaling variable left in the objective (<code>[-A_i 1]</code> where α = 0), which collapses the reported ratio range toward zero by up to six orders of magnitude; <code>round(x,2)</code> equality as an absolute 5×10⁻³ tolerance; and an infeasible branch injecting <span class="m">±Inf</span> that vetoes a clean one.</dd>
         <dt>Validated</dt><dd>With all three fixes, the reference reproduces Kimonu's concordance partition <strong>exactly</strong> on two full models: iIS312_Trypomastigote 111/111 classes and iIS312_Amastigote 165/165, zero differences either way, balanced counts matching. Unfixed it gave 109 and 161.</dd>
-        <dt>Outstanding</dt><dd>Three models — iLJ478, Saha2011iRS1597, iIT341 — have 39–54% of accepted edges bridging true classes and need reruns at 82–138 h each to be sound.</dd>
+        <dt>Outstanding</dt><dd>Superseded by the final rerun on the fixed algorithm and fixed bridge. Exhaustive: identical to Kimonu on iIS312, iIS312_Amastigote, iIS312_Epimastigote, iIS312_Trypomastigote; iCN900, iIT341, iJB785, iLJ478, Saha2011iRS1597, iNF517, iSB619 running, 3 days in. Sampled: complete on all 11 at 3 seeds, balanced identical and concordant pairs a strict subset of Kimonu's on every cell (never a superset).</dd>
       </dl>
     </div>
   </div>
@@ -278,7 +278,7 @@
       </div>
       <dl class="facts">
         <dt>Reference defect</dt><dd>One, found and fixed: Phase IV wrote <code>x[terminal == 0]</code>, indexing a vector of complex ids by a mask over every complex in the graph. R selects by position and pads with <span class="m">NA</span>. 352 NAs per run on iCN900, which then propagate into the overlap merge and fuse the partition into a single 626-complex blob. The comment on the line states the intent: <code>terminal[x]</code>.</dd>
-        <dt>Kimonu deviations</dt><dd>Two, both real and neither yet measured across the 33. Phase IV tests <code>succ[v] - c</code> against the <em>whole</em> network, where Remark S2-1 asks for terminal strong linkage classes of G<sub>𝒞₋₄</sub>, the network reduced to the candidate set. And <code>kinetic_modules</code> wraps the whole thing in an outer loop that rebuilds the concordance partition from merged upstream sets and re-runs — not in the specification. On iCN900 the loop changes nothing.</dd>
+        <dt>Kimonu deviations</dt><dd>Two, both measured across the 33. The outer iteration loop in <code>kinetic_modules</code> changes the partition on <strong>0 of 33</strong>: inert on this benchmark, to be documented or removed. Phase IV tests <code>succ[v] - c</code> against the <em>whole</em> network where Remark S2-1 reads as terminal classes of G<sub>𝒞₋₄</sub>; switching to the reduced graph would change <strong>32 of 33</strong> partitions and most giants (iJB785 22 → 20, iAF1260b 96 → 93, iAM_P* 100 → 98). Kept as is, deliberately: an upstream set needs every complex to keep a path to 𝒞 \ 𝒞<sub>up</sub>, which full-graph terminality guarantees. Both go in Methods.</dd>
       </dl>
       <div class="scroll">
         <table>
@@ -301,15 +301,15 @@
       <div class="stage-head">
         <span class="stage-n">Stage 4</span>
         <h3>ACR and ACRR</h3>
-        <span class="pill ok">reference column computed on 6 of 6</span>
+        <span class="pill ok">reference column on the 4 landed final models</span>
       </div>
       <dl class="facts">
         <dt>Definition</dt><dd>ACR ⟺ e<sub>i</sub> ∈ im(YΔ) ⟺ a zero row of L = ker(YΔᵀ); ACRR ⟺ two equal rows.</dd>
         <dt>Numbers</dt><dd><span class="m">acr</span>, <span class="m">acrr</span>, <span class="m">acr_free</span>, <span class="m">acrr_free</span></dd>
         <dt>Free counts</dt><dd>"Free" excludes the <span class="m">E_1, E_2…</span> enzyme pseudo-metabolites introduced by the elementary-step split. Both prior papers report free counts, so these are the comparable ones.</dd>
         <dt>Blocked on</dt><dd>The reference's ACR lives in a <em>second</em> R script, <code>Get_excel_tables_kinetic_modules.R</code>, which loads a <code>stoichiometric_coupling/*.mat</code> produced by <span class="m">F2C2('glpk', network)</span>. F2C2 is not in the tree.</dd>
-        <dt>Now running</dt><dd>Coupling matrices generated exactly from the nullspace (identical to shipped F2C2 on iCN900; ours finds 4 reactions F2C2 missed on each iIS312 variant). The reference's ACR script also needed metabolite names in the saved model, which our writer never stored — fixed at the writer, patched for the six files on disk.</dd>
-        <dt>First numbers</dt><dd>On the five models with sound concordance: reference ACR = 0 everywhere, ACRR = 1 / 1 / 1 / 1 / 3. Kimonu: ACR 0, ACRR (free) 8 / 5 / 4 / 4 / 1. <strong>Every reference ACRR pair is in Kimonu's set by name — 6 of 6 models</strong>, including iJB785 (17 of 17; its giant of 33 vs Kimonu's 22 is inherited from its 297 adjudicated false-positive concordance edges). Expected — the reference's criterion is combinatorial (two complexes in a module differing in exactly one species, Corollary S2-10), a sufficient condition; Kimonu's kernel test e<sub>i</sub> ∈ im(YΔ) is necessary and sufficient, so it finds the rest.</dd>
+        <dt>Inputs</dt><dd>Coupling matrices generated exactly from the nullspace for all 11 final models (identical to shipped F2C2 on iCN900; ours finds 4 reactions F2C2 missed on each iIS312 variant). The final .mat files carry metabolite names; the fixed R kinetic code is the fork's. Chain: <span class="m">reference_final/acr/run_chain.sh</span>, repeated as each exhaustive run lands.</dd>
+        <dt>First numbers</dt><dd>On the four landed final models (iIS312, Amastigote, Epimastigote, Trypomastigote): reference ACR 0, ACRR 1 / 1 / 1 / 3 pairs, giants 9 / 9 / 9 / 11 — equal to Kimonu's giants. Kimonu ACRR 9 / 9 / 9 / 11 (free 4 / 5 / 4 / 1). <strong>Every reference ACRR pair is in Kimonu's set by name, 4 of 4</strong>. Expected — the reference's criterion is combinatorial (two complexes in a module differing in exactly one species, Corollary S2-10), a sufficient condition; Kimonu's kernel test e<sub>i</sub> ∈ im(YΔ) is necessary and sufficient, so it finds the rest.</dd>
         <dt>Reading its tables</dt><dd><span class="m">OverviewTable[15] = 1</span> means exactly one ACRR pair, not none — the empty case never enters that branch — and <span class="m">write.table</span> emits a single pair as a two-row column.</dd>
       </dl>
     </div>
@@ -326,8 +326,8 @@
     <table>
       <thead><tr><th>Implementation</th><th class="wrap-ok">Known defects</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>Upstream_Algorithm</td><td class="wrap-ok">4 concordance defects; 1 kinetic NA-indexing defect; implements the tentative algorithm rather than the one the paper names</td><td>fixes on our fork, unmerged</td></tr>
-        <tr><td>Kimonu.py</td><td class="wrap-ok">Phase IV terminality scoped to the full graph, not G<sub>𝒞₋₄</sub>; undocumented outer iteration loop</td><td>unmeasured across 33</td></tr>
+        <tr><td>Upstream_Algorithm</td><td class="wrap-ok">4 concordance defects; 1 kinetic NA-indexing defect; implements the tentative algorithm rather than the one the paper names</td><td>fixes on our fork; PR held until go</td></tr>
+        <tr><td>Kimonu.py</td><td class="wrap-ok">Phase IV terminality scoped to the full graph, not G<sub>𝒞₋₄</sub> (deliberate; reduced graph would change 32/33); outer iteration loop inert on 0/33</td><td>measured across 33; both to be stated in Methods</td></tr>
         <tr><td>COCOA.jl</td><td class="wrap-ok">Sampled concordance both splits verified-concordant classes and merges non-concordant ones; one seed in three cascades on iIT341 and iHN637 (giant 523 / 825 vs 185–213 in the other seeds), and iJN678 over-merges in every seed (188k such edges are the reference's problem, not COCOA's; COCOA's are far fewer). Balanced set equals Kimonu's exact one; kinetic stage matches Kimonu on identical input</td><td>concordance is sampling-limited; stages 1 and 3 clean</td></tr>
         <tr><td>Our LP bridge</td><td class="wrap-ok">CPLEX status 5 (OPTIMAL_INFEAS) was treated as a failed solve, and whether a solve landed on 1 or 5 depended on the slot's warm basis — verdicts were order-dependent. Fixed: cold re-solve on any non-optimal status, validated 315/315 pairs with zero flips</td><td>fixed; all prior reference concordance runs suspect at marginal pairs</td></tr>
         <tr><td>Our comparison tooling</td><td class="wrap-ok">Four cross-tool join errors: three name-parsing (coefficients dropped; model names split on <span class="m">_</span>; wrong directory names), one index-space mix (Kimonu-JSON vs CRN indices). Each produced a false finding before being caught. Rule now: convert to CRN index space before any set operation, assert against compositions; the complex bijection is now exact (COCOA writes fractional coefficients as <span class="m">4.5_h[c]</span>)</td><td>fixed; affected figures retracted</td></tr>
@@ -350,8 +350,8 @@
       <tbody>
         <tr><td>Kimonu · 2-phase (Remark S2-1)</td><td class="num">33</td><td class="num">n/a</td><td>none — exact</td><td>ready</td></tr>
         <tr><td>Kimonu · 4-phase (§S.2.2) <strong>*</strong></td><td class="num">33</td><td class="num">n/a</td><td>none — exact</td><td>ready · giant agrees on 25 / 33</td></tr>
-        <tr><td>COCOA · <span class="m">efficient=false</span></td><td class="num">30</td><td class="num">30</td><td>seeds</td><td>3 models queued</td></tr>
-        <tr><td>COCOA · <span class="m">efficient=true</span></td><td class="num">13</td><td class="num">12</td><td>seeds</td><td>20 models running</td></tr>
+        <tr><td>COCOA · <span class="m">efficient=false</span></td><td class="num">30</td><td class="num">30</td><td>seeds</td><td>iSDY_1059 and iS_1188 running at 4–5 days of a 7-day cap; iAF1260b seed 0 timed out at 7 days (non-finisher), seed 1 running. The two largest arms may end 30 / 33.</td></tr>
+        <tr><td>COCOA · <span class="m">efficient=true</span></td><td class="num">31</td><td class="num">30</td><td>seeds</td><td>iJR904 third seed running; iSDY_1059 and iS_1188 in gap array 548402 (first cell 2.5 days in)</td></tr>
         <tr><td>Reference · exhaustive</td><td class="num">4 of 11</td><td class="num">n/a</td><td>none — complete</td><td>final rerun landed on the iIS312 family, identical to Kimonu partition for partition; 7 running (549287, 549292–549295, 549302, 549303)</td></tr>
         <tr><td>Reference · sampled <strong>*</strong></td><td class="num">11</td><td class="num">33</td><td>seeds</td><td>final rerun complete (549296, 549304, 549880–549884); balanced identical and concordant pairs a strict subset of Kimonu's on all 33 cells</td></tr>
       </tbody>
@@ -362,11 +362,11 @@
     <table>
       <thead><tr><th>Figure</th><th>Quantity</th><th>Models</th><th>Blocked by</th></tr></thead>
       <tbody>
-        <tr><td>F1</td><td>Balanced complexes</td><td class="num">33 / 9</td><td>nothing</td></tr>
-        <tr><td>F2</td><td>Concordance modules</td><td class="num">33 / 6</td><td>nothing</td></tr>
-        <tr><td>F3</td><td>Giant kinetic module</td><td class="num">33 / 9</td><td>4-phase run</td></tr>
-        <tr><td>F4</td><td>ACR free · ACRR free (two panels)</td><td class="num">33 / 6</td><td>coupling matrices</td></tr>
-        <tr><td>F5</td><td>Runtime vs size, log y, + stage split</td><td class="num">33 / 9</td><td>nothing</td></tr>
+        <tr><td>F1</td><td>Balanced complexes</td><td class="num">33 / 11</td><td>nothing</td></tr>
+        <tr><td>F2</td><td>Concordance modules</td><td class="num">33 / 11 (exhaustive on 4)</td><td>7 exhaustive runs, time only</td></tr>
+        <tr><td>F3</td><td>Giant kinetic module</td><td class="num">33 / 4</td><td>7 exhaustive runs, then the R chain</td></tr>
+        <tr><td>F4</td><td>ACR free · ACRR free (two panels)</td><td class="num">33 / 4</td><td>7 exhaustive runs, then the R chain</td></tr>
+        <tr><td>F5</td><td>Runtime vs size, log y, + stage split</td><td class="num">33 / 11</td><td>nothing</td></tr>
       </tbody>
     </table>
   </div>
@@ -374,7 +374,7 @@
     <div class="eyebrow">The runtime story is an inversion, not a ranking</div>
     <p>The reference spends essentially <strong>100%</strong> of its time in concordance — balanced takes 0.003–0.022 h against 3.7–138 h for the pairwise LP. Kimonu's exact concordance is nearly free, so its dominant stage is the kinetic graph traversal: <strong>64%</strong> kinetic, 32% concordance, 4% ACR, and kinetic dominates on all 33 models. F5 should carry a stacked-stage panel showing that, because it explains the speedup rather than just asserting it.</p>
   </div>
-  <p>The reference exists on 9 models and cannot be made to exist on 33, so a three-way figure across the full set is not available. The shape that works: <strong>main text</strong> carries Kimonu vs COCOA across 33 models; <strong>supplementary</strong> carries the three-way comparison on the 9 with a complete reference, of which 6 have sound concordance.</p>
+  <p>The reference exists on 11 models and cannot be made to exist on 33, so a three-way figure across the full set is not available. The shape that works: <strong>main text</strong> carries Kimonu vs COCOA across 33 models; <strong>supplementary</strong> carries the three-way comparison on the 11 with a sampled reference at three seeds and an exhaustive reference where it finished.</p>
 </section>
 
 <section>
@@ -382,16 +382,16 @@
     <div class="eyebrow">Roadmap</div>
     <h2>Path to publishable figures</h2>
   </div>
-  <p>Ordered by what blocks a figure. The first three are cheap and unblock three of the five.</p>
+  <p>Everything left is time-gated on the seven exhaustive reference runs; no other work blocks a figure.</p>
 
   <div>
     <div class="task">
       <div class="task-n">01</div>
       <div class="task-main">
         <div class="task-title">Run the 4-phase variant across all 33 models</div>
-        <div class="task-note">The algorithm is already written against Kimonu's topology and reproduces the reference exactly on iCN900. Running it everywhere gives F3 its second Kimonu bar and turns the algorithm difference from a caveat into a measured quantity.</div>
+        <div class="task-note">The algorithm is already written against Kimonu's topology and reproduces the reference exactly on iCN900. Done on all 33 (<span class="m">sweep_tentative/</span>): giants agree with the two-phase algorithm on 25 of 33 and differ by 1–4 complexes on the other 8. F3 carries both Kimonu bars.</div>
       </div>
-      <div class="task-cost">minutes · unblocks F3</div>
+      <div class="task-cost">done · 33 / 33</div>
     </div>
     <div class="task">
       <div class="task-n">02</div>
@@ -403,15 +403,15 @@
       <div class="task-n">03</div>
       <div class="task-main">
         <div class="task-title">Generate coupling matrices from the nullspace, then run the reference ACR stage</div>
-        <div class="task-note">Verified identical to the shipped F2C2 output on iCN900. Gives the reference an ACR/ACRR column for the first time on the six models whose concordance is sound.</div>
+        <div class="task-note">Verified identical to the shipped F2C2 output on iCN900. Matrices exist for all 11 final models. The R chain has run on the 4 landed exhaustive results and is rerun as each of the remaining 7 lands.</div>
       </div>
-      <div class="task-cost">done · 6 of 6</div>
+      <div class="task-cost">done on 4 · repeat per landing</div>
     </div>
     <div class="task">
       <div class="task-n">04</div>
       <div class="task-main">
         <div class="task-title">Finish the COCOA sweep</div>
-        <div class="task-note"><span class="m">efficient=false</span> is at 30 of 33 with three seeds each; the last three are queued. <span class="m">efficient=true</span> is at 13, with 20 running in array 547571. Non-finishers stay unreported rather than being marked.</div></div>
+        <div class="task-note"><span class="m">efficient=false</span> is at 30 of 33 with three seeds each; iSDY_1059 and iS_1188 are 4–5 days into a 7-day cap and iAF1260b already timed out once. <span class="m">efficient=true</span> is at 31 (30 at three seeds); the same two models are in the gap array. Non-finishers stay unreported rather than being marked.</div></div>
     </div>
     <div class="task">
       <div class="task-n">05</div>
@@ -423,9 +423,9 @@
       <div class="task-n">06</div>
       <div class="task-main">
         <div class="task-title">Measure Kimonu's two deviations from Remark S2-1 across the 33</div>
-        <div class="task-note">Full-graph vs reduced-graph terminality in Phase IV, and the undocumented outer loop. Both are known on one model only. Needed before the methods section can claim conformance.</div>
+        <div class="task-note">Measured: the outer loop is inert on 0 of 33; reduced-graph terminality would change 32 of 33 and is deliberately not adopted. Methods text to state both (see Stage 3).</div>
       </div>
-      <div class="task-cost">~1 h</div>
+      <div class="task-cost">done</div>
     </div>
     <div class="task">
       <div class="task-n">07</div>
@@ -433,15 +433,15 @@
         <div class="task-title">Open the upstream PR</div>
         <div class="task-note">Four commits, validated 8/8 on hand-adjudicated pairs and end-to-end on two full models where the fixed reference now reproduces Kimonu's concordance exactly. The algorithm-choice question stays out of it.</div>
       </div>
-      <div class="task-cost">ready</div>
+      <div class="task-cost">held until go</div>
     </div>
     <div class="task">
       <div class="task-n">08</div>
       <div class="task-main">
-        <div class="task-title">Optional — rerun concordance on the three affected models</div>
-        <div class="task-note">iLJ478, Saha2011iRS1597, iIT341 at 82–138 h each. Takes the supplementary three-way from six sound models to nine.</div>
+        <div class="task-title">Superseded — rerun concordance on the three affected models</div>
+        <div class="task-note">Folded into task 02: all 11 models are in the final rerun.</div>
       </div>
-      <div class="task-cost">~350 h</div>
+      <div class="task-cost">closed</div>
     </div>
   </div>
 </section>
@@ -457,7 +457,7 @@
       <tbody>
         <tr><td class="num">547571</td><td>COCOA <span class="m">efficient=true</span>, 91 cells</td><td>90 done, one cell (iJR904) running; 31 models, 30 at 3 seeds</td></tr>
         <tr><td class="num">547572</td><td>COCOA <span class="m">efficient=false</span>, iAF1260b</td><td>seed cell 0 hit the 7-day cap (non-finisher, not reported, not redone); cell 1 running</td></tr>
-        <tr><td class="num">548401 / 548402</td><td>Gap cells — iSDY_1059, iS_1188, iIS312_Amastigote</td><td>running / queued</td></tr>
+        <tr><td class="num">548401 / 548402</td><td>Gap cells, both COCOA settings — iSDY_1059, iS_1188, iIS312_Amastigote</td><td>efficient=false cells at 4.9 and 4.1 days of 7; efficient=true first cell at 2.5 days, 5 queued</td></tr>
         <tr><td class="num">549287, 549292–549295, 549302, 549303</td><td>Exhaustive reference — iCN900, iIT341, iJB785, iLJ478, Saha2011iRS1597, iNF517, iSB619</td><td>3 days in; 14-day cap (21 for iNF517/iSB619)</td></tr>
       </tbody>
     </table>
