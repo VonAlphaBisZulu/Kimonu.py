@@ -161,13 +161,13 @@
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">Benchmark inventory &amp; roadmap · 17 Sep 2026</div>
+  <div class="eyebrow">Benchmark inventory &amp; roadmap · 21 Sep 2026</div>
   <h1>Kinetic Module Pipeline Ledger</h1>
   <p class="lede">Every stage of the three-way comparison, every number it produces, and how far each one can currently be trusted. Nothing here assumes an implementation is correct — including ours.</p>
   <div class="meta">
     <span>33 networks</span>
     <span>Kimonu.py · COCOA.jl v1.1.0 · Upstream_Algorithm</span>
-    <span>9 models with complete exhaustive reference · 3 sampled seeds each</span>
+    <span>11 models in the final reference set · sampled complete at 3 seeds · exhaustive landed on 4</span>
   </div>
 </header>
 
@@ -185,7 +185,7 @@
         <tr><td>1 · Balanced complexes</td><td class="num">n_balanced</td><td>exact kernel</td><td>LP per complex</td><td>sampling</td></tr>
         <tr><td>2 · Concordance</td><td class="num">modules, pairs</td><td>exact kernel</td><td>pairwise LP + CC</td><td>sampled ratios</td></tr>
         <tr><td>3 · Kinetic modules</td><td class="num">modules, giant</td><td>Upstream (S2-1)</td><td>tentative (S.2.2)</td><td>Upstream (S2-1)</td></tr>
-        <tr><td>4 · ACR / ACRR</td><td class="num">acr, acrr</td><td>exact kernel</td><td>not yet run</td><td>sampled</td></tr>
+        <tr><td>4 · ACR / ACRR</td><td class="num">acr, acrr</td><td>exact kernel</td><td>combinatorial (S2-10), run on the 4 landed</td><td>sampled</td></tr>
       </tbody>
     </table>
   </div>
@@ -352,8 +352,8 @@
         <tr><td>Kimonu · 4-phase (§S.2.2) <strong>*</strong></td><td class="num">33</td><td class="num">n/a</td><td>none — exact</td><td>ready · giant agrees on 25 / 33</td></tr>
         <tr><td>COCOA · <span class="m">efficient=false</span></td><td class="num">30</td><td class="num">30</td><td>seeds</td><td>3 models queued</td></tr>
         <tr><td>COCOA · <span class="m">efficient=true</span></td><td class="num">13</td><td class="num">12</td><td>seeds</td><td>20 models running</td></tr>
-        <tr><td>Reference · exhaustive</td><td class="num">9</td><td class="num">n/a</td><td>none — complete</td><td>rerun in progress (549287–549295)</td></tr>
-        <tr><td>Reference · sampled <strong>*</strong></td><td class="num">9</td><td class="num">9</td><td>seeds</td><td>rerun in progress (549296)</td></tr>
+        <tr><td>Reference · exhaustive</td><td class="num">4 of 11</td><td class="num">n/a</td><td>none — complete</td><td>final rerun landed on the iIS312 family, identical to Kimonu partition for partition; 7 running (549287, 549292–549295, 549302, 549303)</td></tr>
+        <tr><td>Reference · sampled <strong>*</strong></td><td class="num">11</td><td class="num">33</td><td>seeds</td><td>final rerun complete (549296, 549304, 549880–549884); balanced identical and concordant pairs a strict subset of Kimonu's on all 33 cells</td></tr>
       </tbody>
     </table>
   </div>
@@ -397,7 +397,7 @@
       <div class="task-n">02</div>
       <div class="task-main">
         <div class="task-title">Final reference reruns — launched 2026-09-18</div>
-        <div class="task-note">Both gate models reproduce Kimonu exactly on the fixed algorithm and fixed bridge (Trypomastigote 111/111, Amastigote 165/165, zero degraded LPs). Eleven exhaustive jobs (549287–549295 plus 549302/549303 for iNF517 and iSB619, 21-day cap) and 33 sampled cells (arrays 549296 and 549304) are running on node01; memory requests right-sized from 16 GB to 4 GB after a gate run measured 151 MB. These replace every earlier reference concordance number; ~100% of reference time is concordance, so this is the only rerun the reference will ever need.</div></div>
+        <div class="task-note">Both gate models reproduce Kimonu exactly on the fixed algorithm and fixed bridge (Trypomastigote 111/111, Amastigote 165/165, zero degraded LPs). Eleven exhaustive jobs (549287–549295 plus 549302/549303 for iNF517 and iSB619, 21-day cap) and 33 sampled cells (arrays 549296 and 549304) are running on node01; memory requests right-sized from 16 GB to 4 GB after a gate run measured 151 MB. These replace every earlier reference concordance number; ~100% of reference time is concordance, so this is the only rerun the reference will ever need. <strong>21 Sep:</strong> sampled arm complete (33/33, three seeds, 13 cells resubmitted with per-model memory after OOM at 4 GB); exhaustive landed on the iIS312 family, all four identical to Kimonu, R stage run on them (giants equal Kimonu, every ACRR pair in Kimonu's set); seven exhaustive runs continue, three days in.</div></div>
     </div>
     <div class="task">
       <div class="task-n">03</div>
@@ -455,10 +455,10 @@
     <table>
       <thead><tr><th>Job</th><th>What</th><th>State</th></tr></thead>
       <tbody>
-        <tr><td class="num">547571</td><td>COCOA <span class="m">efficient=true</span>, 91 cells</td><td>running, 3 concurrent</td></tr>
-        <tr><td class="num">547570 / 547572</td><td>COCOA <span class="m">efficient=false</span> seeds; iAF1260b</td><td>running</td></tr>
+        <tr><td class="num">547571</td><td>COCOA <span class="m">efficient=true</span>, 91 cells</td><td>90 done, one cell (iJR904) running; 31 models, 30 at 3 seeds</td></tr>
+        <tr><td class="num">547572</td><td>COCOA <span class="m">efficient=false</span>, iAF1260b</td><td>seed cell 0 hit the 7-day cap (non-finisher, not reported, not redone); cell 1 running</td></tr>
         <tr><td class="num">548401 / 548402</td><td>Gap cells — iSDY_1059, iS_1188, iIS312_Amastigote</td><td>running / queued</td></tr>
-        <tr><td class="num">548721 / 548722</td><td>Exhaustive reference, iNF517 and iSB619</td><td>17 h in, 14-day cap</td></tr>
+        <tr><td class="num">549287, 549292–549295, 549302, 549303</td><td>Exhaustive reference — iCN900, iIT341, iJB785, iLJ478, Saha2011iRS1597, iNF517, iSB619</td><td>3 days in; 14-day cap (21 for iNF517/iSB619)</td></tr>
       </tbody>
     </table>
   </div>

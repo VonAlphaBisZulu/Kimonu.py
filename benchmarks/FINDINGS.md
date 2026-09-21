@@ -579,3 +579,30 @@ needs it for the first ~45 min only; single-job simplicity was preferred over sp
 prefilter into its own job. Node01 is memory-bound by the running 16 GB exhaustive jobs (booked
 204 GB / 257 GB), so the 26 GB and 12 GB cells start as the iIS312-family exhaustive runs finish.
 Running jobs cannot be shrunk (`scontrol`: "Job is no longer pending execution").
+
+### Sampled reference arm complete; exhaustive landed on the iIS312 family (2026-09-21)
+
+All 33 sampled cells finished (0.2-53 h each; the 13 resubmitted cells ran at their per-model
+memory without incident, iJB785 peaking at 20.5 GB under its 26 GB request). Compared to Kimonu by
+complex composition (`compare.py` partition): balanced sets identical on every cell; concordant
+pairs a strict subset of Kimonu's on every cell, zero invented pairs, `lp_degraded 0` throughout.
+Seeds agree with each other except iCN900 31337 (one pair fewer) and iSB619 31337 (2158 fewer).
+Module counts are not monotone in the pairs: iIT341 178 vs Kimonu 173 and iLJ478 300 vs 267,
+because a dropped pair splits a module. This is the shape the paper should show: the sampled
+prefilter loses concordances (iSB619 -9504 to -11662 pairs of 177160), never gains them.
+
+Exhaustive: iIS312, iIS312_Amastigote, iIS312_Epimastigote, iIS312_Trypomastigote landed (3-17 h),
+each identical to Kimonu in balanced set, modules and pairs. The reference R stages (fork's fixed
+kinetic code, exact coupling matrices) ran on their .mat files in `reference_final/acr/`: giants
+9/9/9/11 equal Kimonu's; ACR 0 on all four; ACRR 1/1/1/3 pairs, every one in Kimonu's set by name
+(Kimonu 9/9/9/11: kernel test vs the reference's sufficient combinatorial criterion). Seven
+exhaustive runs continue. Exact coupling matrices now exist for all 11 final models.
+
+`figures/gather_figdata.py` rebuilds `figdata.json` from the result directories; with `--check` it
+reproduces the committed Kimonu and COCOA numbers exactly (only new COCOA efficient=true seeds
+differ). Reference arms now come only from `reference_final*/`; figures F1-F5 re-rendered.
+
+COCOA efficient=true is at 31/33 (30 at three seeds). It has the same seed-outlier behaviour as
+efficient=false: iHN637 seed 2026 gives balanced 1150 (others 1149), giant 808 (213-216), ACRR
+88019 (5616-5722), ACR 7 (0). iAF1260b efficient=true giant 40/52/40 over seeds, ACRR 766/953/789.
+COCOA efficient=false iAF1260b cell 0 hit its 7-day cap: a non-finisher, not reported, not redone.

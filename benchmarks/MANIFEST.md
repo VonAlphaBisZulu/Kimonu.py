@@ -24,8 +24,8 @@ Live pages: ledger https://claude.ai/artifact/RGt8asxhRiyDcJCpmVKrrF · figures 
 
 | path | what | state |
 |---|---|---|
-| `sweep/cocoa_v110/` | `efficient=false`, seeds 1234/2026/31337 | 30/33 at 3 seeds; iAF1260b, iSDY_1059, iS_1188 queued | 
-| `sweep/cocoa_eff/` | `efficient=true` | 14/33; array 547571 running (20 left, 3 concurrent) |
+| `sweep/cocoa_v110/` | `efficient=false`, seeds 1234/2026/31337 | 30/33 at 3 seeds; iAF1260b (cell 0 timed out at 7 d), iSDY_1059, iS_1188 still running | 
+| `sweep/cocoa_eff/` | `efficient=true` | 31/33 (30 at 3 seeds); one cell left (iJR904) |
 | `sweep/cocoa/` | v1.0.0 — **stale, never report** | 31/33, kept only as history |
 | `matlab_reference/cocoa_isolation/` | COCOA's kinetic stage fed Kimonu's exact partition → 250/19/591/8 = Kimonu | done, iCN900 |
 
@@ -43,7 +43,8 @@ All runs before commit `3ea2bf7` used an order-dependent bridge and are suspect 
 | `reference_fixed/` | 3 concordance fixes, old bridge — Trypomastigote, Amastigote | fixed / old | both reproduce Kimonu exactly |
 | `reference_fixed2/` | 3 fixes + fixed bridge — **the gate** | fixed / fixed | both models exact vs Kimonu, 0 degraded LPs — passed |
 | `reference_acr/` | corrected R kinetic + ACR stage on the 6 sound models, with README on reading the tables | corrected R | done 6/6; every ACRR pair ⊆ Kimonu's |
-| `reference_final/`, `reference_final_sampled/` | **the final reruns** — jobs 549287–549295 + 549302/549303 (11 exhaustive; 14-day cap, 21 for iNF517/iSB619) and arrays 549296 + 549304 (33 sampled cells, 7-day cap; 13 cells OOM at 4 GB and resubmitted per model as 549880-549884, see FINDINGS) | fixed / fixed | launched 2026-09-18 after both gate models matched Kimonu exactly |
+| `figures/gather_figdata.py` → `figdata.json` → `figures/make_prelim.py` | figure data rebuilt from the result directories; `--check` diffs the Kimonu/COCOA arms against the committed file | n/a | regression-clean 2026-09-21 |
+| `reference_final/`, `reference_final_sampled/` | **the final reruns** — jobs 549287–549295 + 549302/549303 (11 exhaustive; 14-day cap, 21 for iNF517/iSB619) and arrays 549296 + 549304 (33 sampled cells, 7-day cap; 13 cells OOM at 4 GB and resubmitted per model as 549880-549884, see FINDINGS) | fixed / fixed | sampled **complete** 33/33 (2026-09-21), exhaustive 4/11 landed (iIS312 family) — all identical to Kimonu; `reference_final/acr/` holds the R kinetic + ACR stage on the landed exhaustive .mat files (fork's fixed R code, exact coupling from `coupling_exact/`) |
 
 Code: `matlab_reference/run_reference.m` (harness; now saves metabolite names), `compat/` (CPLEX bridge, two-arg `round`), `test_determinism.m`, `test_fixed_verdict.m`, `patch_mat_names.m`, `write_coupling_exact.py`, `compare_kinetic_partitions.py`, `PR_DRAFT.md`.
 Upstream: fork `VonAlphaBisZulu/Upstream_Algorithm`, branch `fix/negative-branch-charnes-cooper`, 4 commits, pushed, no PR. `~/pipelines/2026-08_Kimonu/Upstream_Algorithm_benchmark` is pinned at 088d827 for reproducing old runs only.

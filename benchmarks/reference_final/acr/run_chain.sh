@@ -1,0 +1,8 @@
+# Reference R stages (fixed kinetic code from the fork) on the final exhaustive .mat files.
+# Run from this directory: bash run_chain.sh <model> [<model> ...]
+set -u; export PATH=$HOME/miniconda3/envs/R/bin:$PATH; W=$(cd "$(dirname "$0")" && pwd)
+cd $W/Code/kinetic_modules
+for m in "$@"; do s=${m}_concordant_fixed
+  echo "== kinetic $m $(date -Is)"; timeout 7200 Rscript code_kineticModule_analysis.R $s.mat > $W/$m.kin.log 2>&1 && echo ok || echo FAIL
+  echo "== tables  $m $(date -Is)"; timeout 7200 Rscript Get_excel_tables_kinetic_modules.R $s.RData > $W/$m.acr.log 2>&1 && echo ok || echo FAIL
+done; echo ALLDONE

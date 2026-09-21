@@ -61,18 +61,18 @@ def save(fig, name, note):
 
 # F1, F2, F3
 fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "balanced", ["kimonu", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"], "log", "F1  Balanced complexes", "count (log)")
-save(fig, "F1_balanced", BASE + "  Reference values are from the pre-fix bridge; balanced uses no pair LP and matched Kimonu exactly on 9/9.")
+save(fig, "F1_balanced", BASE + "  Reference values are from the final rerun (fixed algorithm and bridge); balanced matches Kimonu exactly on every model, exhaustive and sampled.")
 fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "conc", ["kimonu", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"], "log", "F2  Concordance modules (non-singleton)", "count (log)",
-        labels={"ref_exh": "Reference exhaustive (pre-rerun)*"})
-save(fig, "F2_concordance", BASE + "  Reference concordance predates the bridge fix and the three algorithm fixes; it is sound on 6 of 9 models by adjudication and will be rerun.")
+        labels={"ref_exh": "Reference exhaustive"})
+save(fig, "F2_concordance", BASE + "  Reference concordance is the final rerun: exhaustive is identical to Kimonu on every landed model (4 of 11 so far); sampled (11 models, 3 seeds) is a strict subset of Kimonu's pairs on every cell, as its prefilter can only remove candidates.")
 fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "giant", ["kimonu", "kimonu4", "cocoa_false", "cocoa_true", "ref_exh"], "log", "F3  Largest kinetic module", "count (log)",
         labels={"ref_exh": "Reference (R stage, corrected NA)*"})
-save(fig, "F3_giant", BASE + "  Reference giants are from the corrected R stage on the reference's own pre-rerun concordance (6 models).")
+save(fig, "F3_giant", BASE + "  Reference giants are from the corrected R stage on the final exhaustive concordance (4 models so far), equal to Kimonu on each.")
 # F4: ACR linear (mostly zeros), ACRR symlog
 fig, axs = plt.subplots(2, 1, figsize=(14, 8.5)); a4 = ["kimonu", "cocoa_false", "cocoa_true", "ref_exh"]; lab4 = {"ref_exh": "Reference exhaustive †"}
 grouped(axs[0], "acr_free", a4, "linear", "F4a  ACR metabolites (free)", labels=lab4)
 grouped(axs[1], "acrr_free", a4, "symlog", "F4b  ACRR metabolite pairs (free), symlog", labels=lab4)
-save(fig, "F4_acr_acrr", BASE + "  † reference ACR/ACRR uses the combinatorial criterion (Corollary S2-10), a subset of Kimonu's kernel test; every reference pair is in Kimonu's set on all 6 models.")
+save(fig, "F4_acr_acrr", BASE + "  † reference ACR/ACRR uses the combinatorial criterion (Corollary S2-10), a subset of Kimonu's kernel test; every reference pair is in Kimonu's set on every landed model.")
 # F5
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(14, 5), gridspec_kw={"width_ratios": [2, 1.2]})
 for a in ["kimonu", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"]:
@@ -94,7 +94,7 @@ for i, (lab, col) in enumerate([("concordance", "#1C6B58"), ("kinetic", "#7FB8A6
 a2.set_xticks(x); a2.set_xticklabels(models, rotation=65, ha="right", fontsize=6); a2.set_ylabel("fraction of Kimonu runtime"); a2.set_title("F5b  Where Kimonu spends its time", loc="left", fontsize=11)
 a2.legend(fontsize=7, frameon=False, loc="lower left"); [a2.spines[s].set_visible(False) for s in ("top", "right")]
 rf = [D["ref_exh"][m]["sec_conc"] / D["ref_exh"][m]["seconds"] for m in D["ref_exh"]]
-save(fig, "F5_runtime", f"Reference spends {100*min(rf):.1f}–{100*max(rf):.1f}% of its time in concordance (9 models); reference times are from the pre-fix bridge.  Stochastic arms: median marker, seeds as faint points.")
+save(fig, "F5_runtime", f"Reference spends {100*min(rf):.1f}–{100*max(rf):.1f}% of its time in concordance ({len(rf)} models landed); reference times are from the fixed bridge (cold re-solve on any non-optimal LP status).  Stochastic arms: median marker, seeds as faint points.")
 print("rendered:", sorted(os.listdir("figures/prelim")))
 # the discrepancies F4 makes visible, for the record
 for m in ["iIT341", "iHN637", "iJN678", "iLJ478"]:
