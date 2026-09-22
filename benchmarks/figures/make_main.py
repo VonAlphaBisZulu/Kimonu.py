@@ -16,8 +16,9 @@ MAIN = [m for m in sorted(D["ref_exh"] | D["ref_sampled"], key=lambda m: nC[m]) 
 P.models = MAIN
 os.makedirs("figures/main", exist_ok=True)
 
+import textwrap
 def save(fig, name, note):
-    fig.text(0.01, 0.005, note, fontsize=7, color="#555"); fig.tight_layout(rect=(0, 0.03, 1, 1))
+    fig.text(0.01, 0.005, "\n".join(textwrap.wrap(note, 190)), fontsize=7, color="#555", va="bottom"); fig.tight_layout(rect=(0, 0.05, 1, 1))
     fig.savefig(f"figures/main/{name}.png", dpi=160); fig.savefig(f"figures/main/{name}.svg"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(11, 4.6))
@@ -52,6 +53,6 @@ ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlabel("complexes"); ax.set_y
 for y, t_ in [(60, "1 min"), (3600, "1 h"), (86400, "1 day"), (604800, "1 week")]:
     ax.axhline(y, color="#ddd", lw=0.6); ax.text(xs_all.min() * 1.02, y * 1.15, t_, fontsize=6.5, color="#888")
 ax.set_title("M3  Runtime vs network size, all models", loc="left", fontsize=11)
-ax.legend(fontsize=7, frameon=False, loc="upper left"); ax.grid(color="#eee", lw=0.5); [ax.spines[s].set_visible(False) for s in ("top", "right")]
+ax.legend(fontsize=7, frameon=False, loc="lower right"); ax.grid(color="#eee", lw=0.5); [ax.spines[s].set_visible(False) for s in ("top", "right")]
 save(fig, "M3_runtime", "Lines: least-squares fit of log seconds on log complexes per arm, on per-model medians; bands: 95% confidence for the fitted mean. Stochastic arms show seeds as faint points. Reference times are from the fixed bridge; the exhaustive arm is concordance-dominated.")
 print("main figures:", sorted(os.listdir("figures/main")), "models:", MAIN)
