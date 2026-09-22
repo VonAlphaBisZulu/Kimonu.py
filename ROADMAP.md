@@ -95,7 +95,12 @@ cobrapy-native I/O; keep the concordance core independent of the kinetic/ACR lay
 
 ## 7. Publication
 
-- **Venue:** BMC Bioinformatics application note (or similar app-note track).
+- **Venue (decided 2026-09-22):** full research article, not an app note. Science Advances first
+  (the readership of Langary et al. 2025), PLOS Computational Biology as fallback. Bioinformatics is
+  reserved for StrainDesign (Nature Methods first, Metabolic Engineering as fallback), so Kimonu
+  stays clear of it. Framing: kinetic modules live in the nullspace; the speed is the consequence.
+  Genome-scale ACR/ACRR results across the 33 models are part of the story, not only the benchmark.
+  Upstream PR to the reference waits until COCOA is published.
 - **Working title:** *Harnessing sparse exact nullspace computation for fully deterministic
   detection of concordance and kinetic modules.*
 - **Selling points:** Python accessibility · significant speedup · exactness/determinism.
@@ -136,7 +141,7 @@ cobrapy-native I/O; keep the concordance core independent of the kinetic/ACR lay
 
 **Phase 4 — packaging & paper**
 - [ ] PyPI package, docs, CI; reproducibility scripts for every figure.
-- [ ] Draft the app note.
+- [ ] Draft the research article (Science Advances format).
 
 ## 9. Open questions / risks
 - MATLAB license for the reference head-to-head (currently unavailable).
