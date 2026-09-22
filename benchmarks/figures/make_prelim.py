@@ -18,15 +18,15 @@ from matplotlib.patches import Patch
 
 D = json.load(open("figdata.json")); nC = D["n_complexes"]
 models = sorted(D["models"], key=lambda m: nC[m]); os.makedirs("figures/prelim", exist_ok=True)
-# Teal for Kimonu, rust/tan for COCOA, slate for the reference; starred comparability arms hatched.
-# Kimonu with the reference's criterion wears the reference's family, since that is what it stands in for.
+# Teal for Kimonu, rust/tan for COCOA, slate for the reference. A Kimonu variant built to mirror the
+# reference wears the reference's family and is plotted beside it.
 ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#1C6B58", ""),
-        "kimonu4":     ("Kimonu, overlap merge only*",   "#7FB8A6", "//"),
-        "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#7F8DBA", "//"),
+        "kimonu4":     ("Kimonu, overlap merge only*",   "#33416F", ""),
+        "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#6E7DA8", ""),
         "cocoa_false": ("COCOA efficient=false",        "#B8641E", ""),
         "cocoa_true":  ("COCOA efficient=true",         "#E0A26A", ""),
         "ref_exh":     ("Reference exhaustive",         "#4A5A88", ""),
-        "ref_sampled": ("Reference sampled*",           "#9AA6C8", "//")}
+        "ref_sampled": ("Reference sampled*",           "#9AA6C8", "")}
 BASE = "Stochastic arms: bar at the median over seeds, each seed a point; exact arms have no spread by construction.  * comparability-only arm."
 
 def val(arm, m, key):
@@ -73,7 +73,7 @@ save(fig, "F1_balanced", BASE + "  Reference values are from the final rerun (fi
 fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "conc", ["kimonu", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"], "log", "F2  Concordance modules (non-singleton)", "count (log)",
         labels={"ref_exh": "Reference exhaustive"})
 save(fig, "F2_concordance", BASE + "  Reference concordance is the final rerun: exhaustive is identical to Kimonu on every landed model (4 of 11 so far); sampled (11 models, 3 seeds) is a strict subset of Kimonu's pairs on every cell, as its prefilter can only remove candidates.")
-fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "giant", ["kimonu", "kimonu4", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"], "log", "F3  Largest kinetic module", "count (log)",
+fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "giant", ["kimonu", "cocoa_false", "cocoa_true", "kimonu4", "ref_exh", "ref_sampled"], "log", "F3  Largest kinetic module", "count (log)",
         labels={"ref_exh": "Reference (R stage, corrected NA)*"})
 save(fig, "F3_giant", BASE + "  * Kimonu without the Proposition S3-4 coupling merge = the reference's merge rule; the four-phase and two-phase upstream sets are identical on all 33 models. Reference giants: corrected R stage on the final exhaustive concordance (4 models so far), equal to Kimonu on each.")
 # F4: ACR linear (mostly zeros), ACRR symlog
