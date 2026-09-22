@@ -2726,7 +2726,12 @@
    "balanced": 696,
    "conc": 173,
    "seconds": 282961.046517,
-   "sec_conc": 282917.575784
+   "sec_conc": 282917.575784,
+   "giant": 245,
+   "acr": 0,
+   "acrr": 21,
+   "acr_free": 0,
+   "acrr_free": 8
   }
  },
  "ref_sampled": {
