@@ -85,26 +85,28 @@ def ref_exh(m):
         rec["retest"] = dict(retested=int(w[1]), accepted=int(w[3]), residual=int(w[5]))
     d = json.load(open(f)); b, c = ref_counts(d)
     rec.update(balanced=b, conc=c, seconds=d["seconds"], sec_conc=d["seconds_concordant"])
-    ov = f"reference_final/acr/Results/Overview/Overview_{stem}.csv"
-    if os.path.isfile(ov):
-        v = {int(r[0]): r[1] for r in list(csv.reader(open(ov), delimiter=" "))[1:]}
-        free = free_set(m)
-        single = [r[1] for r in list(csv.reader(open(f"reference_final/acr/Results/MetSingle/MetSingle_{stem}.csv"), delimiter=" "))[1:]]
-        double = read_pairs(f"reference_final/acr/Results/MetDouble/MetDouble_{stem}.csv")
-        mj = f"reference_final/acr/Results/modules_{stem}.json"
-        if os.path.isfile(mj):
-            md = json.load(open(mj))
-            rec["n_kinetic"] = sum(1 for x in md["modules"] if len(x) > 1)     # Overview[4]-[5] is off by the late singleton append
-        rec.update(giant=int(v[6]), acr=int(v[14]), acrr=int(v[15]),
-                   acr_free=n_free(single, free), acrr_free=n_free(double, free))
-        assert len(single) == rec["acr"] and len(double) == rec["acrr"], (m, len(single), len(double), rec)
+    return r_stage(rec, m, "reference_final/acr", stem)
+
+def r_stage(rec, m, root, stem):
+    """Add giant, kinetic-module count and ACR/ACRR from a reference R-stage run when present."""
+    ov = f"{root}/Results/Overview/Overview_{stem}.csv"
+    if not os.path.isfile(ov): return rec
+    v = {int(r[0]): r[1] for r in list(csv.reader(open(ov), delimiter=" "))[1:]}
+    free = free_set(m)
+    single = [r[1] for r in list(csv.reader(open(f"{root}/Results/MetSingle/MetSingle_{stem}.csv"), delimiter=" "))[1:]]
+    double = read_pairs(f"{root}/Results/MetDouble/MetDouble_{stem}.csv")
+    mj = f"{root}/Results/modules_{stem}.json"
+    if os.path.isfile(mj):
+        rec["n_kinetic"] = sum(1 for x in json.load(open(mj))["modules"] if len(x) > 1)
+    rec.update(giant=int(v[6]), acr=int(v[14]), acrr=int(v[15]), acr_free=n_free(single, free), acrr_free=n_free(double, free))
+    assert len(single) == rec["acr"] and len(double) == rec["acrr"], (m, stem, len(single), len(double), rec)
     return rec
 
 def ref_sampled(m):
     out = []
     for f in sorted(glob.glob(f"reference_final_sampled/reference_{m}_seed*.json")):
-        d = json.load(open(f)); b, c = ref_counts(d)
-        out.append(dict(seed=int(re.search(r"seed(\d+)", f).group(1)), balanced=b, conc=c, seconds=d["seconds"]))
+        d = json.load(open(f)); b, c = ref_counts(d); seed = int(re.search(r"seed(\d+)", f).group(1))
+        out.append(r_stage(dict(seed=seed, balanced=b, conc=c, seconds=d["seconds"]), m, "reference_final_sampled/acr", f"{m}_seed{seed}"))
     return out
 
 if __name__ == "__main__":

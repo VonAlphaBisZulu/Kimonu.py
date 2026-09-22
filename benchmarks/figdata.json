@@ -3113,19 +3113,37 @@
     "seed": 1234,
     "balanced": 744,
     "conc": 324,
-    "seconds": 52266.472274
+    "seconds": 52266.472274,
+    "n_kinetic": 235,
+    "giant": 19,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 2026,
     "balanced": 744,
     "conc": 324,
-    "seconds": 52087.03308
+    "seconds": 52087.03308,
+    "n_kinetic": 235,
+    "giant": 19,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 31337,
     "balanced": 744,
     "conc": 323,
-    "seconds": 51140.485737
+    "seconds": 51140.485737,
+    "n_kinetic": 235,
+    "giant": 19,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    }
   ],
   "iIS312": [
@@ -3133,19 +3151,37 @@
     "seed": 1234,
     "balanced": 379,
     "conc": 196,
-    "seconds": 3220.337288
+    "seconds": 3220.337288,
+    "n_kinetic": 49,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 2026,
     "balanced": 379,
     "conc": 196,
-    "seconds": 3244.706175
+    "seconds": 3244.706175,
+    "n_kinetic": 49,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 31337,
     "balanced": 379,
     "conc": 196,
-    "seconds": 3213.630756
+    "seconds": 3213.630756,
+    "n_kinetic": 49,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    }
   ],
   "iIS312_Amastigote": [
@@ -3153,19 +3189,37 @@
     "seed": 1234,
     "balanced": 315,
     "conc": 164,
-    "seconds": 1108.999748
+    "seconds": 1108.999748,
+    "n_kinetic": 33,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 2026,
     "balanced": 315,
     "conc": 164,
-    "seconds": 906.934479
+    "seconds": 906.934479,
+    "n_kinetic": 33,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 31337,
     "balanced": 315,
     "conc": 164,
-    "seconds": 906.540878
+    "seconds": 906.540878,
+    "n_kinetic": 33,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    }
   ],
   "iIS312_Epimastigote": [
@@ -3173,19 +3227,37 @@
     "seed": 1234,
     "balanced": 379,
     "conc": 193,
-    "seconds": 2772.026854
+    "seconds": 2772.026854,
+    "n_kinetic": 49,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 2026,
     "balanced": 379,
     "conc": 193,
-    "seconds": 2350.553108
+    "seconds": 2350.553108,
+    "n_kinetic": 49,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 31337,
     "balanced": 379,
     "conc": 193,
-    "seconds": 2751.666553
+    "seconds": 2751.666553,
+    "n_kinetic": 49,
+    "giant": 9,
+    "acr": 0,
+    "acrr": 1,
+    "acr_free": 0,
+    "acrr_free": 1
    }
   ],
   "iIS312_Trypomastigote": [
@@ -3193,19 +3265,37 @@
     "seed": 1234,
     "balanced": 228,
     "conc": 110,
-    "seconds": 640.501807
+    "seconds": 640.501807,
+    "n_kinetic": 26,
+    "giant": 11,
+    "acr": 0,
+    "acrr": 3,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 2026,
     "balanced": 228,
     "conc": 110,
-    "seconds": 646.397383
+    "seconds": 646.397383,
+    "n_kinetic": 26,
+    "giant": 11,
+    "acr": 0,
+    "acrr": 3,
+    "acr_free": 0,
+    "acrr_free": 1
    },
    {
     "seed": 31337,
     "balanced": 228,
     "conc": 110,
-    "seconds": 750.571589
+    "seconds": 750.571589,
+    "n_kinetic": 26,
+    "giant": 11,
+    "acr": 0,
+    "acrr": 3,
+    "acr_free": 0,
+    "acrr_free": 1
    }
   ],
   "iIT341": [
@@ -3213,19 +3303,37 @@
     "seed": 1234,
     "balanced": 696,
     "conc": 178,
-    "seconds": 75191.550783
+    "seconds": 75191.550783,
+    "n_kinetic": 97,
+    "giant": 195,
+    "acr": 0,
+    "acrr": 14,
+    "acr_free": 0,
+    "acrr_free": 4
    },
    {
     "seed": 2026,
     "balanced": 696,
     "conc": 178,
-    "seconds": 67336.160626
+    "seconds": 67336.160626,
+    "n_kinetic": 97,
+    "giant": 195,
+    "acr": 0,
+    "acrr": 14,
+    "acr_free": 0,
+    "acrr_free": 4
    },
    {
     "seed": 31337,
     "balanced": 696,
     "conc": 178,
-    "seconds": 73052.273331
+    "seconds": 73052.273331,
+    "n_kinetic": 97,
+    "giant": 195,
+    "acr": 0,
+    "acrr": 14,
+    "acr_free": 0,
+    "acrr_free": 4
    }
   ],
   "iJB785": [

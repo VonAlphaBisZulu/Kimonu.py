@@ -47,7 +47,7 @@ def grouped(ax, key, arms, scale="linear", title="", ylabel="count", labels=None
             ax.bar(xx, med, w, color=col, hatch=hatch, edgecolor=col if hatch else "white", linewidth=0.4)
             if runs and len(runs) > 1:
                 if errorbars:   # whiskers span the other replicates around the median
-                    ax.errorbar(xx, med, yerr=[[med - lo], [hi - med]], fmt="none", ecolor="#222", elinewidth=0.8, capsize=2, zorder=3)
+                    ax.errorbar(xx, med, yerr=[[med - lo], [hi - med]], fmt="none", ecolor="#222", elinewidth=1.6, capsize=3, zorder=3)
                 else:
                     ax.scatter([xx] * len(runs), runs, s=6, color="#222", zorder=3, linewidths=0)
     ax.set_xticks(x); ax.set_xticklabels(models, rotation=65, ha="right", fontsize=7)
@@ -71,11 +71,11 @@ save(fig, "F1_balanced", BASE + "  Reference values are from the final rerun (fi
 fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "conc", ["kimonu", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"], "log", "F2  Concordance modules (non-singleton)", "count (log)",
         labels={"ref_exh": "Reference exhaustive"})
 save(fig, "F2_concordance", BASE + "  Reference concordance is the final rerun: exhaustive is identical to Kimonu on every landed model (4 of 11 so far); sampled (11 models, 3 seeds) is a strict subset of Kimonu's pairs on every cell, as its prefilter can only remove candidates.")
-fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "giant", ["kimonu", "kimonu4", "cocoa_false", "cocoa_true", "ref_exh"], "log", "F3  Largest kinetic module", "count (log)",
+fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "giant", ["kimonu", "kimonu4", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"], "log", "F3  Largest kinetic module", "count (log)",
         labels={"ref_exh": "Reference (R stage, corrected NA)*"})
 save(fig, "F3_giant", BASE + "  * Kimonu without the Proposition S3-4 coupling merge = the reference's merge rule; the four-phase and two-phase upstream sets are identical on all 33 models. Reference giants: corrected R stage on the final exhaustive concordance (4 models so far), equal to Kimonu on each.")
 # F4: ACR linear (mostly zeros), ACRR symlog
-fig, axs = plt.subplots(2, 1, figsize=(14, 8.5)); a4 = ["kimonu", "cocoa_false", "cocoa_true", "kimonu_s210", "ref_exh"]; lab4 = {"ref_exh": "Reference exhaustive †"}
+fig, axs = plt.subplots(2, 1, figsize=(14, 8.5)); a4 = ["kimonu", "cocoa_false", "cocoa_true", "kimonu_s210", "ref_exh", "ref_sampled"]; lab4 = {"ref_exh": "Reference exhaustive †", "ref_sampled": "Reference sampled* †"}
 grouped(axs[0], "acr_free", a4, "linear", "F4a  ACR metabolites (free)", labels=lab4)
 grouped(axs[1], "acrr_free", a4, "symlog", "F4b  ACRR metabolite pairs (free), symlog", labels=lab4)
 save(fig, "F4_acr_acrr", BASE + "  † reference ACR/ACRR uses the combinatorial criterion (Corollary S2-10), a subset of Kimonu's kernel test.  * Kimonu applying that criterion to its own modules; equals the reference's ACR/ACRR name sets on every landed model.")

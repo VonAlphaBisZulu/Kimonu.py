@@ -718,3 +718,14 @@ is the pairwise rule with a stricter pair pattern (each complex has exactly one 
 common) and no sign test. Kimonu applying the reference's rule to its own modules
 (`kinetic_variants/s210_criterion.py`) reproduces the reference's ACR and ACRR name sets exactly
 on all six landed models; it is the starred arm in F4 and M2.
+
+### Reference sampled mode gets the R stage; main text uses it (2026-09-22)
+
+The reference's kinetic and ACR/ACRR scripts (fixed R code) now run on the 33 sampled-mode
+.mat files (`reference_final_sampled/acr/`). On the six models with both modes: giants identical
+(11/9/9/9/195/19), free ACRR pairs identical (1/1/1/1/4/1), non-singleton kinetic modules equal on
+four and within 5% on two (iIT341 97 vs 96, iCN900 235 vs 246), where the prefilter's dropped pairs
+split concordance modules. Decision: the main-text figures M1 and M2 carry COCOA efficient=true and
+the reference in sampled mode (11 models, three seeds, whiskers), the supplement figures F3 and F4
+carry both reference modes. iJB785's R kinetic stage is slow (hours) and the remaining sampled
+stems land behind it; the figures are re-rendered when they do.
