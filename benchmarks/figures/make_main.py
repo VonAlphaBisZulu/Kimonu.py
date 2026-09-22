@@ -14,6 +14,7 @@ import make_prelim as P            # renders F1-F5 on import; reuses D, ARMS, va
 D, ARMS, nC = P.D, P.ARMS, P.nC
 MAIN = [m for m in sorted(D["ref_exh"] | D["ref_sampled"], key=lambda m: nC[m]) if m != "iIS312_Epimastigote"][:10]
 P.models = MAIN
+MAINBASE = "Stochastic arms: bar at the median over three seeds, whiskers at the other two replicates; exact arms have no spread by construction.  * comparability-only arm."
 os.makedirs("figures/main", exist_ok=True)
 
 import textwrap
@@ -23,13 +24,13 @@ def save(fig, name, note):
 
 fig, ax = plt.subplots(figsize=(11, 4.6))
 P.grouped(ax, "n_kinetic", ["kimonu", "cocoa_false", "cocoa_true", "ref_exh"], "log", "M1  Kinetic modules (non-singleton)", "count (log)",
-          labels={"ref_exh": "Reference exhaustive"})
-save(fig, "M1_kinetic_modules", P.BASE + "  Reference on the landed exhaustive runs; the three exact arms agree wherever the reference has landed.")
+          labels={"ref_exh": "Reference exhaustive"}, errorbars=True)
+save(fig, "M1_kinetic_modules", MAINBASE + "  Reference on the landed exhaustive runs; the three exact arms agree wherever the reference has landed.")
 
 fig, ax = plt.subplots(figsize=(11, 4.6))
 P.grouped(ax, "acrr_free", ["kimonu", "cocoa_false", "cocoa_true", "kimonu_s210", "ref_exh"], "symlog", "M2  ACRR metabolite pairs (free)", "pairs (symlog)",
-          labels={"ref_exh": "Reference exhaustive †"})
-save(fig, "M2_acrr", P.BASE + "  † reference criterion (Corollary S2-10) is a sufficient condition; * Kimonu applying that criterion to its own modules reproduces the reference's pairs exactly on every landed model.")
+          labels={"ref_exh": "Reference exhaustive †"}, errorbars=True)
+save(fig, "M2_acrr", MAINBASE + "  † reference criterion (Corollary S2-10) is a sufficient condition; * Kimonu applying that criterion to its own modules reproduces the reference's pairs exactly on every landed model.")
 
 # M3 runtime vs size with fitted lines and 95% confidence bands
 fig, ax = plt.subplots(figsize=(11, 5.4))

@@ -36,7 +36,7 @@ def val(arm, m, key):
     runs = [r[key] for r in D[arm].get(m, []) if r.get(key) is not None]
     return None if not runs else (float(np.median(runs)), float(min(runs)), float(max(runs)), runs)
 
-def grouped(ax, key, arms, scale="linear", title="", ylabel="count", labels=None):
+def grouped(ax, key, arms, scale="linear", title="", ylabel="count", labels=None, errorbars=False):
     labels = labels or {}; n = len(arms); w = 0.8 / n; x = np.arange(len(models)); drawn = {a: 0 for a in arms}
     for i, a in enumerate(arms):
         lab, col, hatch = ARMS[a]
@@ -46,7 +46,10 @@ def grouped(ax, key, arms, scale="linear", title="", ylabel="count", labels=None
             med, lo, hi = v[0], v[1], v[2]; runs = v[3] if len(v) > 3 else None; drawn[a] += 1; xx = x[j] + (i - n / 2 + 0.5) * w
             ax.bar(xx, med, w, color=col, hatch=hatch, edgecolor=col if hatch else "white", linewidth=0.4)
             if runs and len(runs) > 1:
-                ax.scatter([xx] * len(runs), runs, s=6, color="#222", zorder=3, linewidths=0)
+                if errorbars:   # whiskers span the other replicates around the median
+                    ax.errorbar(xx, med, yerr=[[med - lo], [hi - med]], fmt="none", ecolor="#222", elinewidth=0.8, capsize=2, zorder=3)
+                else:
+                    ax.scatter([xx] * len(runs), runs, s=6, color="#222", zorder=3, linewidths=0)
     ax.set_xticks(x); ax.set_xticklabels(models, rotation=65, ha="right", fontsize=7)
     ax.set_ylabel(ylabel); ax.set_title(title, loc="left", fontsize=11)
     if scale == "log": ax.set_yscale("log")
