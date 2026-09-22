@@ -75,8 +75,8 @@ for a, key in arms:
     ax.plot(10 ** gx, 10 ** fit, color=col, lw=2.4, zorder=2); ax.fill_between(10 ** gx, 10 ** (fit - t * se), 10 ** (fit + t * se), color=col, alpha=0.12, linewidths=0)
 ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlabel("complexes"); ax.set_ylabel("seconds")
 for y, t_ in [(60, "1 min"), (3600, "1 h"), (86400, "1 day"), (604800, "1 week")]:
-    ax.axhline(y, color="#ccc", lw=0.9); ax.text(xs_all.min() * 1.02, y * 1.15, t_, fontsize=10, color="#777")
+    ax.axhline(y, color="#ccc", lw=0.9); ax.text(xs_all.max() * 1.02, y * 1.15, t_, fontsize=10, color="#777", ha="right")
 ax.set_title("M3  Runtime vs network size, all models", loc="left", fontsize=11)
-ax.legend(fontsize=11, frameon=False, loc="lower right"); ax.grid(color="#eee", lw=0.6); [ax.spines[s].set_visible(False) for s in ("top", "right")]
+ax.legend(fontsize=11, frameon=False, loc="upper left"); ax.grid(color="#eee", lw=0.6); [ax.spines[s].set_visible(False) for s in ("top", "right")]
 save(fig, "M3_runtime", "Lines: least-squares fit of log seconds on log complexes per arm, on per-model medians; bands: 95% confidence for the fitted mean. Stochastic arms show seeds as faint points. Reference times are from the fixed bridge; the exhaustive arm is concordance-dominated.")
 print("main figures:", sorted(os.listdir("figures/main")), "models:", MAIN)
