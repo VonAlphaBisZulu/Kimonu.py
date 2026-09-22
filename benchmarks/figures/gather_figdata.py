@@ -1,8 +1,8 @@
 """Build figdata.json (schema in make_prelim.py) from the benchmark result directories.
 
 Arms: kimonu from sweep_shared/ (giant_overlap from the sweep_tentative/ logs), COCOA from sweep/cocoa_v110 (efficient=false) and sweep/cocoa_eff
-(efficient=true), reference from reference_final/ (exhaustive, fixed algorithm and bridge) and
-reference_final_sampled/. Earlier reference runs are not read: they predate the concordance fixes.
+(efficient=true), reference from reference_final/ (exhaustive, fixed algorithm and bridge; retested partitions from
+reference_final/retest/ where present) and reference_final_sampled/. Earlier reference runs are not read: they predate the concordance fixes.
 Free metabolites are those listed before "E_1" in the model's own metabolite list.
 
     python figures/gather_figdata.py [--check]   # --check diffs kimonu/COCOA arms against the committed file
@@ -61,16 +61,24 @@ def read_pairs(path):
     return vals
 
 def ref_exh(m):
+    """Exhaustive reference; where the rejected pairs were re-tested with the scaling-bound fix
+    (reference_final/retest/), the retested partition and its R stage are used and `retest` says so."""
     f = f"reference_final/reference_{m}.json"
     if not os.path.isfile(f): return None
+    stem, rec = f"{m}_concordant_fixed", {}
+    rt = f"reference_final/retest/reference_{m}_retest.json"
+    if os.path.isfile(rt):
+        f, stem = rt, f"{m}_concordant_fixed_retest"
+        w = open(f"reference_final/retest/retest_{m}.txt").readline().split()
+        rec["retest"] = dict(retested=int(w[1]), accepted=int(w[3]), residual=int(w[5]))
     d = json.load(open(f)); b, c = ref_counts(d)
-    rec = dict(balanced=b, conc=c, seconds=d["seconds"], sec_conc=d["seconds_concordant"])
-    ov = f"reference_final/acr/Results/Overview/Overview_{m}_concordant_fixed.csv"
+    rec.update(balanced=b, conc=c, seconds=d["seconds"], sec_conc=d["seconds_concordant"])
+    ov = f"reference_final/acr/Results/Overview/Overview_{stem}.csv"
     if os.path.isfile(ov):
         v = {int(r[0]): r[1] for r in list(csv.reader(open(ov), delimiter=" "))[1:]}
         free = free_set(m)
-        single = [r[1] for r in list(csv.reader(open(f"reference_final/acr/Results/MetSingle/MetSingle_{m}_concordant_fixed.csv"), delimiter=" "))[1:]]
-        double = read_pairs(f"reference_final/acr/Results/MetDouble/MetDouble_{m}_concordant_fixed.csv")
+        single = [r[1] for r in list(csv.reader(open(f"reference_final/acr/Results/MetSingle/MetSingle_{stem}.csv"), delimiter=" "))[1:]]
+        double = read_pairs(f"reference_final/acr/Results/MetDouble/MetDouble_{stem}.csv")
         rec.update(giant=int(v[6]), acr=int(v[14]), acrr=int(v[15]), acr_free=n_free(single, free), acrr_free=n_free(double, free))
         assert len(single) == rec["acr"] and len(double) == rec["acrr"], (m, len(single), len(double), rec)
     return rec

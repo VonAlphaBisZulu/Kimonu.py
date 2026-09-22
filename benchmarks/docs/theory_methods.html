@@ -91,7 +91,7 @@
   </div>
   <ul>
     <li><b>Kimonu</b>: normalise every nonzero row of <span class="m">M</span> by its first nonzero entry and group identical keys. The partition is produced directly; no pair is visited and no tolerance exists. Transitivity holds by construction. <span class="tag">exact</span></li>
-    <li><b>Reference</b>: a stochastic prefilter (<span class="m">pre_concordant_sampling</span>: 10 random flux points per round, rounds until the candidate list shrinks by less than 1% and at least 50 rounds; a pair survives when the coefficient of variation of its sampled activity ratio is below 0.01) followed by four Charnes–Cooper LPs per surviving pair bounding the ratio over the flux space; concordant when the bounds coincide. Classes are the connected components of the accepted pairs. The prefilter only removes candidates, so a completed sampled run is a <em>subset</em> of the exhaustive answer by construction. Four defects in the pairwise test are fixed on our fork (section 08).</li>
+    <li><b>Reference</b>: a stochastic prefilter (<span class="m">pre_concordant_sampling</span>: 10 random flux points per round, rounds until the candidate list shrinks by less than 1% and at least 50 rounds; a pair survives when the coefficient of variation of its sampled activity ratio is below 0.01) followed by four Charnes–Cooper LPs per surviving pair bounding the ratio over the flux space; concordant when the bounds coincide. Classes are the connected components of the accepted pairs. The prefilter only removes candidates, so a completed sampled run is a <em>subset</em> of the exhaustive answer by construction. Five defects in the pairwise test are fixed on our fork (section 08).</li>
     <li><b>COCOA</b>: sampled activity ratios, LP confirmation with <span class="m">concordance_tolerance = 10<sup>−5</sup></span>, union–find over accepted pairs; <span class="m">efficient=true</span> shortens the search. Seeded, but not bit-reproducible at genome scale.</li>
     <li><b>Verified</b>: reference exhaustive = Kimonu partition for partition (balanced set, modules, pairs) on every landed model of the final rerun (iIS312 and its three life-stage models; seven larger models running). Reference sampled ⊂ Kimonu on all 33 cells (11 models × 3 seeds): balanced identical, concordant pairs a strict subset, never a superset. Module counts are not monotone in the pairs (iIT341 178 vs 173): a dropped pair splits a module. COCOA both splits and merges classes on genome-scale models, and one seed in three cascades on iIT341 and iHN637; iJN678 over-merges at every seed.</li>
   </ul>
@@ -190,7 +190,7 @@
   <div class="tblscroll"><table>
     <thead><tr><th>Where</th><th>Defect</th><th>Status</th></tr></thead>
     <tbody>
-      <tr><td>Reference concordance</td><td>Negative Charnes–Cooper branch keeps the positive branch's bounds (infeasible for <span class="m">t &lt; 0</span>); scaling variable left in the objective (<span class="m">[−A<sub>i</sub> 1]</span>, should be <span class="m">[−A<sub>i</sub> 0]</span>), collapsing reported ratio ranges toward zero; verdict on an absolute 2-decimal grid; an unsolved branch vetoes a solved one</td><td>fixed on fork <span class="m">VonAlphaBisZulu/Upstream_Algorithm</span>, 8/8 adjudicated pairs, reproduces Kimonu exactly on full models; PR held</td></tr>
+      <tr><td>Reference concordance</td><td>Negative Charnes–Cooper branch keeps the positive branch's bounds (infeasible for <span class="m">t &lt; 0</span>); scaling variable left in the objective (<span class="m">[−A<sub>i</sub> 1]</span>, should be <span class="m">[−A<sub>i</sub> 0]</span>), collapsing reported ratio ranges toward zero; verdict on an absolute 2-decimal grid; an unsolved branch vetoes a solved one; the scaling variable is capped at 999, which makes every pair with a complex whose activity never exceeds 1/999 untestable (fixed by bounding it per denominator at 999 / max|A<sub>j</sub>·v|)</td><td>fixed on fork <span class="m">VonAlphaBisZulu/Upstream_Algorithm</span>, 8/8 adjudicated pairs, reproduces Kimonu exactly on full models; PR held</td></tr>
       <tr><td>Reference kinetic (R)</td><td><span class="m">x[terminal == 0]</span> NA indexing</td><td>fixed on fork</td></tr>
       <tr><td>Our LP bridge</td><td>CPLEX status 5 treated as failure; verdicts depended on the warm basis</td><td>fixed: cold re-solve on any non-optimal status, 315/315 pairs stable</td></tr>
       <tr><td>COCOA</td><td>sampled concordance splits and merges true classes; one seed in three cascades on two models; ACRR sets not transitively closed on iJN678</td><td>reported as measured; kinetic stage verified correct on exact input</td></tr>
@@ -204,7 +204,7 @@
   <ol>
     <li>Identical unblocked networks for all three tools, all 33 models.</li>
     <li>Balanced complexes: Kimonu = reference on 37 of 37 landed runs; = COCOA except one cascaded seed.</li>
-    <li>Concordance: reference exhaustive (fixed) = Kimonu on 4 of 4 landed models; reference sampled ⊂ Kimonu on 33 of 33 cells.</li>
+    <li>Concordance: reference exhaustive (fixed) = Kimonu on 6 of 6 landed models, iIT341 after re-testing the pairs the scaling bound had rejected; reference sampled ⊂ Kimonu on 33 of 33 cells.</li>
     <li>Upstream sets: four-phase = two-phase on every seed, 33 of 33 models; autonomy, feeding, Lemma S2-4 hold for both.</li>
     <li>Kinetic modules: Kimonu with overlap-only merge = reference R stage (iCN900); COCOA on Kimonu's partition = Kimonu (iCN900, both settings); reference giants = Kimonu on 4 of 4 landed.</li>
     <li>ACR/ACRR: reference pairs ⊂ Kimonu's on every model with an R stage; EnvZ–OmpR gives {Yp} and the 6-clique.</li>
@@ -218,7 +218,7 @@
       <li>Modules are merged by overlap and by Proposition S3-4; counts under overlap-only merging, the convention of the reference implementation, are given in the Supplement. ACR and ACRR sets are identical under both.</li>
       <li>The reference's sampled mode is a strict subset of its exhaustive mode by construction; sampled runs are reported at three seeds, exhaustive runs once.</li>
       <li>The reference's ACR/ACRR criterion (Corollary S2-10) is sufficient, not necessary; every pair it reports is in Kimonu's set.</li>
-      <li>Non-finishers (7-day cap for COCOA) are not reported and not rerun; the reference concordance test was run with four fixes, submitted upstream.</li>
+      <li>Non-finishers (7-day cap for COCOA) are not reported and not rerun; the reference concordance test was run with four fixes and re-tested with a fifth, all submitted upstream.</li>
     </ul>
   </div>
 </section>

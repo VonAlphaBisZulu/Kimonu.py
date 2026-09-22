@@ -2718,15 +2718,15 @@
    "acrr_free": 1
   },
   "iIT341": {
+   "retest": {
+    "retested": 1300,
+    "accepted": 1286,
+    "residual": 14
+   },
    "balanced": 696,
-   "conc": 185,
-   "seconds": 282877.431198,
-   "sec_conc": 282833.960465,
-   "giant": 245,
-   "acr": 0,
-   "acrr": 21,
-   "acr_free": 0,
-   "acrr_free": 8
+   "conc": 173,
+   "seconds": 282961.046517,
+   "sec_conc": 282917.575784
   }
  },
  "ref_sampled": {
