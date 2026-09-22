@@ -18,15 +18,15 @@ from matplotlib.patches import Patch
 
 D = json.load(open("figdata.json")); nC = D["n_complexes"]
 models = sorted(D["models"], key=lambda m: nC[m]); os.makedirs("figures/prelim", exist_ok=True)
-# matplotlib tab10 for the tools (Kimonu green, COCOA red/orange, reference blue); the Kimonu
-# variants built to mirror the reference take ColorBrewer Blues and sit beside the reference bars.
-ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#2ca02c", ""),
-        "kimonu4":     ("Kimonu, overlap merge only*",   "#08519c", ""),
-        "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#6baed6", ""),
-        "cocoa_false": ("COCOA efficient=false",        "#d62728", ""),
-        "cocoa_true":  ("COCOA efficient=true",         "#ff7f0e", ""),
-        "ref_exh":     ("Reference exhaustive",         "#1f77b4", ""),
-        "ref_sampled": ("Reference sampled*",           "#aec7e8", "")}
+# RColorBrewer Dark2 / Set2 / Pastel2 siblings: Kimonu teal, COCOA oranges, reference blue-violets.
+# The Kimonu variants built to mirror the reference take that family and sit beside the reference bars.
+ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#1b9e77", ""),
+        "kimonu4":     ("Kimonu, overlap merge only*",   "#524c94", ""),
+        "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#8da0cb", ""),
+        "cocoa_false": ("COCOA efficient=false",        "#d95f02", ""),
+        "cocoa_true":  ("COCOA efficient=true",         "#fc8d62", ""),
+        "ref_exh":     ("Reference exhaustive",         "#7570b3", ""),
+        "ref_sampled": ("Reference sampled*",           "#cbd5e8", "")}
 BASE = "Stochastic arms: bar at the median over seeds, each seed a point; exact arms have no spread by construction.  * comparability-only arm."
 
 def val(arm, m, key):
