@@ -1,0 +1,70 @@
+{
+ "model": "ArabidopsisCoreModel",
+ "acr": [],
+ "acrr": [
+  [
+   "Cys[c]",
+   "Cys[p]"
+  ],
+  [
+   "DHO[h]",
+   "DHO[c]"
+  ],
+  [
+   "DHO[h]",
+   "ORO[m]"
+  ],
+  [
+   "GCEA[p]",
+   "GCEA[c]"
+  ],
+  [
+   "Met[c]",
+   "Met[h]"
+  ],
+  [
+   "Met[c]",
+   "Met[m]"
+  ],
+  [
+   "Met[c]",
+   "Met[p]"
+  ],
+  [
+   "Met[h]",
+   "Met[m]"
+  ],
+  [
+   "Met[p]",
+   "Met[h]"
+  ],
+  [
+   "Met[p]",
+   "Met[m]"
+  ],
+  [
+   "ORO[m]",
+   "DHO[c]"
+  ],
+  [
+   "PR-ATP[h]",
+   "PR-AMP[h]"
+  ],
+  [
+   "Pro[c]",
+   "Pro[h]"
+  ],
+  [
+   "Pro[c]",
+   "Pro[p]"
+  ],
+  [
+   "Pro[p]",
+   "Pro[h]"
+  ]
+ ],
+ "acr_free": 0,
+ "acrr_free": 15,
+ "n_kinetic": 576,
+ "giant": 18
+}

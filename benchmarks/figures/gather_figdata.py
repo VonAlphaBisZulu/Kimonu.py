@@ -25,7 +25,15 @@ def kimonu_rec(m):
     return dict(balanced=d["n_balanced"], conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
                 acr_free=n_free(d["acr_free"], free), acrr_free=n_free(d["acrr_free"], free),
                 acr=len(d["acr"]), acrr=len(d["acrr"]), seconds=d["seconds"], sec_conc=d["seconds_concordance"],
-                sec_kin=d["seconds_kinetic"], sec_acr=d["seconds_acr"], giant_overlap=giant_overlap(m)), d["n_complexes"]
+                sec_kin=d["seconds_kinetic"], sec_acr=d["seconds_acr"], giant_overlap=giant_overlap(m),
+                n_kinetic=d["n_kinetic_modules"], **s210(m)), d["n_complexes"]
+
+def s210(m):
+    """ACR/ACRR by the reference's combinatorial rule on Kimonu's modules (kinetic_variants/s210_criterion.py)."""
+    f = f"kinetic_variants/s210_{m}.json"
+    if not os.path.isfile(f): return {}
+    d = json.load(open(f))
+    return dict(acr_s210=len(d["acr"]), acrr_s210=len(d["acrr"]), acr_s210_free=d["acr_free"], acrr_s210_free=d["acrr_free"])
 
 def giant_overlap(m):
     """Largest module under overlap-only merging (the reference's rule), from the sweep_tentative/ logs; the four-phase and two-phase upstream sets are identical, see kinetic_variants/."""
@@ -42,7 +50,11 @@ def cocoa_recs(m, sub, tag):
         sizes = {}
         for x in cm:
             if x > 0: sizes[x] = sizes.get(x, 0) + 1
+        ksizes = {}
+        for x in d["kinetic_module"]:
+            if x >= 0: ksizes[x] = ksizes.get(x, 0) + 1
         out.append(dict(seed=d["seed"], balanced=balanced, conc=sum(1 for v in sizes.values() if v > 1),
+                        n_kinetic=sum(1 for v in ksizes.values() if v > 1),
                         giant=d["giant_module"], acr=len(d["acr"]), acrr=len(d["acrr"]),
                         acr_free=n_free(d["acr"], free), acrr_free=n_free(d["acrr"], free), seconds=d["seconds"]))
     return out
@@ -79,7 +91,12 @@ def ref_exh(m):
         free = free_set(m)
         single = [r[1] for r in list(csv.reader(open(f"reference_final/acr/Results/MetSingle/MetSingle_{stem}.csv"), delimiter=" "))[1:]]
         double = read_pairs(f"reference_final/acr/Results/MetDouble/MetDouble_{stem}.csv")
-        rec.update(giant=int(v[6]), acr=int(v[14]), acrr=int(v[15]), acr_free=n_free(single, free), acrr_free=n_free(double, free))
+        mj = f"reference_final/acr/Results/modules_{stem}.json"
+        if os.path.isfile(mj):
+            md = json.load(open(mj))
+            rec["n_kinetic"] = sum(1 for x in md["modules"] if len(x) > 1)     # Overview[4]-[5] is off by the late singleton append
+        rec.update(giant=int(v[6]), acr=int(v[14]), acrr=int(v[15]),
+                   acr_free=n_free(single, free), acrr_free=n_free(double, free))
         assert len(single) == rec["acr"] and len(double) == rec["acrr"], (m, len(single), len(double), rec)
     return rec
 

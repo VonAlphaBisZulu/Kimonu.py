@@ -1,0 +1,54 @@
+{
+ "model": "iMM904",
+ "acr": [],
+ "acrr": [
+  [
+   "3dhq[c]",
+   "2dda7p[c]"
+  ],
+  [
+   "E197_aprut[c]_h2o[c]_complex",
+   "E563_N1aspmd[c]_h2o[c]_complex"
+  ],
+  [
+   "E253_dmpp[c]_complex",
+   "E253_grdp[c]_complex"
+  ],
+  [
+   "E289_5dpmev[c]_complex",
+   "E555_5pmev[c]_complex"
+  ],
+  [
+   "E305_acg5sa[m]_complex",
+   "E276_acorn[m]_complex"
+  ],
+  [
+   "E333_44mctr[c]_h[c]_complex",
+   "E346_4mzym_int2[c]_h[c]_complex"
+  ],
+  [
+   "E347_44mzym[c]_h[c]_nadph[c]_complex",
+   "E347_4mzym[c]_h[c]_nadph[c]_complex"
+  ],
+  [
+   "E612_3hanthrn[c]_complex",
+   "E590_Lkynr[c]_h[c]_nadph[c]_complex"
+  ],
+  [
+   "oaa[c]",
+   "oaa[e]"
+  ],
+  [
+   "prbamp[c]",
+   "prbatp[c]"
+  ],
+  [
+   "ptd2meeta_SC[c]",
+   "ptdmeeta_SC[c]"
+  ]
+ ],
+ "acr_free": 0,
+ "acrr_free": 4,
+ "n_kinetic": 585,
+ "giant": 22
+}

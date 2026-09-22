@@ -1,0 +1,14 @@
+{
+ "model": "iIS312_Amastigote",
+ "acr": [],
+ "acrr": [
+  [
+   "ura[e]",
+   "gua[e]"
+  ]
+ ],
+ "acr_free": 0,
+ "acrr_free": 1,
+ "n_kinetic": 33,
+ "giant": 9
+}

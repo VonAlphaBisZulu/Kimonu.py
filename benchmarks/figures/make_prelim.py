@@ -20,6 +20,7 @@ D = json.load(open("figdata.json")); nC = D["n_complexes"]
 models = sorted(D["models"], key=lambda m: nC[m]); os.makedirs("figures/prelim", exist_ok=True)
 ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#1C6B58", ""),
         "kimonu4":     ("Kimonu, overlap merge only*",   "#7FB8A6", "//"),
+        "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#7FB8A6", "//"),
         "cocoa_false": ("COCOA efficient=false",        "#B8641E", ""),
         "cocoa_true":  ("COCOA efficient=true",         "#E0A26A", ""),
         "ref_exh":     ("Reference exhaustive",         "#4A5A88", ""),
@@ -29,6 +30,8 @@ BASE = "Stochastic arms: bar at the median over seeds, each seed a point; exact 
 def val(arm, m, key):
     if arm == "kimonu":  v = D["kimonu"].get(m, {}).get(key); return None if v is None else (v, None, None)
     if arm == "kimonu4": v = D["kimonu"].get(m, {}).get("giant_overlap") if key == "giant" else None; return None if v is None else (v, None, None)
+    if arm == "kimonu_s210":
+        v = D["kimonu"].get(m, {}).get({"acr_free": "acr_s210_free", "acrr_free": "acrr_s210_free", "acr": "acr_s210", "acrr": "acrr_s210"}.get(key, "-")); return None if v is None else (v, None, None)
     if arm == "ref_exh": v = D["ref_exh"].get(m, {}).get(key); return None if v is None else (v, None, None)
     runs = [r[key] for r in D[arm].get(m, []) if r.get(key) is not None]
     return None if not runs else (float(np.median(runs)), float(min(runs)), float(max(runs)), runs)
@@ -69,10 +72,10 @@ fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "giant", ["kimonu", "kimonu
         labels={"ref_exh": "Reference (R stage, corrected NA)*"})
 save(fig, "F3_giant", BASE + "  * Kimonu without the Proposition S3-4 coupling merge = the reference's merge rule; the four-phase and two-phase upstream sets are identical on all 33 models. Reference giants: corrected R stage on the final exhaustive concordance (4 models so far), equal to Kimonu on each.")
 # F4: ACR linear (mostly zeros), ACRR symlog
-fig, axs = plt.subplots(2, 1, figsize=(14, 8.5)); a4 = ["kimonu", "cocoa_false", "cocoa_true", "ref_exh"]; lab4 = {"ref_exh": "Reference exhaustive †"}
+fig, axs = plt.subplots(2, 1, figsize=(14, 8.5)); a4 = ["kimonu", "kimonu_s210", "cocoa_false", "cocoa_true", "ref_exh"]; lab4 = {"ref_exh": "Reference exhaustive †"}
 grouped(axs[0], "acr_free", a4, "linear", "F4a  ACR metabolites (free)", labels=lab4)
 grouped(axs[1], "acrr_free", a4, "symlog", "F4b  ACRR metabolite pairs (free), symlog", labels=lab4)
-save(fig, "F4_acr_acrr", BASE + "  † reference ACR/ACRR uses the combinatorial criterion (Corollary S2-10), a subset of Kimonu's kernel test; every reference pair is in Kimonu's set on every landed model.")
+save(fig, "F4_acr_acrr", BASE + "  † reference ACR/ACRR uses the combinatorial criterion (Corollary S2-10), a subset of Kimonu's kernel test.  * Kimonu applying that criterion to its own modules; equals the reference's ACR/ACRR name sets on every landed model.")
 # F5
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(14, 5), gridspec_kw={"width_ratios": [2, 1.2]})
 for a in ["kimonu", "cocoa_false", "cocoa_true", "ref_exh", "ref_sampled"]:

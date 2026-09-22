@@ -695,3 +695,26 @@ module has 913 complexes against 696 balanced (iLJ478: 777 vs 778, one short of 
 so the module was seeded as "balanced" into every upstream set. The shipped .mat files carry `B`;
 the fork now identifies the balanced class as the one equal to `B` (fork commit after e141a83). On
 iCN900 and the iIS312 family the balanced set is the largest class, which is why they were fine.
+
+### Kinetic-module counts: Kimonu seeds singleton concordance classes, the reference does not (2026-09-22)
+
+Non-singleton kinetic modules on the landed models: Kimonu 49/33/49/26/250/103 against the
+reference's 49/33/49/26/246/96 (iIS312 family, iCN900, iIT341). Set by set, every reference module
+is a Kimonu module; the extra Kimonu modules (4 on iCN900, 7 on iIT341) are pairs of one balanced
+and one non-balanced complex, the upstream sets of singleton concordance classes, which the
+reference R script never seeds ("if there is more than one complex assigned"). COCOA's counts agree
+with Kimonu's where its concordance is clean (iCN900 250 at both settings), so COCOA seeds them too.
+Giants and ACR/ACRR are unaffected on every landed model. Whether a singleton class should seed a
+kinetic module is a definitional choice for the paper; Kimonu keeps it for now. Reference counts
+are read from the R stage's `final_lres` (dumped as `modules_<stem>.json` by `run_chain.sh`);
+`Overview[4]-[5]` is not usable for this because the singleton count is taken before the late
+singleton append.
+
+COCOA's ACR/ACRR test, from `kinetic_analysis.jl`: `efficient=true` is a pairwise rule on
+composition differences within a module (one differing species → ACR; exactly two with equal and
+opposite differences → ACRR pair); `efficient=false` runs that rule and then the column-space test
+`y ∈ im(YΔ)` by QR projection at tolerance 1e-8. The reference's rule (Corollary S2-10 as coded)
+is the pairwise rule with a stricter pair pattern (each complex has exactly one further species in
+common) and no sign test. Kimonu applying the reference's rule to its own modules
+(`kinetic_variants/s210_criterion.py`) reproduces the reference's ACR and ACRR name sets exactly
+on all six landed models; it is the starred arm in F4 and M2.

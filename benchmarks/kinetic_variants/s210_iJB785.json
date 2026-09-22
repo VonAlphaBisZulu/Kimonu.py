@@ -1,0 +1,78 @@
+{
+ "model": "iJB785",
+ "acr": [],
+ "acrr": [
+  [
+   "5caiz[c]",
+   "5aizc[c]"
+  ],
+  [
+   "5mdr1p[c]",
+   "5mdru1p[c]"
+  ],
+  [
+   "E119_6pgc[c]_complex",
+   "E345_g6p[c]_complex"
+  ],
+  [
+   "E171_dmpp[c]_complex",
+   "E171_grdp[c]_complex"
+  ],
+  [
+   "E235_glu__D[c]_uama[c]_complex",
+   "E317_26dap__M[c]_uamag[c]_complex"
+  ],
+  [
+   "caro[c]",
+   "gcarote[c]"
+  ],
+  [
+   "caro[c]",
+   "lycop[c]"
+  ],
+  [
+   "chor[c]",
+   "ichor[c]"
+  ],
+  [
+   "gcarote[c]",
+   "lycop[c]"
+  ],
+  [
+   "glu1sa[c]",
+   "5aop[c]"
+  ],
+  [
+   "man6p[c]",
+   "f6p[c]"
+  ],
+  [
+   "man6p[c]",
+   "man1p[c]"
+  ],
+  [
+   "mg2[e]",
+   "mg2[p]"
+  ],
+  [
+   "pphn[c]",
+   "chor[c]"
+  ],
+  [
+   "ru5p__D[c]",
+   "ara5p[c]"
+  ],
+  [
+   "uacgam[c]",
+   "uacmam[c]"
+  ],
+  [
+   "udpgal[c]",
+   "udpg[c]"
+  ]
+ ],
+ "acr_free": 0,
+ "acrr_free": 14,
+ "n_kinetic": 1905,
+ "giant": 22
+}

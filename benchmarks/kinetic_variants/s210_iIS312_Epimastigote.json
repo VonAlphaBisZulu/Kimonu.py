@@ -1,0 +1,14 @@
+{
+ "model": "iIS312_Epimastigote",
+ "acr": [],
+ "acrr": [
+  [
+   "gua[e]",
+   "ura[e]"
+  ]
+ ],
+ "acr_free": 0,
+ "acrr_free": 1,
+ "n_kinetic": 49,
+ "giant": 9
+}
