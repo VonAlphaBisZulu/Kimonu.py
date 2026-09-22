@@ -685,3 +685,13 @@ pairs Kimonu accepts and the reference rejected, with the fix, and report "refer
 up to N solver-residual pairs" (acceptances are already verified as a subset of the exact answer).
 Downstream: iIT341's reference R stage on the split concordance gives giant 245 vs Kimonu 195 and
 ACRR 21 (free 8) vs 4048 (free 24); every reference pair is in Kimonu's set.
+
+### Sixth reference defect, kinetic R stage: the balanced class is taken to be the largest class (2026-09-22)
+
+On the retested iIT341 partition (identical to Kimonu's), the reference R stage first gave giant 245
+vs Kimonu 195 and 7 of its 21 ACRR pairs outside Kimonu's set. Cause: `code_kineticModule_analysis.R`
+picks the largest entry of `class_with_balanced` as the balanced class. iIT341's largest concordance
+module has 913 complexes against 696 balanced (iLJ478: 777 vs 778, one short of the same failure),
+so the module was seeded as "balanced" into every upstream set. The shipped .mat files carry `B`;
+the fork now identifies the balanced class as the one equal to `B` (fork commit after e141a83). On
+iCN900 and the iIS312 family the balanced set is the largest class, which is why they were fine.

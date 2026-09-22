@@ -2727,11 +2727,11 @@
    "conc": 173,
    "seconds": 282961.046517,
    "sec_conc": 282917.575784,
-   "giant": 245,
+   "giant": 195,
    "acr": 0,
-   "acrr": 21,
+   "acrr": 14,
    "acr_free": 0,
-   "acrr_free": 8
+   "acrr_free": 4
   }
  },
  "ref_sampled": {

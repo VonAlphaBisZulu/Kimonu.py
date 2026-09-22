@@ -115,14 +115,14 @@ mets <- unlist(s$Results.balanced[,,1]$MODEL.r[[1]][[1]][,,1]$mets)
 complexes <- unlist(s$Results.balanced[,,1]$MODEL.r[[1]][[1]][,,1]$complexes)
 
 lres <- list()
-maxl <- length(s$class.with.balanced[[1]][[1]][,1])
+# the balanced class is the one holding B; it need not be the largest class
 maxj <- 1
-for (i in 2:length(s$class.with.balanced))
+if (!is.null(s$B))
 {
-	if (maxl < length(s$class.with.balanced[[i]][[1]][,1]))
+	for (i in 1:length(s$class.with.balanced))
 	{
-		maxl <- length(s$class.with.balanced[[i]][[1]][,1])
-		maxj <- i
+		if (setequal(s$class.with.balanced[[i]][[1]][,1], as.vector(s$B)))
+			maxj <- i
 	}
 }
 
