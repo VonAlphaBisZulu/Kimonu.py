@@ -654,3 +654,34 @@ starred comparability arm (F3) with one Methods sentence. `figdata.json` key ren
   iIS312 variant. Not yet drawn.
 - Idea for StrainDesign: an F2C2-type exact flux-coupling function (full/partial/directional
   coupling from the exact nullspace). Community-facing; exactness is the selling point.
+
+### Fifth reference concordance defect: the scaling variable's fixed bound (2026-09-22)
+
+iCN900 exhaustive landed identical to Kimonu (744 balanced, 352 modules, 14618 pairs, 86 h).
+iIT341 exhaustive landed as a strict subset: 429935 of Kimonu's 431235 pairs, 185 modules vs 173,
+balanced identical, `lp_degraded 0`. The 1300 missing pairs split exactly two Kimonu modules (13
+and 79 complexes) into small pieces; the exact M rows of the rejected pairs are proportional
+(ratios -1, 8, -4, ...), and HiGHS bounds of the activity ratio are constant.
+
+Mechanism: the Charnes-Cooper LPs normalise the denominator to A_j.w = 1 with w = t v and
+t in [0, 999] (negative branch [-999, 0]). A complex whose activity never exceeds 1/999 cannot
+reach the normalisation, both branches are infeasible, and the pair is reported non-concordant.
+iIT341 has 198 such non-balanced complexes (max |A_c.v| = 1.18e-4, biomass-linked); all 1300
+missing pairs involve one. The four landed iIS312-family models and iCN900 have none, which is why
+they came out identical. `kinetic_variants/` is unaffected; this is concordance only.
+
+Fix on the fork (commit after 28350a9): bound t per denominator, t <= 999 / max|A_j.v|, the
+activity range computed once per denominator complex with two LPs. Validation through the CPLEX
+bridge: the 8 hand-adjudicated iLJ478 pairs still 8/8; of the 1300 rejected iIT341 pairs, 1286 are
+now accepted and 14 (all with denominator complex 2939, t ~ 8.5e6) stay rejected in CPLEX although
+HiGHS solves them to constant ratios 1, -4, -1. Scaling the +-1e9 flux-variable bounds with t makes
+CPLEX worse (382 rejected); free bounds break the bridge. Residual: solver precision at large t.
+
+Consequences. The five exhaustive runs still in flight (iJB785, iLJ478, Saha, iNF517, iSB619) use the
+fixed bound and will be subsets on any model with sub-1e-3 complexes; the sampled arm's subset
+relation mixes this cap with the prefilter. Options: (a) report reference as subset with this cause;
+(b) rerun the affected exhaustive runs with the fix; (c) after each run lands, re-test only the
+pairs Kimonu accepts and the reference rejected, with the fix, and report "reference + fix = Kimonu
+up to N solver-residual pairs" (acceptances are already verified as a subset of the exact answer).
+Downstream: iIT341's reference R stage on the split concordance gives giant 245 vs Kimonu 195 and
+ACRR 21 (free 8) vs 4048 (free 24); every reference pair is in Kimonu's set.

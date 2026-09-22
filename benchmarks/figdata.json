@@ -2662,6 +2662,17 @@
   ]
  },
  "ref_exh": {
+  "iCN900": {
+   "balanced": 744,
+   "conc": 352,
+   "seconds": 309469.138107,
+   "sec_conc": 309433.606985,
+   "giant": 19,
+   "acr": 0,
+   "acrr": 1,
+   "acr_free": 0,
+   "acrr_free": 1
+  },
   "iIS312": {
    "balanced": 379,
    "conc": 198,
@@ -2705,6 +2716,17 @@
    "acrr": 3,
    "acr_free": 0,
    "acrr_free": 1
+  },
+  "iIT341": {
+   "balanced": 696,
+   "conc": 185,
+   "seconds": 282877.431198,
+   "sec_conc": 282833.960465,
+   "giant": 245,
+   "acr": 0,
+   "acrr": 21,
+   "acr_free": 0,
+   "acrr_free": 8
   }
  },
  "ref_sampled": {
