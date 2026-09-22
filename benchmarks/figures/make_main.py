@@ -17,12 +17,6 @@ P.models = MAIN
 # main-text styling: short model names, matplotlib tab10, larger type, heavier marks (SVG alongside PNG)
 SHORT = {"iIS312_Trypomastigote": "iIS312 Try", "iIS312_Amastigote": "iIS312 Ama", "iIS312_Epimastigote": "iIS312 Epi", "Saha2011iRS1597": "Saha2011",
          "Chlorella_variabilis_iAJ526": "iAJ526", "ArabidopsisCoreModel": "Arabidop."}
-# ColorBrewer "Paired" dark/light pairs, blue vs orange (colour-blind safe); one family per comparison,
-# Kimonu always the dark member and the arm it is read against the light one.
-DB, LB, DO, LO, GR = "#1f78b4", "#a6cee3", "#ff7f00", "#fdbf6f", "#8c8c8c"
-def paint(colors):
-    for arm, col in colors.items():
-        lab, _, hatch = P.ARMS[arm]; P.ARMS[arm] = (lab, col, "")
 plt.rcParams.update({"font.size": 13, "axes.titlesize": 15, "axes.labelsize": 14, "xtick.labelsize": 12, "ytick.labelsize": 12, "legend.fontsize": 11, "lines.linewidth": 2.4})
 
 def polish(ax, names=True):
@@ -42,20 +36,17 @@ def save(fig, name, note):
     fig.text(0.01, 0.005, "\n".join(textwrap.wrap(note, 150)), fontsize=9, color="#555", va="bottom"); fig.tight_layout(rect=(0, 0.06, 1, 1))
     fig.savefig(f"figures/main/{name}.png", dpi=160); fig.savefig(f"figures/main/{name}.svg"); plt.close(fig)
 
-paint({"kimonu": DB, REF: LB, "cocoa_true": LO})
 fig, ax = plt.subplots(figsize=(11, 5.2))
 P.grouped(ax, "n_kinetic", ["kimonu", "cocoa_true", REF], "log", "M1  Kinetic modules (non-singleton)", "count (log)",
           labels=REFLAB, errorbars=True); polish(ax)
 save(fig, "M1_kinetic_modules", MAINBASE + "  Reference on the landed exhaustive runs; the three exact arms agree wherever the reference has landed.")
 
-paint({"kimonu": DB, "cocoa_true": LB, "kimonu_s210": DO, REF: LO})
 fig, ax = plt.subplots(figsize=(11, 5.2))
 P.grouped(ax, "acrr_free", ["kimonu", "cocoa_true", "kimonu_s210", REF], "symlog", "M2  ACRR metabolite pairs (free)", "pairs (symlog)",
           labels=REFLAB2, errorbars=True); polish(ax)
 save(fig, "M2_acrr", MAINBASE + "  † reference criterion (Corollary S2-10) is a sufficient condition; * Kimonu applying that criterion to its own modules reproduces the reference's pairs exactly on every landed model.")
 
 # M3 runtime vs size with fitted lines and 95% confidence bands
-paint({"kimonu": DB, "ref_exh": LB, "cocoa_false": DO, "cocoa_true": LO, "ref_sampled": GR})
 fig, ax = plt.subplots(figsize=(11, 6))
 arms = [("kimonu", "seconds"), ("cocoa_false", "seconds"), ("cocoa_true", "seconds"), ("ref_exh", "seconds"), ("ref_sampled", "seconds")]
 xs_all = np.array([nC[m] for m in D["models"]], float)

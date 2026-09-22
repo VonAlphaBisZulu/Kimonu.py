@@ -18,13 +18,14 @@ from matplotlib.patches import Patch
 
 D = json.load(open("figdata.json")); nC = D["n_complexes"]
 models = sorted(D["models"], key=lambda m: nC[m]); os.makedirs("figures/prelim", exist_ok=True)
-ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#1C6B58", ""),
-        "kimonu4":     ("Kimonu, overlap merge only*",   "#7FB8A6", "//"),
-        "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#7FB8A6", "//"),
-        "cocoa_false": ("COCOA efficient=false",        "#B8641E", ""),
-        "cocoa_true":  ("COCOA efficient=true",         "#E0A26A", ""),
-        "ref_exh":     ("Reference exhaustive",         "#4A5A88", ""),
-        "ref_sampled": ("Reference sampled*",           "#9AA6C8", "//")}
+# ColorBrewer "Paired": Kimonu red, its comparability arms purple; COCOA greens; reference blues.
+ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#e31a1c", ""),
+        "kimonu4":     ("Kimonu, overlap merge only*",   "#cab2d6", ""),
+        "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#6a3d9a", ""),
+        "cocoa_false": ("COCOA efficient=false",        "#b2df8a", ""),
+        "cocoa_true":  ("COCOA efficient=true",         "#33a02c", ""),
+        "ref_exh":     ("Reference exhaustive",         "#1f78b4", ""),
+        "ref_sampled": ("Reference sampled*",           "#a6cee3", "")}
 BASE = "Stochastic arms: bar at the median over seeds, each seed a point; exact arms have no spread by construction.  * comparability-only arm."
 
 def val(arm, m, key):
