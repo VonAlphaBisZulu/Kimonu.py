@@ -27,7 +27,7 @@ P.grouped(ax, "n_kinetic", ["kimonu", "cocoa_false", "cocoa_true", "ref_exh"], "
 save(fig, "M1_kinetic_modules", P.BASE + "  Reference on the landed exhaustive runs; the three exact arms agree wherever the reference has landed.")
 
 fig, ax = plt.subplots(figsize=(11, 4.6))
-P.grouped(ax, "acrr_free", ["kimonu", "kimonu_s210", "cocoa_false", "cocoa_true", "ref_exh"], "symlog", "M2  ACRR metabolite pairs (free)", "pairs (symlog)",
+P.grouped(ax, "acrr_free", ["kimonu", "cocoa_false", "cocoa_true", "kimonu_s210", "ref_exh"], "symlog", "M2  ACRR metabolite pairs (free)", "pairs (symlog)",
           labels={"ref_exh": "Reference exhaustive †"})
 save(fig, "M2_acrr", P.BASE + "  † reference criterion (Corollary S2-10) is a sufficient condition; * Kimonu applying that criterion to its own modules reproduces the reference's pairs exactly on every landed model.")
 

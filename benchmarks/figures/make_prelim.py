@@ -72,7 +72,7 @@ fig, ax = plt.subplots(figsize=(14, 5)); grouped(ax, "giant", ["kimonu", "kimonu
         labels={"ref_exh": "Reference (R stage, corrected NA)*"})
 save(fig, "F3_giant", BASE + "  * Kimonu without the Proposition S3-4 coupling merge = the reference's merge rule; the four-phase and two-phase upstream sets are identical on all 33 models. Reference giants: corrected R stage on the final exhaustive concordance (4 models so far), equal to Kimonu on each.")
 # F4: ACR linear (mostly zeros), ACRR symlog
-fig, axs = plt.subplots(2, 1, figsize=(14, 8.5)); a4 = ["kimonu", "kimonu_s210", "cocoa_false", "cocoa_true", "ref_exh"]; lab4 = {"ref_exh": "Reference exhaustive †"}
+fig, axs = plt.subplots(2, 1, figsize=(14, 8.5)); a4 = ["kimonu", "cocoa_false", "cocoa_true", "kimonu_s210", "ref_exh"]; lab4 = {"ref_exh": "Reference exhaustive †"}
 grouped(axs[0], "acr_free", a4, "linear", "F4a  ACR metabolites (free)", labels=lab4)
 grouped(axs[1], "acrr_free", a4, "symlog", "F4b  ACRR metabolite pairs (free), symlog", labels=lab4)
 save(fig, "F4_acr_acrr", BASE + "  † reference ACR/ACRR uses the combinatorial criterion (Corollary S2-10), a subset of Kimonu's kernel test.  * Kimonu applying that criterion to its own modules; equals the reference's ACR/ACRR name sets on every landed model.")
