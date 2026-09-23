@@ -148,3 +148,5 @@ cobrapy-native I/O; keep the concordance core independent of the kinetic/ACR lay
 - Scenario-(ii) genuinely-different test needs a realistically-bounded model.
 - Complex-enumeration parity (896 vs 895) must be nailed before count comparisons are clean.
 - Kinetic-module + ACR layers are less validated than the concordance core — need their own toy tests.
+
+- **Supplement (idea 2026-09-23):** side-by-side walkthrough on the Langary et al. example network: graph next to A (as in their paper), then Y, N = Y·A, K = ker(N), and A·K with balanced complexes and concordance classes read off. Draft: `benchmarks/docs/examples/nullspace_walkthrough.html`; CNApy model `Langary_example_CNApy.zip` in the same folder.
