@@ -1,14 +1,14 @@
 {
  "model": "iIS312_Epimastigote",
  "new": {
-  "n_modules": 50,
+  "n_modules": 51,
   "giant": 9,
   "acr": 0,
   "acrr": 9,
   "acr_free": 0,
   "acrr_free": 4,
-  "rounds": 1,
-  "seconds": 1.3651447296142578
+  "rounds": 2,
+  "seconds": 1.4623122215270996
  },
  "default": {
   "n_modules": 49,
@@ -17,7 +17,7 @@
   "acrr": 9,
   "acr_free": 0,
   "acrr_free": 4,
-  "seconds": 0.5680108070373535
+  "seconds": 0.5706348419189453
  },
  "relation": "finer",
  "acr_superset": true,

@@ -1,14 +1,14 @@
 {
  "model": "iAF1260b",
  "new": {
-  "n_modules": 1072,
+  "n_modules": 1087,
   "giant": 96,
   "acr": 0,
   "acrr": 1780,
   "acr_free": 0,
   "acrr_free": 18,
-  "rounds": 1,
-  "seconds": 86.97195982933044
+  "rounds": 2,
+  "seconds": 91.23657894134521
  },
  "default": {
   "n_modules": 1112,
@@ -17,7 +17,7 @@
   "acrr": 1695,
   "acr_free": 0,
   "acrr_free": 18,
-  "seconds": 41.11843276023865
+  "seconds": 41.4590528011322
  },
  "relation": "finer",
  "acr_superset": true,

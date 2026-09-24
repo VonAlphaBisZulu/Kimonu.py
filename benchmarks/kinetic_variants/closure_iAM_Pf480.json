@@ -1,14 +1,14 @@
 {
  "model": "iAM_Pf480",
  "new": {
-  "n_modules": 667,
+  "n_modules": 684,
   "giant": 100,
   "acr": 0,
   "acrr": 1364,
   "acr_free": 0,
   "acrr_free": 41,
   "rounds": 2,
-  "seconds": 27.81281614303589
+  "seconds": 28.097851991653442
  },
  "default": {
   "n_modules": 667,
@@ -17,7 +17,7 @@
   "acrr": 1347,
   "acr_free": 0,
   "acrr_free": 40,
-  "seconds": 15.290527105331421
+  "seconds": 15.467319965362549
  },
  "relation": "finer",
  "acr_superset": true,

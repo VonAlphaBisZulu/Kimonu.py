@@ -1,14 +1,14 @@
 {
  "model": "iHN637",
  "new": {
-  "n_modules": 228,
+  "n_modules": 244,
   "giant": 243,
   "acr": 0,
   "acrr": 7346,
   "acr_free": 0,
   "acrr_free": 121,
-  "rounds": 1,
-  "seconds": 8.494704723358154
+  "rounds": 2,
+  "seconds": 9.940893650054932
  },
  "default": {
   "n_modules": 228,
@@ -17,7 +17,7 @@
   "acrr": 7344,
   "acr_free": 0,
   "acrr_free": 121,
-  "seconds": 5.018061876296997
+  "seconds": 5.0357677936553955
  },
  "relation": "finer",
  "acr_superset": true,

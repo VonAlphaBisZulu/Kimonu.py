@@ -1,14 +1,14 @@
 {
  "model": "iSB619",
  "new": {
-  "n_modules": 176,
-  "giant": 140,
+  "n_modules": 185,
+  "giant": 141,
   "acr": 0,
   "acrr": 1901,
   "acr_free": 0,
   "acrr_free": 11,
-  "rounds": 1,
-  "seconds": 4.752641439437866
+  "rounds": 2,
+  "seconds": 5.0849854946136475
  },
  "default": {
   "n_modules": 175,
@@ -17,9 +17,9 @@
   "acrr": 1841,
   "acr_free": 0,
   "acrr_free": 10,
-  "seconds": 2.4210948944091797
+  "seconds": 2.4076991081237793
  },
- "relation": "neither",
+ "relation": "finer",
  "acr_superset": true,
  "acrr_superset": true
 }

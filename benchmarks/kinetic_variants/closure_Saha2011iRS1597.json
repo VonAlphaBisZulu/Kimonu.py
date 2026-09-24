@@ -1,14 +1,14 @@
 {
  "model": "Saha2011iRS1597",
  "new": {
-  "n_modules": 163,
+  "n_modules": 184,
   "giant": 115,
   "acr": 3,
   "acrr": 2567,
   "acr_free": 0,
   "acrr_free": 949,
-  "rounds": 1,
-  "seconds": 3.9532225131988525
+  "rounds": 2,
+  "seconds": 4.275349855422974
  },
  "default": {
   "n_modules": 162,
@@ -17,7 +17,7 @@
   "acrr": 1782,
   "acr_free": 0,
   "acrr_free": 531,
-  "seconds": 1.8665962219238281
+  "seconds": 1.9479448795318604
  },
  "relation": "finer",
  "acr_superset": true,

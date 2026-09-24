@@ -763,3 +763,10 @@ iYO844 102 vs 101) -- the deficiency-one lemma, not yet part of the closure, is 
 ACR and ACRR of the default are subsets of the new ones on 33/33. Gains include Saha2011iRS1597
 free ACRR 531 -> 949 and ACR 2 -> 3, iJN678 ACR 0 -> 1, iMM904 free ACRR 22 -> 38, iJB785 26 -> 36.
 Runtime 1-87 s, about twice the default (the extra LP for v* and the second exact nullspace).
+
+Correction (same day): the four "neither" models were not the deficiency-one lemma (their
+deficiencies are 331-379, where it never fires). The closure fed only non-singleton ψ blocks into
+the S3-4 merge, while the default also attaches single reactant complexes to modules by S3-4 (e.g.
+accoa+h+nadph+malcoa into iYO844's giant). With every reactant singleton taking part (terminal
+complexes excluded), the new partition contains the default on 33/33: identical on iCN900, strictly
+coarser on 32; ACR and ACRR of the default are subsets of the new ones on 33/33.

@@ -1,14 +1,14 @@
 {
  "model": "iYO844",
  "new": {
-  "n_modules": 284,
-  "giant": 101,
+  "n_modules": 386,
+  "giant": 103,
   "acr": 3,
   "acrr": 1182,
   "acr_free": 3,
   "acrr_free": 9,
-  "rounds": 1,
-  "seconds": 13.980437994003296
+  "rounds": 2,
+  "seconds": 14.68500542640686
  },
  "default": {
   "n_modules": 284,
@@ -17,9 +17,9 @@
   "acrr": 1140,
   "acr_free": 3,
   "acrr_free": 9,
-  "seconds": 5.565237522125244
+  "seconds": 5.608149766921997
  },
- "relation": "neither",
+ "relation": "finer",
  "acr_superset": true,
  "acrr_superset": true
 }

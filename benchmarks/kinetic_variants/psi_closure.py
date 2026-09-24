@@ -31,8 +31,10 @@ def psi_blocks(crn, A, Y, Sx, nc, nr, nm, draw=1):
                                            sd.RationalMatrix.from_fractions(((i, j, x) for (i, j), x in W.items() if x != 0), (nm, ncol)))
     return [set(c for c in m if c < nc and c not in zero) for m in psi.modules]
 
-def closure(Y, sets):
-    sets = [s for s in sets if len(s) > 1]; known = set(); rounds = 0
+def closure(Y, sets, reactant=None):
+    """Singletons take part when they are the substrate of some reaction: S3-4 can attach a lone
+    complex to a set. Terminal complexes never enter a rate law and stay out."""
+    sets = [s for s in sets if len(s) > 1 or (len(s) == 1 and reactant is not None and next(iter(s)) in reactant)]; known = set(); rounds = 0
     while True:
         rounds += 1
         sig = coupling_signatures(Y, sets, known)
@@ -51,7 +53,8 @@ for M in sys.argv[1:]:
         A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc); Sx = to_exact(triplets_to_sparse(crn["S"], nm, nr))
         mets = crn["metabolites"]; cut = mets.index("E_1") if "E_1" in mets else len(mets)
         t0 = time.time(); blocks_ = psi_blocks(crn, A, Y, Sx, nc, nr, nm)
-        mods, known, rounds = closure(Y, blocks_); t_new = time.time() - t0
+        reactant = {int(i) for i, j, v in zip(*sp.find(A)) if v < 0}
+        mods, known, rounds = closure(Y, blocks_, reactant); mods = [m for m in mods if len(m) > 1]; t_new = time.time() - t0
         a_new = acr_acrr(Y, mods, mets, known_acr=[mets.index(x) for x in known] if known and isinstance(known[0], str) else known)
         t0 = time.time(); res = kimonu.concordance_from_matrices(A, Sx)
         kd = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity); t_old = time.time() - t0

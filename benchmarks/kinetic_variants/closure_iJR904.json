@@ -1,14 +1,14 @@
 {
  "model": "iJR904",
  "new": {
-  "n_modules": 368,
-  "giant": 144,
+  "n_modules": 373,
+  "giant": 146,
   "acr": 0,
   "acrr": 2553,
   "acr_free": 0,
   "acrr_free": 12,
-  "rounds": 1,
-  "seconds": 11.952352285385132
+  "rounds": 2,
+  "seconds": 12.863941669464111
  },
  "default": {
   "n_modules": 367,
@@ -17,9 +17,9 @@
   "acrr": 2553,
   "acr_free": 0,
   "acrr_free": 12,
-  "seconds": 6.103288888931274
+  "seconds": 6.030435800552368
  },
- "relation": "neither",
+ "relation": "finer",
  "acr_superset": true,
  "acrr_superset": true
 }

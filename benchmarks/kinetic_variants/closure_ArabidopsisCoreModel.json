@@ -8,7 +8,7 @@
   "acr_free": 0,
   "acrr_free": 23,
   "rounds": 1,
-  "seconds": 22.03450632095337
+  "seconds": 22.10256266593933
  },
  "default": {
   "n_modules": 576,
@@ -17,7 +17,7 @@
   "acrr": 152,
   "acr_free": 0,
   "acrr_free": 15,
-  "seconds": 8.85444450378418
+  "seconds": 8.928596496582031
  },
  "relation": "finer",
  "acr_superset": true,

@@ -1,14 +1,14 @@
 {
  "model": "iND750",
  "new": {
-  "n_modules": 340,
+  "n_modules": 343,
   "giant": 32,
   "acr": 0,
   "acrr": 295,
   "acr_free": 0,
   "acrr_free": 21,
-  "rounds": 1,
-  "seconds": 13.56027364730835
+  "rounds": 2,
+  "seconds": 14.299649000167847
  },
  "default": {
   "n_modules": 336,
@@ -17,7 +17,7 @@
   "acrr": 290,
   "acr_free": 0,
   "acrr_free": 18,
-  "seconds": 5.830397605895996
+  "seconds": 5.772264003753662
  },
  "relation": "finer",
  "acr_superset": true,

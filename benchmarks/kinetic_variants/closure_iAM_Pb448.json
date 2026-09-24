@@ -1,14 +1,14 @@
 {
  "model": "iAM_Pb448",
  "new": {
-  "n_modules": 516,
+  "n_modules": 540,
   "giant": 102,
   "acr": 0,
   "acrr": 1490,
   "acr_free": 0,
   "acrr_free": 27,
   "rounds": 2,
-  "seconds": 20.235660076141357
+  "seconds": 20.753665685653687
  },
  "default": {
   "n_modules": 516,
@@ -17,7 +17,7 @@
   "acrr": 1422,
   "acr_free": 0,
   "acrr_free": 23,
-  "seconds": 11.981833696365356
+  "seconds": 12.06321930885315
  },
  "relation": "finer",
  "acr_superset": true,

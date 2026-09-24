@@ -1,14 +1,14 @@
 {
  "model": "iS_1188",
  "new": {
-  "n_modules": 1011,
+  "n_modules": 1017,
   "giant": 94,
   "acr": 0,
   "acrr": 1485,
   "acr_free": 0,
   "acrr_free": 25,
-  "rounds": 1,
-  "seconds": 84.5294919013977
+  "rounds": 2,
+  "seconds": 87.9062442779541
  },
  "default": {
   "n_modules": 1009,
@@ -17,7 +17,7 @@
   "acrr": 1485,
   "acr_free": 0,
   "acrr_free": 25,
-  "seconds": 39.49051284790039
+  "seconds": 39.24401903152466
  },
  "relation": "finer",
  "acr_superset": true,

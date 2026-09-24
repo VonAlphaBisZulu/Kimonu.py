@@ -1,14 +1,14 @@
 {
  "model": "iIS312_Amastigote",
  "new": {
-  "n_modules": 34,
+  "n_modules": 35,
   "giant": 9,
   "acr": 0,
   "acrr": 10,
   "acr_free": 0,
   "acrr_free": 5,
-  "rounds": 1,
-  "seconds": 0.8291831016540527
+  "rounds": 2,
+  "seconds": 0.9540886878967285
  },
  "default": {
   "n_modules": 33,
@@ -17,7 +17,7 @@
   "acrr": 9,
   "acr_free": 0,
   "acrr_free": 5,
-  "seconds": 0.47556567192077637
+  "seconds": 0.47416138648986816
  },
  "relation": "finer",
  "acr_superset": true,
