@@ -1,0 +1,44 @@
+{
+ "model": "iJB785",
+ "n_complexes": 6114,
+ "seconds_psi_1": 1.541607141494751,
+ "draw1": {
+  "n_modules": 1911,
+  "giant": 22,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 1.479457139968872,
+ "draw2": {
+  "n_modules": 1911,
+  "giant": 22,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 1905,
+  "giant": 22
+ },
+ "default": {
+  "n_modules": 1905,
+  "giant": 22
+ },
+ "seconds_kimonu": 16.584850072860718,
+ "only_psi": [
+  11,
+  5,
+  5,
+  3,
+  2,
+  2,
+  2,
+  2
+ ],
+ "only_overlap": [
+  10,
+  2
+ ]
+}

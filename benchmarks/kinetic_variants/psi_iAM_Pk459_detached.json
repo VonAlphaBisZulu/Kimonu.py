@@ -1,0 +1,44 @@
+{
+ "model": "iAM_Pk459",
+ "n_complexes": 7794,
+ "seconds_psi_1": 11.5442373752594,
+ "draw1": {
+  "n_modules": 551,
+  "giant": 96,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "neither"
+ },
+ "seconds_psi_2": 11.659867286682129,
+ "draw2": {
+  "n_modules": 551,
+  "giant": 96,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "neither"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 551,
+  "giant": 96
+ },
+ "default": {
+  "n_modules": 543,
+  "giant": 100
+ },
+ "seconds_kimonu": 18.052430868148804,
+ "only_psi": [
+  11,
+  5,
+  3,
+  2,
+  2
+ ],
+ "only_overlap": [
+  4,
+  4,
+  4,
+  3,
+  2
+ ]
+}

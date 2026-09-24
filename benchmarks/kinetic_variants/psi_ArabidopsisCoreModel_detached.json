@@ -1,0 +1,53 @@
+{
+ "model": "ArabidopsisCoreModel",
+ "n_complexes": 6910,
+ "seconds_psi_1": 17.050917863845825,
+ "draw1": {
+  "n_modules": 588,
+  "giant": 18,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 17.02837300300598,
+ "draw2": {
+  "n_modules": 588,
+  "giant": 18,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 576,
+  "giant": 18
+ },
+ "default": {
+  "n_modules": 576,
+  "giant": 18
+ },
+ "seconds_kimonu": 12.69248342514038,
+ "only_psi": [
+  9,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  5,
+  3,
+  3,
+  3,
+  3,
+  2,
+  2
+ ],
+ "only_overlap": [
+  4,
+  4,
+  2,
+  2
+ ]
+}

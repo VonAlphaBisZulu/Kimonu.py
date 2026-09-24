@@ -1,0 +1,42 @@
+{
+ "model": "iAM_Pc455",
+ "n_complexes": 7922,
+ "seconds_psi_1": 13.453364610671997,
+ "draw1": {
+  "n_modules": 557,
+  "giant": 96,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "neither"
+ },
+ "seconds_psi_2": 13.00608777999878,
+ "draw2": {
+  "n_modules": 557,
+  "giant": 96,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "neither"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 557,
+  "giant": 96
+ },
+ "default": {
+  "n_modules": 549,
+  "giant": 100
+ },
+ "seconds_kimonu": 24.39666223526001,
+ "only_psi": [
+  13,
+  7,
+  2,
+  2
+ ],
+ "only_overlap": [
+  5,
+  4,
+  4,
+  4
+ ]
+}

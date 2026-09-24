@@ -1,0 +1,41 @@
+{
+ "model": "iIS312_Amastigote",
+ "n_complexes": 1446,
+ "seconds_psi_1": 0.5149788856506348,
+ "draw1": {
+  "n_modules": 32,
+  "giant": 28,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 0.5290663242340088,
+ "draw2": {
+  "n_modules": 32,
+  "giant": 28,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 33,
+  "giant": 9
+ },
+ "default": {
+  "n_modules": 33,
+  "giant": 9
+ },
+ "seconds_kimonu": 0.5622830390930176,
+ "only_psi": [
+  28,
+  3,
+  2
+ ],
+ "only_overlap": [
+  9,
+  2,
+  2,
+  2
+ ]
+}

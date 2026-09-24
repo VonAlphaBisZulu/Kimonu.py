@@ -729,3 +729,25 @@ split concordance modules. Decision: the main-text figures M1 and M2 carry COCOA
 the reference in sampled mode (11 models, three seeds, whiskers), the supplement figures F3 and F4
 carry both reference modes. iJB785's R kinetic stage is slow (hours) and the remaining sampled
 stems land behind it; the figures are re-rendered when they do.
+
+### Kinetic modules from a nullspace in complex-concentration space (2026-09-24, exploratory)
+
+Mass action gives v = diag(k)·Sᵀψ. For rate constants built from a positive steady-state flux v*
+(k_r = v*_r / ψ*_s(r)), every positive steady state satisfies N·diag(v*)·Sᵀ·u = 0 with u = ψ/ψ*, so
+complexes whose rows of a basis of ker(N·diag(v*)·Sᵀ) are proportional have a fixed ψ ratio: a
+coupling test with no graph traversal (`kinetic_variants/psi_nullspace.py`). Random rate constants
+are the wrong notion of generic: they usually admit no positive steady state and force whole modules
+to zero.
+
+With uptake reactions detached from the shared zero complex (otherwise every inflow-driven module is
+coupled to ψ_∅ = 1 and they all merge), on 33/33 models: the ψ partition is identical to the
+upstream algorithm's overlap-merged modules on 3 models and strictly coarser on 30, never finer and
+never crossing; two independent v* draws agree on 33/33; runtime comparable to Kimonu. Extra members
+(`psi_extras.json`): 15 uptake-fed complexes, 50 in terminal strong components, 347 other, e.g.
+enzyme-substrate complexes of fully coupled elementary steps (Langary's own remark that fully coupled
+reactions make their substrate complexes coupled, which the upstream algorithm does not apply).
+Against Kimonu's default (S3-4 merge) the relation is "neither" on the S3-4 models: the ψ test is
+linear in ψ and does not see the log-space merges.
+
+Status: the test is sound by construction; an independent numerical check (second steady state by
+continuation) has not yet converged on any model and is not counted as validation.

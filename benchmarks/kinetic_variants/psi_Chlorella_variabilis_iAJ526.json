@@ -1,0 +1,40 @@
+{
+ "model": "Chlorella_variabilis_iAJ526",
+ "n_complexes": 7639,
+ "seconds_psi_1": 25.459548473358154,
+ "draw1": {
+  "n_modules": 508,
+  "giant": 95,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 28.89296841621399,
+ "draw2": {
+  "n_modules": 508,
+  "giant": 95,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 501,
+  "giant": 95
+ },
+ "default": {
+  "n_modules": 501,
+  "giant": 95
+ },
+ "seconds_kimonu": 18.321433067321777,
+ "only_psi": [
+  4,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2
+ ],
+ "only_overlap": []
+}

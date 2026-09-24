@@ -1,0 +1,43 @@
+{
+ "model": "iCN718",
+ "n_complexes": 6044,
+ "seconds_psi_1": 2.554903030395508,
+ "draw1": {
+  "n_modules": 309,
+  "giant": 46,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 2.5773208141326904,
+ "draw2": {
+  "n_modules": 309,
+  "giant": 46,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 310,
+  "giant": 46
+ },
+ "default": {
+  "n_modules": 310,
+  "giant": 46
+ },
+ "seconds_kimonu": 9.688074588775635,
+ "only_psi": [
+  27,
+  22,
+  2,
+  2
+ ],
+ "only_overlap": [
+  21,
+  13,
+  5,
+  2,
+  2
+ ]
+}

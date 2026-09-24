@@ -1,0 +1,39 @@
+{
+ "model": "iIS312_Trypomastigote",
+ "n_complexes": 1046,
+ "seconds_psi_1": 0.26114606857299805,
+ "draw1": {
+  "n_modules": 27,
+  "giant": 11,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 0.19120049476623535,
+ "draw2": {
+  "n_modules": 27,
+  "giant": 11,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 26,
+  "giant": 11
+ },
+ "default": {
+  "n_modules": 26,
+  "giant": 11
+ },
+ "seconds_kimonu": 0.33550024032592773,
+ "only_psi": [
+  5,
+  3,
+  2
+ ],
+ "only_overlap": [
+  4,
+  2
+ ]
+}

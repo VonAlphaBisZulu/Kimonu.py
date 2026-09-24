@@ -1,0 +1,35 @@
+{
+ "model": "iS_1188",
+ "n_complexes": 14311,
+ "seconds_psi_1": 97.61603236198425,
+ "draw1": {
+  "n_modules": 1011,
+  "giant": 94,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 94.8042540550232,
+ "draw2": {
+  "n_modules": 1011,
+  "giant": 94,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 1009,
+  "giant": 94
+ },
+ "default": {
+  "n_modules": 1009,
+  "giant": 94
+ },
+ "seconds_kimonu": 123.72803258895874,
+ "only_psi": [
+  2,
+  2
+ ],
+ "only_overlap": []
+}

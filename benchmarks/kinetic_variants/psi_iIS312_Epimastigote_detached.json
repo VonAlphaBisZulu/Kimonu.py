@@ -1,0 +1,34 @@
+{
+ "model": "iIS312_Epimastigote",
+ "n_complexes": 1738,
+ "seconds_psi_1": 0.2895820140838623,
+ "draw1": {
+  "n_modules": 50,
+  "giant": 9,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 0.3563053607940674,
+ "draw2": {
+  "n_modules": 50,
+  "giant": 9,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 49,
+  "giant": 9
+ },
+ "default": {
+  "n_modules": 49,
+  "giant": 9
+ },
+ "seconds_kimonu": 0.7936224937438965,
+ "only_psi": [
+  2
+ ],
+ "only_overlap": []
+}

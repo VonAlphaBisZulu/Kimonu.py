@@ -1,0 +1,38 @@
+{
+ "model": "iIT341",
+ "n_complexes": 3193,
+ "seconds_psi_1": 0.9300851821899414,
+ "draw1": {
+  "n_modules": 105,
+  "giant": 196,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 0.9248812198638916,
+ "draw2": {
+  "n_modules": 105,
+  "giant": 196,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 103,
+  "giant": 195
+ },
+ "default": {
+  "n_modules": 103,
+  "giant": 195
+ },
+ "seconds_kimonu": 1.8047499656677246,
+ "only_psi": [
+  196,
+  2,
+  2
+ ],
+ "only_overlap": [
+  195
+ ]
+}

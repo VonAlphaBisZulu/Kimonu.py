@@ -1,0 +1,32 @@
+{
+ "model": "iLJ478",
+ "n_complexes": 3440,
+ "seconds_psi_1": 2.9195313453674316,
+ "draw1": {
+  "n_modules": 138,
+  "giant": 158,
+  "n_zero": 0,
+  "vs_overlap": "identical",
+  "vs_default": "identical"
+ },
+ "seconds_psi_2": 2.894709587097168,
+ "draw2": {
+  "n_modules": 138,
+  "giant": 158,
+  "n_zero": 0,
+  "vs_overlap": "identical",
+  "vs_default": "identical"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 138,
+  "giant": 158
+ },
+ "default": {
+  "n_modules": 138,
+  "giant": 158
+ },
+ "seconds_kimonu": 2.425248146057129,
+ "only_psi": [],
+ "only_overlap": []
+}

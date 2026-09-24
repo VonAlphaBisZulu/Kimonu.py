@@ -1,0 +1,40 @@
+{
+ "model": "iYS854",
+ "n_complexes": 7745,
+ "seconds_psi_1": 26.00152850151062,
+ "draw1": {
+  "n_modules": 405,
+  "giant": 318,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 25.24664306640625,
+ "draw2": {
+  "n_modules": 405,
+  "giant": 318,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 405,
+  "giant": 315
+ },
+ "default": {
+  "n_modules": 405,
+  "giant": 315
+ },
+ "seconds_kimonu": 13.17557168006897,
+ "only_psi": [
+  318,
+  3,
+  2
+ ],
+ "only_overlap": [
+  315,
+  2,
+  2
+ ]
+}

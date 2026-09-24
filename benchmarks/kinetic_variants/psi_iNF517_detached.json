@@ -1,0 +1,36 @@
+{
+ "model": "iNF517",
+ "n_complexes": 4063,
+ "seconds_psi_1": 1.3754069805145264,
+ "draw1": {
+  "n_modules": 184,
+  "giant": 154,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 1.4171533584594727,
+ "draw2": {
+  "n_modules": 184,
+  "giant": 154,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 184,
+  "giant": 153
+ },
+ "default": {
+  "n_modules": 184,
+  "giant": 153
+ },
+ "seconds_kimonu": 3.400161027908325,
+ "only_psi": [
+  154
+ ],
+ "only_overlap": [
+  153
+ ]
+}

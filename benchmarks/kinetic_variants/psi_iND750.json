@@ -1,0 +1,40 @@
+{
+ "model": "iND750",
+ "n_complexes": 6037,
+ "seconds_psi_1": 10.508776903152466,
+ "draw1": {
+  "n_modules": 340,
+  "giant": 32,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 10.521917343139648,
+ "draw2": {
+  "n_modules": 340,
+  "giant": 32,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 336,
+  "giant": 32
+ },
+ "default": {
+  "n_modules": 336,
+  "giant": 32
+ },
+ "seconds_kimonu": 8.879587650299072,
+ "only_psi": [
+  5,
+  2,
+  2,
+  2,
+  2
+ ],
+ "only_overlap": [
+  4
+ ]
+}

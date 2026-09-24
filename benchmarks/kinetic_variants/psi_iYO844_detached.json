@@ -1,0 +1,36 @@
+{
+ "model": "iYO844",
+ "n_complexes": 6014,
+ "seconds_psi_1": 10.966287851333618,
+ "draw1": {
+  "n_modules": 284,
+  "giant": 101,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "neither"
+ },
+ "seconds_psi_2": 11.063910245895386,
+ "draw2": {
+  "n_modules": 284,
+  "giant": 101,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "neither"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 284,
+  "giant": 100
+ },
+ "default": {
+  "n_modules": 284,
+  "giant": 102
+ },
+ "seconds_kimonu": 7.821059942245483,
+ "only_psi": [
+  101
+ ],
+ "only_overlap": [
+  100
+ ]
+}

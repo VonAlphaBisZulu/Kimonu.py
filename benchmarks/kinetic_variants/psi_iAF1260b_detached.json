@@ -1,0 +1,64 @@
+{
+ "model": "iAF1260b",
+ "n_complexes": 14973,
+ "seconds_psi_1": 68.62881350517273,
+ "draw1": {
+  "n_modules": 1072,
+  "giant": 96,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 67.40418219566345,
+ "draw2": {
+  "n_modules": 1072,
+  "giant": 96,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 1112,
+  "giant": 96
+ },
+ "default": {
+  "n_modules": 1112,
+  "giant": 96
+ },
+ "seconds_kimonu": 58.80890989303589,
+ "only_psi": [
+  8,
+  8,
+  8,
+  8,
+  8,
+  8,
+  8,
+  8,
+  8,
+  8,
+  8,
+  6,
+  6,
+  6,
+  6
+ ],
+ "only_overlap": [
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  2,
+  2,
+  2,
+  2
+ ]
+}
