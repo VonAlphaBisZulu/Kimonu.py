@@ -1,0 +1,25 @@
+{
+ "model": "iSDY_1059",
+ "new": {
+  "n_modules": 950,
+  "giant": 107,
+  "acr": 0,
+  "acrr": 1880,
+  "acr_free": 0,
+  "acrr_free": 23,
+  "rounds": 1,
+  "seconds": 79.05202746391296
+ },
+ "default": {
+  "n_modules": 990,
+  "giant": 107,
+  "acr": 0,
+  "acrr": 1731,
+  "acr_free": 0,
+  "acrr_free": 23,
+  "seconds": 32.94975733757019
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

@@ -1,0 +1,25 @@
+{
+ "model": "iJN746",
+ "new": {
+  "n_modules": 294,
+  "giant": 203,
+  "acr": 0,
+  "acrr": 5185,
+  "acr_free": 0,
+  "acrr_free": 46,
+  "rounds": 1,
+  "seconds": 10.897029876708984
+ },
+ "default": {
+  "n_modules": 293,
+  "giant": 203,
+  "acr": 0,
+  "acrr": 5184,
+  "acr_free": 0,
+  "acrr_free": 46,
+  "seconds": 5.186575174331665
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

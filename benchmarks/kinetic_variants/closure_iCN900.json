@@ -1,0 +1,25 @@
+{
+ "model": "iCN900",
+ "new": {
+  "n_modules": 250,
+  "giant": 19,
+  "acr": 0,
+  "acrr": 97,
+  "acr_free": 0,
+  "acrr_free": 8,
+  "rounds": 1,
+  "seconds": 2.972801685333252
+ },
+ "default": {
+  "n_modules": 250,
+  "giant": 19,
+  "acr": 0,
+  "acrr": 97,
+  "acr_free": 0,
+  "acrr_free": 8,
+  "seconds": 1.7172374725341797
+ },
+ "relation": "identical",
+ "acr_superset": true,
+ "acrr_superset": true
+}

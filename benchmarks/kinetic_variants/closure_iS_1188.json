@@ -1,0 +1,25 @@
+{
+ "model": "iS_1188",
+ "new": {
+  "n_modules": 1011,
+  "giant": 94,
+  "acr": 0,
+  "acrr": 1485,
+  "acr_free": 0,
+  "acrr_free": 25,
+  "rounds": 1,
+  "seconds": 84.5294919013977
+ },
+ "default": {
+  "n_modules": 1009,
+  "giant": 94,
+  "acr": 0,
+  "acrr": 1485,
+  "acr_free": 0,
+  "acrr_free": 25,
+  "seconds": 39.49051284790039
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

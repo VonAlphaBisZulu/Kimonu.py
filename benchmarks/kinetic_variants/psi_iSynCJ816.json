@@ -1,0 +1,40 @@
+{
+ "model": "iSynCJ816",
+ "n_complexes": 7282,
+ "seconds_psi_1": 5.671454668045044,
+ "draw1": {
+  "n_modules": 1601,
+  "giant": 30,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "seconds_psi_2": 5.7790257930755615,
+ "draw2": {
+  "n_modules": 1601,
+  "giant": 30,
+  "n_zero": 0,
+  "vs_overlap": "coarser",
+  "vs_default": "coarser"
+ },
+ "draws_agree": true,
+ "overlap": {
+  "n_modules": 1597,
+  "giant": 30
+ },
+ "default": {
+  "n_modules": 1597,
+  "giant": 30
+ },
+ "seconds_kimonu": 26.53148055076599,
+ "only_psi": [
+  20,
+  5,
+  4,
+  2,
+  2
+ ],
+ "only_overlap": [
+  3
+ ]
+}

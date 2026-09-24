@@ -1,0 +1,25 @@
+{
+ "model": "iNJ661",
+ "new": {
+  "n_modules": 334,
+  "giant": 197,
+  "acr": 1,
+  "acrr": 2893,
+  "acr_free": 1,
+  "acrr_free": 177,
+  "rounds": 2,
+  "seconds": 11.361040353775024
+ },
+ "default": {
+  "n_modules": 336,
+  "giant": 197,
+  "acr": 1,
+  "acrr": 2892,
+  "acr_free": 1,
+  "acrr_free": 177,
+  "seconds": 5.721054553985596
+ },
+ "relation": "neither",
+ "acr_superset": true,
+ "acrr_superset": true
+}

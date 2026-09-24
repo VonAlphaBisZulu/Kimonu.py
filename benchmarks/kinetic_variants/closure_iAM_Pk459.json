@@ -1,0 +1,25 @@
+{
+ "model": "iAM_Pk459",
+ "new": {
+  "n_modules": 542,
+  "giant": 100,
+  "acr": 0,
+  "acrr": 1376,
+  "acr_free": 0,
+  "acrr_free": 25,
+  "rounds": 2,
+  "seconds": 17.88466763496399
+ },
+ "default": {
+  "n_modules": 543,
+  "giant": 100,
+  "acr": 0,
+  "acrr": 1360,
+  "acr_free": 0,
+  "acrr_free": 23,
+  "seconds": 12.235151767730713
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

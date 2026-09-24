@@ -1,0 +1,25 @@
+{
+ "model": "iSynCJ816",
+ "new": {
+  "n_modules": 1607,
+  "giant": 30,
+  "acr": 2,
+  "acrr": 328,
+  "acr_free": 2,
+  "acrr_free": 53,
+  "rounds": 2,
+  "seconds": 12.349427461624146
+ },
+ "default": {
+  "n_modules": 1597,
+  "giant": 30,
+  "acr": 2,
+  "acrr": 313,
+  "acr_free": 2,
+  "acrr_free": 42,
+  "seconds": 15.426630973815918
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

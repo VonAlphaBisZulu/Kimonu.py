@@ -1,7 +1,7 @@
 {
  "model": "iSDY_1059",
  "n_complexes": 13267,
- "seconds_psi_1": 89.81311583518982,
+ "seconds_psi_1": 63.533910512924194,
  "draw1": {
   "n_modules": 950,
   "giant": 107,
@@ -9,7 +9,7 @@
   "vs_overlap": "coarser",
   "vs_default": "coarser"
  },
- "seconds_psi_2": 89.62780785560608,
+ "seconds_psi_2": 61.60721707344055,
  "draw2": {
   "n_modules": 950,
   "giant": 107,
@@ -26,7 +26,7 @@
   "n_modules": 990,
   "giant": 107
  },
- "seconds_kimonu": 89.80773448944092,
+ "seconds_kimonu": 50.20697832107544,
  "only_psi": [
   14,
   14,

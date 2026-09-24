@@ -751,3 +751,15 @@ linear in ψ and does not see the log-space merges.
 
 Status: the test is sound by construction; an independent numerical check (second steady state by
 continuation) has not yet converged on any model and is not counted as validation.
+
+### ψ-nullspace + log-space closure versus Kimonu's default, 33 models (2026-09-24)
+
+`kinetic_variants/psi_closure.py`: ψ-nullspace coupling (uptakes detached), then Proposition S3-4 with
+known-ACR augmentation iterated to a fixed point. No graph traversal. Against the current default
+(upstream algorithm + S3-4 + S4-1 + S4-5): the new partition contains the default on 29/33 (identical
+on iAB_RBC_283, iCN900, iLJ478; strictly coarser on 26); on 4 (iJR904, iNJ661, iSB619, iYO844) neither
+contains the other, the default having a merge the closure does not make (iJR904 giant 146 vs 144,
+iYO844 102 vs 101) -- the deficiency-one lemma, not yet part of the closure, is the likely source.
+ACR and ACRR of the default are subsets of the new ones on 33/33. Gains include Saha2011iRS1597
+free ACRR 531 -> 949 and ACR 2 -> 3, iJN678 ACR 0 -> 1, iMM904 free ACRR 22 -> 38, iJB785 26 -> 36.
+Runtime 1-87 s, about twice the default (the extra LP for v* and the second exact nullspace).

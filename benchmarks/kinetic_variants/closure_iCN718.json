@@ -1,0 +1,25 @@
+{
+ "model": "iCN718",
+ "new": {
+  "n_modules": 309,
+  "giant": 46,
+  "acr": 0,
+  "acrr": 439,
+  "acr_free": 0,
+  "acrr_free": 10,
+  "rounds": 1,
+  "seconds": 12.62117886543274
+ },
+ "default": {
+  "n_modules": 310,
+  "giant": 46,
+  "acr": 0,
+  "acrr": 394,
+  "acr_free": 0,
+  "acrr_free": 9,
+  "seconds": 6.6907665729522705
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

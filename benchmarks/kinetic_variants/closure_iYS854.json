@@ -1,0 +1,25 @@
+{
+ "model": "iYS854",
+ "new": {
+  "n_modules": 405,
+  "giant": 318,
+  "acr": 0,
+  "acrr": 13028,
+  "acr_free": 0,
+  "acrr_free": 93,
+  "rounds": 1,
+  "seconds": 31.112040758132935
+ },
+ "default": {
+  "n_modules": 405,
+  "giant": 315,
+  "acr": 0,
+  "acrr": 12718,
+  "acr_free": 0,
+  "acrr_free": 90,
+  "seconds": 9.516792297363281
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

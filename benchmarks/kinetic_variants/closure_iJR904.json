@@ -1,0 +1,25 @@
+{
+ "model": "iJR904",
+ "new": {
+  "n_modules": 368,
+  "giant": 144,
+  "acr": 0,
+  "acrr": 2553,
+  "acr_free": 0,
+  "acrr_free": 12,
+  "rounds": 1,
+  "seconds": 11.952352285385132
+ },
+ "default": {
+  "n_modules": 367,
+  "giant": 146,
+  "acr": 0,
+  "acrr": 2553,
+  "acr_free": 0,
+  "acrr_free": 12,
+  "seconds": 6.103288888931274
+ },
+ "relation": "neither",
+ "acr_superset": true,
+ "acrr_superset": true
+}

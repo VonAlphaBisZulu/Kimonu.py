@@ -1,0 +1,25 @@
+{
+ "model": "iIT341",
+ "new": {
+  "n_modules": 105,
+  "giant": 196,
+  "acr": 0,
+  "acrr": 4138,
+  "acr_free": 0,
+  "acrr_free": 25,
+  "rounds": 1,
+  "seconds": 3.144451141357422
+ },
+ "default": {
+  "n_modules": 103,
+  "giant": 195,
+  "acr": 0,
+  "acrr": 4048,
+  "acr_free": 0,
+  "acrr_free": 24,
+  "seconds": 1.4211809635162354
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

@@ -1,0 +1,25 @@
+{
+ "model": "iNF517",
+ "new": {
+  "n_modules": 184,
+  "giant": 154,
+  "acr": 0,
+  "acrr": 2678,
+  "acr_free": 0,
+  "acrr_free": 19,
+  "rounds": 1,
+  "seconds": 5.172072410583496
+ },
+ "default": {
+  "n_modules": 184,
+  "giant": 153,
+  "acr": 0,
+  "acrr": 2608,
+  "acr_free": 0,
+  "acrr_free": 19,
+  "seconds": 2.6242761611938477
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

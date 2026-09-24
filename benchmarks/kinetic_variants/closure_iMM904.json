@@ -1,0 +1,25 @@
+{
+ "model": "iMM904",
+ "new": {
+  "n_modules": 602,
+  "giant": 22,
+  "acr": 0,
+  "acrr": 287,
+  "acr_free": 0,
+  "acrr_free": 38,
+  "rounds": 1,
+  "seconds": 21.195279598236084
+ },
+ "default": {
+  "n_modules": 585,
+  "giant": 22,
+  "acr": 0,
+  "acrr": 271,
+  "acr_free": 0,
+  "acrr_free": 22,
+  "seconds": 12.078751802444458
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

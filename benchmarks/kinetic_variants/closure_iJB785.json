@@ -1,0 +1,25 @@
+{
+ "model": "iJB785",
+ "new": {
+  "n_modules": 1911,
+  "giant": 22,
+  "acr": 0,
+  "acrr": 258,
+  "acr_free": 0,
+  "acrr_free": 36,
+  "rounds": 1,
+  "seconds": 6.241443634033203
+ },
+ "default": {
+  "n_modules": 1905,
+  "giant": 22,
+  "acr": 0,
+  "acrr": 238,
+  "acr_free": 0,
+  "acrr_free": 26,
+  "seconds": 9.451211929321289
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

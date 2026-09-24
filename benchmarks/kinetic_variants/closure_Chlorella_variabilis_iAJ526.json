@@ -1,0 +1,25 @@
+{
+ "model": "Chlorella_variabilis_iAJ526",
+ "new": {
+  "n_modules": 508,
+  "giant": 95,
+  "acr": 0,
+  "acrr": 1271,
+  "acr_free": 0,
+  "acrr_free": 70,
+  "rounds": 1,
+  "seconds": 23.5622398853302
+ },
+ "default": {
+  "n_modules": 501,
+  "giant": 95,
+  "acr": 0,
+  "acrr": 1267,
+  "acr_free": 0,
+  "acrr_free": 66,
+  "seconds": 10.366419076919556
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

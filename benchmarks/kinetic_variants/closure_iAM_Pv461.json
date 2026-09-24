@@ -1,0 +1,25 @@
+{
+ "model": "iAM_Pv461",
+ "new": {
+  "n_modules": 561,
+  "giant": 100,
+  "acr": 0,
+  "acrr": 1379,
+  "acr_free": 0,
+  "acrr_free": 30,
+  "rounds": 2,
+  "seconds": 19.83901333808899
+ },
+ "default": {
+  "n_modules": 561,
+  "giant": 100,
+  "acr": 0,
+  "acrr": 1362,
+  "acr_free": 0,
+  "acrr_free": 28,
+  "seconds": 12.732415914535522
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

@@ -1,0 +1,25 @@
+{
+ "model": "iAB_RBC_283",
+ "new": {
+  "n_modules": 498,
+  "giant": 17,
+  "acr": 0,
+  "acrr": 109,
+  "acr_free": 0,
+  "acrr_free": 10,
+  "rounds": 1,
+  "seconds": 9.3745698928833
+ },
+ "default": {
+  "n_modules": 498,
+  "giant": 17,
+  "acr": 0,
+  "acrr": 109,
+  "acr_free": 0,
+  "acrr_free": 10,
+  "seconds": 7.037437438964844
+ },
+ "relation": "identical",
+ "acr_superset": true,
+ "acrr_superset": true
+}

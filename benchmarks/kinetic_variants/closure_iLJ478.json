@@ -1,0 +1,25 @@
+{
+ "model": "iLJ478",
+ "new": {
+  "n_modules": 138,
+  "giant": 158,
+  "acr": 80,
+  "acrr": 83,
+  "acr_free": 6,
+  "acrr_free": 5,
+  "rounds": 1,
+  "seconds": 4.0549139976501465
+ },
+ "default": {
+  "n_modules": 138,
+  "giant": 158,
+  "acr": 80,
+  "acrr": 83,
+  "acr_free": 6,
+  "acrr_free": 5,
+  "seconds": 1.6902785301208496
+ },
+ "relation": "identical",
+ "acr_superset": true,
+ "acrr_superset": true
+}

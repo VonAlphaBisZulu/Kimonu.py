@@ -1,0 +1,25 @@
+{
+ "model": "ArabidopsisCoreModel",
+ "new": {
+  "n_modules": 588,
+  "giant": 18,
+  "acr": 0,
+  "acrr": 196,
+  "acr_free": 0,
+  "acrr_free": 23,
+  "rounds": 1,
+  "seconds": 22.03450632095337
+ },
+ "default": {
+  "n_modules": 576,
+  "giant": 18,
+  "acr": 0,
+  "acrr": 152,
+  "acr_free": 0,
+  "acrr_free": 15,
+  "seconds": 8.85444450378418
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}

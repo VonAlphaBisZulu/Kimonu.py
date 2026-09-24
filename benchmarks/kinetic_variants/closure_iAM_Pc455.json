@@ -1,0 +1,25 @@
+{
+ "model": "iAM_Pc455",
+ "new": {
+  "n_modules": 549,
+  "giant": 100,
+  "acr": 0,
+  "acrr": 1396,
+  "acr_free": 0,
+  "acrr_free": 24,
+  "rounds": 2,
+  "seconds": 20.158718824386597
+ },
+ "default": {
+  "n_modules": 549,
+  "giant": 100,
+  "acr": 0,
+  "acrr": 1376,
+  "acr_free": 0,
+  "acrr_free": 22,
+  "seconds": 12.798949003219604
+ },
+ "relation": "finer",
+ "acr_superset": true,
+ "acrr_superset": true
+}
