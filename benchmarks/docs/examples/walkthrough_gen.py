@@ -1,7 +1,8 @@
 """Build nullspace_walkthrough.html: the Langary et al. (2025) example network, directions split,
 walked from A to ACR in matrices. Run with the straindesign env and PYTHONPATH=<sd>:<repo>/src."""
-import numpy as np, scipy.sparse as sp, sympy as sy, kimonu, os
-from kimonu.kinetic import _Topology, _sccs, upstream_set, classical_deficiency
+import numpy as np, scipy.sparse as sp, sympy as sy, kimonu, os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+from compat.upstream import _Topology, _sccs, upstream_set, classical_deficiency
 HERE = os.path.dirname(os.path.abspath(__file__))
 cx = ['A','B','C','D','D+E','F','B+G','C+G','H','C+E','A+G','I','A+E']
 rx = [('A','B'),('B','A'),('B','C'),('C','B'),('C','D'),('D+E','F'),('F','D+E'),('F','B+G'),('C+G','H'),('H','C+G'),('H','C+E'),('A+G','I'),('I','A+G'),('I','A+E')]

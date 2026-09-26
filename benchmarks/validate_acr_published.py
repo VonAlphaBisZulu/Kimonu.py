@@ -34,6 +34,7 @@ from scipy import sparse
 import straindesign as sd
 
 import kimonu
+from compat import upstream
 from kimonu.io import exact_matrix
 
 
@@ -149,7 +150,7 @@ def main():
             t0 = time.perf_counter()
             conc = kimonu.concordance_from_matrices(A, N)
             nullity = sd.sparse_nullspace(N).shape[1]
-            kin = kimonu.kinetic_modules(A, conc.modules, conc.balanced, Y=Y, nullity=nullity)
+            kin = upstream.kinetic_modules(A, conc.modules, conc.balanced, Y=Y, nullity=nullity)
             found = kimonu.acr_acrr(Y, kin.modules, mets)
             seconds = time.perf_counter() - t0
 

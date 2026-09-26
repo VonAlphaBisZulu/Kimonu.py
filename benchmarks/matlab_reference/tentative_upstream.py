@@ -15,7 +15,8 @@ import numpy as np
 sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks")
 sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src")
 import kimonu
-from kimonu.kinetic import _Topology, _sccs
+from compat import upstream
+from compat.upstream import _Topology, _sccs
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
@@ -74,7 +75,7 @@ for comp in allc:
     if not any(succ[v] - comp for v in comp): term |= comp
 bad = sum(1 for x in merged for c in x if c in term)
 print(f"  complexes in the result that are globally terminal (Lemma S2-4 violations): {bad}")
-kin = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
+kin = upstream.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
 sz = sorted((len(m) for m in kin.modules), reverse=True); k_ns = [x for x in sz if x > 1]
 print(f"Upstream Alg (S2-1) blocks {len(sz):4d}  non-singleton {len(k_ns):4d}  largest {sz[0]:4d}  covered {sum(k_ns):5d}")
 print(f"reference R stage   (corrected NA)                    non-singleton  246  largest   19  covered   583")

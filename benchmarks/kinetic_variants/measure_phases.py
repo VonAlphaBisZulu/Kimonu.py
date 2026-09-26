@@ -11,7 +11,8 @@ import numpy as np
 sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks")
 sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src")
 import kimonu
-from kimonu.kinetic import _Topology, _sccs, upstream_set, _weak_components
+from compat import upstream
+from compat.upstream import _Topology, _sccs, upstream_set, _weak_components
 from run_kimonu_crn import triplets_to_sparse, to_exact
 B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
 
@@ -98,7 +99,7 @@ def run(M, detail=False):
         hit = [x for x in merged if x & g]
         for x in hit: merged.remove(x); g = g | x
         merged.append(g)
-    kin = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
+    kin = upstream.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
     pt = props(merged, succ, pred, term, bal); pk = props(kin.modules, succ, pred, term, bal)
     gt = max((len(x) for x in merged), default=0); gk = kin.giant_module
     print(f"{M:26s} seeds {len(seeds):5d} | only4 {only_t:4d} only2 {only_k:4d} | 4-phase mods {pt[0]:4d} aut {pt[1]} feed {pt[2]} S2-4 {pt[3]} (bal {pt[4]}) giant {gt:4d} | 2-phase mods {pk[0]:4d} aut {pk[1]} feed {pk[2]} S2-4 {pk[3]} (bal {pk[4]}) giant {gk:4d}")

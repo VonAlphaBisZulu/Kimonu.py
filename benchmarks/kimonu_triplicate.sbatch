@@ -12,6 +12,8 @@ CRN=$BASE/benchmarks/unblocked
 PY=$HOME/miniconda3/envs/straindesign/bin/python
 export PYTHONPATH=${SD_BRANCH:-$HOME/sd-scip-pricing}
 SOLVER=${SOLVER:-scip}
+# KARGS: extra run_kimonu_crn.py options, e.g. "--route upstream" or "--detach-uptakes"
+export KARGS=${KARGS:-}
 REPS=${REPS:-3}
 JOBS=${JOBS:-24}
 mkdir -p $OUT
@@ -30,7 +32,7 @@ done | xargs -P $JOBS -n 2 bash -c '
   OUT=$BASE/benchmarks/${OUTDIR:-triplicate}
   /usr/bin/time -v $HOME/miniconda3/envs/straindesign/bin/python \
     $BASE/benchmarks/run_kimonu_crn.py $BASE/benchmarks/unblocked/${m}_fixed.crn.json \
-    $OUT/kimonu_${m}_rep${r}.json --repeats 1 --assume-unblocked --solver '"${SOLVER:-scip}"' \
+    $OUT/kimonu_${m}_rep${r}.json --repeats 1 --assume-unblocked --solver '"${SOLVER:-scip}"' ${KARGS:-} \
     > $OUT/kimonu_${m}_rep${r}.log 2>&1
   echo "done $m rep$r rc=$?"
 '

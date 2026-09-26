@@ -58,7 +58,7 @@ for r_ in range(nr):
     for i, a in Nent.get(r_, []): W[(i, col)] = W.get((i, col), Fraction(0)) + vx[r_] * a
 ncol = nc + len(extra)
 psi = kimonu.concordance_from_matrices(sp.identity(ncol, format="csr", dtype=np.int64), sd.RationalMatrix.from_fractions(((i, j, x) for (i, j), x in W.items() if x != 0), (nm, ncol)))
-res = kimonu.concordance_from_matrices(A, Sx); ko = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=None)
+res = kimonu.concordance_from_matrices(A, Sx); ko = upstream.kinetic_modules(A, res.modules, res.balanced, Y=None)
 of = {c: frozenset(m) for m in ko.modules for c in m}
 shift = lpsi2 - lpsi1                                   # a coupled block must shift by one common amount
 worst_coupled = 0; worst_extra = 0; n_extra = 0

@@ -9,12 +9,12 @@ import numpy as np, scipy.sparse as sp
 from fractions import Fraction
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
 src = open(os.path.join(B, "kinetic_variants/psi_nullspace.py")).read().split("DETACH = ")[0]; exec(src)
-from kimonu.kinetic import _Topology, _sccs
+from compat.upstream import _Topology, _sccs
 out = {}
 for M in sys.argv[1:]:
     crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc).tocsc(); Sx = to_exact(triplets_to_sparse(crn["S"], nm, nr))
-    res = kimonu.concordance_from_matrices(A, Sx); ko = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=None)
+    res = kimonu.concordance_from_matrices(A, Sx); ko = upstream.kinetic_modules(A, res.modules, res.balanced, Y=None)
     Kx = sd.sparse_nullspace(Sx)
     if not isinstance(Kx, sd.ExactCOO):
         Kc = Kx.tocoo(); Kx = type("K", (), dict(rows=Kc.row, cols=Kc.col, data=Kc.data, denom=1))()

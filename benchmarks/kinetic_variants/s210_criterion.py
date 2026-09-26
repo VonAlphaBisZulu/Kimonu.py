@@ -12,6 +12,7 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
 import kimonu
+from compat import upstream
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 def s210(Y, modules):
@@ -38,7 +39,7 @@ for M in sys.argv[1:]:
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     S = to_exact(triplets_to_sparse(crn["S"], nm, nr))
     res = kimonu.concordance_from_matrices(A, S)
-    kin = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
+    kin = upstream.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
     acr, acrr = s210(Y, kin.modules)
     mets = crn["metabolites"]; cut = mets.index("E_1") if "E_1" in mets else len(mets)
     out = dict(model=M, acr=sorted(mets[i] for i in acr), acrr=sorted([mets[i], mets[j]] for i, j in acrr),

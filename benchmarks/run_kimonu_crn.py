@@ -18,8 +18,9 @@ import numpy as np
 from scipy import sparse
 
 import kimonu
+from compat import upstream
 from kimonu.io import exact_matrix
-from kimonu.kinetic import complex_graph, _sccs
+from compat.upstream import complex_graph, _sccs
 
 
 def triplets_to_sparse(t, nrows, ncols, dtype=float):
@@ -94,6 +95,12 @@ def main():
                          "shared preprocessing is costed once rather than inside one arm.")
     ap.add_argument("--solver", default=None,
                     help="LP solver for the blocked-reaction FVA; default picks the best free one.")
+    ap.add_argument("--route", choices=("psi", "upstream"), default="psi",
+                    help="kinetic modules from the psi null space (Kimonu) or, for comparability with "
+                         "the published tools, from upstream sets (compat/upstream.py).")
+    ap.add_argument("--detach-uptakes", action="store_true",
+                    help="psi route: every uptake reaction gets its own source.")
+    ap.add_argument("--seed", type=int, default=0, help="psi route: seed of the interior flux.")
     args = ap.parse_args()
 
     with open(args.crn) as fh:
@@ -124,8 +131,11 @@ def main():
         t0 = time.perf_counter()
         result = kimonu.concordance_from_matrices(A, S)
         t1 = time.perf_counter()
-        kin = kimonu.kinetic_modules(A, result.modules, result.balanced, Y=Y,
-                                     nullity=result.nullity)
+        if args.route == "psi":
+            kin = kimonu.kinetic_modules(A, Y, S, detach_uptakes=args.detach_uptakes, seed=args.seed)
+        else:
+            kin = upstream.kinetic_modules(A, result.modules, result.balanced, Y=Y,
+                                           nullity=result.nullity)
         t2 = time.perf_counter()
         acr = kimonu.acr_acrr(Y, kin.modules, metabolite_ids=crn["metabolites"],
                               known_acr=kin.known_acr)
@@ -180,7 +190,9 @@ def main():
            "n_sccs": len(sccs), "largest_scc": max((len(c) for c in sccs), default=0),
            "n_terminal_sccs": terminal,
            "n_kinetic_modules": kin.n_modules, "giant_kinetic_module": kin.giant_module,
-           "deficiency": kin.deficiency, "kinetic_iterations": kin.iterations,
+           "kinetic_route": args.route + ("_detached" if args.detach_uptakes else ""),
+           "deficiency": getattr(kin, "deficiency", None),
+           "kinetic_iterations": getattr(kin, "iterations", getattr(kin, "rounds", None)),
            "acr": list(acr.acr), "acrr": [list(p) for p in acr.acrr],
            "acr_free": [m for m in acr.acr if m in free],
            "acrr_free": [list(p) for p in acr.acrr if p[0] in free and p[1] in free],

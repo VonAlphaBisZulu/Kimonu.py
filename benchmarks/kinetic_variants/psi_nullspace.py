@@ -17,6 +17,7 @@ from scipy.optimize import linprog
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
 import kimonu, straindesign as sd
+from compat import upstream
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 def blocks(groups): return {frozenset(g) for g in groups if len(g) > 1}
@@ -55,8 +56,8 @@ for M in [a for a in sys.argv[1:] if not a.startswith('--')]:
       Sx = to_exact(triplets_to_sparse(crn["S"], nm, nr))
       t0 = time.time()
       res = kimonu.concordance_from_matrices(A, Sx)
-      k_over = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=None)
-      k_def = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
+      k_over = upstream.kinetic_modules(A, res.modules, res.balanced, Y=None)
+      k_def = upstream.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
       t_kim = time.time() - t0
       Kx = sd.sparse_nullspace(Sx)
       if not isinstance(Kx, sd.ExactCOO):

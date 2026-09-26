@@ -10,7 +10,8 @@ from collections import Counter, defaultdict
 sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks")
 sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src")
 import kimonu
-from kimonu.kinetic import _Topology, _sccs
+from compat import upstream
+from compat.upstream import _Topology, _sccs
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
@@ -77,7 +78,7 @@ def merge(sets):
 res = kimonu.concordance_from_matrices(A, S); bal = set(res.balanced)
 seeds = [m for m in (set(x) - bal for x in res.modules) if m]
 T = merge([s for s in (tentative(m | bal) for m in seeds) if s])
-kin = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
+kin = upstream.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
 for tag, blocks in (("tentative (S.2.2)", T), ("Kimonu (S2-1)", [set(m) for m in kin.modules]),
                     ("COCOA", list(C.values()))):
     ns = [b for b in blocks if len(b) > 1]

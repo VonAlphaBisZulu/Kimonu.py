@@ -57,7 +57,7 @@ for M in sys.argv[1:]:
         mods, known, rounds = closure(Y, blocks_, reactant); mods = [m for m in mods if len(m) > 1]; t_new = time.time() - t0
         a_new = acr_acrr(Y, mods, mets, known_acr=[mets.index(x) for x in known] if known and isinstance(known[0], str) else known)
         t0 = time.time(); res = kimonu.concordance_from_matrices(A, Sx)
-        kd = kimonu.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity); t_old = time.time() - t0
+        kd = upstream.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity); t_old = time.time() - t0
         a_old = acr_acrr(Y, kd.modules, mets, known_acr=kd.known_acr)
         P = {frozenset(m) for m in mods}; Q = {frozenset(m) for m in kd.modules if len(m) > 1}
         free = lambda pairs: sum(1 for p in pairs if all(mets.index(x) < cut for x in p))
