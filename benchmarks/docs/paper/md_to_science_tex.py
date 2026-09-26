@@ -1,4 +1,4 @@
-"""Preview build: Obsidian outline (Kimonu.md) -> Science template (.tex/.pdf).
+r"""Preview build: Obsidian outline (Kimonu.md) -> Science template (.tex/.pdf).
 
 Strips callouts, ==editorial comments== and image embeds; doi.org links become \cite{} keys
 looked up by DOI in kimonu.bib (see make_bib.py), a parenthesised run of them one \cite, other
