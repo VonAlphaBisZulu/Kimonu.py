@@ -20,7 +20,9 @@ D = json.load(open("figdata.json")); nC = D["n_complexes"]
 models = sorted(D["models"], key=lambda m: nC[m]); os.makedirs("figures/prelim", exist_ok=True)
 # RColorBrewer Set1: Kimonu green, reference blue, COCOA red; the lighter member of each hue is the
 # second arm of that tool. Kimonu variants built to mirror the reference are dark blue, beside it.
-ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#4DAF4A", ""),
+ARMS = {"kimonu":      ("Kimonu",                        "#4DAF4A", ""),
+        "kimonu_det":  ("Kimonu, detached uptakes*",     "#A8DCA5", ""),
+        "kimonu_up":   ("Kimonu, upstream-set route*",   "#1F4E79", ""),
         "kimonu4":     ("Kimonu, overlap merge only*",   "#1F4E79", ""),
         "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#1F4E79", ""),
         "cocoa_false": ("COCOA efficient=false",        "#E41A1C", ""),
@@ -30,10 +32,10 @@ ARMS = {"kimonu":      ("Kimonu (Upstream, S2-1)",      "#4DAF4A", ""),
 BASE = "Stochastic arms: bar at the median over seeds, each seed a point; exact arms have no spread by construction.  * comparability-only arm."
 
 def val(arm, m, key):
-    if arm == "kimonu":  v = D["kimonu"].get(m, {}).get(key); return None if v is None else (v, None, None)
-    if arm == "kimonu4": v = D["kimonu"].get(m, {}).get("giant_overlap") if key == "giant" else None; return None if v is None else (v, None, None)
+    if arm in ("kimonu", "kimonu_det", "kimonu_up"): v = D[arm].get(m, {}).get(key); return None if v is None else (v, None, None)
+    if arm == "kimonu4": v = D["kimonu_up"].get(m, {}).get("giant_overlap") if key == "giant" else None; return None if v is None else (v, None, None)
     if arm == "kimonu_s210":
-        v = D["kimonu"].get(m, {}).get({"acr_free": "acr_s210_free", "acrr_free": "acrr_s210_free", "acr": "acr_s210", "acrr": "acrr_s210"}.get(key, "-")); return None if v is None else (v, None, None)
+        v = D["kimonu_up"].get(m, {}).get({"acr_free": "acr_s210_free", "acrr_free": "acrr_s210_free", "acr": "acr_s210", "acrr": "acrr_s210"}.get(key, "-")); return None if v is None else (v, None, None)
     if arm == "ref_exh": v = D["ref_exh"].get(m, {}).get(key); return None if v is None else (v, None, None)
     runs = [r[key] for r in D[arm].get(m, []) if r.get(key) is not None]
     return None if not runs else (float(np.median(runs)), float(min(runs)), float(max(runs)), runs)

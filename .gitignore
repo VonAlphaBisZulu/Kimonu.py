@@ -230,3 +230,4 @@ benchmarks/reference/
 benchmarks/archive/
 benchmarks/unblocked/*.log
 octave-workspace
+benchmarks/seedcheck_psi/

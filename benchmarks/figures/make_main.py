@@ -37,18 +37,19 @@ def save(fig, name, note):
     fig.savefig(f"figures/main/{name}.png", dpi=160); fig.savefig(f"figures/main/{name}.svg"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(11, 5.2))
-P.grouped(ax, "n_kinetic", ["kimonu", "cocoa_true", REF], "log", "M1  Kinetic modules (non-singleton)", "count (log)",
+P.grouped(ax, "n_kinetic", ["kimonu", "kimonu_det", "cocoa_true", "kimonu_up", REF], "log", "M1  Kinetic modules (non-singleton)", "count (log)",
           labels=REFLAB, errorbars=True); polish(ax)
-save(fig, "M1_kinetic_modules", MAINBASE + "  Reference on the landed exhaustive runs; the three exact arms agree wherever the reference has landed.")
+save(fig, "M1_kinetic_modules", MAINBASE + "  Kimonu's partition contains the upstream-set partition on every model (coarser or equal); the upstream-set route reproduces the reference wherever its exhaustive run landed.")
 
 fig, ax = plt.subplots(figsize=(11, 5.2))
-P.grouped(ax, "acrr_free", ["kimonu", "cocoa_true", "kimonu_s210", REF], "symlog", "M2  ACRR metabolite pairs (free)", "pairs (symlog)",
+P.grouped(ax, "acrr_free", ["kimonu", "kimonu_det", "cocoa_true", "kimonu_s210", REF], "symlog", "M2  ACRR metabolite pairs (free)", "pairs (symlog)",
           labels=REFLAB2, errorbars=True); polish(ax)
-save(fig, "M2_acrr", MAINBASE + "  † reference criterion (Corollary S2-10) is a sufficient condition; * Kimonu applying that criterion to its own modules reproduces the reference's pairs exactly on every landed model.")
+ax.set_ylim(top=ax.get_ylim()[1] * 30)          # headroom so the legend clears the tallest bars
+save(fig, "M2_acrr", MAINBASE + "  † reference criterion (Corollary S2-10) is a sufficient condition; * Kimonu applying that criterion to its own modules reproduces the reference's pairs exactly on every landed model; pairs of two ACR metabolites are not counted as ACRR, so attached uptakes can lower the count.")
 
 # M3 runtime vs size with fitted lines and 95% confidence bands
 fig, ax = plt.subplots(figsize=(11, 6))
-arms = [("kimonu", "seconds"), ("cocoa_false", "seconds"), ("cocoa_true", "seconds"), ("ref_exh", "seconds"), ("ref_sampled", "seconds")]
+arms = [("kimonu", "seconds"), ("kimonu_up", "seconds"), ("cocoa_false", "seconds"), ("cocoa_true", "seconds"), ("ref_exh", "seconds"), ("ref_sampled", "seconds")]
 xs_all = np.array([nC[m] for m in D["models"]], float)
 for a, key in arms:
     lab, col, _ = ARMS[a]; X, Y = [], []
