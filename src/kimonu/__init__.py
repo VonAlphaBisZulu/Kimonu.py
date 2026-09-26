@@ -5,7 +5,9 @@ Pure Python (no Julia). Depends on SENUS (exact sparse nullspace) and cobra.
 Core idea: concordance is flux coupling lifted one matrix product up. With N = Y·A,
 K = ker(N) (exact, sparse, via SENUS), and M = A·K, concordant complexes are the
 proportional rows of M and balanced complexes are its zero rows — exact linear algebra,
-no LP, no sampling. See ROADMAP.md.
+no LP, no sampling. Kinetic modules are proportional rows of the null space of the steady-state
+equations in complex concentrations, closed in log space; ACR/ACRR are read off the left null
+space of the modules' composition differences. See ROADMAP.md.
 """
 from kimonu.io import build_crn
 from kimonu.concordance import concordance, concordance_from_matrices, ConcordanceResult

@@ -69,7 +69,7 @@ def test_no_modules_means_no_acr():
     assert result.n_columns == 0
 
 
-# --- end to end: concordance -> kinetic modules -> ACR, from the network alone -----------------
+# --- end to end: kinetic modules -> ACR, from the network alone ------------------------------
 
 # EnvZ-OmpR incidence: (complex, reaction, +-1), in the model's own order.
 REACTIONS = [
@@ -89,17 +89,9 @@ def _A():
 
 
 def test_kinetic_modules_reproduce_the_giant_module():
-    """The nine non-terminal complexes form one kinetic module.
-
-    Reaching it needs the deficiency rule: coupling alone cannot merge the set holding XD with the
-    one holding XD + Yp, because that merge is equivalent to knowing Yp has ACR.
-    """
+    """The nine non-terminal complexes form one kinetic module."""
     A, Y = _A(), _Y()
-    concordance = [{0, 2, 6, 8, 11}, {1, 9, 10, 12}, {3, 4}, {5, 7}]
-    balanced = {0, 2, 6, 8, 11}
-    result = kimonu.kinetic_modules(A, concordance, balanced, Y=Y)
-
-    assert result.deficiency == 2
+    result = kimonu.kinetic_modules(A, Y, Y @ A)
     assert result.n_modules == 1
     assert result.giant_module == 9
     giant = next(m for m in result.modules if len(m) > 1)
@@ -107,18 +99,9 @@ def test_kinetic_modules_reproduce_the_giant_module():
 
 
 def test_end_to_end_acr_is_yp():
-    """From the incidence matrix alone, the pipeline finds Yp and only Yp."""
+    """From the incidence and composition matrices alone, the pipeline finds Yp and only Yp."""
     A, Y = _A(), _Y()
-    concordance = [{0, 2, 6, 8, 11}, {1, 9, 10, 12}, {3, 4}, {5, 7}]
-    modules = kimonu.kinetic_modules(A, concordance, {0, 2, 6, 8, 11}, Y=Y)
-    found = kimonu.acr_acrr(Y, modules.modules, METABOLITES)
+    modules = kimonu.kinetic_modules(A, Y, Y @ A)
+    found = kimonu.acr_acrr(Y, modules.modules, METABOLITES, known_acr=modules.known_acr)
     assert found.acr == ["Yp"]
     assert len(found.acrr) == 15
-
-
-def test_without_Y_the_coarser_merges_are_skipped():
-    """Omitting Y reproduces overlap-only merging, which is what the reference does."""
-    A, Y = _A(), _Y()
-    concordance = [{0, 2, 6, 8, 11}, {1, 9, 10, 12}, {3, 4}, {5, 7}]
-    result = kimonu.kinetic_modules(A, concordance, {0, 2, 6, 8, 11})
-    assert result.giant_module < 9

@@ -1,313 +1,181 @@
-"""Kinetic modules from the concordance partition.
+"""Kinetic modules from a null space in complex-concentration space.
 
-A kinetic module is a set of complexes whose reactions are kinetically coupled. Following Langary
-et al. (2025), each concordance module is taken together with the balanced complexes and reduced to
-its *upstream set* on the complex graph — one vertex per complex, one edge per reaction, from its
-substrate complex to its product complex. The upstream algorithm (Remark S2-1) has two phases:
+Under mass action, reaction j runs at r_j = k_j * psi_s(j), where psi_c is the monomial of complex c
+and s(j) the substrate complex of j. Any positive steady state (r*, psi*) fixes rate constants
+k_j = r*_j / psi*_s(j), and every steady state for those constants satisfies
 
-1. remove entry complexes — complexes produced by a reaction whose substrate lies outside the set —
-   repeatedly, which leaves a set nothing outside can feed;
-2. remove terminal strongly connected components, which leaves a set that feeds itself.
+    W u = 0,   W = N diag(r*) S^T,   u = psi / psi*,
 
-The upstream sets are then merged, and the merging is where most of the work is. Three rules apply,
-and all three are needed: sets that share a complex merge; sets whose representatives are *coupled*
-merge (Proposition S3-4); and if the mass-action deficiency is one, every unbalanced concordance
-module merges (Lemma S4-5). Merges feed back into the concordance modules, so the whole thing is
-iterated to a fixed point, with metabolites found to have ACR augmenting the coupling matrix as they
-are discovered (Remark S3-6).
+with S the substrate part of the incidence matrix. Complexes whose rows in a basis of ker(W) are
+proportional keep a fixed psi ratio at every positive steady state: they are kinetically coupled.
+Every rate-constant set that admits a positive steady state arises this way, and r* is drawn at
+random from the interior of the steady-state cone, so the coupling holds for generic rate constants.
 
-The feedback matters. On EnvZ-OmpR the coupling rule alone cannot merge the set containing XD with
-the set containing XD + Yp: doing so requires e_Yp to lie in the span of the coupling matrix, which
-is the very question the merge would settle. The deficiency rule breaks that circle.
+The coupled sets are then closed in log space. Within a set, ln psi_c - ln psi_d =
+(y_c - y_d)^T ln x is constant, so any composition difference in the span of those is constant as
+well, and sets whose representatives differ by such a vector merge (Proposition S3-4 of Langary et
+al., 2025). Metabolites found to have ACR on the way extend that span (Remark S3-6).
+
+A merge found in log space is a new linear fact in psi space: u_c = u_d for the merged complexes,
+since their ratio is fixed and equals one at u = 1. Added to W, it can make further rows of the
+kernel proportional, because the proportional-row readout alone ignores linear relations among
+three or more coupled sets. On EnvZ-OmpR this feedback is what couples the complexes that differ
+by Yp. Both steps are iterated until the partition no longer changes.
+
+The zero complex has psi = 1. Attached (default), its uptake reactions run at constant rate and
+complexes coupled to it share its module: a fixed medium. Detached, each uptake reaction is given
+its own source, so only couplings that hold whatever the uptake rates remain.
 """
 from collections import namedtuple
 from fractions import Fraction
 
 import numpy as np
+import straindesign as sd
+from scipy import sparse
+from scipy.optimize import linprog
+
+from kimonu.acr import acr_acrr, coupling_signatures
+from kimonu.concordance import concordance_from_matrices
 
 KineticResult = namedtuple(
     "KineticResult",
-    ["modules", "module_of", "n_modules", "giant_module", "known_acr", "iterations", "deficiency"],
+    ["modules", "module_of", "n_modules", "giant_module", "known_acr", "rounds"],
 )
 
 
-def reaction_complexes(A):
-    """Per reaction, its substrate and product complexes."""
-    A = A.tocsc()
-    out = []
-    for j in range(A.shape[1]):
-        start, end = A.indptr[j], A.indptr[j + 1]
-        rows, vals = A.indices[start:end], A.data[start:end]
-        out.append(([int(r) for r, v in zip(rows, vals) if v < 0],
-                    [int(r) for r, v in zip(rows, vals) if v > 0]))
-    return out
+def _exact_entries(N):
+    """(row, col, Fraction) triples and shape of an exact or integer stoichiometric matrix."""
+    if isinstance(N, sd.RationalMatrix):
+        coo = N.to_coo_exact()
+        return [(int(i), int(j), Fraction(int(v), int(coo.denom)))
+                for i, j, v in zip(coo.rows, coo.cols, coo.data)], tuple(coo.shape)
+    N = sparse.coo_matrix(N)
+    return [(int(i), int(j), Fraction(str(v))) for i, j, v in zip(N.row, N.col, N.data)], N.shape
 
 
-class _Topology:
-    """Reaction adjacency in the form the upstream algorithm needs, built once."""
-
-    __slots__ = ("succ", "pred", "producers", "substrates", "products", "n")
-
-    def __init__(self, A):
-        rxns = reaction_complexes(A)
-        n = A.shape[0]
-        self.n = n
-        self.succ = [set() for _ in range(n)]
-        self.pred = [set() for _ in range(n)]
-        self.producers = [[] for _ in range(n)]      # complex -> reactions producing it
-        self.substrates = [s for s, _ in rxns]       # reaction -> substrate complexes
-        self.products = [p for _, p in rxns]         # reaction -> product complexes
-        for j, (subs, prods) in enumerate(rxns):
-            for p in prods:
-                self.producers[p].append(j)
-            for sc in subs:
-                for p in prods:
-                    self.succ[sc].add(p)
-                    self.pred[p].add(sc)
+def _kernel_entries(K):
+    """(row, col, Fraction) triples of an exact null-space basis."""
+    if isinstance(K, sd.ExactCOO):
+        return [(int(i), int(j), Fraction(int(v), int(K.denom)))
+                for i, j, v in zip(K.rows, K.cols, K.data)]
+    K = sparse.coo_matrix(K)
+    return [(int(i), int(j), Fraction(int(v))) for i, j, v in zip(K.row, K.col, K.data)]
 
 
-def complex_graph(A):
-    """Successors and predecessors of each complex in the reaction graph."""
-    n = A.shape[0]
-    succ = [set() for _ in range(n)]
-    pred = [set() for _ in range(n)]
-    for substrates, products in reaction_complexes(A):
-        for s in substrates:
-            for p in products:
-                succ[s].add(p)
-                pred[p].add(s)
-    return succ, pred
+def positive_flux(N, seed=0):
+    """An exact steady-state flux with every entry strictly positive.
 
-
-def _sccs(succ, scope):
-    """Tarjan's strongly connected components restricted to ``scope``."""
-    index, low, on_stack, stack, result = {}, {}, set(), [], []
-    counter = 0
-    for root in sorted(scope):
-        if root in index:
-            continue
-        work = [(root, iter(sorted(succ[root] & scope)))]
-        index[root] = low[root] = counter
-        counter += 1
-        stack.append(root)
-        on_stack.add(root)
-        while work:
-            v, it = work[-1]
-            descended = False
-            for w in it:
-                if w not in index:
-                    index[w] = low[w] = counter
-                    counter += 1
-                    stack.append(w)
-                    on_stack.add(w)
-                    work.append((w, iter(sorted(succ[w] & scope))))
-                    descended = True
-                    break
-                if w in on_stack:
-                    low[v] = min(low[v], index[w])
-            if descended:
-                continue
-            work.pop()
-            if work:
-                low[work[-1][0]] = min(low[work[-1][0]], low[v])
-            if low[v] == index[v]:
-                component = []
-                while True:
-                    w = stack.pop()
-                    on_stack.discard(w)
-                    component.append(w)
-                    if w == v:
-                        break
-                result.append(set(component))
-    return result
-
-
-def upstream_set(candidates, topology, succ=None):
-    """The upstream set of a candidate complex set (Remark S2-1)."""
-    current = set(candidates)
-    succ = topology.succ if succ is None else succ
-
-    # phase I: drop entry complexes, to a fixed point
-    #
-    # A complex is an entry complex when some reaction producing it draws on a substrate outside
-    # the set.
-    substrates = topology.substrates
-    producers = topology.producers
-    while True:
-        entry = {c for c in current
-                 if any(any(sub not in current for sub in substrates[j]) for j in producers[c])}
-        if not entry:
-            break
-        current -= entry
-
-    # phase II: drop terminal strongly connected components
-    #
-    # Terminality is decided against the set as it stands after phase I, and every terminal
-    # component is removed together. Removing them one at a time and re-testing against the
-    # shrinking set cascades: each removal can strand the component that fed it, and the whole set
-    # unravels.
-    if current:
-        components = _sccs(succ, current)
-        # Terminality is judged on the full network, not on the candidate set: a component that
-        # feeds something outside the candidate is still feeding, so it is not terminal. Testing
-        # only against `current` calls such a component terminal and deletes it, which strands its
-        # complexes in singleton modules and loses every ACR/ACRR relation among them.
-        terminal = [c for c in components if not any(succ[v] - c for v in c)]
-        for component in terminal:
-            current -= component
-    return current
-
-
-def _weak_components(succ, pred, scope):
-    seen, out = set(), []
-    for start in sorted(scope):
-        if start in seen:
-            continue
-        stack, comp = [start], []
-        seen.add(start)
-        while stack:
-            v = stack.pop()
-            comp.append(v)
-            for w in (succ[v] | pred[v]) & scope:
-                if w not in seen:
-                    seen.add(w)
-                    stack.append(w)
-        out.append(set(comp))
-    return out
-
-
-def is_weakly_reversible(succ, pred, n):
-    """True when every linkage class is a single strongly connected component."""
-    scope = set(range(n))
-    for component in _weak_components(succ, pred, scope):
-        if len(_sccs(succ, component)) > 1:
-            return False
-    return True
-
-
-def classical_deficiency(Y, A, succ, pred, nullity=None):
-    """delta = n - l - rank(N): complexes, minus linkage classes, minus the rank of N = Y*A.
-
-    The rank comes from the exact nullspace, not from an SVD. A float rank test would put a
-    numerical tolerance in the middle of a discrete rule — the deficiency decides whether every
-    unbalanced module merges, and the difference between delta = 1 and delta = 2 changes the answer.
-    It is also the difference between an O(n^3) dense factorisation and a sparse exact one.
-
-    ``nullity`` may be supplied when the kernel has already been computed for the concordance
-    partition, in which case no factorisation happens here at all.
+    An LP point with random lower bounds r >= 1 + U(0, 1) is snapped onto the exact kernel through
+    its free coordinates, the rows where the basis has a single entry. The steady-state set is a
+    cone, so no upper bounds are needed. Raises ValueError when no such flux exists, which means
+    the network still has blocked reactions.
     """
+    entries, (m, q) = _exact_entries(N)
+    Nf = sparse.csr_matrix(([float(v) for _, _, v in entries],
+                            ([i for i, _, _ in entries], [j for _, j, _ in entries])), shape=(m, q))
+    rng = np.random.default_rng(seed)
+    lower = 1 + rng.random(q)
+    lp = linprog(rng.random(q), A_eq=Nf, b_eq=np.zeros(m),
+                 bounds=[(lo, None) for lo in lower], method="highs")
+    if lp.status != 0:
+        raise ValueError("no strictly positive steady-state flux; remove blocked reactions first")
+
+    rows = {}
+    for i, j, v in _kernel_entries(sd.sparse_nullspace(N)):
+        rows.setdefault(i, []).append((j, v))
+    free = {}
+    for i, row in rows.items():
+        if len(row) == 1:
+            j, v = row[0]
+            free.setdefault(j, Fraction(float(lp.x[i])) / v)
+    flux = [sum((v * free.get(j, 0) for j, v in rows.get(i, ())), Fraction(0)) for i in range(q)]
+    if not all(x > 0 for x in flux):
+        raise ValueError("snapped flux is not strictly positive")
+    return flux
+
+
+def _coupled_sets(A, Y, N, flux, detach_uptakes, equal=()):
+    """Groups of complexes with proportional rows in ker(N diag(r*) S^T), with u_c = u_d imposed for
+    every pair (c, d) in ``equal``."""
     n = A.shape[0]
-    linkage = len(_weak_components(succ, pred, set(range(n))))
-    if nullity is None:
-        import straindesign as sd
-        nullity = sd.sparse_nullspace((Y @ A).tocsr()).shape[1]
-    rank = A.shape[1] - nullity
-    return n - linkage - rank
+    Acsc = A.tocsc()
+    substrate = {}
+    for j in range(Acsc.shape[1]):
+        start, end = Acsc.indptr[j], Acsc.indptr[j + 1]
+        for i, a in zip(Acsc.indices[start:end], Acsc.data[start:end]):
+            if a < 0:
+                substrate[j] = int(i)
+    zero = {c for c in range(n) if Y.tocsc()[:, c].nnz == 0}
+
+    by_reaction = {}
+    entries, (m, _) = _exact_entries(N)
+    for i, j, v in entries:
+        by_reaction.setdefault(j, []).append((i, v))
+    W, extra = {}, {}
+    for j, s in substrate.items():
+        col = extra.setdefault(j, n + len(extra)) if detach_uptakes and s in zero else s
+        for i, v in by_reaction.get(j, ()):
+            W[(i, col)] = W.get((i, col), Fraction(0)) + flux[j] * v
+    ncol = n + len(extra)
+    for k, (c, d) in enumerate(equal):
+        W[(m + k, c)], W[(m + k, d)] = Fraction(1), Fraction(-1)
+    Wx = sd.RationalMatrix.from_fractions(((i, j, x) for (i, j), x in W.items() if x != 0),
+                                          (m + len(equal), ncol))
+    groups = concordance_from_matrices(sparse.identity(ncol, format="csr", dtype=np.int64), Wx).modules
+    drop = zero if detach_uptakes else set()
+    return [set(c for c in g if c < n and c not in drop) for g in groups], set(substrate.values()) - drop
 
 
-def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20, nullity=None):
-    """Kinetic modules from the concordance partition.
+def _closure(Y, sets):
+    """Merge sets with equal signatures (Proposition S3-4), extended by ACR metabolites (Remark S3-6),
+    until neither the sets nor the ACR metabolites change."""
+    known, rounds = set(), 0
+    while True:
+        rounds += 1
+        signatures = coupling_signatures(Y, sets, known)
+        if signatures is None:
+            return sets, known, rounds
+        merged = {}
+        for s, key in zip(sets, signatures):
+            merged.setdefault(key, set()).update(s)
+        merged = list(merged.values())
+        found = known | set(acr_acrr(Y, merged, known_acr=known).acr)
+        if len(merged) == len(sets) and found == known:
+            return merged, known, rounds
+        sets, known = merged, found
+
+
+def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
+    """Kinetic modules of a network with no blocked reactions.
 
     Args:
-        A: complexes x reactions incidence matrix.
-        modules: concordance modules as iterables of complex indices (singletons included).
-        balanced: indices of balanced complexes.
-        Y: metabolites x complexes composition matrix. Required for the coupling and deficiency
-            merges; without it only overlapping upstream sets are merged, which reproduces the
-            reference implementation's behaviour and can miss ACR.
-        max_iterations: cap on the outer loop; convergence is normally reached in a few passes.
-        nullity: dimension of ker(N), when already known from the concordance step. Supplying it
-            skips the only factorisation this function would otherwise perform.
+        A: complexes x reactions incidence matrix, one -1 and one +1 per column.
+        Y: metabolites x complexes composition matrix.
+        N: metabolites x reactions stoichiometric matrix, exact (straindesign RationalMatrix) or
+            integer; N = Y A.
+        detach_uptakes: give every reaction out of the zero complex its own source, so couplings
+            through the constant zero-complex monomial are not used.
+        seed: seed of the random interior flux. Results hold for generic rate constants, so the
+            seed changes them only with probability zero.
 
-    Returns a :class:`KineticResult`.
+    Returns a :class:`KineticResult`; every complex belongs to exactly one module, singletons
+    included. Complexes that are no reaction's substrate appear in no rate law and stay singletons.
     """
-    from kimonu.acr import acr_acrr, coupling_signatures
-
     n = A.shape[0]
-    topology = _Topology(A)
-    succ, pred = topology.succ, topology.pred
-    balanced = set(balanced)
-
-    concordance = [set(m) - balanced for m in modules]
-    concordance = [m for m in concordance if m]
-    initial_delta = (classical_deficiency(Y, A, succ, pred, nullity=nullity)
-                     if Y is not None else -1)
-    weakly_reversible = is_weakly_reversible(succ, pred, n)
-
-    known_acr = set()
-    n_merges = 0
-    previous = None
-    iterations = 0
-    current_modules = []
-
-    while iterations < max_iterations:
-        iterations += 1
-        upstream_sets = []
-        origin = []
-        for idx, module in enumerate(concordance):
-            s = upstream_set(module | balanced, topology)
-            if s:
-                upstream_sets.append(s)
-                origin.append(idx)
-
-        if not upstream_sets:
+    flux = positive_flux(N, seed)
+    equal, rounds = [], 0
+    while True:
+        coupled, substrates = _coupled_sets(A, Y, N, flux, detach_uptakes, equal)
+        coupled = [s for s in coupled if len(s) > 1 or (len(s) == 1 and next(iter(s)) in substrates)]
+        sets, known, r = _closure(Y, coupled)
+        rounds += r
+        if len(sets) == len(coupled):
             break
+        equal = [(min(s), c) for s in sets for c in s if c != min(s)]
 
-        sets = _group_sets(upstream_sets, origin, Y, known_acr)
-
-        # a merge of upstream sets is a merge of the concordance modules behind them
-        new_concordance = []
-        for _, sources in sets:
-            union = set()
-            for i in sources:
-                union |= concordance[i]
-            new_concordance.append(union)
-        for idx, module in enumerate(concordance):
-            if not any(idx in sources for _, sources in sets):
-                new_concordance.append(module)
-
-        n_merges += len(concordance) - len(new_concordance)
-        current_modules = [s for s, _ in sets]
-
-        if Y is not None:
-            found = acr_acrr(Y, current_modules, known_acr=known_acr)
-            known_acr |= set(found.acr)
-
-        state = (frozenset(frozenset(s) for s in current_modules),
-                 frozenset(frozenset(m) for m in new_concordance))
-        concordance = new_concordance
-        if state == previous:
-            break
-        previous = state
-
-    # Lemma S4-5: with mass-action deficiency one, every unbalanced module belongs together
-    deficiency_merged = False
-    if Y is not None and initial_delta >= 0 and len(concordance) > 1:
-        lower = 0 if weakly_reversible else 1
-        upper = initial_delta - n_merges
-        if lower == 1 and upper == 1:
-            concordance = [set().union(*concordance)]
-            deficiency_merged = True
-            upstream_sets = []
-            for module in concordance:
-                s = upstream_set(module | balanced, topology)
-                if s:
-                    upstream_sets.append(s)
-            sets = _group_sets(upstream_sets, list(range(len(upstream_sets))), Y, known_acr)
-            current_modules = [s for s, _ in sets]
-
-    result = list(current_modules)
-
-    # linkage classes made up entirely of balanced complexes stand on their own
+    result = [s for s in sets if s]
     assigned = set().union(*result) if result else set()
-    for comp in _weak_components(succ, pred, set(range(n))):
-        if comp <= balanced and not (comp & assigned):
-            result.append(comp)
-            assigned |= comp
-
-    for i in range(n):
-        if i not in assigned:
-            result.append({i})
+    result += [{i} for i in range(n) if i not in assigned]
 
     module_of = np.zeros(n, dtype=np.int64)
     for idx, group in enumerate(result, start=1):
@@ -319,41 +187,6 @@ def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20, nullity=Non
         module_of=module_of,
         n_modules=sum(1 for m in result if len(m) > 1),
         giant_module=max((len(m) for m in result), default=0),
-        known_acr=sorted(known_acr),
-        iterations=iterations,
-        deficiency=initial_delta,
+        known_acr=sorted(known),
+        rounds=rounds,
     )
-
-
-def _group_sets(upstream_sets, origin, Y, known_acr):
-    """Merge upstream sets by overlap and, when Y is given, by coupling (Proposition S3-4).
-
-    Returns a list of (merged set, set of originating concordance module indices).
-    """
-    from kimonu.acr import coupling_signatures
-
-    items = [(set(s), {o}) for s, o in zip(upstream_sets, origin)]
-
-    # overlap
-    merged = []
-    for group, sources in items:
-        touching = [x for x in merged if x[0] & group]
-        for x in touching:
-            merged.remove(x)
-            group = group | x[0]
-            sources = sources | x[1]
-        merged.append((group, sources))
-
-    if Y is None or len(merged) < 2:
-        return merged
-
-    signatures = coupling_signatures(Y, [g for g, _ in merged], known_acr)
-    if signatures is None:
-        return merged
-
-    by_signature = {}
-    for (group, sources), sig in zip(merged, signatures):
-        key = by_signature.setdefault(sig, [set(), set()])
-        key[0] |= group
-        key[1] |= sources
-    return [(g, s) for g, s in by_signature.values()]
