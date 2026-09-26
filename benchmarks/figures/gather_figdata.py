@@ -1,7 +1,7 @@
 """Build figdata.json (schema in make_prelim.py) from the benchmark result directories.
 
 Arms: kimonu from triplicate_psi/ (psi null space, attached uptakes; seconds the median of three replicates),
-kimonu_det from triplicate_psi_detached/, kimonu_up from sweep_shared/ (upstream-set route, compat/upstream.py;
+kimonu_det from triplicate_psi_detached3/ (detached uptakes, same median), kimonu_up from sweep_shared/ (upstream-set route, compat/upstream.py;
 giant_overlap from the sweep_tentative/ logs, S2-10 fields from kinetic_variants/), COCOA from sweep/cocoa_v110 (efficient=false) and sweep/cocoa_eff
 (efficient=true), reference from reference_final/ (exhaustive, fixed algorithm and bridge; retested partitions from
 reference_final/retest/ where present) and reference_final_sampled/. Earlier reference runs are not read: they predate the concordance fixes.
@@ -22,9 +22,9 @@ def n_free(items, free):
     """items: metabolite names (ACR) or name pairs (ACRR); a pair is free when both members are."""
     return sum(all(x in free for x in (it if isinstance(it, list) else [it])) for it in items)
 
-def kimonu_rec(m):
+def kimonu_rec(m, root="triplicate_psi"):
     """psi route; the replicates agree on every count, so only the times vary."""
-    reps = [json.load(open(f)) for f in sorted(glob.glob(f"triplicate_psi/kimonu_{m}_rep*.json"))]
+    reps = [json.load(open(f)) for f in sorted(glob.glob(f"{root}/kimonu_{m}_rep*.json"))]
     d, free = reps[0], free_set(m)
     med = lambda k: sorted(r[k] for r in reps)[len(reps) // 2]
     return dict(balanced=d["n_balanced"], conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
@@ -32,10 +32,6 @@ def kimonu_rec(m):
                 acr=len(d["acr"]), acrr=len(d["acrr"]), seconds=med("seconds"), sec_conc=med("seconds_concordance"),
                 sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"), n_kinetic=d["n_kinetic_modules"]), d["n_complexes"]
 
-def kimonu_det_rec(m):
-    d = json.load(open(f"triplicate_psi_detached/kimonu_{m}_rep1.json")); free = free_set(m)
-    return dict(giant=d["giant_kinetic_module"], n_kinetic=d["n_kinetic_modules"], acr=len(d["acr"]), acrr=len(d["acrr"]),
-                acr_free=n_free(d["acr_free"], free), acrr_free=n_free(d["acrr_free"], free), seconds=d["seconds"])
 
 def kimonu_up_rec(m):
     d = json.load(open(f"sweep_shared/kimonu_{m}.json")); free = free_set(m)
@@ -132,7 +128,7 @@ if __name__ == "__main__":
     D = dict(models=models, n_complexes={}, kimonu={}, kimonu_det={}, kimonu_up={}, cocoa_false={}, cocoa_true={}, ref_exh={}, ref_sampled={})
     for m in models:
         D["kimonu"][m], D["n_complexes"][m] = kimonu_rec(m)
-        D["kimonu_det"][m] = kimonu_det_rec(m)
+        D["kimonu_det"][m] = kimonu_rec(m, "triplicate_psi_detached3")[0]
         D["kimonu_up"][m] = kimonu_up_rec(m)[0]
         cf, ct = cocoa_recs(m, "cocoa_v110", "cocoa_v110"), cocoa_recs(m, "cocoa_eff", "cocoa_eff")
         if cf: D["cocoa_false"][m] = cf

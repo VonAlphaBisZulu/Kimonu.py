@@ -20,8 +20,8 @@ D = json.load(open("figdata.json")); nC = D["n_complexes"]
 models = sorted(D["models"], key=lambda m: nC[m]); os.makedirs("figures/prelim", exist_ok=True)
 # RColorBrewer Set1: Kimonu green, reference blue, COCOA red; the lighter member of each hue is the
 # second arm of that tool. Kimonu variants built to mirror the reference are dark blue, beside it.
-ARMS = {"kimonu":      ("Kimonu",                        "#4DAF4A", ""),
-        "kimonu_det":  ("Kimonu, detached uptakes*",     "#A8DCA5", ""),
+ARMS = {"kimonu":      ("Kimonu, attached uptakes",      "#1B7837", ""),
+        "kimonu_det":  ("Kimonu",                        "#4DAF4A", ""),
         "kimonu_up":   ("Kimonu, upstream-set route*",   "#1F4E79", ""),
         "kimonu4":     ("Kimonu, overlap merge only*",   "#1F4E79", ""),
         "kimonu_s210": ("Kimonu, S2-10 criterion*",     "#1F4E79", ""),

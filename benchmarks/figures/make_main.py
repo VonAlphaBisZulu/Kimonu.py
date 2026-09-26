@@ -37,19 +37,19 @@ def save(fig, name, note):
     fig.savefig(f"figures/main/{name}.png", dpi=160); fig.savefig(f"figures/main/{name}.svg"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(11, 5.2))
-P.grouped(ax, "n_kinetic", ["kimonu", "kimonu_det", "cocoa_true", "kimonu_up", REF], "log", "M1  Kinetic modules (non-singleton)", "count (log)",
+P.grouped(ax, "n_kinetic", ["kimonu_det", "cocoa_true", "kimonu_up", REF], "log", "M1  Kinetic modules (non-singleton)", "count (log)",
           labels=REFLAB, errorbars=True); polish(ax)
 save(fig, "M1_kinetic_modules", MAINBASE + "  Kimonu's partition contains the upstream-set partition on every model (coarser or equal); the upstream-set route reproduces the reference wherever its exhaustive run landed.")
 
 fig, ax = plt.subplots(figsize=(11, 5.2))
-P.grouped(ax, "acrr_free", ["kimonu", "kimonu_det", "cocoa_true", "kimonu_s210", REF], "symlog", "M2  ACRR metabolite pairs (free)", "pairs (symlog)",
+P.grouped(ax, "acrr_free", ["kimonu_det", "cocoa_true", "kimonu_s210", REF], "symlog", "M2  ACRR metabolite pairs (free)", "pairs (symlog)",
           labels=REFLAB2, errorbars=True); polish(ax)
 ax.set_ylim(top=ax.get_ylim()[1] * 30)          # headroom so the legend clears the tallest bars
-save(fig, "M2_acrr", MAINBASE + "  † reference criterion (Corollary S2-10) is a sufficient condition; * Kimonu applying that criterion to its own modules reproduces the reference's pairs exactly on every landed model; pairs of two ACR metabolites are not counted as ACRR, so attached uptakes can lower the count.")
+save(fig, "M2_acrr", MAINBASE + "  † reference criterion (Corollary S2-10) is a sufficient condition; * Kimonu applying that criterion to its own modules reproduces the reference's pairs exactly on every landed model.")
 
 # M3 runtime vs size with fitted lines and 95% confidence bands
 fig, ax = plt.subplots(figsize=(11, 6))
-arms = [("kimonu", "seconds"), ("kimonu_up", "seconds"), ("cocoa_false", "seconds"), ("cocoa_true", "seconds"), ("ref_exh", "seconds"), ("ref_sampled", "seconds")]
+arms = [("kimonu_det", "seconds"), ("kimonu_up", "seconds"), ("cocoa_false", "seconds"), ("cocoa_true", "seconds"), ("ref_exh", "seconds"), ("ref_sampled", "seconds")]
 xs_all = np.array([nC[m] for m in D["models"]], float)
 for a, key in arms:
     lab, col, _ = ARMS[a]; X, Y = [], []
@@ -71,4 +71,15 @@ for y, t_ in [(60, "1 min"), (3600, "1 h"), (86400, "1 day"), (604800, "1 week")
 ax.set_title("M3  Runtime vs network size, all models", loc="left", fontsize=11)
 ax.legend(fontsize=11, frameon=False, loc="upper left"); ax.grid(color="#eee", lw=0.6); [ax.spines[s].set_visible(False) for s in ("top", "right")]
 save(fig, "M3_runtime", "Lines: least-squares fit of log seconds on log complexes per arm, on per-model medians; bands: 95% confidence for the fitted mean. Stochastic arms show seeds as faint points. Reference times are from the fixed bridge; the exhaustive arm is concordance-dominated.")
+# M4 (separate from the agreement figures): what attaching the uptakes to the zero complex changes
+MB = [m for m in sorted(D["models"], key=lambda m: nC[m])]
+P.models = MB
+fig, axs = plt.subplots(3, 1, figsize=(14, 11), sharex=True)
+for ax, key, title, scale in [(axs[0], "n_kinetic", "M4a  Kinetic modules (non-singleton)", "log"),
+                              (axs[1], "acr_free", "M4b  ACR metabolites (free)", "symlog"),
+                              (axs[2], "acrr_free", "M4c  ACRR metabolite pairs (free)", "symlog")]:
+    P.grouped(ax, key, ["kimonu_det", "kimonu"], scale, title, "count"); polish(ax, names=False)
+    if scale == "symlog": ax.set_ylim(top=ax.get_ylim()[1] * 30)
+axs[2].set_xticks(range(len(MB))); axs[2].set_xticklabels([SHORT.get(m, m) for m in MB], rotation=55, ha="right", fontsize=10)
+save(fig, "M4_uptakes", "Detached: every uptake reaction has its own source, so nothing couples through the zero complex (the setting of the agreement figures). Attached: the zero complex has psi = 1, so metabolites fed at a constant rate are fixed (a constant medium). Pairs of two ACR metabolites are not counted as ACRR, so attaching can lower the ACRR count.")
 print("main figures:", sorted(os.listdir("figures/main")), "models:", MAIN)
