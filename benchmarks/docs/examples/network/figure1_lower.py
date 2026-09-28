@@ -37,6 +37,7 @@ INK, MUTE, FONT = "#1b2430", "#9aa3ad", 'font-family="ArialMT, Arial"'
 MOD = {**{c: "#fff2cd" for c in ['B', 'D', 'D+E', 'B+G']}, **{c: "#ffe0ff" for c in ['C+G', 'C+E']},
        **{c: "#e5d9ff" for c in ['A+G', 'A+E']}, **{c: "#5a9bd5" for c in ['A', 'C', 'F', 'H', 'I']}}
 KIN = "#c9ecf4"
+ACRR_FILL, ACR_FILL = "#d9e7c4", "#f2c14e"
 EMC = {"e1": "#e6862b", "e2": "#3a9d5d"}
 BAND = "#fff2cd"
 
@@ -80,6 +81,14 @@ OWN = {"M3.834,65.717": 14, "143.175 162.258": 14, "M41.111,133.368": 14, "3.834
        "M147.687,86.152": 9, "M188.84,95.72": 9, "M188.36,95.18": 9, "x1=\"188.84\"": 9, "194.799 102.105": 9,
        "M211.383,125.74c22.162": 11, "264.154 93.465": 11, "M211.383,125.74c23.753": 11, "164.488 158.581": 11, "x1=\"205.959\"": 11,
        "M176.063,32.461": 5, "176.666 34.901": 5, "M87.838,19.071": 3, "262.085 71.797": 3}
+def grow(poly, k):
+    """scale an arrowhead polygon about its centroid, so heads stay legible on a thumbnail"""
+    m = re.search(r'points="([^"]+)"', poly)
+    p = [float(v) for v in m.group(1).split()]; xs, ys = p[0::2], p[1::2]
+    cx_, cy_ = sum(xs) / len(xs), sum(ys) / len(ys)
+    q = " ".join(f"{cx_ + k * (x - cx_):.3f} {cy_ + k * (y - cy_):.3f}" for x, y in zip(xs, ys))
+    return poly[:m.start(1)] + q + poly[m.end(1):]
+
 def thumb(em, colour):
     b = body
     for key, rx in OWN.items():
@@ -89,7 +98,9 @@ def thumb(em, colour):
         el = m.group(0)
         if on:
             el = el.replace('stroke="#000"', f'stroke="{colour}"').replace('stroke-width="1.2"', 'stroke-width="2"')
-            el = el.replace('/>', f' fill="{colour}"/>') if el.startswith('<polygon') and 'fill=' not in el else el
+            if el.startswith('<polygon'):
+                el = grow(el, 1.9)
+                el = el.replace('/>', f' fill="{colour}"/>') if 'fill=' not in el else el
         else:
             el = el.replace('stroke="#000"', 'stroke="#d5d9de"')
             el = el.replace('/>', ' fill="#d5d9de"/>') if el.startswith('<polygon') and 'fill=' not in el else el
@@ -97,51 +108,36 @@ def thumb(em, colour):
     return b
 
 out_parts = []
-Y0 = 234
-# C ------------------------------------------------------------------------------------------------
+Y0 = 222
+KCOLS = ["k1", "k2", "k3", "k4", "k5", "e1", "e2"]
+# C: the two elementary modes, stacked, next to K -----------------------------------------------
 out_parts.append(letter(4.302, Y0, "C"))
-out_parts.append(t(24, Y0 - 2, "Steady-state fluxes: K = ker(N)", 8, INK))
+out_parts.append(t(24, Y0 - 2, "K = ker(N)", 8, INK))
 S = 0.47
 for i, (em, name) in enumerate(((E1, "e1"), (E2, "e2"))):
-    x, y = 8 + i * 128, Y0 + 8
+    x, y = 4, Y0 + 8 + i * 94
     out_parts.append(f'<g transform="translate({x} {y}) scale({S})">' + thumb(em, EMC[name]) + '</g>')
-    out_parts.append(t(x + 30, y + 94, f"elementary mode {name}", 7.5, EMC[name], bold=True))
-kx, ky = 8, Y0 + 116
+    out_parts.append(t(x + S * 242, y + 8, name, 8, EMC[name], bold=True))
 chipK = {"R1": "#e5d9ff", "R2": "#e5d9ff", "R5": "#fff2cd", "R8": "#fff2cd"}
-out_parts.append(matrix(kx, ky, [f"R{j + 1}" for j in range(14)], ["k1", "k2", "k3", "k4", "k5", "e1", "e2"],
+out_parts.append(matrix(136, Y0 + 22, [f"R{j + 1}" for j in range(14)], KCOLS,
                         [list(K[j, :]) for j in range(14)], chip=chipK, band=(5, 6)))
-nx = kx + 26 + 7 * 13 + 8
-for i, line in enumerate(["k1–k5: reversible pairs", "e1, e2: elementary modes", "",
-                          "Proportional rows are fully", "coupled reactions:"]):
-    out_parts.append(t(nx, ky + 10 + i * 10, line, 7.5))
-out_parts.append(rect(nx, ky + 52.5, 36, 9, "#e5d9ff") + t(nx + 2, ky + 60, "R1, R2", 7.5)
-                 + rect(nx + 40, ky + 52.5, 36, 9, "#fff2cd") + t(nx + 42, ky + 60, "R5, R8", 7.5))
-# D ------------------------------------------------------------------------------------------------
-DX = 262
+# D: complex activities --------------------------------------------------------------------------
+DX = 266
 out_parts.append(letter(DX, Y0, "D"))
-out_parts.append(t(DX + 18, Y0 - 2, "Complex activities: M = A·K", 8, INK))
-out_parts.append(matrix(DX + 2, Y0 + 20, CX, ["k1", "k2", "k3", "k4", "k5", "e1", "e2"],
-                        [list(M[i, :]) for i in range(13)], lw=30, chip=MOD, band=(5, 6)))
-for i, line in enumerate(["Zero rows: balanced", "(A, C, F, H, I).", "Proportional rows:", "concordance modules.",
-                          "Columns k1–k5 are zero:", "a reversible pair returns", "every complex to itself."]):
-    out_parts.append(t(DX + 2, Y0 + 170 + i * 10, line, 7.5))
-# E ------------------------------------------------------------------------------------------------
-EX = 398
+out_parts.append(t(DX + 18, Y0 - 2, "M = A·K", 8, INK))
+out_parts.append(matrix(DX + 2, Y0 + 22, CX, KCOLS, [list(M[i, :]) for i in range(13)], lw=30, chip=MOD, band=(5, 6)))
+# E: tangent space and complex signatures --------------------------------------------------------
+EX = 400
 out_parts.append(letter(EX, Y0, "E"))
-out_parts.append(t(EX + 18, Y0 - 2, "Tangent space", 8, INK))
-out_parts.append(t(EX + 18, Y0 + 8, "T = ker(N·diag(r*)·Sᵀ·Yᵀ)", 7.5, INK))
-chipT = {s: KIN for s in "ABCFHI"}; chipT["G"] = "#5a9bd5"
-out_parts.append(matrix(EX + 2, Y0 + 30, SP, ["t1", "t2"], [list(T[i, :]) for i in range(9)], lw=16, chip=chipT))
+out_parts.append(t(EX + 18, Y0 - 2, "T = ker(N·diag(r*)·Sᵀ·Yᵀ)", 8, INK))
+chipT = {s: ACRR_FILL for s in "ABCFHI"}; chipT["G"] = ACR_FILL
+out_parts.append(t(EX + 20, Y0 + 12, "T", 7.5, MUTE))
+out_parts.append(matrix(EX + 2, Y0 + 22, SP, ["t1", "t2"], [list(T[i, :]) for i in range(9)], lw=16, chip=chipT))
 chipC = {c: KIN for c in CX if YT[CX.index(c), :] == sy.Matrix([[1, 0]]) and c in SUB}
-out_parts.append(t(EX + 50, Y0 + 30, "Yᵀ·T", 7, MUTE))
-out_parts.append(matrix(EX + 52, Y0 + 30, CX, ["t1", "t2"], [list(YT[i, :]) for i in range(13)], lw=26, chip=chipC))
-for i, line in enumerate(["Zero row of T: ACR (G).", "Equal rows of T: ACRR", "(A, B, C, F, H, I).",
-                          "Equal rows of Yᵀ·T among", "substrate complexes:", "the kinetic module (B).",
-                          "B+G shares the row but is", "no reaction's substrate."]):
-    out_parts.append(t(EX + 2, Y0 + 180 + i * 10, line, 7.5))
+out_parts.append(t(EX + 60, Y0 + 12, "Yᵀ·T", 7.5, MUTE))
+out_parts.append(matrix(EX + 52, Y0 + 22, CX, ["t1", "t2"], [list(YT[i, :]) for i in range(13)], lw=26, chip=chipC))
 
 fig = open(fig_in).read()
-ACRR_FILL, ACR_FILL = "#d9e7c4", "#f2c14e"
 halos = []
 nodes = re.findall(r'<text transform="translate\(([\d.]+) ([\d.]+)\)" font-family="Arial-BoldMT, Arial" font-size="14"[^>]*><tspan x="0" y="0">([A-I])</tspan>', fig)[:9]
 groups = {}
@@ -153,8 +149,8 @@ for x, y, L in nodes:
     w = 14 * {"I": .278, "F": .611}.get(L, .72); cx_, cy_ = float(x) + w / 2, float(y) - 5
     fill = ACR_FILL if all(v == 0 for v in T[SP.index(L), :]) else ACRR_FILL if any(L in g for g in acrr) else None
     if fill: halos.append(f'<circle cx="{cx_:.2f}" cy="{cy_:.2f}" r="9.5" fill="{fill}"/>')
-key = [f'<circle cx="16" cy="196" r="4.5" fill="{ACRR_FILL}"/>', t(24, 199, "ACRR group: fixed ratios among A, B, C, F, H, I", 7.5),
-       f'<circle cx="236" cy="196" r="4.5" fill="{ACR_FILL}"/>', t(244, 199, "ACR: fixed concentration of G", 7.5)]
+key = [f'<circle cx="16" cy="196" r="4.5" fill="{ACRR_FILL}"/>', t(24, 199, "ACRR group", 8),
+       f'<circle cx="86" cy="196" r="4.5" fill="{ACR_FILL}"/>', t(94, 199, "ACR", 8)]
 fig = fig.replace('<!-- Generator', '<g id="acr_acrr_halos">' + "".join(halos) + '</g>\n  <!-- Generator', 1)
 out_parts = key + out_parts
 fig = fig.replace('</svg>', '  <g id="panels_C_to_E_proposal">\n  ' + "\n  ".join(out_parts) + '\n  </g>\n</svg>')
