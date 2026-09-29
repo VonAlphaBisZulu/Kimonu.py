@@ -1,5 +1,9 @@
 """Shrink a model to a minimal network that still shows a tangent-only relation (delta debugging).
 
+Removal units are enzyme mechanisms: every reaction that involves one enzyme (E_k or a bound form Ek_...)
+forms one unit, and every other reaction is its own unit. Removing a mechanism removes one enzyme's whole
+contribution; nothing is lumped, so the kinetics of the kept reactions are unchanged.
+
 The predicate: after removing a set of reactions (and whatever becomes blocked), the tangent space still
 reports metabolite TARGET as fixed and the iterated route still does not. Reactions are removed in chunks
 of decreasing size (ddmin); every accepted removal is logged and the current network saved, so a run can
@@ -66,22 +70,33 @@ def save(keep, note):
     return len(kept), len(ms)
 
 keep = unblocked(list(range(nr)))
+import re
+Ncsc = N0.tocsc(); by_enzyme = {}
+for j in keep:
+    names = [mets[i] for i in Ncsc.indices[Ncsc.indptr[j]:Ncsc.indptr[j + 1]]]
+    ids = {m.group(1) for n in names for m in [re.match(r"E_?(\d+)(?:_|$)", n)] if m}
+    by_enzyme.setdefault(min(ids, key=int) if ids else f"r{j}", []).append(j)
+units = list(by_enzyme.values())
 t0 = time.time()
+print(f"{len(keep)} reactions in {len(units)} units ({sum(1 for k in by_enzyme if not k.startswith('r'))} enzyme mechanisms)", flush=True)
 print(f"{M} {target}: {len(keep)} unblocked reactions; gap on full model: {gap(keep)} ({time.time() - t0:.0f}s)", flush=True)
 n = 2
-while len(keep) >= 2:
-    chunks = [keep[i::n] for i in range(n)]            # interleaved, so each chunk samples the whole network
+while len(units) >= 2:
+    chunks = [units[i::n] for i in range(n)]           # interleaved, so each chunk samples the whole network
     removed = False
     for ch in chunks:
-        trial = [r for r in keep if r not in set(ch)]
+        drop = {r for u in ch for r in u}
+        trial = [r for r in keep if r not in drop]
         if trial and gap(trial):
-            keep = unblocked(sorted(trial)); n = max(n - 1, 2); removed = True
+            keep = unblocked(sorted(trial)); kept = set(keep)
+            units = [u for u in units if kept.issuperset(u)]
+            n = max(n - 1, 2); removed = True
             r_, m_ = save(keep, "in progress")
-            print(f"[{time.time() - t0:7.0f}s] removed a chunk of {len(ch)}: {r_} reactions, {m_} metabolites left", flush=True)
+            print(f"[{time.time() - t0:7.0f}s] removed {len(ch)} groups: {r_} reactions in {len(units)} groups, {m_} metabolites left", flush=True)
             break
     if not removed:
-        if n >= len(keep): break
-        n = min(len(keep), 2 * n)
-        print(f"[{time.time() - t0:7.0f}s] no chunk removable, splitting finer: n = {n}", flush=True)
+        if n >= len(units): break
+        n = min(len(units), 2 * n)
+        print(f"[{time.time() - t0:7.0f}s] no chunk removable, splitting finer: n = {n} of {len(units)} groups", flush=True)
 r_, m_ = save(keep, "1-minimal: removing any single reaction loses the gap")
 print(f"done: {r_} reactions, {m_} metabolites ({time.time() - t0:.0f}s)", flush=True)
