@@ -4,7 +4,7 @@ import numpy as np, scipy.sparse as sp, straindesign as sd
 from fractions import Fraction
 from kimonu.kinetic import positive_flux, _exact_entries, _kernel_entries
 
-def one_shot_exact(A, Y, N, detach, seed=0):
+def one_shot_exact(A, Y, N, detach, seed=0, want_groups=False):
     n = A.shape[0]; Ac = sp.csc_matrix(A); Yc = sp.csc_matrix(Y)
     flux = positive_flux(N, seed)
     sub = {}
@@ -41,5 +41,8 @@ def one_shot_exact(A, Y, N, detach, seed=0):
     mets = {}
     for i in range(m):
         if rows.get(i): mets.setdefault(key(rows[i]), []).append(i)
-    acrr = sum(len(g) * (len(g) - 1) // 2 for g in mets.values())
+    acrr_groups = [g for g in mets.values() if len(g) > 1]
+    acrr = sum(len(g) * (len(g) - 1) // 2 for g in acrr_groups)
+    if want_groups:
+        return list(groups.values()), acr, acrr_groups, K.shape[1]
     return list(groups.values()), acr, acrr, K.shape[1]
