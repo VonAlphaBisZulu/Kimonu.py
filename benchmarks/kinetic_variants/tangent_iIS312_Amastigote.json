@@ -1,0 +1,56 @@
+{
+ "model": "iIS312_Amastigote",
+ "n_metabolites": 927,
+ "n_conservation": 117,
+ "attached": {
+  "tangent_dim": 118,
+  "rounds": 4,
+  "seconds_iterated": 2.144900321960449,
+  "seconds_tangent": 21.50592303276062,
+  "couplings_iterated": 1004,
+  "couplings_tangent": 1004,
+  "iterated_not_in_tangent": 0,
+  "local_only_couplings": 0,
+  "acr_iterated": 20,
+  "acr_tangent": 20,
+  "local_only_acr": [],
+  "acr_iterated_not_in_tangent": 0,
+  "acrr_pairs_iterated": 34,
+  "acrr_pairs_tangent": 34,
+  "acrr_iterated_not_in_tangent": 0,
+  "local_only_acrr_pairs": 0,
+  "acrr_groups_tangent": [
+   8,
+   3,
+   2,
+   2,
+   2
+  ]
+ },
+ "detached": {
+  "tangent_dim": 149,
+  "rounds": 3,
+  "seconds_iterated": 1.9568486213684082,
+  "seconds_tangent": 26.273115634918213,
+  "couplings_iterated": 79,
+  "couplings_tangent": 79,
+  "iterated_not_in_tangent": 0,
+  "local_only_couplings": 0,
+  "acr_iterated": 0,
+  "acr_tangent": 0,
+  "local_only_acr": [],
+  "acr_iterated_not_in_tangent": 0,
+  "acrr_pairs_iterated": 10,
+  "acrr_pairs_tangent": 10,
+  "acrr_iterated_not_in_tangent": 0,
+  "local_only_acrr_pairs": 0,
+  "acrr_groups_tangent": [
+   3,
+   3,
+   2,
+   2,
+   2,
+   2
+  ]
+ }
+}
