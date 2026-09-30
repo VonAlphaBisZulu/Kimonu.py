@@ -10,7 +10,7 @@ import numpy as np
 from scipy import sparse
 
 import kimonu
-from kimonu.kinetic import positive_flux, _coupled_sets
+from kimonu.kinetic import positive_flux, _psi_coupled
 
 
 def _crn(reactions, species):
@@ -73,7 +73,7 @@ def test_envz_ompr_end_to_end():
 def test_feedback_is_what_couples_the_yp_complexes():
     """Without the feedback the psi readout leaves XD and XD+Yp apart; their ratio is x_Yp."""
     A, Y, N, cx = _crn(ENVZ, ENVZ_SPECIES)
-    sets, _ = _coupled_sets(A, Y, N, positive_flux(N), detach_uptakes=False)
+    sets, _ = _psi_coupled(A, Y, N, positive_flux(N), detach_uptakes=False)
     xd, xdyp = cx.index("XD"), cx.index("XD+Yp")
     assert not any(xd in s and xdyp in s for s in sets)
 

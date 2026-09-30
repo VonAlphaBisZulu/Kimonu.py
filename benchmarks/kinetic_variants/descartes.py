@@ -16,16 +16,17 @@ the psi kernel as in the default route. Every step is a theorem, so the route st
 from fractions import Fraction
 import numpy as np
 from scipy import sparse
-from kimonu.kinetic import positive_flux, _coupled_sets
+from kimonu.kinetic import positive_flux, _psi_coupled
 from kimonu.linalg import entries
-from kimonu.acr import composition_differences, _rows_of_left_nullspace
+from kimonu.acr import composition_differences
+from kimonu.linalg import left_null_rows
 
 
 def _rows(Y, sets, extra):
     YD = composition_differences(Y, sets)
     cols = [YD] + [sparse.csc_matrix(v.reshape(-1, 1)) for v in extra]
     YD = sparse.hstack(cols).tocsc() if extra else YD
-    return _rows_of_left_nullspace(YD) if YD.shape[1] else None
+    return left_null_rows(YD) if YD.shape[1] else None
 
 
 def _signature(Ycsc, rows, c):
@@ -96,7 +97,7 @@ def kinetic_modules_descartes(A, Y, N, detach_uptakes=False, seed=0):
     flux = positive_flux(N, seed)
     equal, extra, firings = [], [], []
     while True:
-        coupled, subs = _coupled_sets(A, Y, N, flux, detach_uptakes, equal)
+        coupled, subs = _psi_coupled(A, Y, N, flux, detach_uptakes, equal)
         coupled = [s for s in coupled if len(s) > 1 or (len(s) == 1 and next(iter(s)) in subs)]
         sets, rows = _closure(Y, coupled, extra)
         new = _descartes(A, Y, N, rows, extra, flux, detach_uptakes)

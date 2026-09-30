@@ -164,7 +164,8 @@ def main():
         start, end = Ycsc.indptr[j], Ycsc.indptr[j + 1]
         comp = {crn["metabolites"][int(r)]: float(v)
                 for r, v in zip(Ycsc.indices[start:end], Ycsc.data[start:end])}
-        complexes.append({"id": f"complex_{j + 1}", "module": module_of[j], "composition": comp})
+        complexes.append({"id": f"complex_{j + 1}", "module": module_of[j], "composition": comp,
+                          "kinetic_module": int(kin.module_of[j])})
 
     succ, pred = complex_graph(A)
     sccs = _sccs(succ, set(range(nc)))
@@ -176,8 +177,6 @@ def main():
     free_upto = mets.index("E_1") if "E_1" in mets else len(mets)
     free = set(mets[:free_upto])
 
-    for j, c in enumerate(complexes):
-        c["kinetic_module"] = int(kin.module_of[j]) if kin.module_of[j] is not None else -1
 
     out = {"tool": "Kimonu.py", "seconds": min(times), "seconds_cold": times[0],
            "seconds_concordance": min(t_conc), "seconds_kinetic": min(t_kin),
