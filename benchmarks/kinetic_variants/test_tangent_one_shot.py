@@ -64,3 +64,24 @@ def test_toys_separate_missed_from_local():
         G = sp.csr_matrix((A.toarray() < 0).astype(float).T @ Y.toarray().T)
         status = certify(sp.csr_matrix(N.toarray().astype(float)), G, np.array([1.0, 0.0]))[0]
         assert ("infeasible" in status) == fixed
+
+
+def test_example_network_for_the_completeness_figure():
+    """dimerising proteins A, B (one steady state) next to an autocatalytic kinase switch C, P (two):
+    iterated reports nothing (correct, incomplete), the tangent space reports A, B, C, P (complete, wrong on
+    C and P), the sign certificate keeps A and B"""
+    import scipy.sparse as sp
+    from kinetic_variants.branch_certificate import certify
+    R = [("0", "A"), ("A", "0"), ("A+A", "0"), ("0", "B"), ("B", "0"), ("A+B", "0"),
+         ("0", "C"), ("C", "0"), ("P", "0"), ("C+P+P", "P+P+P")]
+    S = ["A", "B", "C", "P"]
+    A, Y, N, cx = _crn(R, S)
+    it = kimonu.kinetic_modules(A, Y, N)
+    assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == []
+    assert sorted(one_shot_exact(A, Y, N, False)[1]) == [0, 1, 2, 3]
+    G = sp.csr_matrix((A.toarray() < 0).astype(float).T @ Y.toarray().T); Nf = sp.csr_matrix(N.toarray().astype(float))
+    proven = [s for i, s in enumerate(S) if "infeasible" in certify(Nf, G, np.eye(4)[i])[0]]
+    assert proven == ["A", "B"]
+    # two positive steady states with rate constants (A: 2, 1, .5; B: 1, 1; AB: 1; C: 4, 1; P: 1; auto: 1)
+    for c, p in ((2 - 3 ** 0.5, 2 + 3 ** 0.5), (2 + 3 ** 0.5, 2 - 3 ** 0.5)):
+        assert abs(4 - c - c * p * p) < 1e-9 and abs(-p + c * p * p) < 1e-9
