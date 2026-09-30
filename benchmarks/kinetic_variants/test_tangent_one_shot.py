@@ -34,3 +34,17 @@ def test_envz_both_routes_agree():
     assert {frozenset(m) for m in mods if len(m) > 1} == {frozenset(m) for m in it.modules if len(m) > 1}
     assert [ENVZ_SPECIES[i] for i in acr] == ["Yp"] and dim == 2
     assert sorted(len(g) for g in groups) == [6]
+
+
+def test_descartes_step_on_known_networks():
+    """silent on the cubic (three sign changes), fires on constant supply with first- and second-order loss,
+    and treats detached uptakes as free, not constant"""
+    from kinetic_variants.descartes import kinetic_modules_descartes
+    A, Y, N, cx = _crn(CUBIC, ["A"])
+    assert kinetic_modules_descartes(A, Y, N)[1] == []
+    dimer = [("0", "X"), ("X", "0"), ("X+X", "0")]
+    A, Y, N, cx = _crn(dimer, ["X"])
+    it = kimonu.kinetic_modules(A, Y, N)
+    assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == [], "the iterated route alone misses it"
+    assert kinetic_modules_descartes(A, Y, N)[1] == [0], "one sign change: exactly one positive x"
+    assert kinetic_modules_descartes(A, Y, N, detach_uptakes=True)[1] == [], "a free source leaves x free"

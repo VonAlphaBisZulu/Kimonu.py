@@ -50,7 +50,7 @@ def _closure(Y, sets, extra):
         sets = merged
 
 
-def _descartes(A, Y, N, rows, extra, flux):
+def _descartes(A, Y, N, rows, extra, flux, detach_uptakes):
     """one pass over the metabolite balances; returns newly fixed vectors"""
     Ycsc, Acsc = Y.tocsc(), A.tocsc()
     substrate = {}
@@ -59,8 +59,11 @@ def _descartes(A, Y, N, rows, extra, flux):
             if a < 0: substrate[j] = int(i)
     entries, (m, _) = _exact_entries(N); by_row = {}
     for i, j, v in entries: by_row.setdefault(i, []).append((j, v))
+    zero = {c for c in range(Ycsc.shape[1]) if Ycsc.indptr[c] == Ycsc.indptr[c + 1]}
     found = []
     for i, terms in by_row.items():
+        # detached: every uptake has its own free source, so an uptake term is not a constant
+        if detach_uptakes and any(substrate[j] in zero for j, _ in terms): continue
         coef = {}                                      # substrate complex -> sum of N_ij r*_j
         for j, v in terms:
             c = substrate[j]; coef[c] = coef.get(c, Fraction(0)) + v * flux[j]
@@ -95,7 +98,7 @@ def kinetic_modules_descartes(A, Y, N, detach_uptakes=False, seed=0):
         coupled, subs = _coupled_sets(A, Y, N, flux, detach_uptakes, equal)
         coupled = [s for s in coupled if len(s) > 1 or (len(s) == 1 and next(iter(s)) in subs)]
         sets, rows = _closure(Y, coupled, extra)
-        new = _descartes(A, Y, N, rows, extra, flux)
+        new = _descartes(A, Y, N, rows, extra, flux, detach_uptakes)
         if new:
             i, v = new[0]; extra.append(v); firings.append(i)
             continue
