@@ -33,6 +33,15 @@ def kimonu_rec(m, root="triplicate_psi"):
                 sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"), n_kinetic=d["n_kinetic_modules"]), d["n_complexes"]
 
 
+def kimonu_ref_rec(m):
+    """reference-equivalent mode (run_kimonu_refmode.py): the reference's definitions from null spaces"""
+    reps = [json.load(open(f)) for f in sorted(glob.glob(f"triplicate_refmode/kimonu_{m}_rep*.json"))]
+    if not reps: return None
+    d = reps[0]; med = lambda k: sorted(r[k] for r in reps)[len(reps) // 2]
+    return dict(balanced=d["balanced"], conc=d["conc"], n_kinetic=d["n_kinetic"], giant=d["giant"],
+                acr=d["acr"], acrr=d["acrr"], acr_free=d["acr_free"], acrr_free=d["acrr_free"],
+                seconds=med("seconds"), sec_conc=med("seconds_concordance"), sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"))
+
 def kimonu_up_rec(m):
     d = json.load(open(f"sweep_shared/kimonu_{m}.json")); free = free_set(m)
     return dict(balanced=d["n_balanced"], conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
@@ -125,11 +134,13 @@ def ref_sampled(m):
 if __name__ == "__main__":
     old = json.load(open("figdata.json"))
     models = old["models"]
-    D = dict(models=models, n_complexes={}, kimonu={}, kimonu_det={}, kimonu_up={}, cocoa_false={}, cocoa_true={}, ref_exh={}, ref_sampled={})
+    D = dict(models=models, n_complexes={}, kimonu={}, kimonu_det={}, kimonu_up={}, kimonu_ref={}, cocoa_false={}, cocoa_true={}, ref_exh={}, ref_sampled={})
     for m in models:
         D["kimonu"][m], D["n_complexes"][m] = kimonu_rec(m)
         D["kimonu_det"][m] = kimonu_rec(m, "triplicate_psi_detached3")[0]
         D["kimonu_up"][m] = kimonu_up_rec(m)[0]
+        r = kimonu_ref_rec(m)
+        if r: D["kimonu_ref"][m] = r
         cf, ct = cocoa_recs(m, "cocoa_v110", "cocoa_v110"), cocoa_recs(m, "cocoa_eff", "cocoa_eff")
         if cf: D["cocoa_false"][m] = cf
         if ct: D["cocoa_true"][m] = ct

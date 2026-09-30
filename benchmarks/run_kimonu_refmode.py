@@ -1,9 +1,10 @@
 """Kimonu in reference-equivalent mode: the reference's definitions, computed from null spaces.
 
 Balanced complexes and concordance from ker N (M = A K); kinetic modules from upstream sets seeded by
-the multi-complex concordance classes only (compat/upstream.py; the reference does not seed from
-single-complex classes); ACR/ACRR by the reference's combinatorial rule (Corollary S2-10). Timed end to
-end, blocked reactions already removed.
+the multi-complex concordance classes only and merged where they overlap, as the reference's R stage
+does (compat/upstream.py with Y=None: no Proposition S3-4 or deficiency merge, which the reference does
+not apply); ACR/ACRR by the reference's combinatorial rule (Corollary S2-10). Timed end to end, blocked
+reactions already removed.
 
     python run_kimonu_refmode.py <model> <out.json>
 """
@@ -21,7 +22,7 @@ A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse
 t0 = time.perf_counter()
 res = kimonu.concordance_from_matrices(A, S)
 t1 = time.perf_counter()
-kin = upstream.kinetic_modules(A, [g for g in res.modules if len(g) > 1], res.balanced, Y=Y, nullity=res.nullity)
+kin = upstream.kinetic_modules(A, [g for g in res.modules if len(g) > 1], res.balanced, Y=None)
 t2 = time.perf_counter()
 acr, acrr = s210(Y, kin.modules)
 t3 = time.perf_counter()
