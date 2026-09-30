@@ -36,30 +36,12 @@ from scipy.optimize import linprog
 
 from kimonu.acr import acr_acrr, coupling_signatures
 from kimonu.concordance import concordance_from_matrices
+from kimonu.linalg import entries
 
 KineticResult = namedtuple(
     "KineticResult",
     ["modules", "module_of", "n_modules", "giant_module", "known_acr", "rounds"],
 )
-
-
-def _exact_entries(N):
-    """(row, col, Fraction) triples and shape of an exact or integer stoichiometric matrix."""
-    if isinstance(N, sd.RationalMatrix):
-        coo = N.to_coo_exact()
-        return [(int(i), int(j), Fraction(int(v), int(coo.denom)))
-                for i, j, v in zip(coo.rows, coo.cols, coo.data)], tuple(coo.shape)
-    N = sparse.coo_matrix(N)
-    return [(int(i), int(j), Fraction(str(v))) for i, j, v in zip(N.row, N.col, N.data)], N.shape
-
-
-def _kernel_entries(K):
-    """(row, col, Fraction) triples of an exact null-space basis."""
-    if isinstance(K, sd.ExactCOO):
-        return [(int(i), int(j), Fraction(int(v), int(K.denom)))
-                for i, j, v in zip(K.rows, K.cols, K.data)]
-    K = sparse.coo_matrix(K)
-    return [(int(i), int(j), Fraction(int(v))) for i, j, v in zip(K.row, K.col, K.data)]
 
 
 def positive_flux(N, seed=0):
@@ -70,9 +52,9 @@ def positive_flux(N, seed=0):
     cone, so no upper bounds are needed. Raises ValueError when no such flux exists, which means
     the network still has blocked reactions.
     """
-    entries, (m, q) = _exact_entries(N)
-    Nf = sparse.csr_matrix(([float(v) for _, _, v in entries],
-                            ([i for i, _, _ in entries], [j for _, j, _ in entries])), shape=(m, q))
+    triples, (m, q) = entries(N)
+    Nf = sparse.csr_matrix(([float(v) for _, _, v in triples],
+                            ([i for i, _, _ in triples], [j for _, j, _ in triples])), shape=(m, q))
     rng = np.random.default_rng(seed)
     lower = 1 + rng.random(q)
     lp = linprog(rng.random(q), A_eq=Nf, b_eq=np.zeros(m),
@@ -81,7 +63,7 @@ def positive_flux(N, seed=0):
         raise ValueError("no strictly positive steady-state flux; remove blocked reactions first")
 
     rows = {}
-    for i, j, v in _kernel_entries(sd.sparse_nullspace(N)):
+    for i, j, v in entries(sd.sparse_nullspace(N))[0]:
         rows.setdefault(i, []).append((j, v))
     free = {}
     for i, row in rows.items():
@@ -108,8 +90,8 @@ def _coupled_sets(A, Y, N, flux, detach_uptakes, equal=()):
     zero = {c for c in range(n) if Y.tocsc()[:, c].nnz == 0}
 
     by_reaction = {}
-    entries, (m, _) = _exact_entries(N)
-    for i, j, v in entries:
+    triples, (m, _) = entries(N)
+    for i, j, v in triples:
         by_reaction.setdefault(j, []).append((i, v))
     W, extra = {}, {}
     for j, s in substrate.items():

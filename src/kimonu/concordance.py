@@ -6,72 +6,17 @@ the M-row is zero. Pure exact linear algebra over the rationals — no LP, no sa
 straindesign. Ported from the validated Julia proof-of-concept (concordance_nullspace.jl).
 """
 from collections import namedtuple
-from fractions import Fraction
-
-import numpy as np
-from scipy import sparse
 
 import straindesign as sd
 
 from kimonu.io import build_crn
+from kimonu.linalg import product_rows
 
 ConcordanceResult = namedtuple(
     "ConcordanceResult",
     ["n_complexes", "n_balanced", "n_modules", "n_concordant_pairs",
      "modules", "balanced", "complexes", "reaction_ids", "nullity"],
 )
-
-
-def _M_rows(A, K):
-    """Yield (row_index, [(col, Fraction value), ...]) for the nonzero rows of M = A·K.
-
-    A is integer (complexes x reactions). K is the exact nullspace (reactions x nu), either a scipy
-    integer CSR (common word-sized case) or a sd.ExactCOO (>int64 coefficients). Either way M is
-    exact; a common denominator only scales rows and never affects proportionality, so it is dropped.
-    """
-    if isinstance(K, sd.ExactCOO):
-        # K[r, c] = data / denom; build M = A·K exactly with Python ints (denom cancels for ratios).
-        Kcols = {}
-        for r, c, v in zip(K.rows, K.cols, K.data):
-            Kcols.setdefault(r, []).append((c, v))
-        Acsr = A.tocsr()
-        for i in range(Acsr.shape[0]):
-            row = Acsr.getrow(i)
-            acc = {}
-            for rxn, a in zip(row.indices, row.data):
-                for c, v in Kcols.get(int(rxn), ()):
-                    acc[c] = acc.get(c, 0) + int(a) * int(v)
-            nz = sorted((c, Fraction(val)) for c, val in acc.items() if val != 0)
-            yield i, nz
-    else:
-        M = (A @ K).tocsr()   # complexes x nu, integer
-        for i in range(M.shape[0]):
-            row = M.getrow(i)
-            if row.nnz == 0:
-                yield i, []
-                continue
-            order = np.argsort(row.indices)
-            nz = [(int(row.indices[k]), Fraction(int(row.data[k]))) for k in order]
-            yield i, nz
-
-
-def _fva_unblocked(model, solver=None, tol=1e-9):
-    """Return a copy of ``model`` with blocked reactions removed (FVA-based).
-
-    The concordance partition is exact over the *feasible* steady-state set, whose linear span is
-    ker(N) restricted to reactions that can carry flux. This preprocessing (an LP-based FVA, done
-    once) is the only place an LP appears — the concordance detection itself is LP-free. Matches
-    COCOA's scenario (i) (irreversibility only).
-
-    Uses straindesign's accelerated FVA, the same solver stack the exact nullspace comes from.
-    """
-    m = model.copy()
-    ranges = sd.fva(m, solver=solver) if solver else sd.fva(m)
-    blocked = [rid for rid in ranges.index
-               if abs(ranges.at[rid, "minimum"]) <= tol and abs(ranges.at[rid, "maximum"]) <= tol]
-    if blocked:
-        m.remove_reactions(blocked, remove_orphans=True)
-    return m
 
 
 def concordance(model, preprocess=True, solver=None):
@@ -87,7 +32,14 @@ def concordance(model, preprocess=True, solver=None):
     whose activity is identically zero over the steady-state space.
     """
     if preprocess:
-        model = _fva_unblocked(model, solver=solver)
+        # The partition is exact over the feasible steady-state set, whose linear span is ker(N) once
+        # the reactions that cannot carry flux are gone. This FVA is the only LP in the analysis.
+        model = model.copy()
+        ranges = sd.fva(model, solver=solver) if solver else sd.fva(model)
+        blocked = [r for r in ranges.index
+                   if abs(ranges.at[r, "minimum"]) <= 1e-9 and abs(ranges.at[r, "maximum"]) <= 1e-9]
+        if blocked:
+            model.remove_reactions(blocked, remove_orphans=True)
     crn = build_crn(model)
     return concordance_from_matrices(crn.A, crn.N_exact, complexes=crn.complexes,
                                      reaction_ids=crn.reaction_ids)
@@ -103,18 +55,23 @@ def concordance_from_matrices(A, N, complexes=None, reaction_ids=None):
 
     ``N`` must have integer or rational entries; the kernel is computed from it exactly.
     """
-    K = sd.sparse_nullspace(N)   # reactions x nu, exact
+    # Every steady-state flux is K·alpha, so row c of M = A·K says how complex c's activity -- its net
+    # formation rate -- changes along each steady-state direction.
+    K = sd.sparse_nullspace(N)
+    M = product_rows(A, K)
 
     balanced = []
     groups = {}                          # canonical key -> [complex indices]
-    for i, nz in _M_rows(A, K):
-        if not nz:
-            balanced.append(i)
+    for c, row in enumerate(M):
+        if not row:
+            # balanced: no steady state ever net produces or consumes the complex, so its row is zero
+            balanced.append(c)
             continue
-        c0, v0 = nz[0]
-        # normalize so the first nonzero == 1; identical keys <=> same 1-D span <=> concordant
-        key = tuple((c, val / v0) for c, val in nz)
-        groups.setdefault(key, []).append(i)
+        # concordant: rows proportional, of any sign. Normalize so the first nonzero == 1; identical
+        # keys <=> same 1-D span <=> concordant, and grouping equal keys is transitive by construction
+        nz = sorted(row.items())
+        key = tuple((col, v / nz[0][1]) for col, v in nz)
+        groups.setdefault(key, []).append(c)
 
     modules = list(groups.values())
     pairs = sum(len(g) * (len(g) - 1) // 2 for g in modules)
