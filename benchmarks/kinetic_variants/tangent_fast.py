@@ -21,19 +21,19 @@ from fractions import Fraction
 from math import lcm
 import numpy as np, scipy.sparse as sp, straindesign as sd
 from scipy.optimize import linprog
-from kimonu.kinetic import _exact_entries, _kernel_entries
+from kimonu.linalg import entries
 import kinetic_variants.tangent_one_shot as _t
 
 
 def integer_positive_flux(N, seed=0, scale=10**6):
-    entries, (m, q) = _exact_entries(N)
-    Nf = sp.csr_matrix(([float(v) for *_, v in entries], ([i for i, *_ in entries], [j for _, j, _ in entries])), shape=(m, q))
+    triples, (m, q) = entries(N)
+    Nf = sp.csr_matrix(([float(v) for *_, v in triples], ([i for i, *_ in triples], [j for _, j, _ in triples])), shape=(m, q))
     rng = np.random.default_rng(seed)
     lp = linprog(rng.random(q), A_eq=Nf, b_eq=np.zeros(m), bounds=[(lo, None) for lo in 1 + rng.random(q)], method="highs")
     if lp.status != 0:
         raise ValueError("no strictly positive steady-state flux; remove blocked reactions first")
     rows = {}
-    for i, j, v in _kernel_entries(sd.sparse_nullspace(N)):
+    for i, j, v in entries(sd.sparse_nullspace(N))[0]:
         rows.setdefault(i, []).append((j, v))
     while scale < 1e12:
         free = {}
@@ -45,7 +45,7 @@ def integer_positive_flux(N, seed=0, scale=10**6):
         flux = [sum((v * free.get(j, 0) * L for j, v in rows.get(i, ())), Fraction(0)) for i in range(q)]
         if all(x > 0 for x in flux):
             res = {}
-            for i, j, v in entries: res[i] = res.get(i, Fraction(0)) + v * flux[j]
+            for i, j, v in triples: res[i] = res.get(i, Fraction(0)) + v * flux[j]
             assert not any(res.values()), "integer flux is not an exact steady state"
             return flux
         scale *= 10

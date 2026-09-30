@@ -2,7 +2,8 @@
 Coupled complexes: equal rows of Y^T T_xi; ACR: zero rows of T_xi; ACRR: equal rows of T_xi."""
 import numpy as np, scipy.sparse as sp, straindesign as sd
 from fractions import Fraction
-from kimonu.kinetic import positive_flux, _exact_entries, _kernel_entries
+from kimonu.kinetic import positive_flux
+from kimonu.linalg import entries
 
 def one_shot_exact(A, Y, N, detach, seed=0, want_groups=False):
     n = A.shape[0]; Ac = sp.csc_matrix(A); Yc = sp.csc_matrix(Y)
@@ -13,9 +14,9 @@ def one_shot_exact(A, Y, N, detach, seed=0, want_groups=False):
             if a < 0: sub[j] = int(i)
     zero = {c for c in range(n) if Yc[:, c].nnz == 0}
     ycol = {c: [(int(i), Fraction(str(v))) for i, v in zip(Yc.indices[Yc.indptr[c]:Yc.indptr[c+1]], Yc.data[Yc.indptr[c]:Yc.indptr[c+1]])] for c in range(n)}
-    entries, (m, q) = _exact_entries(N)
+    triples, (m, q) = entries(N)
     byr = {}
-    for i, j, v in entries: byr.setdefault(j, []).append((i, v))
+    for i, j, v in triples: byr.setdefault(j, []).append((i, v))
     J = {}; extra = {}
     for j, s in sub.items():
         cols = [(k, w) for k, w in ycol[s]]
@@ -27,7 +28,7 @@ def one_shot_exact(A, Y, N, detach, seed=0, want_groups=False):
     Jx = sd.RationalMatrix.from_fractions(((i, k, x) for (i, k), x in J.items() if x != 0), (m, ncol))
     K = sd.sparse_nullspace(Jx)
     rows = {}
-    for i, j, v in _kernel_entries(K):
+    for i, j, v in entries(K)[0]:
         if i < m: rows.setdefault(i, {})[j] = v
     key = lambda d: tuple(sorted((c, v) for c, v in d.items() if v != 0))
     acr = [i for i in range(m) if not rows.get(i)]

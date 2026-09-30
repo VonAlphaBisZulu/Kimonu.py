@@ -16,7 +16,8 @@ the psi kernel as in the default route. Every step is a theorem, so the route st
 from fractions import Fraction
 import numpy as np
 from scipy import sparse
-from kimonu.kinetic import positive_flux, _coupled_sets, _exact_entries
+from kimonu.kinetic import positive_flux, _coupled_sets
+from kimonu.linalg import entries
 from kimonu.acr import composition_differences, _rows_of_left_nullspace
 
 
@@ -57,8 +58,8 @@ def _descartes(A, Y, N, rows, extra, flux, detach_uptakes):
     for j in range(Acsc.shape[1]):
         for i, a in zip(Acsc.indices[Acsc.indptr[j]:Acsc.indptr[j + 1]], Acsc.data[Acsc.indptr[j]:Acsc.indptr[j + 1]]):
             if a < 0: substrate[j] = int(i)
-    entries, (m, _) = _exact_entries(N); by_row = {}
-    for i, j, v in entries: by_row.setdefault(i, []).append((j, v))
+    triples, (m, _) = entries(N); by_row = {}
+    for i, j, v in triples: by_row.setdefault(i, []).append((j, v))
     zero = {c for c in range(Ycsc.shape[1]) if Ycsc.indptr[c] == Ycsc.indptr[c + 1]}
     found = []
     for i, terms in by_row.items():

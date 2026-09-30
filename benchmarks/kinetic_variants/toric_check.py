@@ -14,7 +14,8 @@ import numpy as np, scipy.sparse as sp, straindesign as sd
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src")); sys.path.insert(0, os.path.join(os.path.dirname(B), "tests"))
 import kimonu
-from kimonu.kinetic import positive_flux, _exact_entries, _closure
+from kimonu.kinetic import positive_flux, _closure
+from kimonu.linalg import entries
 from kimonu.concordance import concordance_from_matrices
 
 def psi_kernel(A, Y, N, flux, equal=()):
@@ -22,8 +23,8 @@ def psi_kernel(A, Y, N, flux, equal=()):
     for j in range(Acsc.shape[1]):
         for i, a in zip(Acsc.indices[Acsc.indptr[j]:Acsc.indptr[j + 1]], Acsc.data[Acsc.indptr[j]:Acsc.indptr[j + 1]]):
             if a < 0: substrate[j] = int(i)
-    entries, (m, _) = _exact_entries(N); by = {}
-    for i, j, v in entries: by.setdefault(j, []).append((i, v))
+    triples, (m, _) = entries(N); by = {}
+    for i, j, v in triples: by.setdefault(j, []).append((i, v))
     W = {}
     for j, s in substrate.items():
         for i, v in by.get(j, ()): W[(i, s)] = W.get((i, s), Fraction(0)) + flux[j] * v
