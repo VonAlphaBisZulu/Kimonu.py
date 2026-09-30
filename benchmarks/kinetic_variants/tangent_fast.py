@@ -6,7 +6,11 @@ denominator against the basis is cleared, and r* = K b is then an integer vector
 to be strictly positive and N r* = 0 exactly. The previous snapping kept the LP's binary fractions,
 whose entries are already small (146 bits on iNJ661) but not integral; a first attempt at small decimal
 denominators made them larger (1542 bits), since the common denominator of many small denominators
-grows. Integers (64 bits on iNJ661) cut the tangent computation there from 99 s to 13 s.
+grows. Integers cut the tangent computation on iNJ661 from 99 s to 13 s (scale 100).
+
+The scale sets how finely the LP point is rounded, and with it how generic r* stays: at scale 100 many
+rates round to the same small integers, and on iHN637 that produced one ACRR pair the generic readout
+does not have. From scale 10^4 on the result matches; 10^6 is the default (iHN637: 30 s instead of 104 s).
 
 Building the tangent space from the sparse block system [W 0; I -Y^T] instead of J = W Y^T was also
 tried and was 1.3-5x slower (iIS312_Trypomastigote, iNJ661), so J is formed as before.
@@ -21,7 +25,7 @@ from kimonu.kinetic import _exact_entries, _kernel_entries
 import kinetic_variants.tangent_one_shot as _t
 
 
-def integer_positive_flux(N, seed=0, scale=100):
+def integer_positive_flux(N, seed=0, scale=10**6):
     entries, (m, q) = _exact_entries(N)
     Nf = sp.csr_matrix(([float(v) for *_, v in entries], ([i for i, *_ in entries], [j for _, j, _ in entries])), shape=(m, q))
     rng = np.random.default_rng(seed)
