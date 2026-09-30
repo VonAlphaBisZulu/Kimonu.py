@@ -10,7 +10,7 @@ from collections import namedtuple
 import straindesign as sd
 
 from kimonu.io import build_crn
-from kimonu.linalg import product_rows
+from kimonu.linalg import matrix_product
 
 ConcordanceResult = namedtuple(
     "ConcordanceResult",
@@ -58,7 +58,7 @@ def concordance_from_matrices(A, N, complexes=None, reaction_ids=None):
     # Every steady-state flux is K·alpha, so row c of M = A·K says how complex c's activity -- its net
     # formation rate -- changes along each steady-state direction.
     K = sd.sparse_nullspace(N)
-    M = product_rows(A, K)
+    M = matrix_product(A, K)
 
     balanced = []
     groups = {}                          # canonical key -> [complex indices]

@@ -22,15 +22,13 @@ def entries(M):
     return [(int(i), int(j), Fraction(str(v))) for i, j, v in zip(M.row, M.col, M.data)], M.shape
 
 
-def product_rows(A, K):
-    """Rows of A·K as {column: value}, one per row of A; a zero row is an empty dict.
-
-    A is an integer matrix (the complex incidence matrix), K any exact matrix.
-    """
+def matrix_product(A, K):
+    """A·K for an integer matrix A (the complex incidence matrix) and any exact matrix K."""
     k_rows = {}
     for i, j, v in entries(K)[0]:
         k_rows.setdefault(i, []).append((j, v))
     A = sparse.csr_matrix(A)
+    # the result in row form: one {column: value} dict per row of A, an empty dict for a zero row
     rows = []
     for c in range(A.shape[0]):
         acc = {}
