@@ -23,6 +23,9 @@ ConcordanceResult = namedtuple(
 def concordance(model, preprocess=True, solver=None):
     """Compute the exact concordance partition of a cobra ``model``.
 
+    A wrapper around :func:`concordance_from_matrices`: it removes blocked reactions (FVA), builds the
+    complex decomposition N = Y·A from the model, and hands A and N on.
+
     Args:
         preprocess: if True (default), remove blocked reactions via FVA first (scenario i). Pass a
             model that is already FVA-unblocked with ``preprocess=False``.
