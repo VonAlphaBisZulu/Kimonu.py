@@ -26,7 +26,7 @@ from fractions import Fraction
 import numpy as np
 from scipy import sparse
 
-import straindesign as sd
+from kimonu.linalg import left_null_rows
 
 AcrResult = namedtuple("AcrResult", ["acr", "acrr", "n_columns"])
 
@@ -59,30 +59,6 @@ def composition_differences(Y, modules, known_acr=()):
     return sparse.hstack(columns).tocsc()
 
 
-def _rows_of_left_nullspace(YD):
-    """Rows of L = ker(YΔᵀ), as hashable exact tuples."""
-    if YD.shape[1] == 0:
-        # Nothing is in the span of an empty matrix except the zero vector, so no metabolite has
-        # ACR; the left nullspace is the whole space and every row is distinct.
-        return None
-
-    L = sd.sparse_nullspace(YD.T.tocsr())
-    if isinstance(L, sd.ExactCOO):
-        rows = {}
-        for r, c, v in zip(L.rows, L.cols, L.data):
-            rows.setdefault(int(r), {})[int(c)] = Fraction(int(v))
-        return [tuple(sorted(rows.get(i, {}).items())) for i in range(YD.shape[0])]
-
-    L = L.tocsr()
-    out = []
-    for i in range(L.shape[0]):
-        start, end = L.indptr[i], L.indptr[i + 1]
-        order = np.argsort(L.indices[start:end])
-        out.append(tuple((int(L.indices[start:end][k]), Fraction(int(L.data[start:end][k])))
-                         for k in order))
-    return out
-
-
 def coupling_signatures(Y, modules, known_acr=()):
     """Signature L'Y[:, c] of each module's representative, for the Proposition S3-4 merge.
 
@@ -91,7 +67,7 @@ def coupling_signatures(Y, modules, known_acr=()):
     equal exact vectors rather than a rank test per pair.
     """
     YD = composition_differences(Y, modules, known_acr)
-    rows = _rows_of_left_nullspace(YD)
+    rows = left_null_rows(YD)
     if rows is None:
         return None
 
@@ -120,7 +96,7 @@ def acr_acrr(Y, modules, metabolite_ids=None, known_acr=()):
     because each concentration is, which is not an independent finding.
     """
     YD = composition_differences(Y, modules, known_acr)
-    rows = _rows_of_left_nullspace(YD)
+    rows = left_null_rows(YD)
     n = Y.shape[0]
     names = metabolite_ids if metabolite_ids is not None else list(range(n))
 

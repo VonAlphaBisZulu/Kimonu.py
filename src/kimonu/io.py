@@ -11,7 +11,6 @@ as in COCOA's `:empty`). Complexes are enumerated in first-seen order over the r
 COCOA's deterministic ordering.
 """
 from fractions import Fraction
-from math import gcd
 
 import numpy as np
 from scipy import sparse
@@ -97,8 +96,7 @@ def build_crn(model):
 
     N = (Y @ A).tocsr()  # == stoichiometric matrix, by construction
 
-    # Exact integer N for the kernel: accumulate the rational entries, then clear denominators one
-    # metabolite row at a time.
+    # Exact N for the kernel, accumulated from the rational compositions.
     exact = {}
     for c, comp in enumerate(complex_comp):
         for m, coeff in comp.items():
@@ -120,3 +118,17 @@ def build_crn(model):
     out.reaction_ids = rxn_ids
     out.metabolite_ids = met_ids
     return out
+
+
+def substrate_complexes(A):
+    """The substrate complex of every reaction, {reaction: complex}."""
+    A = sparse.csc_matrix(A)
+    return {j: int(A.indices[k]) for j in range(A.shape[1])
+            for k in range(A.indptr[j], A.indptr[j + 1]) if A.data[k] < 0}
+
+
+def zero_complexes(Y):
+    """Complexes with no species: the zero complex of uptake and export reactions."""
+    Y = sparse.csc_matrix(Y)
+    return {c for c in range(Y.shape[1]) if Y.indptr[c] == Y.indptr[c + 1]}
+

@@ -1,9 +1,10 @@
-"""Exact concordance partition via the sparse exact nullspace.
+"""Balanced complexes and concordance, read off the null space of N.
 
-Concordance is flux coupling lifted one matrix product up: with N = Y·A and K = ker(N), two
-complexes are concordant iff the corresponding rows of M = A·K are proportional, and balanced iff
-the M-row is zero. Pure exact linear algebra over the rationals — no LP, no sampling. K comes from
-straindesign. Ported from the validated Julia proof-of-concept (concordance_nullspace.jl).
+Concordance is flux coupling lifted one matrix product up. With N = Y·A and K = ker(N), the rows of
+M = A·K describe how each complex's activity moves over the steady states: a complex is balanced when
+its row is zero, and two complexes are concordant when their rows are proportional. Everything is exact
+linear algebra over the rationals, with K from straindesign's sparse null space; the only LP is the
+FVA that removes blocked reactions beforehand.
 """
 from collections import namedtuple
 
@@ -28,8 +29,8 @@ def concordance(model, preprocess=True, solver=None):
         solver: solver for that FVA; None lets straindesign choose.
 
     Returns a :class:`ConcordanceResult`. ``modules`` are groups of mutually concordant complexes
-    (proportional M-rows, singletons included, matching the Julia PoC); ``balanced`` are complexes
-    whose activity is identically zero over the steady-state space.
+    (proportional M-rows, singletons included); ``balanced`` are complexes whose activity is
+    identically zero over the steady-state space.
     """
     if preprocess:
         # The partition is exact over the feasible steady-state set, whose linear span is ker(N) once
@@ -55,10 +56,13 @@ def concordance_from_matrices(A, N, complexes=None, reaction_ids=None):
 
     ``N`` must have integer or rational entries; the kernel is computed from it exactly.
     """
-    # Every steady-state flux is K·alpha, so row c of M = A·K says how complex c's activity -- its net
-    # formation rate -- changes along each steady-state direction.
+    # 1) K = ker(N): every steady-state flux vector is a combination K·alpha of its columns.
     K = sd.sparse_nullspace(N)
+    # 2) M = A·K: each column of M is a pattern of complex formation and consumption that some
+    #    steady state produces; row c follows complex c's net formation rate across all of them.
     M = matrix_product(A, K)
+    # 3) Compare rows: complexes whose rows are proportional are always formed or consumed at the
+    #    same relative rate.
 
     balanced = []
     groups = {}                          # canonical key -> [complex indices]

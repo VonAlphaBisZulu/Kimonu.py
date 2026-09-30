@@ -30,13 +30,10 @@ from collections import namedtuple
 from fractions import Fraction
 
 import numpy as np
-import straindesign as sd
-from scipy import sparse
-from scipy.optimize import linprog
 
 from kimonu.acr import acr_acrr, coupling_signatures
-from kimonu.concordance import concordance_from_matrices
-from kimonu.linalg import entries
+from kimonu.io import substrate_complexes, zero_complexes
+from kimonu.linalg import entries, exact, null_space_rows, positive_flux, proportional_classes
 
 KineticResult = namedtuple(
     "KineticResult",
@@ -44,68 +41,32 @@ KineticResult = namedtuple(
 )
 
 
-def positive_flux(N, seed=0):
-    """An exact steady-state flux with every entry strictly positive.
+def _psi_coupled(A, Y, N, flux, detach_uptakes, equal=()):
+    """Complexes whose psi ratios are fixed by the steady-state equations W u = 0, W = N diag(r*) S^T.
 
-    An LP point with random lower bounds r >= 1 + U(0, 1) is snapped onto the exact kernel through
-    its free coordinates, the rows where the basis has a single entry. The steady-state set is a
-    cone, so no upper bounds are needed. Raises ValueError when no such flux exists, which means
-    the network still has blocked reactions.
+    ``equal`` lists pairs (c, d) already known to satisfy u_c = u_d. Returns the coupled sets and the
+    substrate complexes (the only complexes that appear in a rate law).
     """
-    triples, (m, q) = entries(N)
-    Nf = sparse.csr_matrix(([float(v) for _, _, v in triples],
-                            ([i for i, _, _ in triples], [j for _, j, _ in triples])), shape=(m, q))
-    rng = np.random.default_rng(seed)
-    lower = 1 + rng.random(q)
-    lp = linprog(rng.random(q), A_eq=Nf, b_eq=np.zeros(m),
-                 bounds=[(lo, None) for lo in lower], method="highs")
-    if lp.status != 0:
-        raise ValueError("no strictly positive steady-state flux; remove blocked reactions first")
-
-    rows = {}
-    for i, j, v in entries(sd.sparse_nullspace(N))[0]:
-        rows.setdefault(i, []).append((j, v))
-    free = {}
-    for i, row in rows.items():
-        if len(row) == 1:
-            j, v = row[0]
-            free.setdefault(j, Fraction(float(lp.x[i])) / v)
-    flux = [sum((v * free.get(j, 0) for j, v in rows.get(i, ())), Fraction(0)) for i in range(q)]
-    if not all(x > 0 for x in flux):
-        raise ValueError("snapped flux is not strictly positive")
-    return flux
-
-
-def _coupled_sets(A, Y, N, flux, detach_uptakes, equal=()):
-    """Groups of complexes with proportional rows in ker(N diag(r*) S^T), with u_c = u_d imposed for
-    every pair (c, d) in ``equal``."""
     n = A.shape[0]
-    Acsc = A.tocsc()
-    substrate = {}
-    for j in range(Acsc.shape[1]):
-        start, end = Acsc.indptr[j], Acsc.indptr[j + 1]
-        for i, a in zip(Acsc.indices[start:end], Acsc.data[start:end]):
-            if a < 0:
-                substrate[j] = int(i)
-    zero = {c for c in range(n) if Y.tocsc()[:, c].nnz == 0}
-
+    substrate, zero = substrate_complexes(A), zero_complexes(Y)
     by_reaction = {}
     triples, (m, _) = entries(N)
     for i, j, v in triples:
         by_reaction.setdefault(j, []).append((i, v))
+    # W: column c collects, for every reaction consuming complex c, its stoichiometry times its rate at
+    # r*. A detached uptake gets a column of its own, a free source rather than the constant psi_0 = 1.
     W, extra = {}, {}
-    for j, s in substrate.items():
-        col = extra.setdefault(j, n + len(extra)) if detach_uptakes and s in zero else s
+    for j, c in substrate.items():
+        col = extra.setdefault(j, n + len(extra)) if detach_uptakes and c in zero else c
         for i, v in by_reaction.get(j, ()):
             W[(i, col)] = W.get((i, col), Fraction(0)) + flux[j] * v
-    ncol = n + len(extra)
-    for k, (c, d) in enumerate(equal):
+    for k, (c, d) in enumerate(equal):                    # u_c - u_d = 0
         W[(m + k, c)], W[(m + k, d)] = Fraction(1), Fraction(-1)
-    Wx = sd.RationalMatrix.from_fractions(((i, j, x) for (i, j), x in W.items() if x != 0),
-                                          (m + len(equal), ncol))
-    groups = concordance_from_matrices(sparse.identity(ncol, format="csr", dtype=np.int64), Wx).modules
+    W = exact(((i, j, v) for (i, j), v in W.items()), (m + len(equal), n + len(extra)))
+    # proportional rows of ker(W): these complexes keep fixed psi ratios at every steady state
+    _, classes = proportional_classes(null_space_rows(W))
     drop = zero if detach_uptakes else set()
-    return [set(c for c in g if c < n and c not in drop) for g in groups], set(substrate.values()) - drop
+    return [{c for c in g if c < n and c not in drop} for g in classes], set(substrate.values()) - drop
 
 
 def _closure(Y, sets):
@@ -144,13 +105,21 @@ def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
     included. Complexes that are no reaction's substrate appear in no rate law and stay singletons.
     """
     n = A.shape[0]
+    # 1) Generic rate constants: an interior steady-state flux r* fixes k_j = r*_j at psi* = 1.
     flux = positive_flux(N, seed)
     equal, rounds = [], 0
     while True:
-        coupled, substrates = _coupled_sets(A, Y, N, flux, detach_uptakes, equal)
+        # 2) Linear part: every steady state for these k solves W u = 0; proportional rows of ker(W)
+        #    are complexes with fixed psi ratios. Substrate complexes on their own still take part in
+        #    the closure, which can attach them to a set.
+        coupled, substrates = _psi_coupled(A, Y, N, flux, detach_uptakes, equal)
         coupled = [s for s in coupled if len(s) > 1 or (len(s) == 1 and next(iter(s)) in substrates)]
+        # 3) Log part: within a set, differences of log compositions are fixed; merge sets whose
+        #    representatives differ by such a vector, and fix metabolites that become ACR on the way.
         sets, known, r = _closure(Y, coupled)
         rounds += r
+        # 4) Feedback: a merge found in log space is the linear fact u_c = u_d; add it to W and repeat
+        #    until nothing merges.
         if len(sets) == len(coupled):
             break
         equal = [(min(s), c) for s in sets for c in s if c != min(s)]

@@ -1,6 +1,6 @@
 """Kimonu — exact, deterministic concordance and kinetic-module analysis of metabolic networks.
 
-Pure Python (no Julia). Depends on straindesign (exact sparse null space) and cobra.
+Pure Python. Depends on straindesign (exact sparse null space) and cobra.
 
 Core idea: concordance is flux coupling lifted one matrix product up. With N = Y·A,
 K = ker(N) (exact, sparse, via straindesign), and M = A·K, concordant complexes are the
