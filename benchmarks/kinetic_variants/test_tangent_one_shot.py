@@ -48,3 +48,19 @@ def test_descartes_step_on_known_networks():
     assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == [], "the iterated route alone misses it"
     assert kinetic_modules_descartes(A, Y, N)[1] == [0], "one sign change: exactly one positive x"
     assert kinetic_modules_descartes(A, Y, N, detach_uptakes=True)[1] == [], "a free source leaves x free"
+
+
+def test_toys_separate_missed_from_local():
+    """(a) heterodimer: one steady state, the iterated route misses X and Y, the sign certificate proves them;
+    (b) Gray-Scott: two positive steady states, the tangent space overclaims, the certificate refuses"""
+    import scipy.sparse as sp
+    from kinetic_variants.branch_certificate import certify
+    for R, fixed in (([("0", "X"), ("X", "0"), ("X+X", "0"), ("0", "Y"), ("Y", "0"), ("X+Y", "0")], True),
+                     ([("0", "X"), ("X", "0"), ("Y", "0"), ("X+Y+Y", "Y+Y+Y")], False)):
+        A, Y, N, cx = _crn(R, ["X", "Y"])
+        it = kimonu.kinetic_modules(A, Y, N)
+        assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == []
+        assert sorted(one_shot_exact(A, Y, N, False)[1]) == [0, 1]
+        G = sp.csr_matrix((A.toarray() < 0).astype(float).T @ Y.toarray().T)
+        status = certify(sp.csr_matrix(N.toarray().astype(float)), G, np.array([1.0, 0.0]))[0]
+        assert ("infeasible" in status) == fixed
