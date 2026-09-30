@@ -9,7 +9,13 @@ reports metabolite TARGET as fixed and the iterated route still does not. Reacti
 of decreasing size (ddmin); every accepted removal is logged and the current network saved, so a run can
 be stopped at any time.
 
-    python kinetic_variants/reduce_gap.py <model> <target metabolite> <out.json>
+Units are tried far-to-near: ordered by their distance from the target in the metabolite-reaction
+graph (the 20 most connected metabolites left out, so cofactors do not make everything adjacent), and
+removed as contiguous blocks, so large distant parts go first. All checks are exact: a floating-point
+screen (least squares for e_target in the row space of J) called the resumed iHN637 network "not fixed"
+where the exact test says fixed.
+
+    python kinetic_variants/reduce_gap.py <model> <target metabolite> <out.json> [resume.json]
 """
 import json, os, sys, time
 import numpy as np, scipy.sparse as sp
@@ -39,10 +45,25 @@ def network(keep):
     A = A[used_c, :]; Y = Y0[:, used_c]; used_m = np.flatnonzero(np.abs(Y).sum(axis=1).A.ravel())
     return A.tocsr().astype(np.int64), Y[used_m, :].tocsr(), to_exact(N0[used_m, :][:, keep]), [mets[i] for i in used_m]
 
+from scipy.sparse.linalg import lsqr
+from kimonu.kinetic import positive_flux
+
+def tangent_fixed_float(A, Y, N, ti):
+    """e_ti in the row space of J = N diag(r*) G, in floating point"""
+    r = np.array([float(v) for v in positive_flux(N)])
+    Nf = N0_float(N); G = ((A < 0).astype(float).T @ Y.T).tocsr()
+    J = (Nf @ sp.diags(r) @ G).tocsr()
+    e = np.zeros(J.shape[1]); e[ti] = 1
+    w = lsqr(J.T.tocsr(), e, atol=1e-14, btol=1e-14, iter_lim=20000)[0]
+    return np.linalg.norm(J.T @ w - e) < 1e-6
+
+def N0_float(N):
+    coo = N.to_coo_exact(); return sp.csr_matrix((np.array(coo.data, float) / float(coo.denom), (coo.rows, coo.cols)), shape=coo.shape)
+
 cache = {}
-def gap(keep):
+def gap(keep, exact=False):
     key = frozenset(keep)
-    if key in cache: return cache[key]
+    if (key, exact) in cache: return cache[(key, exact)]
     ok = False
     try:
         kept = unblocked(sorted(keep))
@@ -52,11 +73,14 @@ def gap(keep):
             it = kimonu.kinetic_modules(A, Y, N)
             acr_it = set(kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr)
             if ti not in acr_it:
-                _, acr_t, _, _ = one_shot_exact(A, Y, N, False)
-                ok = ti in set(acr_t)
+                if exact:
+                    _, acr_t, _, _ = one_shot_exact(A, Y, N, False)
+                    ok = ti in set(acr_t)
+                else:
+                    ok = tangent_fixed_float(A, Y, N, ti)
     except Exception as e:
         print("   predicate error:", type(e).__name__, str(e)[:80], flush=True)
-    cache[key] = ok
+    cache[(key, exact)] = ok if exact else cache.get((key, exact), ok)
     return ok
 
 def save(keep, note):
@@ -70,6 +94,8 @@ def save(keep, note):
     return len(kept), len(ms)
 
 keep = unblocked(list(range(nr)))
+if len(sys.argv) > 4:
+    keep = unblocked(json.load(open(sys.argv[4]))["reactions"])
 import re
 Ncsc = N0.tocsc(); by_enzyme = {}
 for j in keep:
@@ -77,17 +103,30 @@ for j in keep:
     ids = {m.group(1) for n in names for m in [re.match(r"E_?(\d+)(?:_|$)", n)] if m}
     by_enzyme.setdefault(min(ids, key=int) if ids else f"r{j}", []).append(j)
 units = list(by_enzyme.values())
+# distance of each unit from the target, hubs excluded
+Nr = N0.tocsr(); deg = np.diff(Nr.indptr); hubs = set(np.argsort(-deg)[:20]) - {t_idx}
+dist = {t_idx: 0}; frontier = [t_idx]; rx_d = {}
+while frontier:
+    nxt = []
+    for i in frontier:
+        for j in Nr.indices[Nr.indptr[i]:Nr.indptr[i + 1]]:
+            if j in rx_d: continue
+            rx_d[j] = dist[i]
+            for i2 in Ncsc.indices[Ncsc.indptr[j]:Ncsc.indptr[j + 1]]:
+                if i2 not in dist and i2 not in hubs: dist[i2] = dist[i] + 1; nxt.append(i2)
+    frontier = nxt
+units.sort(key=lambda u: -min(rx_d.get(j, 10**6) for j in u))
 t0 = time.time()
 print(f"{len(keep)} reactions in {len(units)} units ({sum(1 for k in by_enzyme if not k.startswith('r'))} enzyme mechanisms)", flush=True)
-print(f"{M} {target}: {len(keep)} unblocked reactions; gap on full model: {gap(keep)} ({time.time() - t0:.0f}s)", flush=True)
+print(f"{M} {target}: {len(keep)} unblocked reactions; gap on full model: {gap(keep, exact=True)} ({time.time() - t0:.0f}s)", flush=True)
 n = 2
 while len(units) >= 2:
-    chunks = [units[i::n] for i in range(n)]           # interleaved, so each chunk samples the whole network
+    size = -(-len(units) // n); chunks = [units[i:i + size] for i in range(0, len(units), size)]   # far first
     removed = False
     for ch in chunks:
         drop = {r for u in ch for r in u}
         trial = [r for r in keep if r not in drop]
-        if trial and gap(trial):
+        if trial and gap(trial, exact=True):
             keep = unblocked(sorted(trial)); kept = set(keep)
             units = [u for u in units if kept.issuperset(u)]
             n = max(n - 1, 2); removed = True
