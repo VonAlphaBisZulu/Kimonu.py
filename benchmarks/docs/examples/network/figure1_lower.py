@@ -1,6 +1,6 @@
 """Panels C-E of Figure 1, drawn into a copy of the Illustrator draft.
 
-C: elementary modes on two thumbnails of the metabolic panel, and K = ker(N)
+C: K = ker(N), with three of its columns drawn on thumbnails of the metabolic panel
 D: complex activities M = A K
 E: tangent space T = ker(N diag(r*) S^T Y^T) and its complex signatures Y^T T
 Units are points on the 7.2 x 9 in artboard; text 8 pt Arial, panel letters as in the draft.
@@ -20,10 +20,11 @@ for k, c in enumerate(CX):
     for t in c.split('+'): Y[SP.index(t), k] += 1
 for j, (s, p) in enumerate(RX): A[CX.index(s), j] = -1; A[CX.index(p), j] = 1
 N = Y * A
-# K in the basis of the draft: five reversible-pair cycles and two elementary modes
+# K in a basis read off the drawing: two routes through the network, then the five reversible-pair cycles.
+# Any basis of ker(N) would do; these columns are just easy to see on the network.
 PAIRS = [(0, 1), (2, 3), (5, 6), (8, 9), (11, 12)]
-E1, E2 = [2, 4, 5, 7, 8, 10], [2, 4, 5, 7, 11, 13]
-cols = [[1 if j in p else 0 for j in range(14)] for p in PAIRS] + [[1 if j in e else 0 for j in range(14)] for e in (E1, E2)]
+P1, P2 = [2, 4, 5, 7, 8, 10], [2, 4, 5, 7, 11, 13]
+cols = [[1 if j in e else 0 for j in range(14)] for e in (P1, P2)] + [[1 if j in p else 0 for j in range(14)] for p in PAIRS]
 K = sy.Matrix(cols).T
 assert N * K == sy.zeros(9, 7) and K.rank() == 7
 M = A * K
@@ -38,8 +39,8 @@ MOD = {**{c: "#fff2cd" for c in ['B', 'D', 'D+E', 'B+G']}, **{c: "#ffe0ff" for c
        **{c: "#e5d9ff" for c in ['A+G', 'A+E']}, **{c: "#5a9bd5" for c in ['A', 'C', 'F', 'H', 'I']}}
 KIN = "#c9ecf4"
 ACRR_FILL, ACR_FILL = "#d9e7c4", "#f2c14e"
-EMC = {"e1": "#e6862b", "e2": "#3a9d5d"}
-BAND = "#fff2cd"
+# k1-k3 are drawn on the thumbnails: strong hue for the drawing and the column label, tint for the column band
+KC = {"k1": ("#e6862b", "#fbe2cc"), "k2": ("#3a9d5d", "#d5eedd"), "k3": ("#56708c", "#dfe6ee")}  # k3 avoids lavender, the colour of concordance module 3
 
 def t(x, y, s, size=8, fill=INK, bold=False, anchor=None):
     fam = 'font-family="Arial-BoldMT, Arial" font-weight="700"' if bold else FONT
@@ -51,11 +52,15 @@ def rect(x, y, w, h, fill, rx=2, stroke=None):
 def letter(x, y, L):
     return f'<text transform="translate({x} {y})" fill="{INK}" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">{L}</tspan></text>'
 
-def matrix(x0, y0, rows, colnames, data, rh=10, cw=13, lw=26, chip=None, band=(), zero=MUTE, fmt=str):
-    """row labels (optionally on coloured chips), column header, numbers; zeros muted"""
+def matrix(x0, y0, rows, colnames, data, rh=10, cw=13, lw=26, chip=None, band=None, zero=MUTE, fmt=str):
+    """row labels (optionally on coloured chips), column header, numbers; zeros muted.
+    band: {column name: (hue, tint)}, a tinted column under a label in the hue"""
     o = []
-    for j in band: o.append(rect(x0 + lw + j * cw, y0 - rh + 1, cw, rh * (len(rows) + 1), BAND, rx=0))
-    for j, c in enumerate(colnames): o.append(t(x0 + lw + j * cw + cw / 2, y0, c, 7, MUTE, anchor="middle"))
+    band = band or {}
+    for j, c in enumerate(colnames):
+        if c in band: o.append(rect(x0 + lw + j * cw, y0 - rh + 1, cw, rh * (len(rows) + 1), band[c][1], rx=0))
+    for j, c in enumerate(colnames):
+        o.append(t(x0 + lw + j * cw + cw / 2, y0, c, 7, band[c][0] if c in band else MUTE, bold=c in band, anchor="middle"))
     for i, r_ in enumerate(rows):
         y = y0 + (i + 1) * rh
         if chip and chip.get(r_):
@@ -66,11 +71,11 @@ def matrix(x0, y0, rows, colnames, data, rh=10, cw=13, lw=26, chip=None, band=()
             o.append(t(x0 + lw + j * cw + cw / 2, y, s, 7.5, zero if v == 0 else INK, anchor="middle"))
     return "\n  ".join(o)
 
-# ---- thumbnails of the metabolic panel with one elementary mode each --------------------------
+# ---- thumbnails of the metabolic panel, one column of K each ------------------------------------
 net = open(net_in).read()
-body = net[net.index('>', net.index('<svg')) + 1: net.rindex('</svg>')]
-body = re.sub(r'<!--.*?-->', '', body)
-body = re.sub(r'<g id="R\d+_reverse">.*?</g>', '', body, flags=re.S)                   # reverse directions off
+full = net[net.index('>', net.index('<svg')) + 1: net.rindex('</svg>')]
+full = re.sub(r'<!--.*?-->', '', full)
+body = re.sub(r'<g id="R\d+_reverse">.*?</g>', '', full, flags=re.S)                   # reverse directions off
 body = re.sub(r'<g isolation="isolate">\s*<g isolation="isolate">\s*<text[^>]*font-size="8".*?</g>\s*</g>', '', body, flags=re.S)  # reaction labels off
 # black elements of each reaction, identified by a coordinate they start with
 OWN = {"M3.834,65.717": 14, "143.175 162.258": 14, "M41.111,133.368": 14, "3.834 62.166": 14,
@@ -90,7 +95,15 @@ def grow(poly, k):
     return poly[:m.start(1)] + q + poly[m.end(1):]
 
 def thumb(em, colour):
+    """the network with the reactions of one K column in colour and all others pale"""
     b = body
+    for j in em:
+        # a reverse direction drawn as its own grey harpoon (e.g. R2 in the R1/R2 cycle) comes back in colour
+        m = re.search(r'<g id="R%d_reverse">.*?</g>' % (j + 1), full, flags=re.S)
+        if m:
+            g = m.group(0).replace('stroke="#bbb"', f'stroke="{colour}"').replace('fill="#bbb"', f'fill="{colour}"')
+            g = re.sub(r'<polygon[^>]*/>', lambda p: grow(p.group(0), 1.9), g.replace('stroke-width="1.2"', 'stroke-width="2"'))
+            b = g + b
     for key, rx in OWN.items():
         on = (rx - 1) in em
         pat = re.compile(r'<(path|polygon|line)[^>]*' + re.escape(key) + r'[^>]*/>')
@@ -109,23 +122,23 @@ def thumb(em, colour):
 
 out_parts = []
 Y0 = 222
-KCOLS = ["k1", "k2", "k3", "k4", "k5", "e1", "e2"]
-# C: the two elementary modes, stacked, next to K -----------------------------------------------
+KCOLS = [f"k{i + 1}" for i in range(7)]
+# C: K, with its first three columns drawn on the network, stacked to its left ---------------------
 out_parts.append(letter(4.302, Y0, "C"))
 out_parts.append(t(24, Y0 - 2, "K = ker(N)", 8, INK))
 S = 0.47
-for i, (em, name) in enumerate(((E1, "e1"), (E2, "e2"))):
-    x, y = 4, Y0 + 8 + i * 94
-    out_parts.append(f'<g transform="translate({x} {y}) scale({S})">' + thumb(em, EMC[name]) + '</g>')
-    out_parts.append(t(x + S * 242, y + 8, name, 8, EMC[name], bold=True))
+for i, (em, name) in enumerate(((P1, "k1"), (P2, "k2"), (PAIRS[0], "k3"))):
+    x, y = 4, Y0 + 8 + i * 90
+    out_parts.append(f'<g transform="translate({x} {y}) scale({S})">' + thumb(em, KC[name][0]) + '</g>')
+    out_parts.append(t(x + S * 242, y + 8, name, 8, KC[name][0], bold=True))
 chipK = {"R1": "#e5d9ff", "R2": "#e5d9ff", "R5": "#fff2cd", "R8": "#fff2cd"}
 out_parts.append(matrix(136, Y0 + 22, [f"R{j + 1}" for j in range(14)], KCOLS,
-                        [list(K[j, :]) for j in range(14)], chip=chipK, band=(5, 6)))
+                        [list(K[j, :]) for j in range(14)], chip=chipK, band=KC))
 # D: complex activities --------------------------------------------------------------------------
 DX = 266
 out_parts.append(letter(DX, Y0, "D"))
 out_parts.append(t(DX + 18, Y0 - 2, "M = A·K", 8, INK))
-out_parts.append(matrix(DX + 2, Y0 + 22, CX, KCOLS, [list(M[i, :]) for i in range(13)], lw=30, chip=MOD, band=(5, 6)))
+out_parts.append(matrix(DX + 2, Y0 + 22, CX, KCOLS, [list(M[i, :]) for i in range(13)], lw=30, chip=MOD, band=KC))
 # E: tangent space and complex signatures --------------------------------------------------------
 EX = 400
 out_parts.append(letter(EX, Y0, "E"))
@@ -138,6 +151,8 @@ out_parts.append(t(EX + 60, Y0 + 12, "Yᵀ·T", 7.5, MUTE))
 out_parts.append(matrix(EX + 52, Y0 + 22, CX, ["t1", "t2"], [list(YT[i, :]) for i in range(13)], lw=26, chip=chipC))
 
 fig = open(fig_in).read()
+# artboard cropped to 7 in (504 pt), as in the draft Phil cropped; three thumbnails end just above it
+fig = fig.replace('viewBox="0 0 518.4 648"', 'viewBox="0 0 518.4 504"', 1)
 halos = []
 nodes = re.findall(r'<text transform="translate\(([\d.]+) ([\d.]+)\)" font-family="Arial-BoldMT, Arial" font-size="14"[^>]*><tspan x="0" y="0">([A-I])</tspan>', fig)[:9]
 groups = {}
