@@ -90,3 +90,52 @@ def test_deterministic_and_runs_on_ecoli():
            (r2.n_complexes, r2.n_balanced, r2.n_modules, r2.n_concordant_pairs)
     # balanced + partitioned complexes account for every complex
     assert r1.n_balanced + sum(len(g) for g in r1.modules) == r1.n_complexes
+
+
+def _toy(reactions, pins=None):
+    """A cobra model from {id: {metabolite: coefficient}}; reactions in ``pins`` get lb = ub = value."""
+    import cobra
+    m = cobra.Model("toy")
+    m.add_metabolites([cobra.Metabolite(s) for s in sorted({s for st in reactions.values() for s in st})])
+    for rid, st in reactions.items():
+        v = (pins or {}).get(rid)
+        r = cobra.Reaction(rid, lower_bound=v if v else 0, upper_bound=v if v else 1000)
+        m.add_reactions([r])
+        r.add_metabolites({m.metabolites.get_by_id(s): c for s, c in st.items()})
+    return m
+
+
+# r_i = r_k + r_x and r_j = r_l + r_x: rows i and j of ker(N) are not proportional
+TWO_FEEDS = {"k": {"U": 1}, "l": {"W": 1}, "x": {"U": 1, "W": 1}, "i": {"U": -1}, "j": {"W": -1}}
+
+
+def _coupled(model):
+    """Reaction ids grouped by proportional rows of the kernel that concordance() computes."""
+    import straindesign as sd
+    from kimonu.concordance import _pins, _with_pins
+    from kimonu.linalg import null_space_rows, proportional_classes
+    crn = build_crn(model)
+    rows = null_space_rows(_with_pins(crn.N_exact, crn.reaction_ids, _pins(model, sd.fva(model))))
+    return {frozenset(crn.reaction_ids[i] for i in c) for c in proportional_classes(rows)[1] if len(c) > 1}
+
+
+def test_two_equal_pins_couple_reactions_that_still_vary():
+    """With r_k = r_l = 5, r_i = r_j = 5 + r_x for every r_x: a coupling ker(N) alone does not show."""
+    assert _coupled(_toy(TWO_FEEDS)) == set()
+    assert _coupled(_toy(TWO_FEEDS, {"k": 5, "l": 5})) == {frozenset("kl"), frozenset("ij")}
+
+
+def test_one_pin_or_mismatched_pins_add_no_coupling():
+    """One pin leaves the span of the steady states at ker(N); pins at 5 and 3 only fix k against l."""
+    assert _coupled(_toy(TWO_FEEDS, {"k": 5})) == set()
+    assert _coupled(_toy(TWO_FEEDS, {"k": 5, "l": 3})) == {frozenset("kl")}
+
+
+def test_pins_reach_the_concordance_partition():
+    """Two feeds, each into its own linkage class: pinning both makes the two classes concordant."""
+    net = {"k": {"X": 1}, "y": {"Y": 1}, "m": {"X": -1, "Y": -1},
+           "l": {"W": 1}, "v": {"V": 1}, "n": {"W": -1, "V": -1}}
+    sizes = lambda r: sorted(len(g) for g in r.modules)
+    assert sizes(kimonu.concordance(_toy(net))) == [3, 3]
+    assert sizes(kimonu.concordance(_toy(net, {"k": 2}))) == [3, 3]
+    assert sizes(kimonu.concordance(_toy(net, {"k": 2, "l": 7}))) == [6]
