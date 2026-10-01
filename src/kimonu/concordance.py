@@ -4,14 +4,15 @@ Concordance is flux coupling lifted one matrix product up. With N = Y·A and K =
 M = A·K describe how each complex's activity moves over the steady states: a complex is balanced when
 its row is zero, and two complexes are concordant when their rows are proportional. Everything is exact
 linear algebra over the rationals, with K from straindesign's sparse null space; the only LP is the
-FVA that removes blocked reactions beforehand.
+FVA beforehand, which finds blocked reactions and rates pinned by the bounds.
 """
 from collections import namedtuple
+from fractions import Fraction
 
 import straindesign as sd
 
 from kimonu.io import build_crn
-from kimonu.linalg import matrix_product
+from kimonu.linalg import entries, exact, matrix_product
 
 ConcordanceResult = namedtuple(
     "ConcordanceResult",
@@ -23,30 +24,69 @@ ConcordanceResult = namedtuple(
 def concordance(model, preprocess=True, solver=None):
     """Compute the exact concordance partition of a cobra ``model``.
 
-    A wrapper around :func:`concordance_from_matrices`: it removes blocked reactions (FVA), builds the
-    complex decomposition N = Y·A from the model, and hands A and N on.
+    A wrapper around :func:`concordance_from_matrices`: it runs FVA to remove blocked reactions and
+    find pinned rates, builds the complex decomposition N = Y·A from the model, and hands A and N on.
 
     Args:
-        preprocess: if True (default), remove blocked reactions via FVA first (scenario i). Pass a
-            model that is already FVA-unblocked with ``preprocess=False``.
+        preprocess: if True (default), run that FVA first (scenario i). Pass a model that is already
+            FVA-unblocked and has no pinned rates with ``preprocess=False``.
         solver: solver for that FVA; None lets straindesign choose.
 
     Returns a :class:`ConcordanceResult`. ``modules`` are groups of mutually concordant complexes
     (proportional M-rows, singletons included); ``balanced`` are complexes whose activity is
     identically zero over the steady-state space.
     """
+    pins = {}
     if preprocess:
-        # The partition is exact over the feasible steady-state set, whose linear span is ker(N) once
-        # the reactions that cannot carry flux are gone. This FVA is the only LP in the analysis.
+        # The partition is exact over the feasible steady states P. Their linear span is ker(N) unless
+        # some rate is constant across P: at zero, a blocked reaction, which is removed; or pinned at a
+        # nonzero value. Two independent pins couple reactions that ker(N) does not, so the pins enter
+        # the kernel as extra rows of N (_with_pins). This FVA is the only LP in the analysis.
         model = model.copy()
         ranges = sd.fva(model, solver=solver) if solver else sd.fva(model)
         blocked = [r for r in ranges.index
                    if abs(ranges.at[r, "minimum"]) <= 1e-9 and abs(ranges.at[r, "maximum"]) <= 1e-9]
+        pins = _pins(model, ranges)
         if blocked:
             model.remove_reactions(blocked, remove_orphans=True)
     crn = build_crn(model)
-    return concordance_from_matrices(crn.A, crn.N_exact, complexes=crn.complexes,
-                                     reaction_ids=crn.reaction_ids)
+    return concordance_from_matrices(crn.A, _with_pins(crn.N_exact, crn.reaction_ids, pins),
+                                     complexes=crn.complexes, reaction_ids=crn.reaction_ids)
+
+
+def _pins(model, ranges, tol=1e-9):
+    """{reaction id: exact value} for the rates that a bound holds at a nonzero value in every steady state.
+
+    FVA shows such a rate as minimum == maximum. The bound it sits on gives the value exactly; a rate
+    that is constant only because others are pinned follows from those and needs no entry.
+    """
+    pins = {}
+    for r in model.reactions:
+        lo, hi = ranges.at[r.id, "minimum"], ranges.at[r.id, "maximum"]
+        if abs(hi) <= tol or hi - lo > tol * max(1, abs(hi)):
+            continue
+        for b in (r.lower_bound, r.upper_bound):
+            if abs(hi - b) <= tol * max(1, abs(b)):
+                pins[r.id] = Fraction(str(b))
+                break
+    return pins
+
+
+def _with_pins(N, reaction_ids, pins):
+    """N with one row c_l·r_k − c_k·r_l = 0 for every pinned rate l after the first one, k.
+
+    Rates pinned at c_k and c_l keep that ratio along the whole linear span of the feasible steady
+    states, and that span, not ker(N), is what the kernel has to be for the readout to be complete.
+    One pin or none adds nothing.
+    """
+    if len(pins) < 2:
+        return N
+    triples, (m, q) = entries(N)
+    col = {r: j for j, r in enumerate(reaction_ids)}
+    (k, ck), *rest = pins.items()
+    for i, (l, cl) in enumerate(rest):
+        triples += [(m + i, col[k], cl), (m + i, col[l], -ck)]
+    return exact(triples, (m + len(rest), q))
 
 
 def concordance_from_matrices(A, N, complexes=None, reaction_ids=None):
