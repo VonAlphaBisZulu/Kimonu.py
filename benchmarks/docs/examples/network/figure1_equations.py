@@ -1,4 +1,4 @@
-"""Figure 1: the defining equations above panels A and B, and the deficiency under B's legend."""
+"""Figure 1: the defining equations above panels A and B."""
 import re, sys
 src, out = sys.argv[1:3]
 s = open(src).read()
@@ -24,9 +24,6 @@ eqs = [
     line(311, 12.5, [("d", R), ("x", B), ("/d", R), ("t", R), (" = ", R), ("Y", B), ("·", R), ("A", B), ("·", R), ("r", B), (" = ", R), ("0", B)]),
     line(311, 24, [("r", B), (" = diag(", R), ("k", B), (")·", R), ("S", B), ("ᵀ·", R), ("ψ", B), (",   ln ", R), ("ψ", B),
                    (" = ", R), ("Y", B), ("ᵀ·ln ", R), ("x", B)]),
-    # deficiency, in the free third row of B's legend (right column); the four rows of B are its linkage classes
-    line(418, 191.16 + SHIFT, [("δ = ", R), ("n", R), (" − ℓ − rank ", R), ("N", B)], 8),
-    line(418, 202.16 + SHIFT, [("   = 13 − 4 − 7 = 2", R)], 8),
 ]
 s = s[:open_tag.end()] + f'\n  <g id="equations">{"".join(eqs)}</g>\n  <g transform="translate(0 {SHIFT})">' + body + '</g>\n' + s[close:]
 open(out, "w").write(s)
