@@ -85,3 +85,55 @@ def test_example_network_for_the_completeness_figure():
     # two positive steady states with rate constants (A: 2, 1, .5; B: 1, 1; AB: 1; C: 4, 1; P: 1; auto: 1)
     for c, p in ((2 - 3 ** 0.5, 2 + 3 ** 0.5), (2 + 3 ** 0.5, 2 - 3 ** 0.5)):
         assert abs(4 - c - c * p * p) < 1e-9 and abs(-p + c * p * p) < 1e-9
+
+
+def _two_point_setup(R, species):
+    import scipy.sparse as sp
+    from kinetic_variants.two_point import substrate_composition
+    A, Y, N, cx = _crn(R, species)
+    return A, Y, N, substrate_composition(A, Y), sp.csr_matrix(N, dtype=float)
+
+
+def test_two_point_criterion_on_the_completeness_example():
+    """C and P: an exact pair of steady states with equal k (x = 1, x' = (1, 1, 2, 1/2)), and the search finds
+    one without being told; A and B: the sign MILP proves them, and moving A admits no pair"""
+    from fractions import Fraction as Fr
+    from kinetic_variants.two_point import exact_realise, search, certify
+    R = [("0", "A"), ("A", "0"), ("A+A", "0"), ("0", "B"), ("B", "0"), ("A+B", "0"),
+         ("0", "C"), ("C", "0"), ("P", "0"), ("C+P+P", "P+P+P")]
+    A, Y, N, G, Nf = _two_point_setup(R, ["A", "B", "C", "P"])
+    assert exact_realise(N, G, [1, 1, 2, Fr(1, 2)]) is not None
+    assert exact_realise(N, G, [2, 1, 1, 1]) is None
+    hit = search(Nf, G, np.eye(4)[2], starts=10, seed=1, time_limit=60)
+    assert hit is not None and abs(hit[0][2]) > 0.5
+    assert ["infeasible" in certify(Nf, G, np.eye(4)[i])[0] for i in range(4)] == [True, True, False, False]
+
+
+def test_two_point_on_the_figure_1_network():
+    """G is proven once the iterated route's fixed log-combinations enter (the bare sign MILP cannot); D and E
+    move in opposite directions with every rate unchanged: an exact counterexample"""
+    from fractions import Fraction as Fr
+    from kinetic_variants.two_point import exact_realise, certify, iterated_constraints
+    R = [("A", "B"), ("B", "A"), ("B", "C"), ("C", "B"), ("C", "D"), ("D+E", "F"), ("F", "D+E"), ("F", "B+G"),
+         ("C+G", "H"), ("H", "C+G"), ("H", "C+E"), ("A+G", "I"), ("I", "A+G"), ("I", "A+E")]
+    A, Y, N, G, Nf = _two_point_setup(R, list("ABCDEFGHI"))
+    V, classes, _ = iterated_constraints(A, Y, N)
+    g = np.eye(9)[6]
+    assert "infeasible" not in certify(Nf, G, g)[0]
+    assert "infeasible" in certify(Nf, G, g, V=V, classes=classes)[0]
+    assert exact_realise(N, G, [1, 1, 1, 2, Fr(1, 2), 1, 1, 1, 1]) is not None
+
+
+def test_two_point_envz_and_detached_uptakes():
+    """EnvZ-OmpR: no pair moves Yp; the sign MILP needs the iterated equalities to prove it. A detached uptake's
+    rate ratio is free, which turns the dimer's unique steady state into a free one"""
+    from kinetic_variants.two_point import search, certify, iterated_constraints, uptakes
+    A, Y, N, G, Nf = _two_point_setup(ENVZ, ENVZ_SPECIES)
+    V, classes, _ = iterated_constraints(A, Y, N)
+    c = np.eye(len(ENVZ_SPECIES))[ENVZ_SPECIES.index("Yp")]
+    assert search(Nf, G, c, starts=5, seed=3, time_limit=30) is None
+    assert "infeasible" not in certify(Nf, G, c)[0]
+    assert "infeasible" in certify(Nf, G, c, V=V, classes=classes)[0]
+    A, Y, N, G, Nf = _two_point_setup([("0", "X"), ("X", "0"), ("X+X", "0")], ["X"])
+    assert "infeasible" in certify(Nf, G, np.array([1.0]))[0]
+    assert search(Nf, G, np.array([1.0]), free=uptakes(A, Y), starts=5, time_limit=30) is not None
