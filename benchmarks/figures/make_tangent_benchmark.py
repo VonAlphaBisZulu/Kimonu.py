@@ -18,7 +18,10 @@ from matplotlib.lines import Line2D
 
 LACR = "/scratch/sadreyev_lab/pschneider/kimonu_local_acr"
 TF = "/scratch/sadreyev_lab/pschneider/kimonu_tangent_float"
-OUT = "figures/main"; LIMIT = 3600
+OUT = os.environ.get("FIG_OUT", "figures/main"); LIMIT = 3600
+# composed into Figure 3 by make_figure3.py: a shorter panel, no letters (the composition adds them)
+HEIGHT_CM = float(os.environ.get("FIG_HEIGHT_CM", 6.2)); LETTERS = os.environ.get("FIG_LETTERS", "1") == "1"
+NAME = os.environ.get("FIG_NAME", "tangent_benchmark")
 plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6.5,
                      "ytick.labelsize": 6.5, "legend.fontsize": 6.5, "axes.linewidth": 0.6,
                      "xtick.major.width": 0.6, "ytick.major.width": 0.6, "svg.fonttype": "none", "pdf.fonttype": 42})
@@ -38,7 +41,7 @@ for f in glob.glob("kinetic_variants/fast_*.json"):
     genome.append((crn["n_metabolites"], json.load(open(f))["attached"]["seconds"]))
 floats = [json.load(open(f)) for f in sorted(glob.glob(f"{TF}/*.json"))]
 
-fig = plt.figure(figsize=(17.5 / 2.54, 6.2 / 2.54))
+fig = plt.figure(figsize=(17.5 / 2.54, HEIGHT_CM / 2.54))
 ax = fig.add_axes([0.07, 0.17, 0.42, 0.74]); bx = fig.add_axes([0.6, 0.17, 0.38, 0.74])
 # ---- A
 for key, col, mk, lab in (("minors", PURPLE, "s", "symbolic minors (published criterion)"),
@@ -55,7 +58,7 @@ ax.set_xscale("log"); ax.set_yscale("log"); ax.set_ylim(1e-3 * 0.6, LIMIT * 6)
 ax.set_xlabel("species"); ax.set_ylabel("wall time (s)")
 for s in ("top", "right"): ax.spines[s].set_visible(False)
 ax.legend(frameon=False, loc="lower right")
-ax.text(-0.13, 1.02, "A", transform=ax.transAxes, fontsize=10, fontweight="bold", va="bottom")
+if LETTERS: ax.text(-0.13, 1.02, "A", transform=ax.transAxes, fontsize=10, fontweight="bold", va="bottom")
 # ---- B: wrong calls against the dynamic range of the interior flux, the source of float trouble
 if floats:
     w = lambda v: v["acr_fp"] + v["acr_fn"] + v["acrr_fp"] + v["acrr_fn"]
@@ -70,8 +73,8 @@ if floats:
             transform=bx.transAxes, fontsize=6, color=INK, va="top")
     for s_ in ("top", "right"): bx.spines[s_].set_visible(False)
     bx.legend(frameon=False, loc="lower right")
-bx.text(-0.12, 1.02, "B", transform=bx.transAxes, fontsize=10, fontweight="bold", va="bottom")
+if LETTERS: bx.text(-0.12, 1.02, "B", transform=bx.transAxes, fontsize=10, fontweight="bold", va="bottom")
 os.makedirs(OUT, exist_ok=True)
 for ext in ("svg", "png"):
-    fig.savefig(f"{OUT}/tangent_benchmark.{ext}", dpi=300)
+    fig.savefig(f"{OUT}/{NAME}.{ext}", dpi=300)
 print("wrote", OUT)

@@ -1,11 +1,11 @@
-"""Figure 3: a network whose answer is known, where the iterated and the Jacobian route disagree.
+"""Figure 3: a network whose answer is known, where the iterated and the tangent route disagree.
 
 A: complex network. Dimerising proteins A, B (supply, decay, homo- and heterodimer removal) next to an
    autocatalytic kinase switch C, P (C + 2P -> 3P). The iterated route's one kinetic module, {P, C+2P},
    is outlined; it fixes C·P, not C or P.
 B: nullclines at the rate constants of test_example_network_for_the_completeness_figure. A and B cross
    once, C and P twice: two positive steady states that differ in C and P.
-C: ACR per metabolite, truth against the iterated route, the Jacobian route and the sign certificate.
+C: ACR per metabolite, truth against the iterated route, the tangent route (local ACR) and the sign certificate.
 Style as Figure 1: 518.4 pt wide, Arial 8 pt text, bold 14 pt complexes, 1.2 pt strokes, harpoons with
 the reverse direction in #bbb. Arial has no glyph for the empty set or for check marks, so those are paths.
 
@@ -153,13 +153,15 @@ B_.append(t(420 + 2.0 / 4.5 * 92, 160 - 1.7 / 4.5 * 110, "C·P = 1", 7.5, ORANGE
 # ---- C: ACR per metabolite ----
 Y0 = 236
 C_ = [letter(4.302, Y0 - 5, "C"), t(24, Y0 - 7, "ACR, per metabolite")]
-COLS = [("steady state 1", 84), ("steady state 2", 140), ("truth", 196), ("iterated", 250), ("Jacobian", 304),
+COLS = [("steady state 1", 84), ("steady state 2", 140), ("truth", 196), ("iterated", 250), ("tangent", 304),
         ("certificate", 358)]
 for name, x in COLS:
     C_.append(t(x, Y0 + 6, name, 7, MUTE, anchor="middle"))
+C_.append(t(304, Y0 - 2, "local ACR", 6.5, MUTE, anchor="middle"))   # the tangent route decides local ACR
+C_.append(t(250, Y0 - 2, "proven", 6.5, MUTE, anchor="middle"))
 SS = {"A": (a_ss, a_ss), "B": (b_ss, b_ss), "C": (cp_ss[0][0], cp_ss[1][0]), "P": (cp_ss[0][1], cp_ss[1][1])}
 TRUTH = {"A": True, "B": True, "C": False, "P": False}
-CALLS = {"iterated": set(), "Jacobian": {"A", "B", "C", "P"}, "certificate": {"A", "B"}}
+CALLS = {"iterated": set(), "tangent": {"A", "B", "C", "P"}, "certificate": {"A", "B"}}
 RH = 13
 def cell(x, y, claimed, true):
     """ACR claimed: amber chip; claimed but false: red chip; missed: dashed outline around a dash"""

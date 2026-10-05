@@ -101,8 +101,10 @@
 <text transform="translate(118.21 242.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">steady state 2</tspan></text>
 <text transform="translate(189.00 242.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">truth</tspan></text>
 <text transform="translate(238.33 242.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">iterated</tspan></text>
-<text transform="translate(289.99 242.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">Jacobian</tspan></text>
+<text transform="translate(292.32 242.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">tangent</tspan></text>
 <text transform="translate(343.02 242.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">certificate</tspan></text>
+<text transform="translate(289.55 234.00)" font-family="ArialMT, Arial" font-size="6.5" fill="#9aa3ad"><tspan x="0" y="0">local ACR</tspan></text>
+<text transform="translate(240.06 234.00)" font-family="ArialMT, Arial" font-size="6.5" fill="#9aa3ad"><tspan x="0" y="0">proven</tspan></text>
 <text transform="translate(37.11 256.00)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="8" fill="#1b2430"><tspan x="0" y="0">A</tspan></text>
 <text transform="translate(74.62 256.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">0.839</tspan></text>
 <text transform="translate(130.62 256.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">0.839</tspan></text>

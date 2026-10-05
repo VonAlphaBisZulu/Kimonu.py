@@ -4,7 +4,7 @@ A  the key quantities on the eleven models where the exhaustive reference finish
    in both tools (asserted below), so each cell shows the shared value.
 B  wall time of that same computation, row-aligned with A, and the speedup.
 C  wall time vs network size on all 33 models for every arm, with a log-log least-squares line per arm.
-D  where the time goes on those eleven models: the concordance stage against everything after it (kinetic
+Supplementary figure (figures/supp/FigS_stage_timing): where the time goes on those eleven models: the concordance stage against everything after it (kinetic
    modules, ACR/ACRR), per tool, as the range over the models with the median marked. Measured vs derived:
    Kimonu's stage times are measured (median of three replicates); the reference's concordance stage is its
    own measured time, and its R stage the wall time between the chain log's start stamp and the end of its
@@ -92,8 +92,7 @@ def mark(ax, x, y, arm, s=16, z=3):
 W, RH, HEAD, PAD = 6.89, 0.2, 2.6, 0.1                  # width, table row height, header rows, cell padding
 n = len(REF)
 hA = (n + HEAD) * RH
-hD, yD = 1.0, 0.36                                      # D: a short row under C
-H = 0.06 + hA + 0.5 + 0.18 + 2.3 + 0.42 + hD + 0.2
+H = 0.06 + hA + 0.5 + 0.18 + 2.3 + 0.42
 fig = plt.figure(figsize=(W, H)); rend = fig.canvas.get_renderer()
 def width_in(s, size):
     t = fig.text(0, 0, s, fontsize=size); w = t.get_window_extent(rend).width / fig.dpi; t.remove(); return w
@@ -145,7 +144,7 @@ axB.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc=GREEN, mec="wh
            loc="upper left", bbox_to_anchor=(0.06, 1.0), frameon=False, handletextpad=0.2, borderaxespad=0.05, labelspacing=0.25)
 
 # --- C: every model, every arm
-hC, yC = 2.3, yD + hD + 0.62
+hC, yC = 2.3, 0.42
 axC = fig.add_axes([0.5 / W, yC / H, 3.75 / W, hC / H])
 for y, lab in {60: "1 min", 3600: "1 h", 86400: "1 day", 604800: "1 week"}.items():
     axC.axhline(y, color=RULE, lw=0.5, zorder=1); axC.text(1.9e4, y * 1.18, lab, fontsize=6, color=MUTE, ha="right", va="bottom")
@@ -167,8 +166,16 @@ axC.legend(handles=handles, loc="upper left", bbox_to_anchor=(1.04, 1.0), frameo
 fig.text(4.5 / W, (yC + 0.02) / H, "Lines: least-squares fit of log wall time on\nlog size per arm. Stochastic arms: median of\nthree seeds; Kimonu: median of three replicates.\nCOCOA.jl did not finish iS_1188 and iSDY_1059\n(both settings) or iAF1260b (efficient=false)\nwithin 7 days.",
          fontsize=6, color=MUTE, va="bottom", linespacing=1.3)
 
-# --- D: concordance stage against the rest, per tool, over the eleven models of A
-axD = fig.add_axes([1.75 / W, yD / H, 3.6 / W, hD / H])
+for L, x, y in (("A", x0A, H - 0.06), ("B", x0B, H - 0.06), ("C", x0A, yC + hC + 0.2)):
+    fig.text(x / W, y / H, L, fontsize=10, fontweight="bold", va="top", ha="left", color=INK)
+
+os.makedirs(out, exist_ok=True)
+for ext in ("svg", "pdf", "png"):
+    fig.savefig(os.path.join(out, f"Figure2_draft.{ext}"), dpi=300)
+# --- supplementary figure: concordance stage against the rest, per tool, over the eleven models of A
+hD, yD, HS = 1.0, 0.36, 1.5
+figS = plt.figure(figsize=(W, HS))
+axD = figS.add_axes([1.75 / W, yD / HS, 3.6 / W, hD / HS])
 ROWS = ["ref_exh", "cocoa_false", "cocoa_true", "kimonu_ref"]
 axD.set_xscale("log"); axD.set_xlim(0.05, 2.5e6); axD.set_ylim(len(ROWS) - 0.4, -0.6)
 for y, lab in {1: "1 s", 60: "1 min", 3600: "1 h", 86400: "1 day", 604800: "1 week"}.items():
@@ -187,15 +194,13 @@ axD.set_yticks([]); axD.minorticks_off()
 axD.set_xticks([1, 60, 3600, 86400, 604800]); axD.set_xticklabels(["1 s", "1 min", "1 h", "1 day", "1 week"])
 for sp in ("top", "right", "left"): axD.spines[sp].set_visible(False)
 axD.spines["bottom"].set_color(MUTE); axD.tick_params(axis="x", colors=INK, length=2)
-axD.set_xlabel("wall time per stage (range over the 11 models of A, median marked)", labelpad=2)
+axD.set_xlabel("wall time per stage (range over the 11 models of Fig. 2A, median marked)", labelpad=2)
 axD.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc=INK, mec="white", mew=0.5, label="concordance"),
                     Line2D([], [], ls="", marker="o", ms=4.5, mfc="white", mec=INK, mew=0.9, label="kinetic modules, ACR/ACRR")],
            loc="upper left", bbox_to_anchor=(1.01, 1.0), frameon=False, handletextpad=0.2, labelspacing=0.4)
 
-for L, x, y in (("A", x0A, H - 0.06), ("B", x0B, H - 0.06), ("C", x0A, yC + hC + 0.2), ("D", x0A, yD + hD + 0.22)):
-    fig.text(x / W, y / H, L, fontsize=10, fontweight="bold", va="top", ha="left", color=INK)
-
-os.makedirs(out, exist_ok=True)
-for ext in ("svg", "pdf", "png"):
-    fig.savefig(os.path.join(out, f"Figure2_draft.{ext}"), dpi=300)
+supp = os.path.join(os.path.dirname(os.path.abspath(out)), "supp")
+os.makedirs(supp, exist_ok=True)
+for ext in ("svg", "png"):
+    figS.savefig(os.path.join(supp, f"FigS_stage_timing.{ext}"), dpi=300)
 print(f"speedup over the exhaustive reference: {min(ratios):.3g} to {max(ratios):.3g}, median {np.median(ratios):.3g} (11 models)")

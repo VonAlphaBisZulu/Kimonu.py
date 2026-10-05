@@ -16,6 +16,10 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
 
 out = sys.argv[1] if len(sys.argv) > 1 else "figures/main"
+# composed into Figure 3 by make_figure3.py: a shorter panel, no letters (the composition adds them)
+HEIGHT_IN = float(os.environ.get("FIG_HEIGHT_IN", 2.9)); LETTERS = os.environ.get("FIG_LETTERS", "1") == "1"
+NAME = os.environ.get("FIG_NAME", "hierarchy")
+LEGEND_BOTTOM = os.environ.get("FIG_LEGEND_BOTTOM", "0") == "1"   # Figure 3: the top band holds the panel letters
 plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6,
                      "ytick.labelsize": 6.5, "legend.fontsize": 6.5, "axes.linewidth": 0.6,
                      "svg.fonttype": "none", "pdf.fonttype": 42})
@@ -28,7 +32,7 @@ LABEL_BELOW = {("A", "iCN718")}
 bad = [d["model"] for d in D if any(d["violations"].values())]
 assert not bad, f"iterated relations missing from the tangent route: {bad}"
 
-fig, axs = plt.subplots(1, 2, figsize=(17.5 / 2.54, 2.9), sharex=True)
+fig, axs = plt.subplots(1, 2, figsize=(17.5 / 2.54, HEIGHT_IN), sharex=True)
 panels = [("pairs", "coupled complex pairs", "A"),
           (lambda r: r["acr_free"] + r["acrr_pairs_free"], "ACR metabolites + ACRR pairs (free)", "B")]
 for ax, (key, ylabel, letter) in zip(axs, panels):
@@ -54,15 +58,21 @@ for ax, (key, ylabel, letter) in zip(axs, panels):
     for s in ("top", "right"): ax.spines[s].set_visible(False)
     for s in ("left", "bottom"): ax.spines[s].set_color(MUTE)
     ax.grid(axis="y", color=RULE, lw=0.4); ax.set_axisbelow(True)
-    ax.text(-0.12, 1.04, letter, transform=ax.transAxes, fontsize=10, fontweight="bold", color=INK, va="bottom")
+    if LETTERS:
+        ax.text(-0.12, 1.04, letter, transform=ax.transAxes, fontsize=10, fontweight="bold", color=INK, va="bottom")
 axs[0].set_xlabel(""); axs[1].set_xlabel("")
-fig.text(0.5, 0.005, "models, by number of complexes", ha="center", va="bottom", color=INK)
+if not LEGEND_BOTTOM:
+    fig.text(0.5, 0.005, "models, by number of complexes", ha="center", va="bottom", color=INK)
 handles = [Line2D([], [], marker="o", ls="", color=INK, ms=3.5, label="decided: iterated = tangent"),
            Line2D([], [], marker="o", ls="", color=GREEN, mec="white", ms=5.5, label="iterated route (proven)"),
            Line2D([], [], marker="D", ls="", mfc="white", mec=PURPLE, ms=4, label="tangent route (local ACR); +n = undecided"),]
-fig.legend(handles=handles, loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 1.0))
-fig.tight_layout(rect=(0, 0.03, 1, 0.92))
+if LEGEND_BOTTOM:
+    fig.legend(handles=handles, loc="lower center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.0))
+    fig.tight_layout(rect=(0, 0.07, 1, 0.95))
+else:
+    fig.legend(handles=handles, loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 1.0))
+    fig.tight_layout(rect=(0, 0.03, 1, 0.92))
 os.makedirs(out, exist_ok=True)
 for ext in ("svg", "png"):
-    fig.savefig(f"{out}/hierarchy.{ext}", dpi=300)
+    fig.savefig(f"{out}/{NAME}.{ext}", dpi=300)
 print("gap models:", [d["model"] for d in D if d["gap"]])
