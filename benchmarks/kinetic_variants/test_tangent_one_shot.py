@@ -164,3 +164,37 @@ def test_injectivity_certificate_matches_the_jacobian_criterion():
         if not injective:
             mismatch, sigma_err = realise_witness(Nf, G, wit)
             assert mismatch < 1e-8 and sigma_err < 1e-6, name
+
+
+FIG1 = [("A", "B"), ("B", "A"), ("B", "C"), ("C", "B"), ("C", "D"), ("D+E", "F"), ("F", "D+E"), ("F", "B+G"),
+        ("C+G", "H"), ("H", "C+G"), ("H", "C+E"), ("A+G", "I"), ("I", "A+G"), ("I", "A+E")]
+
+
+def test_terminal_complexes_join_the_module_they_are_coupled_to():
+    """Figure 1: B+G joins the module (psi_{B+G}/psi_B = x_G, G has ACR), the one terminal complex Langary et al.
+    report; A+E and C+E pair up (ratio x_A/x_C); D stays alone. ACR and ACRR do not change."""
+    from kinetic_variants.terminal_join import join_terminals
+    A, Y, N, cx = _crn(FIG1, list("ABCDEFGHI"))
+    res = kimonu.kinetic_modules(A, Y, N)
+    joined = {frozenset(cx[i] for i in m) for m in join_terminals(A, Y, res) if len(m) > 1}
+    assert joined == {frozenset({"A", "B", "C", "D+E", "F", "C+G", "H", "A+G", "I", "B+G"}), frozenset({"A+E", "C+E"})}
+    before = kimonu.acr_acrr(Y, res.modules, known_acr=res.known_acr)
+    after = kimonu.acr_acrr(Y, [set(m) for m in join_terminals(A, Y, res)], known_acr=res.known_acr)
+    assert before.acr == after.acr and sorted(before.acrr) == sorted(after.acrr)
+
+
+def test_autonomous_blocks_prove_what_uniqueness_gives():
+    """{A, B} of Figure 3 is autonomous, conservation-free and injective: A and B have ACR (the iterated route
+    misses both). {C, P} is not injective (two steady states). Detached uptakes give free sources: nothing."""
+    import scipy.sparse as sp
+    from kinetic_variants.autonomous_blocks import run
+    fig3 = [("0", "A"), ("A", "0"), ("A+A", "0"), ("0", "B"), ("B", "0"), ("A+B", "0"), ("0", "C"), ("C", "0"),
+            ("P", "0"), ("C+P+P", "P+P+P")]
+    for R, S, attached, detached in [(fig3, list("ABCP"), ["A", "B"], []),
+                                     ([("0", "X"), ("X", "0"), ("X+X", "0")], ["X"], ["X"], []),
+                                     (CUBIC, ["A"], [], []),
+                                     (ENVZ, ENVZ_SPECIES, ["Yp"], ["Yp"])]:
+        A, Y, N, cx = _crn(R, S)
+        for det, want in ((False, attached), (True, detached)):
+            out = run(A, Y, N, sp.csr_matrix(N, dtype=float), detach_uptakes=det, log=lambda s: None)
+            assert [S[i] for i in out["acr"]] == want, (S, det)
