@@ -137,3 +137,30 @@ def test_two_point_envz_and_detached_uptakes():
     A, Y, N, G, Nf = _two_point_setup([("0", "X"), ("X", "0"), ("X+X", "0")], ["X"])
     assert "infeasible" in certify(Nf, G, np.array([1.0]))[0]
     assert search(Nf, G, np.array([1.0]), free=uptakes(A, Y), starts=5, time_limit=30) is not None
+
+
+def test_injectivity_certificate_matches_the_jacobian_criterion():
+    """The sign MILP (injectivity for every k on every class) against Feliu & Wiuf's determinant test, on
+    networks that are injective (dimer, heterodimer, Shinar-Feinberg's concordant network 11) and that are not
+    (the cubic, the completeness example, Shinar-Feinberg's EnvZ-OmpR network 12); every witness found is
+    rebuilt into explicit x != x' in one class and k > 0 with f_k(x) = f_k(x')"""
+    from kinetic_variants.injectivity import certify_injective, realise_witness, jacobian_sign_test
+    nets = {
+        "dimer": ([("0", "X"), ("X", "0"), ("X+X", "0")], ["X"], True),
+        "heterodimer": ([("0", "X"), ("X", "0"), ("X+X", "0"), ("0", "Y"), ("Y", "0"), ("X+Y", "0")], ["X", "Y"], True),
+        "SF11": ([("A", "B"), ("B", "A"), ("C+D+D+D+D", "E"), ("E", "C+D+D+D+D"), ("B+E", "F"), ("F", "A+E"), ("A+E", "F"),
+                  ("B", "D+B"), ("D", "0")], list("ABCDEF"), True),
+        "cubic": (CUBIC, ["A"], False),
+        "fig3": ([("0", "A"), ("A", "0"), ("A+A", "0"), ("0", "B"), ("B", "0"), ("A+B", "0"), ("0", "C"), ("C", "0"),
+                  ("P", "0"), ("C+P+P", "P+P+P")], ["A", "B", "C", "P"], False),
+        "SF12": ([("A", "B"), ("B", "A"), ("B", "C"), ("C+D", "E"), ("E", "C+D"), ("E", "A+F"), ("B+F", "G"), ("G", "B+F"),
+                  ("G", "B+D")], list("ABCDEFG"), False),
+    }
+    for name, (R, S, injective) in nets.items():
+        A, Y, N, G, Nf = _two_point_setup(R, S)
+        st, _, wit = certify_injective(Nf, G, time_limit=120)
+        assert ("infeasible" in st) == injective, name
+        assert jacobian_sign_test(A, Y, N) == injective, name
+        if not injective:
+            mismatch, sigma_err = realise_witness(Nf, G, wit)
+            assert mismatch < 1e-8 and sigma_err < 1e-6, name
