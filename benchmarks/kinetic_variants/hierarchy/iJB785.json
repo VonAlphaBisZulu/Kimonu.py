@@ -1,0 +1,32 @@
+{
+ "model": "iJB785",
+ "n_complexes": 6114,
+ "n_metabolites": 4148,
+ "tangent_dim": 872,
+ "seconds_iterated": 13.858624696731567,
+ "seconds_tangent": 5.977925539016724,
+ "it": {
+  "modules": 1902,
+  "giant": 22,
+  "pairs": 2973,
+  "acr": 10,
+  "acrr_pairs": 263,
+  "acr_free": 10,
+  "acrr_pairs_free": 31
+ },
+ "tan": {
+  "modules": 1902,
+  "giant": 22,
+  "pairs": 2973,
+  "acr": 10,
+  "acrr_pairs": 263,
+  "acr_free": 10,
+  "acrr_pairs_free": 31
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

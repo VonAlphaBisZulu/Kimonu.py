@@ -1,0 +1,32 @@
+{
+ "model": "iMM904",
+ "n_complexes": 8536,
+ "n_metabolites": 5435,
+ "tangent_dim": 745,
+ "seconds_iterated": 40.00761675834656,
+ "seconds_tangent": 167.63220119476318,
+ "it": {
+  "modules": 609,
+  "giant": 22,
+  "pairs": 1688,
+  "acr": 0,
+  "acrr_pairs": 287,
+  "acr_free": 0,
+  "acrr_pairs_free": 38
+ },
+ "tan": {
+  "modules": 609,
+  "giant": 22,
+  "pairs": 1688,
+  "acr": 0,
+  "acrr_pairs": 287,
+  "acr_free": 0,
+  "acrr_pairs_free": 38
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}
