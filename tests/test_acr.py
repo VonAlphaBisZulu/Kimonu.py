@@ -89,13 +89,14 @@ def _A():
 
 
 def test_kinetic_modules_reproduce_the_giant_module():
-    """The nine non-terminal complexes form one kinetic module."""
+    """The nine non-terminal complexes and X+Yp form one kinetic module; XD+Y and XT+Y form a second."""
     A, Y = _A(), _Y()
     result = kimonu.kinetic_modules(A, Y, Y @ A)
-    assert result.n_modules == 1
-    assert result.giant_module == 9
-    giant = next(m for m in result.modules if len(m) > 1)
-    assert giant == {0, 1, 2, 3, 5, 6, 8, 10, 11}
+    assert result.n_modules == 2
+    assert result.giant_module == 10
+    giant = next(m for m in result.modules if len(m) == 10)
+    assert giant == {0, 1, 2, 3, 5, 6, 8, 10, 11, 12}
+    assert {4, 7} in [set(m) for m in result.modules]
 
 
 def test_end_to_end_acr_is_yp():

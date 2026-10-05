@@ -58,13 +58,13 @@ def test_positive_flux_is_an_exact_interior_steady_state():
 
 
 def test_envz_ompr_end_to_end():
-    """Nine non-terminal complexes in one module, Yp the only ACR species, one 6-clique of ACRR."""
+    """Nine non-terminal complexes and X+Yp in one module, Yp the only ACR species, one 6-clique of ACRR."""
     A, Y, N, cx = _crn(ENVZ, ENVZ_SPECIES)
     kin = kimonu.kinetic_modules(A, Y, N)
-    assert kin.n_modules == 1
-    assert kin.giant_module == 9
-    giant = next(m for m in kin.modules if len(m) > 1)
-    assert {cx[i] for i in giant} == {"XD", "X", "XT", "Xp+Y", "XpY", "XT+Yp", "XTYp", "XD+Yp", "XDYp"}
+    assert kin.n_modules == 2
+    assert kin.giant_module == 10
+    giant = next(m for m in kin.modules if len(m) == 10)
+    assert {cx[i] for i in giant} == {"XD", "X", "XT", "Xp+Y", "XpY", "XT+Yp", "XTYp", "XD+Yp", "XDYp", "X+Yp"}
     acr = kimonu.acr_acrr(Y, kin.modules, metabolite_ids=ENVZ_SPECIES, known_acr=kin.known_acr)
     assert sorted(acr.acr) == ["Yp"]
     assert len(acr.acrr) == 15
@@ -78,13 +78,17 @@ def test_feedback_is_what_couples_the_yp_complexes():
     assert not any(xd in s and xdyp in s for s in sets)
 
 
-def test_terminal_complexes_stay_singletons():
-    """Complexes that are no reaction's substrate appear in no rate law."""
+def test_terminal_complexes_join_only_where_coupled():
+    """X+Yp is coupled to the module through Yp, which has ACR (psi_{X+Yp}/psi_X = x_Yp); XD+Y and XT+Y are
+    coupled to each other (ratio x_XD/x_XT); Xp stays alone. Joining changes no ACR or ACRR."""
     A, Y, N, cx = _crn(ENVZ, ENVZ_SPECIES)
     kin = kimonu.kinetic_modules(A, Y, N)
-    for name in ("Xp", "X+Yp", "XT+Y", "XD+Y"):
-        assert kin.module_of[cx.index(name)] not in {kin.module_of[i] for m in kin.modules
-                                                     if len(m) > 1 for i in m}
+    giant = next(m for m in kin.modules if len(m) == 10)
+    assert {cx[i] for i in giant} == {"XD", "X", "XT", "Xp+Y", "XpY", "XT+Yp", "XTYp", "XD+Yp", "XDYp", "X+Yp"}
+    assert {frozenset(cx[i] for i in m) for m in kin.modules if len(m) == 2} == {frozenset({"XD+Y", "XT+Y"})}
+    assert kin.module_of[cx.index("Xp")] not in {kin.module_of[i] for m in kin.modules if len(m) > 1 for i in m}
+    acr = kimonu.acr_acrr(Y, kin.modules, metabolite_ids=ENVZ_SPECIES, known_acr=kin.known_acr)
+    assert sorted(acr.acr) == ["Yp"] and len(acr.acrr) == 15
 
 
 def test_modules_are_a_partition_of_the_complexes():
