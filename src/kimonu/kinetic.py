@@ -22,6 +22,12 @@ kernel proportional, because the proportional-row readout alone ignores linear r
 three or more coupled sets. On EnvZ-OmpR this feedback is what couples the complexes that differ
 by Yp. Both steps are iterated until the partition no longer changes.
 
+Complexes that are no reaction's substrate have a zero column in W, so their u is free in ker(W) and
+they reach the closure as singletons. Their psi is still a monomial of x, and the closure joins them to a
+module exactly when their composition differs from a member's by a fixed log-combination; this is the
+coupling of Langary et al. (2025, Supplement S.1), which is not restricted to substrates. Joining adds no
+new vector to the span, so it changes no ACR or ACRR, and the u_c = u_d it feeds back only fixes u_c.
+
 The zero complex has psi = 1. Attached (default), its uptake reactions run at constant rate and
 complexes coupled to it share its module: a fixed medium. Detached, each uptake reaction is given
 its own source, so only couplings that hold whatever the uptake rates remain.
@@ -102,7 +108,8 @@ def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
             seed changes them only with probability zero.
 
     Returns a :class:`KineticResult`; every complex belongs to exactly one module, singletons
-    included. Complexes that are no reaction's substrate appear in no rate law and stay singletons.
+    included. Complexes that are no reaction's substrate join a module when the log closure couples
+    them to it.
     """
     n = A.shape[0]
     # 1) Generic rate constants: an interior steady-state flux r* fixes k_j = r*_j at psi* = 1.
@@ -110,10 +117,10 @@ def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
     equal, rounds = [], 0
     while True:
         # 2) Linear part: every steady state for these k solves W u = 0; proportional rows of ker(W)
-        #    are complexes with fixed psi ratios. Substrate complexes on their own still take part in
-        #    the closure, which can attach them to a set.
-        coupled, substrates = _psi_coupled(A, Y, N, flux, detach_uptakes, equal)
-        coupled = [s for s in coupled if len(s) > 1 or (len(s) == 1 and next(iter(s)) in substrates)]
+        #    are complexes with fixed psi ratios. Complexes on their own, substrates or not, still take
+        #    part in the closure, which can attach them to a set.
+        coupled, _ = _psi_coupled(A, Y, N, flux, detach_uptakes, equal)
+        coupled = [s for s in coupled if s]
         # 3) Log part: within a set, differences of log compositions are fixed; merge sets whose
         #    representatives differ by such a vector, and fix metabolites that become ACR on the way.
         sets, known, r = _closure(Y, coupled)
