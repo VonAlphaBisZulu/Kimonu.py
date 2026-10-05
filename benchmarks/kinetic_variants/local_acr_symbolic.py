@@ -114,17 +114,8 @@ def ecoli_core(name="e_coli_core"):
             r.lower_bound = 0
     ranges = sd.fva(m, solver="glpk")              # Gurobi is node-locked on the cluster
     m.remove_reactions([r for r in ranges.index if abs(ranges.at[r, "maximum"]) <= 1e-9], remove_orphans=True)
-    crn = build_crn(m)
-    # build_crn gives the zero complex no row, so exchange reactions have no substrate complex and
-    # kimonu.kinetic_modules would drop uptakes from W (false couplings); add it explicitly, as in the
-    # benchmark crn.json files: one row in A, a zero column in Y
-    A = sp.lil_matrix(crn.A); nc, q = A.shape
-    A.resize((nc + 1, q)); Ac = sp.csc_matrix(crn.A)
-    for j in range(q):
-        col = Ac.data[Ac.indptr[j]:Ac.indptr[j + 1]]
-        if len(col) == 1: A[nc, j] = -int(col[0])
-    Y = sp.hstack([sp.csr_matrix(crn.Y), sp.csr_matrix((crn.Y.shape[0], 1))]).tocsr()
-    return sp.csr_matrix(A, dtype=np.int64), Y, crn.N_exact, crn.metabolite_ids
+    crn = build_crn(m)                              # the zero complex has its own row of A
+    return sp.csr_matrix(crn.A, dtype=np.int64), sp.csr_matrix(crn.Y), crn.N_exact, crn.metabolite_ids
 
 
 class Timeout(Exception):

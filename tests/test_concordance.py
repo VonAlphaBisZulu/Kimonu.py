@@ -132,10 +132,11 @@ def test_one_pin_or_mismatched_pins_add_no_coupling():
 
 
 def test_pins_reach_the_concordance_partition():
-    """Two feeds, each into its own linkage class: pinning both makes the two classes concordant."""
+    """Two feed cycles through the zero complex: the zero complex is a module of its own, and pinning
+    both feeds makes every complex concordant."""
     net = {"k": {"X": 1}, "y": {"Y": 1}, "m": {"X": -1, "Y": -1},
            "l": {"W": 1}, "v": {"V": 1}, "n": {"W": -1, "V": -1}}
     sizes = lambda r: sorted(len(g) for g in r.modules)
-    assert sizes(kimonu.concordance(_toy(net))) == [3, 3]
-    assert sizes(kimonu.concordance(_toy(net, {"k": 2}))) == [3, 3]
-    assert sizes(kimonu.concordance(_toy(net, {"k": 2, "l": 7}))) == [6]
+    assert sizes(kimonu.concordance(_toy(net))) == [1, 3, 3]
+    assert sizes(kimonu.concordance(_toy(net, {"k": 2}))) == [1, 3, 3]
+    assert sizes(kimonu.concordance(_toy(net, {"k": 2, "l": 7}))) == [7]
