@@ -31,7 +31,10 @@ def test_envz_both_routes_agree():
     A, Y, N, cx = _crn(ENVZ, ENVZ_SPECIES)
     mods, acr, groups, dim = one_shot_exact(A, Y, N, detach=False, want_groups=True)
     it = kimonu.kinetic_modules(A, Y, N)
-    assert {frozenset(m) for m in mods if len(m) > 1} == {frozenset(m) for m in it.modules if len(m) > 1}
+    # one_shot_exact groups substrate complexes only; the iterated route now also places terminal ones
+    sub = {int(i) for i in np.nonzero((A.toarray() < 0).any(axis=1))[0]}
+    restrict = lambda ms: {frozenset(set(m) & sub) for m in ms if len(set(m) & sub) > 1}
+    assert restrict(mods) == restrict(it.modules)
     assert [ENVZ_SPECIES[i] for i in acr] == ["Yp"] and dim == 2
     assert sorted(len(g) for g in groups) == [6]
 
@@ -198,3 +201,17 @@ def test_autonomous_blocks_prove_what_uniqueness_gives():
         for det, want in ((False, attached), (True, detached)):
             out = run(A, Y, N, sp.csr_matrix(N, dtype=float), detach_uptakes=det, log=lambda s: None)
             assert [S[i] for i in out["acr"]] == want, (S, det)
+
+
+def test_published_local_acr_criterion_matches_the_nullspace_readout():
+    """Pascual-Escudero & Feliu's minor criterion (symbolic), the same rank test by elimination over Q(v), and
+    one exact nullspace at a random interior flux give the same ACR (and ACRR) calls; the iterated route stays
+    below the generic-k truth and the tangent route above it (networks from García Puente et al. 2025 and
+    Pascual-Escudero & Feliu 2022)"""
+    from kinetic_variants.local_acr_symbolic import NETWORKS, run_network
+    for name in ("GP2.18", "GP3.12", "GP3.14", "GP3.15", "GPB.3", "PEF4.6", "PEF5.5", "Fig3"):
+        R, S, truth = NETWORKS[name]
+        A, Y, N, cx = _crn(R, S)
+        r = run_network(name, A, Y, N, S, truth, limit=60)
+        assert r["agree_rref"] and r["agree_minors"] and not r["degenerate"], name
+        assert r["chain_ok"], name

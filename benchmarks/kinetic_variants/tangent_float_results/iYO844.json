@@ -1,0 +1,106 @@
+{
+ "model": "iYO844",
+ "m": 3917,
+ "exact": {
+  "seconds": 256.0807042121887,
+  "dim_T": 526,
+  "acr": 4,
+  "acrr_pairs": 1270
+ },
+ "float": {
+  "numpy_default|1e-08": {
+   "tol": 8.697487174913476e-13,
+   "row_tol": 1e-08,
+   "dim_T": 529,
+   "acr_fp": 0,
+   "acr_fn": 4,
+   "acrr_fp": 6,
+   "acrr_fn": 1270
+  },
+  "numpy_default|1e-06": {
+   "tol": 8.697487174913476e-13,
+   "row_tol": 1e-06,
+   "dim_T": 529,
+   "acr_fp": 47,
+   "acr_fn": 2,
+   "acrr_fp": 39,
+   "acrr_fn": 1251
+  },
+  "numpy_default|0.0001": {
+   "tol": 8.697487174913476e-13,
+   "row_tol": 0.0001,
+   "dim_T": 529,
+   "acr_fp": 753,
+   "acr_fn": 0,
+   "acrr_fp": 241,
+   "acrr_fn": 1107
+  },
+  "1e-10|1e-08": {
+   "tol": 1e-10,
+   "row_tol": 1e-08,
+   "dim_T": 614,
+   "acr_fp": 0,
+   "acr_fn": 4,
+   "acrr_fp": 0,
+   "acrr_fn": 1270
+  },
+  "1e-10|1e-06": {
+   "tol": 1e-10,
+   "row_tol": 1e-06,
+   "dim_T": 614,
+   "acr_fp": 13,
+   "acr_fn": 4,
+   "acrr_fp": 2,
+   "acrr_fn": 1270
+  },
+  "1e-10|0.0001": {
+   "tol": 1e-10,
+   "row_tol": 0.0001,
+   "dim_T": 614,
+   "acr_fp": 493,
+   "acr_fn": 2,
+   "acrr_fp": 45,
+   "acrr_fn": 1263
+  },
+  "1e-6|1e-08": {
+   "tol": 1e-06,
+   "row_tol": 1e-08,
+   "dim_T": 2850,
+   "acr_fp": 0,
+   "acr_fn": 4,
+   "acrr_fp": 0,
+   "acrr_fn": 1270
+  },
+  "1e-6|1e-06": {
+   "tol": 1e-06,
+   "row_tol": 1e-06,
+   "dim_T": 2850,
+   "acr_fp": 0,
+   "acr_fn": 4,
+   "acrr_fp": 1,
+   "acrr_fn": 1270
+  },
+  "1e-6|0.0001": {
+   "tol": 1e-06,
+   "row_tol": 0.0001,
+   "dim_T": 2850,
+   "acr_fp": 1,
+   "acr_fn": 4,
+   "acrr_fp": 9,
+   "acrr_fn": 1270
+  }
+ },
+ "float_svd_seconds": 9.792692184448242,
+ "oracle": {
+  "setting": "1e-10|1e-08",
+  "tol": 1e-10,
+  "row_tol": 1e-08,
+  "dim_T": 614,
+  "acr_fp": 0,
+  "acr_fn": 4,
+  "acrr_fp": 0,
+  "acrr_fn": 1270
+ },
+ "sigma_min_nonzero_over_max": 5.304145259708576e-20,
+ "rate_span_log10": 7.195066913648424
+}

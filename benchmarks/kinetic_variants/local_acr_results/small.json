@@ -1,0 +1,1126 @@
+[
+ {
+  "network": "GP2.18",
+  "species": 2,
+  "reactions": 2,
+  "complexes": 4,
+  "kimonu": {
+   "seconds": 0.013542652130126953,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "dim_T": 1
+  },
+  "iterated": {
+   "acr": [
+    0
+   ],
+   "acrr": []
+  },
+  "setup_seconds": 0.05150914192199707,
+  "s": 1,
+  "kernel_params": 1,
+  "rref": {
+   "seconds": 0.00183868408203125,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "rank": 1
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0003535747528076172,
+   "acr": [
+    0
+   ],
+   "n_minors": 2
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": true,
+   "1": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "A",
+   "B"
+  ]
+ },
+ {
+  "network": "GP2.19",
+  "species": 1,
+  "reactions": 3,
+  "complexes": 5,
+  "kimonu": {
+   "seconds": 0.005263566970825195,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "dim_T": 0
+  },
+  "iterated": {
+   "acr": [],
+   "acrr": []
+  },
+  "setup_seconds": 0.003939390182495117,
+  "s": 1,
+  "kernel_params": 2,
+  "rref": {
+   "seconds": 0.0017108917236328125,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "rank": 1
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0002875328063964844,
+   "acr": [
+    0
+   ],
+   "n_minors": 0
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "A"
+  ]
+ },
+ {
+  "network": "GP3.9",
+  "species": 8,
+  "reactions": 12,
+  "complexes": 10,
+  "kimonu": {
+   "seconds": 0.005614280700683594,
+   "acr": [
+    2
+   ],
+   "acrr": [
+    [
+     4,
+     7
+    ]
+   ],
+   "dim_T": 2
+  },
+  "iterated": {
+   "acr": [
+    2
+   ],
+   "acrr": [
+    [
+     4,
+     7
+    ]
+   ]
+  },
+  "setup_seconds": 0.0066623687744140625,
+  "s": 6,
+  "kernel_params": 6,
+  "rref": {
+   "seconds": 0.04053521156311035,
+   "acr": [
+    2
+   ],
+   "acrr": [
+    [
+     4,
+     7
+    ]
+   ],
+   "rank": 6
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.1888272762298584,
+   "acr": [
+    2
+   ],
+   "n_minors": 15
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "2": true
+  },
+  "chain_ok": true,
+  "species_names": [
+   "S1",
+   "S2",
+   "S3",
+   "E",
+   "C1",
+   "C2",
+   "C3",
+   "C4"
+  ]
+ },
+ {
+  "network": "GP3.12",
+  "species": 2,
+  "reactions": 5,
+  "complexes": 7,
+  "kimonu": {
+   "seconds": 0.00442814826965332,
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": [],
+   "dim_T": 0
+  },
+  "iterated": {
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": []
+  },
+  "setup_seconds": 0.0021386146545410156,
+  "s": 2,
+  "kernel_params": 3,
+  "rref": {
+   "seconds": 0.0015385150909423828,
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": [],
+   "rank": 2
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0003304481506347656,
+   "acr": [
+    0,
+    1
+   ],
+   "n_minors": 0
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": true,
+   "1": true
+  },
+  "chain_ok": true,
+  "species_names": [
+   "A",
+   "B"
+  ],
+  "truth_unconditional": {
+   "A": false,
+   "B": false
+  }
+ },
+ {
+  "network": "GP3.14",
+  "species": 2,
+  "reactions": 3,
+  "complexes": 6,
+  "kimonu": {
+   "seconds": 0.00424504280090332,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "dim_T": 1
+  },
+  "iterated": {
+   "acr": [],
+   "acrr": []
+  },
+  "setup_seconds": 0.0013115406036376953,
+  "s": 1,
+  "kernel_params": 2,
+  "rref": {
+   "seconds": 0.0008089542388916016,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "rank": 1
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.00027561187744140625,
+   "acr": [
+    0
+   ],
+   "n_minors": 2
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": false,
+   "1": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "A",
+   "B"
+  ]
+ },
+ {
+  "network": "GP3.15",
+  "species": 7,
+  "reactions": 9,
+  "complexes": 9,
+  "kimonu": {
+   "seconds": 0.004966259002685547,
+   "acr": [
+    4
+   ],
+   "acrr": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     0,
+     6
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     5,
+     6
+    ]
+   ],
+   "dim_T": 2
+  },
+  "iterated": {
+   "acr": [
+    4
+   ],
+   "acrr": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     0,
+     6
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     5,
+     6
+    ]
+   ]
+  },
+  "setup_seconds": 0.0024826526641845703,
+  "s": 5,
+  "kernel_params": 4,
+  "rref": {
+   "seconds": 0.00893092155456543,
+   "acr": [
+    4
+   ],
+   "acrr": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     0,
+     6
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     5,
+     6
+    ]
+   ],
+   "rank": 5
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.03008437156677246,
+   "acr": [
+    4
+   ],
+   "n_minors": 22
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "4": true
+  },
+  "chain_ok": true,
+  "species_names": [
+   "X",
+   "XT",
+   "Xp",
+   "Y",
+   "Yp",
+   "XpY",
+   "XTYp"
+  ]
+ },
+ {
+  "network": "GP3.17",
+  "species": 2,
+  "reactions": 5,
+  "complexes": 7,
+  "kimonu": {
+   "seconds": 0.004137516021728516,
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": [],
+   "dim_T": 0
+  },
+  "iterated": {
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": []
+  },
+  "setup_seconds": 0.0014455318450927734,
+  "s": 2,
+  "kernel_params": 3,
+  "rref": {
+   "seconds": 0.0011510848999023438,
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": [],
+   "rank": 2
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0003058910369873047,
+   "acr": [
+    0,
+    1
+   ],
+   "n_minors": 0
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": true,
+   "1": true
+  },
+  "chain_ok": true,
+  "species_names": [
+   "A",
+   "B"
+  ]
+ },
+ {
+  "network": "GPB.3",
+  "species": 2,
+  "reactions": 6,
+  "complexes": 5,
+  "kimonu": {
+   "seconds": 0.003922462463378906,
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": [],
+   "dim_T": 0
+  },
+  "iterated": {
+   "acr": [
+    0
+   ],
+   "acrr": []
+  },
+  "setup_seconds": 0.0017511844635009766,
+  "s": 2,
+  "kernel_params": 4,
+  "rref": {
+   "seconds": 0.0010995864868164062,
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": [],
+   "rank": 2
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0002903938293457031,
+   "acr": [
+    0,
+    1
+   ],
+   "n_minors": 0
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": true,
+   "1": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "A",
+   "B"
+  ]
+ },
+ {
+  "network": "PEF4.4",
+  "species": 2,
+  "reactions": 2,
+  "complexes": 4,
+  "kimonu": {
+   "seconds": 0.004006147384643555,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "dim_T": 1
+  },
+  "iterated": {
+   "acr": [
+    0
+   ],
+   "acrr": []
+  },
+  "setup_seconds": 0.0007903575897216797,
+  "s": 1,
+  "kernel_params": 1,
+  "rref": {
+   "seconds": 0.0005080699920654297,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "rank": 1
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0002262592315673828,
+   "acr": [
+    0
+   ],
+   "n_minors": 2
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": true,
+   "1": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "X1",
+   "X2"
+  ]
+ },
+ {
+  "network": "PEF4.6",
+  "species": 2,
+  "reactions": 3,
+  "complexes": 6,
+  "kimonu": {
+   "seconds": 0.00424504280090332,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "dim_T": 1
+  },
+  "iterated": {
+   "acr": [],
+   "acrr": []
+  },
+  "setup_seconds": 0.0011441707611083984,
+  "s": 1,
+  "kernel_params": 2,
+  "rref": {
+   "seconds": 0.0007345676422119141,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "rank": 1
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0003173351287841797,
+   "acr": [
+    0
+   ],
+   "n_minors": 2
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": false,
+   "1": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "X1",
+   "X2"
+  ]
+ },
+ {
+  "network": "PEF5.5",
+  "species": 5,
+  "reactions": 6,
+  "complexes": 6,
+  "kimonu": {
+   "seconds": 0.00531458854675293,
+   "acr": [
+    3
+   ],
+   "acrr": [
+    [
+     2,
+     4
+    ]
+   ],
+   "dim_T": 2
+  },
+  "iterated": {
+   "acr": [
+    3
+   ],
+   "acrr": [
+    [
+     2,
+     4
+    ]
+   ]
+  },
+  "setup_seconds": 0.002053976058959961,
+  "s": 3,
+  "kernel_params": 3,
+  "rref": {
+   "seconds": 0.007674694061279297,
+   "acr": [
+    3
+   ],
+   "acrr": [
+    [
+     2,
+     4
+    ]
+   ],
+   "rank": 3
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.002832174301147461,
+   "acr": [
+    3
+   ],
+   "n_minors": 12
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "3": true
+  },
+  "chain_ok": true,
+  "species_names": [
+   "X1",
+   "X2",
+   "X3",
+   "X4",
+   "X5"
+  ]
+ },
+ {
+  "network": "Fig1",
+  "species": 9,
+  "reactions": 14,
+  "complexes": 13,
+  "kimonu": {
+   "seconds": 0.005554676055908203,
+   "acr": [
+    6
+   ],
+   "acrr": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     0,
+     7
+    ],
+    [
+     0,
+     8
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     8
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     2,
+     8
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     5,
+     8
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "dim_T": 2
+  },
+  "iterated": {
+   "acr": [
+    6
+   ],
+   "acrr": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     0,
+     7
+    ],
+    [
+     0,
+     8
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     8
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     2,
+     8
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     5,
+     8
+    ],
+    [
+     7,
+     8
+    ]
+   ]
+  },
+  "setup_seconds": 0.005568742752075195,
+  "s": 7,
+  "kernel_params": 7,
+  "rref": {
+   "seconds": 0.03270411491394043,
+   "acr": [
+    6
+   ],
+   "acrr": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     0,
+     7
+    ],
+    [
+     0,
+     8
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     5
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     8
+    ],
+    [
+     2,
+     5
+    ],
+    [
+     2,
+     7
+    ],
+    [
+     2,
+     8
+    ],
+    [
+     5,
+     7
+    ],
+    [
+     5,
+     8
+    ],
+    [
+     7,
+     8
+    ]
+   ],
+   "rank": 7
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 2.4706079959869385,
+   "acr": [
+    6
+   ],
+   "n_minors": 37
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": false,
+   "1": false,
+   "2": false,
+   "3": false,
+   "4": false,
+   "5": false,
+   "6": true,
+   "7": false,
+   "8": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "XD",
+   "X",
+   "XT",
+   "Xp",
+   "Y",
+   "XpY",
+   "Yp",
+   "XTYp",
+   "XDYp"
+  ]
+ },
+ {
+  "network": "Fig3",
+  "species": 4,
+  "reactions": 10,
+  "complexes": 9,
+  "kimonu": {
+   "seconds": 0.009407758712768555,
+   "acr": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "acrr": [],
+   "dim_T": 0
+  },
+  "iterated": {
+   "acr": [],
+   "acrr": []
+  },
+  "setup_seconds": 0.004045724868774414,
+  "s": 4,
+  "kernel_params": 6,
+  "rref": {
+   "seconds": 0.004024028778076172,
+   "acr": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "acrr": [],
+   "rank": 4
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0005259513854980469,
+   "acr": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "n_minors": 0
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": true,
+   "1": true,
+   "2": false,
+   "3": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "A",
+   "B",
+   "C",
+   "P"
+  ]
+ },
+ {
+  "network": "dimer",
+  "species": 1,
+  "reactions": 3,
+  "complexes": 3,
+  "kimonu": {
+   "seconds": 0.003518819808959961,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "dim_T": 0
+  },
+  "iterated": {
+   "acr": [],
+   "acrr": []
+  },
+  "setup_seconds": 0.0010640621185302734,
+  "s": 1,
+  "kernel_params": 2,
+  "rref": {
+   "seconds": 0.000736236572265625,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "rank": 1
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.00022840499877929688,
+   "acr": [
+    0
+   ],
+   "n_minors": 0
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": true
+  },
+  "chain_ok": true,
+  "species_names": [
+   "X"
+  ]
+ },
+ {
+  "network": "heterodimer",
+  "species": 2,
+  "reactions": 6,
+  "complexes": 5,
+  "kimonu": {
+   "seconds": 0.003596067428588867,
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": [],
+   "dim_T": 0
+  },
+  "iterated": {
+   "acr": [],
+   "acrr": []
+  },
+  "setup_seconds": 0.0011146068572998047,
+  "s": 2,
+  "kernel_params": 4,
+  "rref": {
+   "seconds": 0.0012257099151611328,
+   "acr": [
+    0,
+    1
+   ],
+   "acrr": [],
+   "rank": 2
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.0003533363342285156,
+   "acr": [
+    0,
+    1
+   ],
+   "n_minors": 0
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": true,
+   "1": true
+  },
+  "chain_ok": true,
+  "species_names": [
+   "X",
+   "Y"
+  ]
+ },
+ {
+  "network": "cubic",
+  "species": 1,
+  "reactions": 4,
+  "complexes": 4,
+  "kimonu": {
+   "seconds": 0.0034377574920654297,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "dim_T": 0
+  },
+  "iterated": {
+   "acr": [],
+   "acrr": []
+  },
+  "setup_seconds": 0.0012547969818115234,
+  "s": 1,
+  "kernel_params": 3,
+  "rref": {
+   "seconds": 0.0009243488311767578,
+   "acr": [
+    0
+   ],
+   "acrr": [],
+   "rank": 1
+  },
+  "degenerate": false,
+  "minors": {
+   "seconds": 0.00027561187744140625,
+   "acr": [
+    0
+   ],
+   "n_minors": 0
+  },
+  "agree_rref": true,
+  "agree_minors": true,
+  "truth": {
+   "0": false
+  },
+  "chain_ok": true,
+  "species_names": [
+   "A"
+  ]
+ }
+]
