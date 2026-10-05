@@ -1,0 +1,352 @@
+[
+ {
+  "model": "iCN900",
+  "cocoa_seconds": 3325.183680013,
+  "cocoa_n": 250,
+  "cocoa_giant": 19,
+  "cocoa_acr": 0,
+  "cocoa_acrr": 8,
+  "attached": {
+   "n": 250,
+   "giant": 19,
+   "relation": "identical",
+   "relation_substrates": "identical",
+   "acr": 0,
+   "acrr": 8,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 0,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  },
+  "detached": {
+   "n": 250,
+   "giant": 19,
+   "relation": "identical",
+   "relation_substrates": "identical",
+   "acr": 0,
+   "acrr": 8,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 0,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  }
+ },
+ {
+  "model": "iHN637",
+  "cocoa_seconds": 17798.111915587,
+  "cocoa_n": 244,
+  "cocoa_giant": 243,
+  "cocoa_acr": 0,
+  "cocoa_acrr": 121,
+  "attached": {
+   "n": 244,
+   "giant": 243,
+   "relation": "incomparable",
+   "relation_substrates": "kimonu coarser",
+   "acr": 0,
+   "acrr": 121,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 0,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  },
+  "detached": {
+   "n": 244,
+   "giant": 243,
+   "relation": "incomparable",
+   "relation_substrates": "kimonu coarser",
+   "acr": 0,
+   "acrr": 121,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 0,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  }
+ },
+ {
+  "model": "iIT341",
+  "cocoa_seconds": 3243.943908568,
+  "cocoa_n": 110,
+  "cocoa_giant": 195,
+  "cocoa_acr": 0,
+  "cocoa_acrr": 24,
+  "attached": {
+   "n": 112,
+   "giant": 210,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 13,
+   "acrr": 16,
+   "acr_only_kimonu": [
+    "actACP[c]",
+    "amob[c]",
+    "his__L[e]",
+    "ile__L[e]",
+    "leu__L[e]",
+    "met__L[e]",
+    "myrsACP[c]",
+    "pi[e]",
+    "pime[c]",
+    "pime[e]",
+    "thm[e]",
+    "uaagmda[c]",
+    "val__L[e]"
+   ],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 5,
+   "acrr_only_cocoa": 13,
+   "acrr_only_cocoa_examples": [
+    [
+     "actACP[c]",
+     "myrsACP[c]"
+    ],
+    [
+     "actACP[c]",
+     "uaagmda[c]"
+    ],
+    [
+     "ile__L[e]",
+     "leu__L[e]"
+    ]
+   ]
+  },
+  "detached": {
+   "n": 112,
+   "giant": 196,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 0,
+   "acrr": 25,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 1,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  }
+ },
+ {
+  "model": "iIS312",
+  "cocoa_seconds": 69.980345294,
+  "cocoa_n": 50,
+  "cocoa_giant": 9,
+  "cocoa_acr": 0,
+  "cocoa_acrr": 4,
+  "attached": {
+   "n": 65,
+   "giant": 44,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 15,
+   "acrr": 31,
+   "acr_only_kimonu": [
+    "a_D_glucose[e]",
+    "arg__L[e]",
+    "b_D_glucose[e]",
+    "ergst[c]",
+    "ergst[e]",
+    "gua[e]",
+    "h[e]",
+    "his__L[e]",
+    "ile__L[e]",
+    "leu__L[e]",
+    "lys__L[e]",
+    "met__L[e]",
+    "phe__L[e]",
+    "ura[e]",
+    "val__L[e]"
+   ],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 28,
+   "acrr_only_cocoa": 1,
+   "acrr_only_cocoa_examples": [
+    [
+     "gua[e]",
+     "ura[e]"
+    ]
+   ]
+  },
+  "detached": {
+   "n": 51,
+   "giant": 9,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 0,
+   "acrr": 4,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 0,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  }
+ },
+ {
+  "model": "iIS312_Amastigote",
+  "cocoa_seconds": 35.317064931,
+  "cocoa_n": 34,
+  "cocoa_giant": 9,
+  "cocoa_acr": 0,
+  "cocoa_acrr": 5,
+  "attached": {
+   "n": 47,
+   "giant": 44,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 15,
+   "acrr": 32,
+   "acr_only_kimonu": [
+    "a_D_glucose[e]",
+    "arg__L[e]",
+    "b_D_glucose[e]",
+    "ergst[c]",
+    "ergst[e]",
+    "gua[e]",
+    "h[e]",
+    "his__L[e]",
+    "ile__L[e]",
+    "leu__L[e]",
+    "lys__L[e]",
+    "met__L[e]",
+    "phe__L[e]",
+    "ura[e]",
+    "val__L[e]"
+   ],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 28,
+   "acrr_only_cocoa": 1,
+   "acrr_only_cocoa_examples": [
+    [
+     "gua[e]",
+     "ura[e]"
+    ]
+   ]
+  },
+  "detached": {
+   "n": 35,
+   "giant": 9,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 0,
+   "acrr": 5,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 0,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  }
+ },
+ {
+  "model": "iIS312_Epimastigote",
+  "cocoa_seconds": 71.035703372,
+  "cocoa_n": 50,
+  "cocoa_giant": 9,
+  "cocoa_acr": 0,
+  "cocoa_acrr": 4,
+  "attached": {
+   "n": 65,
+   "giant": 44,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 15,
+   "acrr": 31,
+   "acr_only_kimonu": [
+    "a_D_glucose[e]",
+    "arg__L[e]",
+    "b_D_glucose[e]",
+    "ergst[c]",
+    "ergst[e]",
+    "gua[e]",
+    "h[e]",
+    "his__L[e]",
+    "ile__L[e]",
+    "leu__L[e]",
+    "lys__L[e]",
+    "met__L[e]",
+    "phe__L[e]",
+    "ura[e]",
+    "val__L[e]"
+   ],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 28,
+   "acrr_only_cocoa": 1,
+   "acrr_only_cocoa_examples": [
+    [
+     "gua[e]",
+     "ura[e]"
+    ]
+   ]
+  },
+  "detached": {
+   "n": 51,
+   "giant": 9,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 0,
+   "acrr": 4,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 0,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  }
+ },
+ {
+  "model": "iIS312_Trypomastigote",
+  "cocoa_seconds": 17.580960126,
+  "cocoa_n": 29,
+  "cocoa_giant": 11,
+  "cocoa_acr": 0,
+  "cocoa_acrr": 1,
+  "attached": {
+   "n": 35,
+   "giant": 53,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 16,
+   "acrr": 28,
+   "acr_only_kimonu": [
+    "a_D_glucose[e]",
+    "arg__L[e]",
+    "b_D_glucose[e]",
+    "ergst[c]",
+    "ergst[e]",
+    "gly[e]",
+    "gua[e]",
+    "h[e]",
+    "his__L[e]",
+    "ile__L[e]",
+    "leu__L[e]",
+    "lys__L[e]",
+    "met__L[e]",
+    "phe__L[e]",
+    "ura[e]",
+    "val__L[e]"
+   ],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 28,
+   "acrr_only_cocoa": 1,
+   "acrr_only_cocoa_examples": [
+    [
+     "gua[e]",
+     "ura[e]"
+    ]
+   ]
+  },
+  "detached": {
+   "n": 30,
+   "giant": 11,
+   "relation": "kimonu coarser",
+   "relation_substrates": "kimonu coarser",
+   "acr": 0,
+   "acrr": 1,
+   "acr_only_kimonu": [],
+   "acr_only_cocoa": [],
+   "acrr_only_kimonu": 0,
+   "acrr_only_cocoa": 0,
+   "acrr_only_cocoa_examples": []
+  }
+ }
+]
