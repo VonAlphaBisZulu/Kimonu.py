@@ -6,9 +6,11 @@ A metabolic network factorizes as N = Y·A:
   A : complexes  x reactions    incidence (-1 on a reaction's substrate complex, +1 on its product)
 
 A *complex* is one side of a reaction — a multiset of species (e.g. A+B, 2B, C). Boundary/exchange
-reactions have an empty complex on one side, which contributes no incidence entry (the "zero complex",
-as in COCOA's `:empty`). Complexes are enumerated in first-seen order over the reactions, matching
-COCOA's deterministic ordering.
+reactions have the zero complex on one side: a complex with no species (an all-zero column of Y, as
+in COCOA's `:empty`). It gets its own row of A, so every reaction has a substrate and a product
+complex; mass action needs that, because an uptake from the zero complex runs at rate k_j * psi_0 with
+psi_0 = 1. Complexes are enumerated in first-seen order over the reactions, matching COCOA's
+deterministic ordering.
 """
 from fractions import Fraction
 
@@ -62,9 +64,7 @@ def build_crn(model):
     complex_comp = []    # complex row index -> {met_id: coeff (>0)}
 
     def _complex(comp):
-        """Return the complex index for a multiset {met_id: coeff>0}, or None if empty."""
-        if not comp:
-            return None
+        """Return the complex index for a multiset {met_id: coeff>0}; {} is the zero complex."""
         key = tuple(sorted(comp.items()))
         idx = complex_index.get(key)
         if idx is None:
@@ -79,10 +79,8 @@ def build_crn(model):
         product = {m.id: _exact(c) for m, c in r.metabolites.items() if c > 0}      # coeff on the product side
         si = _complex(substrate)
         pi = _complex(product)
-        if si is not None:
-            Ai.append(si); Aj.append(j); Av.append(-1)
-        if pi is not None:
-            Ai.append(pi); Aj.append(j); Av.append(+1)
+        Ai.append(si); Aj.append(j); Av.append(-1)
+        Ai.append(pi); Aj.append(j); Av.append(+1)
 
     ncplx = len(complex_comp)
     A = sparse.csr_matrix((Av, (Ai, Aj)), shape=(ncplx, len(rxn_ids)), dtype=np.int64)
