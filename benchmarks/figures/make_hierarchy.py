@@ -24,7 +24,7 @@ plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7
                      "ytick.labelsize": 6.5, "legend.fontsize": 6.5, "axes.linewidth": 0.6,
                      "svg.fonttype": "none", "pdf.fonttype": 42})
 INK, MUTE, RULE = "#1b2430", "#6b7480", "#d5d9de"
-GREEN, PURPLE = "#4DAF4A", "#984EA3"          # Kimonu green as in Figure 2; local ACR in Set1 purple
+GREY, DARK = "#6b7480", "#3a4250"              # no colours: the two bounds differ by marker shape only
 D = sorted((json.load(open(f)) for f in glob.glob("kinetic_variants/hierarchy/*.json")), key=lambda d: d["n_complexes"])
 SHORT = {"Chlorella_variabilis_iAJ526": "iAJ526", "Saha2011iRS1597": "iRS1597", "ArabidopsisCoreModel": "AraCore",
          "iIS312_Trypomastigote": "iIS312 T", "iIS312_Amastigote": "iIS312 A", "iIS312_Epimastigote": "iIS312 E"}
@@ -41,15 +41,15 @@ for ax, (key, ylabel, letter) in zip(axs, panels):
         lo, hi = get(d["it"]), get(d["tan"])
         lo_, hi_ = max(lo, 0.7), max(hi, 0.7)            # zero counts sit on the floor of the log axis
         if lo == hi:
-            ax.scatter(x, lo_, s=10, color=INK, zorder=3, linewidths=0)
+            ax.scatter(x, lo_, s=10, color=GREY, zorder=3, linewidths=0)
         else:
             # the two bounds side by side, so a gap that is small on the log axis stays visible
-            ax.plot([x - 0.22, x + 0.22], [lo_, hi_], color=MUTE, lw=1.0, zorder=2)
-            ax.scatter(x - 0.22, lo_, s=20, color=GREEN, edgecolor="white", linewidths=0.5, zorder=3)
-            ax.scatter(x + 0.22, hi_, s=18, marker="D", facecolor="white", edgecolor=PURPLE, linewidths=1.0, zorder=3)
+            ax.plot([x - 0.22, x + 0.22], [lo_, hi_], color=GREY, lw=1.0, zorder=2)
+            ax.scatter(x - 0.22, lo_, s=20, facecolor="white", edgecolor=DARK, linewidths=0.9, zorder=3)
+            ax.scatter(x + 0.22, hi_, s=18, marker="D", facecolor="white", edgecolor=DARK, linewidths=0.9, zorder=3)
             below = (letter, d["model"]) in LABEL_BELOW       # placed by hand where a neighbour sits to the upper right
             ax.annotate(f"+{hi - lo:,}", (x + 0.22, hi_), xytext=(4, -3 if below else 2), textcoords="offset points",
-                        ha="left", va="top" if below else "bottom", fontsize=6, color=PURPLE)
+                        ha="left", va="top" if below else "bottom", fontsize=6, color=DARK)
     ax.set_yscale("log"); ax.set_ylabel(ylabel, color=INK)
     ax.yaxis.set_major_locator(LogLocator(base=10)); ax.yaxis.set_minor_formatter(NullFormatter())
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}" if v >= 1 else ""))
@@ -63,9 +63,9 @@ for ax, (key, ylabel, letter) in zip(axs, panels):
 axs[0].set_xlabel(""); axs[1].set_xlabel("")
 if not LEGEND_BOTTOM:
     fig.text(0.5, 0.005, "models, by number of complexes", ha="center", va="bottom", color=INK)
-handles = [Line2D([], [], marker="o", ls="", color=INK, ms=3.5, label="decided: iterated = tangent"),
-           Line2D([], [], marker="o", ls="", color=GREEN, mec="white", ms=5.5, label="iterated route (proven)"),
-           Line2D([], [], marker="D", ls="", mfc="white", mec=PURPLE, ms=4, label="tangent route (local ACR); +n = undecided"),]
+handles = [Line2D([], [], marker="o", ls="", color=GREY, ms=3.5, label="decided: iterated = tangent"),
+           Line2D([], [], marker="o", ls="", mfc="white", mec=DARK, mew=0.9, ms=5, label="iterated route (proven)"),
+           Line2D([], [], marker="D", ls="", mfc="white", mec=DARK, mew=0.9, ms=4, label="tangent route (local ACR); +n = undecided"),]
 if LEGEND_BOTTOM:
     fig.legend(handles=handles, loc="lower center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.0))
     fig.tight_layout(rect=(0, 0.07, 1, 0.95))

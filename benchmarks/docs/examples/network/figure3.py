@@ -1,4 +1,4 @@
-"""Figure 3, panels A-D: a network whose answer is known, where the iterated and the tangent route disagree.
+"""Figure 3, panels A-E: a network whose answer is known, where the iterated and the tangent route disagree.
 
 A protein X is made, degraded and assembled into an inactive kinase (2X -> C); the active kinase P activates
 C cooperatively (C + 2P -> 3P), and C and P are degraded.
@@ -9,11 +9,15 @@ B: complex view, as Figure 1B. The iterated route's one kinetic module, {P, C+2P
 C: steady states at the rate constants of test_natural_candidates_for_the_completeness_figure. X has one
    (supply 2 = loss x + x^2 at x = 1); in the (C, P) plane at x = 1 the nullclines cross twice, at
    (1/10, 2/5) and (2/5, 1/10).
-D: ACR per metabolite, truth against the iterated route, the tangent route (local ACR) and the sign certificate.
-A and B are drawn in Figure 1's units (bold 14 pt nodes, 1.2 pt strokes, harpoons with the reverse direction
-in #bbb) and shrunk by S to sit side by side; every reaction is its own group, so the drawing can be
-rearranged in Illustrator. C and D are drawn at final size, 518.4 pt wide in all. Arial has no glyph for the
-empty set or for check marks, so those are paths.
+D: the two steady states on the network of A: exact flux r* on each arrow, shaft width 2·√r*, and the
+   concentrations. X and the fluxes through it are the same in both; C is routed mostly into C + 2P -> 3P
+   in one and mostly into decay in the other.
+E: ACR per metabolite, truth against the iterated route, the tangent route (local ACR) and the sign certificate.
+A and B follow Phil's layout of 2026-10-06 (figure3_phil_2026-10-06.svg) in Figure 1's units: bold 14 pt
+nodes, 8 pt labels, 1.2 pt strokes, Figure 1's heads, and harpoons with the reverse direction in #bbb whose
+heads sit half a stroke out, flush with the outer edge of the shaft. Every reaction is its own group, so the
+drawing can be rearranged in Illustrator. All panels are drawn at final size, 518.4 pt wide. Arial has no
+glyph for the empty set or for check marks, so those are paths.
 
     python figure3.py <out.svg>
 """
@@ -63,11 +67,49 @@ def cross(x, y):
     return (f'<path d="M{x - 2.6:.2f},{y - 2.6:.2f} L{x + 2.6:.2f},{y + 2.6:.2f} M{x + 2.6:.2f},{y - 2.6:.2f} L{x - 2.6:.2f},{y + 2.6:.2f}" '
             f'fill="none" stroke="{FALSE_LINE}" stroke-width="1.3" stroke-linecap="round"/>')
 
-# ---- A: complex network, pills as in Figure 1B ----
+# ---- shapes shared by A, B and D, in Figure 1's sizes ----
+FULL = {"A": (4.07, 2.35), "B": (4.63, 2.64)}           # full heads: length, half base (equilateral, side 4.7 / 5.29)
+HARP = {"A": (4.7, 3.3), "B": (5.29, 3.63)}             # harpoons: length along the shaft, barb
+def unit(p, q):
+    L = math.hypot(q[0] - p[0], q[1] - p[1]); return ((q[0] - p[0]) / L, (q[1] - p[1]) / L)
+def full_head(tip, v, size, col="#000"):
+    L, h = FULL[size]; b = (tip[0] - L * v[0], tip[1] - L * v[1]); n = (v[1], -v[0])
+    return poly([tip, (b[0] + h * n[0], b[1] + h * n[1]), (b[0] - h * n[0], b[1] - h * n[1])], col)
+def arrow(p, q, size, col="#000", w=1.2):
+    """straight arrow p -> q with its tip at q; the shaft runs 0.3 pt into the head"""
+    v = unit(p, q); L = FULL[size][0]
+    return [line(p[0], p[1], q[0] - (L - .3) * v[0], q[1] - (L - .3) * v[1], col, w), full_head(q, v, size, col)]
+def pair(p, q, size, w=(1.2, 1.2)):
+    """reversible p <-> q: forward harpoon black, reverse #bbb, each on the left of its travel with the barb
+    outward. Each shaft runs to its tip, and the head sits half a stroke out from the shaft's centre line,
+    so its flat edge closes out with the outer edge of the shaft."""
+    o = []
+    for a, b, col, wi in ((p, q, "#000", w[0]), (q, p, GRAY, w[1])):
+        v = unit(a, b); n = (v[1], -v[0]); c = .59 + wi / 2           # shaft centre: inner edges 1.18 pt apart
+        back, barb = HARP[size]
+        s0, s1 = (a[0] + c * n[0], a[1] + c * n[1]), (b[0] + c * n[0], b[1] + c * n[1])
+        tip = (s1[0] + wi / 2 * n[0], s1[1] + wi / 2 * n[1])
+        base = (tip[0] - back * v[0], tip[1] - back * v[1])
+        o += [line(s0[0], s0[1], s1[0], s1[1], col, wi), poly([tip, base, (base[0] + barb * n[0], base[1] + barb * n[1])], col)]
+    return o
+def turn(p, v0, tip, v1, size, col="#000", w=1.2):
+    """smooth quarter turn: leaves p along v0, arrives at a full head at tip along v1 (axis-parallel v0, v1)"""
+    L = FULL[size][0]; e = (tip[0] - (L - .3) * v1[0], tip[1] - (L - .3) * v1[1])
+    d0 = abs((e[0] - p[0]) * v0[0] + (e[1] - p[1]) * v0[1]); d1 = abs((e[0] - p[0]) * v1[0] + (e[1] - p[1]) * v1[1])
+    c0 = (p[0] + .552 * d0 * v0[0], p[1] + .552 * d0 * v0[1]); c1 = (e[0] - .552 * d1 * v1[0], e[1] - .552 * d1 * v1[1])
+    return [f'<path d="M{p[0]:.2f},{p[1]:.2f} C{c0[0]:.2f},{c0[1]:.2f} {c1[0]:.2f},{c1[1]:.2f} {e[0]:.2f},{e[1]:.2f}" '
+            f'fill="none" stroke="{col}" stroke-width="{w}"/>', full_head(tip, v1, size, col)]
+def group(name, items): return [f'<g id="{name}">', *items, '</g>']
+
+# ---- B: complex view, as Figure 1B, on Phil's layout of 2026-10-06 ----
 PH, PAD = 20.26, 5.8                                   # pill height and side padding of Figure 1B
 def pill_w(c): return max(22.46, width(c, 14, BLD) + 2 * PAD) if c != "0" else 22.46
-POS = {"0": (118, 118), "X": (38, 72), "2X": (112, 30), "C": (196, 30), "P": (196, 130),
-       "C+2P": (196, 182), "3P": (256, 182)}
+POS = {"2X": (184.1, 26.7), "C": (240.1, 26.7), "X": (199.5, 54.0), "0": (280.2, 54.0), "P": (199.5, 83.5),
+       "C+2P": (199.5, 108.3), "3P": (264.8, 108.3)}     # 3P 6 pt right of Phil's, room for R4
+L_ = lambda c, gap=3: POS[c][0] - pill_w(c) / 2 - gap  # just outside a pill's left, right, top and bottom
+R_ = lambda c, gap=3: POS[c][0] + pill_w(c) / 2 + gap
+T_ = lambda c, gap=2.5: POS[c][1] - PH / 2 - gap
+B__ = lambda c, gap=2.5: POS[c][1] + PH / 2 + gap
 
 def pill(c, fill="#fff"):
     x, y = POS[c]; w = pill_w(c)
@@ -79,108 +121,95 @@ def pill(c, fill="#fff"):
         o.append(t(x, y + 5.1, c, 14, "#000", bold=True, anchor="middle"))
     return o
 
-def rim(c, u, gap=2.5):
-    """point where the ray from the centre of pill c along unit vector u leaves the pill, plus a gap"""
-    x, y = POS[c]; hw, hh = pill_w(c) / 2, PH / 2
-    s = min(hw / abs(u[0]) if u[0] else math.inf, hh / abs(u[1]) if u[1] else math.inf)
-    return x + (s + gap) * u[0], y + (s + gap) * u[1]
-
-def arrow(src, dst, reversible):
-    """irreversible: one line and a full head; reversible: the forward harpoon in black on the left of
-    its travel direction and the reverse one in gray, as in Figure 1B"""
-    (x0, y0), (x1, y1) = POS[src], POS[dst]
-    L = math.hypot(x1 - x0, y1 - y0); u = ((x1 - x0) / L, (y1 - y0) / L)
-    o = []
-    for k, (a, b, col) in enumerate([(src, dst, "#000"), (dst, src, GRAY)][:1 + reversible]):
-        v = u if k == 0 else (-u[0], -u[1]); n = (v[1], -v[0])        # left of travel, in SVG coordinates
-        off = 1.19 if reversible else 0
-        p = rim(a, v); q = rim(b, (-v[0], -v[1]))
-        p = (p[0] + off * n[0], p[1] + off * n[1]); q = (q[0] + off * n[0], q[1] + off * n[1])
-        if reversible:
-            tip = (q[0] - .6 * n[0], q[1] - .6 * n[1]); base = (tip[0] - 5.29 * v[0], tip[1] - 5.29 * v[1])
-            head = [tip, base, (base[0] + 3.63 * n[0], base[1] + 3.63 * n[1])]
-        else:
-            tip = q; base = (q[0] - 4.63 * v[0], q[1] - 4.63 * v[1])
-            head = [tip, (base[0] + 2.64 * n[0], base[1] + 2.64 * n[1]), (base[0] - 2.64 * n[0], base[1] - 2.64 * n[1])]
-        end = (base[0] + .3 * v[0], base[1] + .3 * v[1])
-        o += [line(p[0], p[1], end[0], end[1], col), poly(head, col)]
-    return o
-
-S = 0.7                                             # A and B are drawn in Figure 1 units and shrunk by S
 A_ = []
-# the iterated route's kinetic module {P, C+2P}: psi_{C+2P} / psi_P = C·P is fixed, so C·P = k9 / k10
-mx0 = POS["C+2P"][0] - pill_w("C+2P") / 2 - 6; mx1 = POS["C+2P"][0] + pill_w("C+2P") / 2 + 6
-A_.append(rect(mx0, POS["P"][1] - PH / 2 - 6, mx1 - mx0, POS["C+2P"][1] - POS["P"][1] + PH + 12, KIN, rx=12,
-               stroke="#000", sw=1.5, dash="6 2"))
-for s_, p_, _ in RX:
-    if (p_, s_) in {(a, b) for a, b, _ in RX} and (p_, s_) < (s_, p_):
-        continue                                        # reverse of a pair: drawn with its forward reaction
-    rid = f"{s_}_to_{p_}".replace("+", "_").replace("0", "zero")
-    A_ += [f'<g id="B_{rid}">', *arrow(s_, p_, (p_, s_) in {(a, b) for a, b, _ in RX}), '</g>']
+# the iterated route's kinetic module {P, C+2P}: psi_{C+2P} / psi_P = C·P is fixed, so C·P = k_R4 / k_R6
+mx0, mx1 = POS["C+2P"][0] - pill_w("C+2P") / 2 - 6, POS["C+2P"][0] + pill_w("C+2P") / 2 + 6
+my0, my1 = POS["P"][1] - PH / 2 - 6, POS["C+2P"][1] + PH / 2 + 6
+A_.append(rect(mx0, my0, mx1 - mx0, my1 - my0, KIN, rx=12, stroke="#000", sw=1.5, dash="6 2"))
+yX, y0 = POS["X"][1], POS["0"][1]
+A_ += group("B_R1_R2_zero_X", pair((L_("0"), y0), (R_("X"), yX), "B")      # R1 0 -> X travels left: black below
+            + [t((R_("X") + L_("0")) / 2 - 2.3, yX - 7.6, "R1", 8, INK, anchor="end"), t((R_("X") + L_("0")) / 2 - 2.3, yX - 7.6, "/R2", 8, GRAY)])
+A_ += group("B_R3_2X_C", arrow((R_("2X", 3.5), POS["2X"][1]), (L_("C"), POS["C"][1]), "B")
+            + [t((R_("2X", 3.5) + L_("C")) / 2, POS["C"][1] - 4, "R3", 8, INK, anchor="middle")])
+A_ += group("B_R5_C_zero", turn((R_("C"), POS["C"][1]), (1, 0), (POS["0"][0], T_("0")), (0, 1), "B")
+            + [t(R_("C") + 13, POS["C"][1] - 4, "R5", 8, INK, anchor="middle")])
+A_ += group("B_R6_P_zero", turn((R_("P"), POS["P"][1]), (1, 0), (POS["0"][0], B__("0")), (0, -1), "B")
+            + [t(250, POS["P"][1] - 4, "R6", 8, INK, anchor="middle")])
+A_ += group("B_R4_C2P_3P", arrow((R_("C+2P"), POS["C+2P"][1]), (L_("3P"), POS["3P"][1]), "B")
+            + [t((mx1 + .75 + L_("3P")) / 2, POS["3P"][1] - 4, "R4", 8, INK, anchor="middle")])
 for c in POS:
-    A_ += pill(c)
-A_ += [rect(12, 213, 10.5, 8.6, KIN, rx=4.2, stroke="#000", sw=1.5, dash="6 2"),
-       t(28, 221, "kinetic module (iterated route)", 10.5)]
+    A_ += group(f"B_complex_{c.replace('+', '_').replace('0', 'zero')}", pill(c))
+A_ += [rect(mx0 + 4.5, 136.2, 7.85, 6.43, KIN, rx=3.17, stroke="#000", sw=1.5, dash="6 2"),
+       t(mx0 + 18.4, 141.5, "kinetic module (iterated route)", 8)]
 
-# ---- metabolite view, as Figure 1A: species with halos, reactions as arrows between them ----
-SP = {"X": (62, 112), "C": (150, 50), "P": (150, 172)}
-NODE_R = 12                                            # halo radius 9.5 plus a gap, Figure 1 units
-def zero(x, y, r=4.2):
-    """where an exchange reaction meets the environment: nothing is drawn. The zero complex belongs to
-    the complex view; in the metabolite view uptakes and exports simply start and end in open space."""
-    return []
-def head(tip, v, col="#000", harpoon_side=None):
-    """full arrowhead at tip pointing along unit v, or a harpoon on side n (Figure 1 sizes)"""
-    n = (v[1], -v[0])
-    if harpoon_side is not None:
-        base = (tip[0] - 5.29 * v[0], tip[1] - 5.29 * v[1])
-        return poly([tip, base, (base[0] + 3.63 * n[0], base[1] + 3.63 * n[1])], col)
-    base = (tip[0] - 4.63 * v[0], tip[1] - 4.63 * v[1])
-    return poly([tip, (base[0] + 2.64 * n[0], base[1] + 2.64 * n[1]), (base[0] - 2.64 * n[0], base[1] - 2.64 * n[1])], col)
-def unit(p, q):
-    L = math.hypot(q[0] - p[0], q[1] - p[1]); return ((q[0] - p[0]) / L, (q[1] - p[1]) / L)
-def shrink(p, q, rp, rq):
-    """segment p->q cut back by rp at p and rq at q"""
-    u = unit(p, q); return (p[0] + rp * u[0], p[1] + rp * u[1]), (q[0] - rq * u[0], q[1] - rq * u[1]), u
-def pair(p, q, rp, rq):
-    """reversible pair p <-> q: black forward harpoon, gray reverse harpoon, offset as in Figure 1"""
-    o = []
-    for k, (a, b, ra, rb, col) in enumerate([(p, q, rp, rq, "#000"), (q, p, rq, rp, GRAY)]):
-        s0, s1, v = shrink(a, b, ra, rb); n = (v[1], -v[0])
-        s0 = (s0[0] + 1.19 * n[0], s0[1] + 1.19 * n[1]); s1 = (s1[0] + 1.19 * n[0], s1[1] + 1.19 * n[1])
-        tip = (s1[0] - .6 * n[0], s1[1] - .6 * n[1])
-        o += [line(s0[0], s0[1], tip[0] - 5 * v[0], tip[1] - 5 * v[1], col), head(tip, v, col, harpoon_side=1)]
-    return o
-def single(p, q, rp, rq, col="#000"):
-    s0, s1, v = shrink(p, q, rp, rq)
-    return [line(s0[0], s0[1], s1[0] - 4.3 * v[0], s1[1] - 4.3 * v[1], col), head(s1, v, col)]
-def bez(p, c, q, col="#000", arrow=True):
-    """quadratic curve p -> q with control c; arrowhead at q along the end tangent"""
-    o = [f'<path d="M{p[0]:.2f},{p[1]:.2f} Q{c[0]:.2f},{c[1]:.2f} {q[0]:.2f},{q[1]:.2f}" fill="none" stroke="{col}" stroke-width="1.2"/>']
-    if arrow: o.append(head(q, unit(c, q), col))
-    return o
-def on_circle(centre, towards, r):
-    u = unit(centre, towards); return (centre[0] + r * u[0], centre[1] + r * u[1])
+# ---- A: metabolite view, as Figure 1A, on Phil's layout; also the two copies of D ----
+NODE = {"X": (51.455, 34.2), "C": (100.685, 34.2), "P": (100.685, 95.27)}
+HALF = {"X": (9.5, 9.5), "C": (5.05, 5.0), "P": (4.67, 5.0)}       # halo radius for X; half glyph for C and P
+TRUE_ACR = {"X"}                                       # halo: the true answer, as Figure 1A marks ACR
+# Phil's numbering: R1 0 -> X, R2 X -> 0, R3 2X -> C, R4 C + 2P -> 3P, R5 C -> 0, R6 P -> 0
+RID = {"R1": 0, "R2": 1, "R3": 2, "R4": 4, "R5": 3, "R6": 5}
+def rate(i, v):
+    """mass-action rate of RX[i] at concentrations v, exact"""
+    s, _, k = RX[i]; r = F(k)
+    for term in s.split("+"):
+        if term != "0":
+            n, m = (int(term[:-1]), term[-1]) if term[0].isdigit() else (1, term)
+            r *= v[m] ** n
+    return r
+FLUX = [{r: rate(i, v) for r, i in RID.items()} for v in SS]
+assert [FLUX[0][r] for r in RID] == [2, 1, F(1, 2), F(2, 5), F(1, 10), F(2, 5)]
+assert [FLUX[1][r] for r in RID] == [2, 1, F(1, 2), F(1, 10), F(2, 5), F(1, 10)]
 
-M_ = []
-TRUE_ACR = {"X"}                                       # halos: the true answer, as Figure 1A marks ACR
-g = lambda name, items: [f'<g id="A_{name}">', *items, '</g>']
-# supply and decay of X: a reversible pair with the environment (open space, no zero complex here)
-M_ += g("X_supply_decay", pair((12, 112), SP["X"], 0, NODE_R))
-# 2X -> C, labelled with the two molecules it consumes
-M_ += g("2X_to_C", single(SP["X"], SP["C"], NODE_R, NODE_R) + [t(88, 76, "2", 10.5)])
-M_ += g("C_decay", single(SP["C"], (150, 6), NODE_R, 0))
-M_ += g("P_decay", single(SP["P"], (150, 218), NODE_R, 0))
-# C + 2P -> 3P: C and P merge into the reaction, which returns to P; numbers give consumed and produced
-J2 = (212, 112)
-c_ = on_circle(SP["C"], J2, NODE_R); p_out = on_circle(SP["P"], (180, 140), NODE_R); p_in = on_circle(SP["P"], (190, 184), NODE_R)
-M_ += g("C_2P_to_3P", bez(c_, (210, 62), J2, arrow=False) + bez(p_out, (196, 140), J2, arrow=False)
-        + bez(J2, (240, 182), p_in) + [t(170, 140, "2", 10.5), t(214, 186, "3", 10.5)])
-for m, (x, y) in SP.items():
-    M_ += g(f"species_{m}", [f'<circle cx="{x}" cy="{y}" r="9.5" fill="{ACR_FILL if m in TRUE_ACR else "#fff"}"'
-                             f'{"" if m in TRUE_ACR else " stroke=\"#c9ced4\" stroke-width=\"1\""}/>',
-                             t(x, y + 5.1, m, 14, "#000", bold=True, anchor="middle")])
-M_ += [f'<circle cx="18" cy="225" r="5.2" fill="{ACR_FILL}"/>', t(28, 229, "ACR (true)", 10.5)]
+def metabolite_view(flux=None, conc=None, fs=8, pre="A"):
+    """the network of A. With flux (one steady state), shafts are 2·√r* wide and carry r* instead of the
+    reaction names, and conc labels the species; the stoichiometric numbers are left out."""
+    (xX, yR), (xC, _), (_, yP) = NODE["X"], NODE["C"], NODE["P"]
+    W = lambda r: 1.2 if flux is None else 2 * math.sqrt(flux[r])
+    name = lambda r: r if flux is None else str(flux[r])
+    o = [f'<circle cx="{xX}" cy="{yR}" r="9.5" fill="{ACR_FILL}"/>']
+    # R1/R2: uptake and decay of X, a reversible pair from open space (there is no zero complex here)
+    o += group(f"{pre}_R1_R2", pair((13.0, yR), (xX - 9.5 - 2, yR), "A", (W("R1"), W("R2"))) + (
+        [t(15.2, 47.0, "R1", fs, INK), t(15.2 + width("R1", fs), 47.0, "/R2", fs, GRAY)] if flux is None else
+        [t(26.5, 27.6, name("R1"), fs, INK, anchor="middle"), t(26.5, 47.0, name("R2"), fs, GRAY, anchor="middle")]))
+    x0, x1 = xX + 9.5 + 2.5, xC - HALF["C"][0] - 2.5
+    o += group(f"{pre}_R3", arrow((x0, yR), (x1, yR), "A", w=W("R3")) + [t((x0 + x1) / 2, 47.0, name("R3"), fs, INK, anchor="middle")]
+               + ([t(x0 + 1.5, 29.6, "2", fs, INK), t(x1 - 6.5, 29.6, "1", fs, INK)] if flux is None else []))
+    xo0, xo1 = xC + HALF["C"][0] + 3, 137.2
+    o += group(f"{pre}_R5", arrow((xo0, yR), (xo1, yR), "A", w=W("R5"))
+               + [t((xo0 + xo1) / 2, 29.6 if flux is None else 47.0, name("R5"), fs, INK, anchor="middle")])
+    o += group(f"{pre}_R6", arrow((xo0, yP), (xo1, yP), "A", w=W("R6")) + [t((xo0 + xo1) / 2, 90.7, name("R6"), fs, INK, anchor="middle")])
+    # R4, C + 2P -> 3P: C comes down the vertical; the loop takes 2P from P's left into the junction J, and
+    # 3P arrive at P. Two cubics with a common vertical tangent at the loop's far side.
+    J, xl, ye = (xC, 67.03), 71.49, (xC - HALF["P"][0] - 3.3, yP)
+    loop = (f"M{J[0]},{J[1]} C{J[0]},{J[1] - 17.7} {xl},{J[1] - 17.7} {xl},{J[1]} "
+            f"C{xl},{J[1] + .552 * (yP - J[1]):.2f} {ye[0] - .552 * (ye[0] - xl):.2f},{yP} {ye[0]:.2f},{yP}")
+    o += group(f"{pre}_R4", arrow((xC, yR + HALF["C"][1] + 3), (xC, yP - HALF["P"][1] - 3), "A", w=W("R4"))
+               + [f'<path d="{loop}" fill="none" stroke="#000" stroke-width="{W("R4"):.2f}"/>',
+                  t(66.5, 70.0, name("R4"), fs, INK, anchor="end")]
+               + ([t(104.4, 52.5, "1", fs, INK), t(104.4, 82.5, "3", fs, INK), t(85.5, 90.0, "2", fs, INK)] if flux is None else []))
+    for m, (x, y) in NODE.items():
+        o.append(t(x, y + 5.0, m, 14, "#000", bold=True, anchor="middle"))
+    if conc is not None:
+        o += [t(xX, 20.8, f"x = {conc['X']}", fs, INK, anchor="middle"), t(xC, 23.6, f"c = {conc['C']}", fs, INK, anchor="middle"),
+              t(xC, 108.6, f"p = {conc['P']}", fs, INK, anchor="middle")]
+    return o
+
+M_ = metabolite_view() + [f'<circle cx="19.0" cy="88.5" r="4.5" fill="{ACR_FILL}"/>', t(26.5, 91.4, "ACR (true)", 8)]
+
+# ---- D: the two steady states on the network of A ----
+DS, DY = 0.8, 140.8                                    # copies of A at 80 %; 10 pt labels print at 8 pt
+D_ = [letter(4.302, 166, "D")]
+for k, ox in enumerate((18, 150)):
+    D_ += [f'<g id="D_steady_state_{k + 1}" transform="translate({ox} {DY}) scale({DS})">',
+           *metabolite_view(FLUX[k], SS[k], fs=10, pre=f"D{k + 1}"), t(4, 99.5, f"steady state {k + 1}", 10, INK, bold=True), '</g>']
+# key: numbers on arrows are the steady-state flux r*, exact; shaft width grows with its square root
+KX, KY = 285, 166
+D_ += [t(KX, KY, "on arrows: flux r*", 8), t(KX, KY + 11, "width ∝ √r*", 8, MUTE)]
+for j, r in enumerate((F(2), F(1, 2), F(1, 10))):
+    yy = KY + 23 + j * 9
+    D_ += [line(KX, yy, KX + 20, yy, "#000", DS * 2 * math.sqrt(r)), t(KX + 25, yy + 2.6, str(r), 8)]
+D_ += [t(KX, KY + 59, "x, c, p: concentrations", 8, MUTE)]
+
 
 # ---- C: nullclines, stacked in the right column ----
 def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title, yticks=None):
@@ -218,9 +247,9 @@ B_ += plot(NX, 184, NW, NH, .6, .6, [0, .2, .4],
 # the orange curve is where the iterated route's kinetic module holds: C·P = 1/25 at every steady state
 B_.append(t(NX + .3 / .6 * NW, 184 - .31 / .6 * NH, "C·P = 1/25", 7.5, ORANGE))
 
-# ---- D: ACR per metabolite ----
-Y0 = 226
-C_ = [letter(4.302, Y0 - 5, "D"), t(24, Y0 - 7, "ACR, per metabolite")]
+# ---- E: ACR per metabolite ----
+Y0 = 255
+C_ = [letter(4.302, Y0 - 5, "E"), t(24, Y0 - 7, "ACR, per metabolite")]
 COLS = [("steady state 1", 84), ("steady state 2", 140), ("truth", 196), ("iterated", 250), ("tangent", 304),
         ("certificate", 358)]
 for name, x in COLS:
@@ -271,8 +300,8 @@ H = Y0 + 92 - RH
 svg = ['<?xml version="1.0" encoding="UTF-8"?>',
        f'<svg id="Figure3" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 518.4 {H}" width="518.4pt" height="{H}pt">',
        '<rect x="0" y="0" width="518.4" height="%d" fill="#fff"/>' % H,
-       letter(4.302, 16.991, "A"), letter(184, 16.991, "B"), letter(374, 16.991, "C"),
-       f'<g id="A_metabolite_view" transform="translate(4 14) scale({S})">', *M_, '</g>',
-       f'<g id="B_complex_view" transform="translate(186 14) scale({S})">', *A_, '</g>',
-       '<g id="C_nullclines">', *B_, '</g>', '<g id="D_acr_table">', *C_, '</g>', '</svg>']
+       letter(4.302, 16.991, "A"), letter(151.109, 16.991, "B"), letter(374, 16.991, "C"),
+       '<g id="A_metabolite_view">', *M_, '</g>', '<g id="B_complex_view">', *A_, '</g>',
+       '<g id="C_nullclines">', *B_, '</g>', '<g id="D_steady_states">', *D_, '</g>',
+       '<g id="E_acr_table">', *C_, '</g>', '</svg>']
 open(sys.argv[1], "w").write("\n".join(svg) + "\n")

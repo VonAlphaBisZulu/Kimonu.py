@@ -1,13 +1,13 @@
 """Figure 3: kinetic modules and ACR, bounded from both sides.
 
-A-D   the toy network where local and global differ: metabolite view, complex view, nullclines, ACR per
-      metabolite (figure3.py, which draws its own letters A-D)
-E, F  the 33 benchmark models: iterated route (proven) against tangent route (local ACR), make_hierarchy.py
-G, H  the tangent route at scale: symbolic local-ACR criterion against one exact nullspace, and float64
-      against exact arithmetic (make_tangent_benchmark.py)
+A-E   the toy network where local and global differ: metabolite view, complex view, nullclines, the two
+      steady states on the network, ACR per metabolite (figure3.py, which draws its own letters A-E)
+F, G  the 33 benchmark models: iterated route (proven) against tangent route (local ACR), make_hierarchy.py
+H, I  the tangent route at scale: symbolic local-ACR criterion against one exact nullspace, and how many of
+      the exact ACR/ACRR relations float64 still finds (make_tangent_benchmark.py)
 
 The three parts are drawn by their own scripts at the size they get here (text kept as text) and nested
-into one SVG with transforms; letters E-H are added here, in Figure 1's style.
+into one SVG with transforms; letters F-I are added here, in Figure 1's style.
 
     python figures/make_figure3.py      # from benchmarks/
 """
@@ -32,20 +32,20 @@ def part(path):
     return w, h, s[root.end():s.rindex("</svg>")]
 
 rows, y, letters = [], 0.0, []
-# A-D: toy network, drawn at final width with its own letters
+# A-E: toy network, drawn at final width with its own letters
 w, h, body = part(f"{tmp}/toy.svg")
 body = re.sub(r'<rect x="0" y="0" width="518.4" height="\d+" fill="#fff"/>', "", body)
-rows.append(f'<g id="AD_toy" transform="translate(0 {y:.2f})">{body}</g>')
+rows.append(f'<g id="AE_toy" transform="translate(0 {y:.2f})">{body}</g>')
 y += h + GAP
-# E, F: hierarchy
+# F, G: hierarchy
 w, h, body = part(f"{tmp}/hierarchy.svg"); s = W / w
-rows.append(f'<g id="EF_hierarchy" transform="translate(0 {y:.2f}) scale({s:.4f})">{body}</g>')
-letters += [LETTER.format(x=2, y=y + 16, L="E"), LETTER.format(x=W / 2 - 12, y=y + 16, L="F")]
+rows.append(f'<g id="FG_hierarchy" transform="translate(0 {y:.2f}) scale({s:.4f})">{body}</g>')
+letters += [LETTER.format(x=2, y=y + 16, L="F"), LETTER.format(x=W / 2 - 12, y=y + 16, L="G")]
 y += h * s + GAP
-# G, H: tangent-route benchmark
+# H, I: tangent-route benchmark
 w, h, body = part(f"{tmp}/tangent.svg"); s = W / w
-rows.append(f'<g id="GH_tangent" transform="translate(0 {y:.2f}) scale({s:.4f})">{body}</g>')
-letters += [LETTER.format(x=2, y=y + 14, L="G"), LETTER.format(x=0.51 * W, y=y + 14, L="H")]
+rows.append(f'<g id="HI_tangent" transform="translate(0 {y:.2f}) scale({s:.4f})">{body}</g>')
+letters += [LETTER.format(x=2, y=y + 14, L="H"), LETTER.format(x=0.51 * W, y=y + 14, L="I")]
 y += h * s
 
 H = round(y + 2, 1)

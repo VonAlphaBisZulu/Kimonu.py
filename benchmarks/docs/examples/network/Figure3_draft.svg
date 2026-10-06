@@ -1,93 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Figure3" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 518.4 305" width="518.4pt" height="305pt">
-<rect x="0" y="0" width="518.4" height="305" fill="#fff"/>
+<svg id="Figure3" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 518.4 334" width="518.4pt" height="334pt">
+<rect x="0" y="0" width="518.4" height="334" fill="#fff"/>
 <text transform="translate(4.302 16.991)" fill="#1b2430" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">A</tspan></text>
-<text transform="translate(184 16.991)" fill="#1b2430" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">B</tspan></text>
+<text transform="translate(151.109 16.991)" fill="#1b2430" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">B</tspan></text>
 <text transform="translate(374 16.991)" fill="#1b2430" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">C</tspan></text>
-<g id="A_metabolite_view" transform="translate(4 14) scale(0.7)">
-<g id="A_X_supply_decay">
-<line x1="12.00" y1="110.81" x2="45.00" y2="111.41" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="50.00 111.41 44.71 111.41 44.71 107.78" fill="#000"/>
-<line x1="50.00" y1="113.19" x2="17.00" y2="112.59" fill="none" stroke="#bbb" stroke-width="1.2"/>
-<polygon points="12.00 112.59 17.29 112.59 17.29 116.22" fill="#bbb"/>
+<g id="A_metabolite_view">
+<circle cx="51.455" cy="34.2" r="9.5" fill="#f2c14e"/>
+<g id="A_R1_R2">
+<line x1="13.00" y1="33.01" x2="39.95" y2="33.01" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="39.95 32.41 35.25 32.41 35.25 29.11" fill="#000"/>
+<line x1="39.95" y1="35.39" x2="13.00" y2="35.39" fill="none" stroke="#bbb" stroke-width="1.2"/>
+<polygon points="13.00 35.99 17.70 35.99 17.70 39.29" fill="#bbb"/>
+<text transform="translate(15.20 47.00)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R1</tspan></text>
+<text transform="translate(25.42 47.00)" font-family="ArialMT, Arial" font-size="8" fill="#bbb"><tspan x="0" y="0">/R2</tspan></text>
 </g>
-<g id="A_2X_to_C">
-<line x1="71.81" y1="105.09" x2="136.68" y2="59.39" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="140.19 56.91 134.88 57.42 137.93 61.74" fill="#000"/>
-<text transform="translate(88.00 76.00)" font-family="ArialMT, Arial" font-size="10.5" fill="#1b2430"><tspan x="0" y="0">2</tspan></text>
+<g id="A_R3">
+<line x1="63.45" y1="34.20" x2="89.37" y2="34.20" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="93.14 34.20 89.06 31.85 89.06 36.55" fill="#000"/>
+<text transform="translate(73.18 47.00)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R3</tspan></text>
+<text transform="translate(64.95 29.60)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">2</tspan></text>
+<text transform="translate(86.64 29.60)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">1</tspan></text>
 </g>
-<g id="A_C_decay">
-<line x1="150.00" y1="38.00" x2="150.00" y2="10.30" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="150.00 6.00 147.36 10.63 152.64 10.63" fill="#000"/>
+<g id="A_R5">
+<line x1="108.73" y1="34.20" x2="133.43" y2="34.20" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="137.20 34.20 133.13 31.85 133.13 36.55" fill="#000"/>
+<text transform="translate(117.86 29.60)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R5</tspan></text>
 </g>
-<g id="A_P_decay">
-<line x1="150.00" y1="184.00" x2="150.00" y2="213.70" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="150.00 218.00 152.64 213.37 147.36 213.37" fill="#000"/>
+<g id="A_R6">
+<line x1="108.73" y1="95.27" x2="133.43" y2="95.27" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="137.20 95.27 133.13 92.92 133.13 97.62" fill="#000"/>
+<text transform="translate(117.86 90.70)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R6</tspan></text>
 </g>
-<g id="A_C_2P_to_3P">
-<path d="M158.49,58.49 Q210.00,62.00 212.00,112.00" fill="none" stroke="#000" stroke-width="1.2"/>
-<path d="M158.21,163.25 Q196.00,140.00 212.00,112.00" fill="none" stroke="#000" stroke-width="1.2"/>
-<path d="M212.00,112.00 Q240.00,182.00 161.49,175.45" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="161.49 175.45 165.89 178.46 166.33 173.20" fill="#000"/>
-<text transform="translate(170.00 140.00)" font-family="ArialMT, Arial" font-size="10.5" fill="#1b2430"><tspan x="0" y="0">2</tspan></text>
-<text transform="translate(214.00 186.00)" font-family="ArialMT, Arial" font-size="10.5" fill="#1b2430"><tspan x="0" y="0">3</tspan></text>
+<g id="A_R4">
+<line x1="100.69" y1="42.20" x2="100.69" y2="83.50" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="100.69 87.27 103.03 83.20 98.34 83.20" fill="#000"/>
+<path d="M100.685,67.03 C100.685,49.33 71.49,49.33 71.49,67.03 C71.49,82.62 81.00,95.27 92.72,95.27" fill="none" stroke="#000" stroke-width="1.20"/>
+<text transform="translate(56.28 70.00)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R4</tspan></text>
+<text transform="translate(104.40 52.50)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">1</tspan></text>
+<text transform="translate(104.40 82.50)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">3</tspan></text>
+<text transform="translate(85.50 90.00)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">2</tspan></text>
 </g>
-<g id="A_species_X">
-<circle cx="62" cy="112" r="9.5" fill="#f2c14e"/>
-<text transform="translate(57.33 117.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">X</tspan></text>
+<text transform="translate(46.79 39.20)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">X</tspan></text>
+<text transform="translate(95.63 39.20)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">C</tspan></text>
+<text transform="translate(96.02 100.27)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">P</tspan></text>
+<circle cx="19.0" cy="88.5" r="4.5" fill="#f2c14e"/>
+<text transform="translate(26.50 91.40)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">ACR (true)</tspan></text>
 </g>
-<g id="A_species_C">
-<circle cx="150" cy="50" r="9.5" fill="#fff" stroke="#c9ced4" stroke-width="1"/>
-<text transform="translate(144.95 55.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">C</tspan></text>
+<g id="B_complex_view">
+<rect x="170.00" y="67.37" width="59.01" height="57.06" rx="12" ry="12" fill="#c9ecf4" stroke="#000" stroke-width="1.5" stroke-dasharray="6 2"/>
+<g id="B_R1_R2_zero_X">
+<line x1="265.97" y1="55.19" x2="213.73" y2="55.19" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="213.73 55.79 219.02 55.79 219.02 59.42" fill="#000"/>
+<line x1="213.73" y1="52.81" x2="265.97" y2="52.81" fill="none" stroke="#bbb" stroke-width="1.2"/>
+<polygon points="265.97 52.21 260.68 52.21 260.68 48.58" fill="#bbb"/>
+<text transform="translate(227.33 46.40)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R1</tspan></text>
+<text transform="translate(237.55 46.40)" font-family="ArialMT, Arial" font-size="8" fill="#bbb"><tspan x="0" y="0">/R2</tspan></text>
 </g>
-<g id="A_species_P">
-<circle cx="150" cy="172" r="9.5" fill="#fff" stroke="#c9ced4" stroke-width="1"/>
-<text transform="translate(145.33 177.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">P</tspan></text>
+<g id="B_R3_2X_C">
+<line x1="201.96" y1="26.70" x2="221.54" y2="26.70" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="225.87 26.70 221.24 24.06 221.24 29.34" fill="#000"/>
+<text transform="translate(208.80 22.70)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R3</tspan></text>
 </g>
-<circle cx="18" cy="225" r="5.2" fill="#f2c14e"/>
-<text transform="translate(28.00 229.00)" font-family="ArialMT, Arial" font-size="10.5" fill="#1b2430"><tspan x="0" y="0">ACR (true)</tspan></text>
+<g id="B_R5_C_zero">
+<path d="M254.33,26.70 C268.61,26.70 280.20,31.33 280.20,37.04" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="280.20 41.37 282.84 36.74 277.56 36.74" fill="#000"/>
+<text transform="translate(262.22 22.70)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R5</tspan></text>
 </g>
-<g id="B_complex_view" transform="translate(186 14) scale(0.7)">
-<rect x="166.50" y="113.87" width="59.01" height="84.26" rx="12" ry="12" fill="#c9ecf4" stroke="#000" stroke-width="1.5" stroke-dasharray="6 2"/>
-<g id="B_zero_to_X">
-<line x1="104.01" y1="111.33" x2="55.43" y2="82.70" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="51.10 80.21 55.69 82.85 53.88 86.00" fill="#000"/>
-<line x1="51.99" y1="78.67" x2="100.57" y2="107.30" fill="none" stroke="#bbb" stroke-width="1.2"/>
-<polygon points="104.90 109.79 100.31 107.15 102.12 104.00" fill="#bbb"/>
+<g id="B_R6_P_zero">
+<path d="M213.73,83.50 C250.42,83.50 280.20,77.88 280.20,70.96" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="280.20 66.63 277.56 71.26 282.84 71.26" fill="#000"/>
+<text transform="translate(244.89 79.50)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R6</tspan></text>
 </g>
-<g id="B_2X_to_C">
-<line x1="128.86" y1="30.00" x2="177.94" y2="30.00" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="182.27 30.00 177.64 27.36 177.64 32.64" fill="#000"/>
+<g id="B_R4_C2P_3P">
+<line x1="226.00" y1="108.30" x2="243.11" y2="108.30" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="247.44 108.30 242.81 105.66 242.81 110.94" fill="#000"/>
+<text transform="translate(233.48 104.30)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">R4</tspan></text>
 </g>
-<g id="B_C_to_zero">
-<line x1="185.36" y1="42.00" x2="131.51" y2="102.76" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="128.64 106.00 133.68 104.29 129.73 100.78" fill="#000"/>
+<g id="B_complex_2X">
+<rect x="169.74" y="16.57" width="28.72" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
+<text transform="translate(175.54 31.80)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">2X</tspan></text>
 </g>
-<g id="B_C_2P_to_3P">
-<line x1="222.00" y1="182.00" x2="234.81" y2="182.00" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="239.14 182.00 234.51 179.36 234.51 184.64" fill="#000"/>
+<g id="B_complex_C">
+<rect x="228.87" y="16.57" width="22.46" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
+<text transform="translate(235.05 31.80)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">C</tspan></text>
 </g>
-<g id="B_P_to_zero">
-<line x1="182.30" y1="127.89" x2="135.98" y2="120.77" fill="none" stroke="#000" stroke-width="1.2"/>
-<polygon points="131.70 120.11 135.88 123.42 136.68 118.20" fill="#000"/>
+<g id="B_complex_X">
+<rect x="188.27" y="43.87" width="22.46" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
+<text transform="translate(194.83 59.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">X</tspan></text>
 </g>
-<rect x="106.77" y="107.87" width="22.46" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
-<circle cx="118.00" cy="118.00" r="4.6" fill="none" stroke="#000" stroke-width="1.5"/>
-<line x1="113.40" y1="124.20" x2="122.60" y2="111.80" fill="none" stroke="#000" stroke-width="1.5"/>
-<rect x="26.77" y="61.87" width="22.46" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
-<text transform="translate(33.33 77.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">X</tspan></text>
-<rect x="97.64" y="19.87" width="28.72" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
-<text transform="translate(103.44 35.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">2X</tspan></text>
-<rect x="184.77" y="19.87" width="22.46" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
-<text transform="translate(190.95 35.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">C</tspan></text>
-<rect x="184.77" y="119.87" width="22.46" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
-<text transform="translate(191.33 135.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">P</tspan></text>
-<rect x="172.50" y="171.87" width="47.01" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
-<text transform="translate(178.30 187.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">C+2P</tspan></text>
-<rect x="241.64" y="171.87" width="28.72" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
-<text transform="translate(247.44 187.10)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">3P</tspan></text>
-<rect x="12.00" y="213.00" width="10.50" height="8.60" rx="4.2" ry="4.2" fill="#c9ecf4" stroke="#000" stroke-width="1.5" stroke-dasharray="6 2"/>
-<text transform="translate(28.00 221.00)" font-family="ArialMT, Arial" font-size="10.5" fill="#1b2430"><tspan x="0" y="0">kinetic module (iterated route)</tspan></text>
+<g id="B_complex_zero">
+<rect x="268.97" y="43.87" width="22.46" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
+<circle cx="280.20" cy="54.00" r="4.6" fill="none" stroke="#000" stroke-width="1.5"/>
+<line x1="275.60" y1="60.20" x2="284.80" y2="47.80" fill="none" stroke="#000" stroke-width="1.5"/>
+</g>
+<g id="B_complex_P">
+<rect x="188.27" y="73.37" width="22.46" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
+<text transform="translate(194.83 88.60)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">P</tspan></text>
+</g>
+<g id="B_complex_C_2P">
+<rect x="176.00" y="98.17" width="47.01" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
+<text transform="translate(181.80 113.40)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">C+2P</tspan></text>
+</g>
+<g id="B_complex_3P">
+<rect x="250.44" y="98.17" width="28.72" height="20.26" rx="9.98" ry="9.98" fill="#fff" stroke="#000" stroke-width="1"/>
+<text transform="translate(256.24 113.40)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">3P</tspan></text>
+</g>
+<rect x="174.50" y="136.20" width="7.85" height="6.43" rx="3.17" ry="3.17" fill="#c9ecf4" stroke="#000" stroke-width="1.5" stroke-dasharray="6 2"/>
+<text transform="translate(188.40 141.50)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">kinetic module (iterated route)</tspan></text>
 </g>
 <g id="C_nullclines">
 <text transform="translate(419.76 22.00)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">X: one steady state</tspan></text>
@@ -138,61 +157,151 @@
 <text transform="translate(468.72 170.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">2</tspan></text>
 <text transform="translate(454.00 156.10)" font-family="ArialMT, Arial" font-size="7.5" fill="#e6862b"><tspan x="0" y="0">C·P = 1/25</tspan></text>
 </g>
-<g id="D_acr_table">
-<text transform="translate(4.302 221)" fill="#1b2430" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">D</tspan></text>
-<text transform="translate(24.00 219.00)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">ACR, per metabolite</tspan></text>
-<text transform="translate(62.21 232.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">steady state 1</tspan></text>
-<text transform="translate(118.21 232.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">steady state 2</tspan></text>
-<text transform="translate(189.00 232.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">truth</tspan></text>
-<text transform="translate(238.33 232.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">iterated</tspan></text>
-<text transform="translate(292.32 232.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">tangent</tspan></text>
-<text transform="translate(343.02 232.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">certificate</tspan></text>
-<text transform="translate(289.55 224.00)" font-family="ArialMT, Arial" font-size="6.5" fill="#9aa3ad"><tspan x="0" y="0">local ACR</tspan></text>
-<text transform="translate(240.06 224.00)" font-family="ArialMT, Arial" font-size="6.5" fill="#9aa3ad"><tspan x="0" y="0">proven</tspan></text>
-<text transform="translate(37.33 246.00)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="8" fill="#1b2430"><tspan x="0" y="0">X</tspan></text>
-<text transform="translate(81.92 246.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">1</tspan></text>
-<text transform="translate(137.91 246.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">1</tspan></text>
-<rect x="184.50" y="238.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f2c14e"/>
-<text transform="translate(188.61 246.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
-<rect x="238.50" y="238.70" width="23.00" height="9.60" rx="2" ry="2" fill="none" stroke="#c9a227" stroke-width="0.8" stroke-dasharray="2 1.2"/>
-<text transform="translate(248.05 246.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
-<rect x="292.50" y="238.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f2c14e"/>
-<text transform="translate(296.61 246.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
-<rect x="346.50" y="238.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f2c14e"/>
-<text transform="translate(350.61 246.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
-<text transform="translate(37.11 259.00)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="8" fill="#1b2430"><tspan x="0" y="0">C</tspan></text>
-<text transform="translate(76.70 259.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">1/10</tspan></text>
-<text transform="translate(134.79 259.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">2/5</tspan></text>
-<text transform="translate(194.05 259.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
-<text transform="translate(248.05 259.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
-<rect x="292.50" y="251.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f6c9c2" stroke="#c8453b" stroke-width="0.8"/>
-<text transform="translate(296.61 259.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
-<text transform="translate(356.05 259.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
-<text transform="translate(37.33 272.00)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="8" fill="#1b2430"><tspan x="0" y="0">P</tspan></text>
-<text transform="translate(78.79 272.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">2/5</tspan></text>
-<text transform="translate(132.70 272.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">1/10</tspan></text>
-<text transform="translate(194.05 272.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
-<text transform="translate(248.05 272.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
-<rect x="292.50" y="264.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f6c9c2" stroke="#c8453b" stroke-width="0.8"/>
-<text transform="translate(296.61 272.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
-<text transform="translate(356.05 272.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
-<line x1="30.00" y1="279.50" x2="374.00" y2="279.50" fill="none" stroke="#dde1e6" stroke-width="0.6"/>
-<text transform="translate(199.08 289.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">correct</tspan></text>
-<path d="M246.80,286.20 L249.00,288.70 L253.40,283.40" fill="none" stroke="#3a9d5d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M301.40,283.80 L306.60,289.00 M306.60,283.80 L301.40,289.00" fill="none" stroke="#c8453b" stroke-width="1.3" stroke-linecap="round"/>
-<path d="M354.80,286.20 L357.00,288.70 L361.40,283.40" fill="none" stroke="#3a9d5d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-<text transform="translate(191.57 301.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">complete</tspan></text>
-<path d="M247.40,295.80 L252.60,301.00 M252.60,295.80 L247.40,301.00" fill="none" stroke="#c8453b" stroke-width="1.3" stroke-linecap="round"/>
-<path d="M300.80,298.20 L303.00,300.70 L307.40,295.40" fill="none" stroke="#3a9d5d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M354.80,298.20 L357.00,300.70 L361.40,295.40" fill="none" stroke="#3a9d5d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="408.00" y="238.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f2c14e"/>
-<text transform="translate(412.11 246.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
-<text transform="translate(436.00 246.20)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">reported</tspan></text>
-<rect x="408.00" y="251.70" width="23.00" height="9.60" rx="2" ry="2" fill="none" stroke="#c9a227" stroke-width="0.8" stroke-dasharray="2 1.2"/>
-<text transform="translate(417.55 259.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
-<text transform="translate(436.00 259.20)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">missed</tspan></text>
-<rect x="408.00" y="264.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f6c9c2" stroke="#c8453b" stroke-width="0.8"/>
-<text transform="translate(412.11 272.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
-<text transform="translate(436.00 272.20)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">false</tspan></text>
+<g id="D_steady_states">
+<text transform="translate(4.302 166)" fill="#1b2430" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">D</tspan></text>
+<g id="D_steady_state_1" transform="translate(18 140.8) scale(0.8)">
+<circle cx="51.455" cy="34.2" r="9.5" fill="#f2c14e"/>
+<g id="D1_R1_R2">
+<line x1="13.00" y1="32.20" x2="39.95" y2="32.20" fill="none" stroke="#000" stroke-width="2.8284271247461903"/>
+<polygon points="39.95 30.78 35.25 30.78 35.25 27.48" fill="#000"/>
+<line x1="39.95" y1="35.79" x2="13.00" y2="35.79" fill="none" stroke="#bbb" stroke-width="2.0"/>
+<polygon points="13.00 36.79 17.70 36.79 17.70 40.09" fill="#bbb"/>
+<text transform="translate(23.72 27.60)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">2</tspan></text>
+<text transform="translate(23.72 47.00)" font-family="ArialMT, Arial" font-size="10" fill="#bbb"><tspan x="0" y="0">1</tspan></text>
+</g>
+<g id="D1_R3">
+<line x1="63.45" y1="34.20" x2="89.37" y2="34.20" fill="none" stroke="#000" stroke-width="1.4142135623730951"/>
+<polygon points="93.14 34.20 89.06 31.85 89.06 36.55" fill="#000"/>
+<text transform="translate(71.34 47.00)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">1/2</tspan></text>
+</g>
+<g id="D1_R5">
+<line x1="108.73" y1="34.20" x2="133.43" y2="34.20" fill="none" stroke="#000" stroke-width="0.6324555320336759"/>
+<polygon points="137.20 34.20 133.13 31.85 133.13 36.55" fill="#000"/>
+<text transform="translate(113.24 47.00)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">1/10</tspan></text>
+</g>
+<g id="D1_R6">
+<line x1="108.73" y1="95.27" x2="133.43" y2="95.27" fill="none" stroke="#000" stroke-width="1.2649110640673518"/>
+<polygon points="137.20 95.27 133.13 92.92 133.13 97.62" fill="#000"/>
+<text transform="translate(116.02 90.70)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">2/5</tspan></text>
+</g>
+<g id="D1_R4">
+<line x1="100.69" y1="42.20" x2="100.69" y2="83.50" fill="none" stroke="#000" stroke-width="1.2649110640673518"/>
+<polygon points="100.69 87.27 103.03 83.20 98.34 83.20" fill="#000"/>
+<path d="M100.685,67.03 C100.685,49.33 71.49,49.33 71.49,67.03 C71.49,82.62 81.00,95.27 92.72,95.27" fill="none" stroke="#000" stroke-width="1.26"/>
+<text transform="translate(52.60 70.00)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">2/5</tspan></text>
+</g>
+<text transform="translate(46.79 39.20)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">X</tspan></text>
+<text transform="translate(95.63 39.20)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">C</tspan></text>
+<text transform="translate(96.02 100.27)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">P</tspan></text>
+<text transform="translate(40.47 20.80)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">x = 1</tspan></text>
+<text transform="translate(82.75 23.60)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">c = 1/10</tspan></text>
+<text transform="translate(85.25 108.60)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">p = 2/5</tspan></text>
+<text transform="translate(4.00 99.50)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="10" fill="#1b2430"><tspan x="0" y="0">steady state 1</tspan></text>
+</g>
+<g id="D_steady_state_2" transform="translate(150 140.8) scale(0.8)">
+<circle cx="51.455" cy="34.2" r="9.5" fill="#f2c14e"/>
+<g id="D2_R1_R2">
+<line x1="13.00" y1="32.20" x2="39.95" y2="32.20" fill="none" stroke="#000" stroke-width="2.8284271247461903"/>
+<polygon points="39.95 30.78 35.25 30.78 35.25 27.48" fill="#000"/>
+<line x1="39.95" y1="35.79" x2="13.00" y2="35.79" fill="none" stroke="#bbb" stroke-width="2.0"/>
+<polygon points="13.00 36.79 17.70 36.79 17.70 40.09" fill="#bbb"/>
+<text transform="translate(23.72 27.60)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">2</tspan></text>
+<text transform="translate(23.72 47.00)" font-family="ArialMT, Arial" font-size="10" fill="#bbb"><tspan x="0" y="0">1</tspan></text>
+</g>
+<g id="D2_R3">
+<line x1="63.45" y1="34.20" x2="89.37" y2="34.20" fill="none" stroke="#000" stroke-width="1.4142135623730951"/>
+<polygon points="93.14 34.20 89.06 31.85 89.06 36.55" fill="#000"/>
+<text transform="translate(71.34 47.00)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">1/2</tspan></text>
+</g>
+<g id="D2_R5">
+<line x1="108.73" y1="34.20" x2="133.43" y2="34.20" fill="none" stroke="#000" stroke-width="1.2649110640673518"/>
+<polygon points="137.20 34.20 133.13 31.85 133.13 36.55" fill="#000"/>
+<text transform="translate(116.02 47.00)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">2/5</tspan></text>
+</g>
+<g id="D2_R6">
+<line x1="108.73" y1="95.27" x2="133.43" y2="95.27" fill="none" stroke="#000" stroke-width="0.6324555320336759"/>
+<polygon points="137.20 95.27 133.13 92.92 133.13 97.62" fill="#000"/>
+<text transform="translate(113.24 90.70)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">1/10</tspan></text>
+</g>
+<g id="D2_R4">
+<line x1="100.69" y1="42.20" x2="100.69" y2="83.50" fill="none" stroke="#000" stroke-width="0.6324555320336759"/>
+<polygon points="100.69 87.27 103.03 83.20 98.34 83.20" fill="#000"/>
+<path d="M100.685,67.03 C100.685,49.33 71.49,49.33 71.49,67.03 C71.49,82.62 81.00,95.27 92.72,95.27" fill="none" stroke="#000" stroke-width="0.63"/>
+<text transform="translate(47.04 70.00)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">1/10</tspan></text>
+</g>
+<text transform="translate(46.79 39.20)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">X</tspan></text>
+<text transform="translate(95.63 39.20)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">C</tspan></text>
+<text transform="translate(96.02 100.27)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="14" fill="#000"><tspan x="0" y="0">P</tspan></text>
+<text transform="translate(40.47 20.80)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">x = 1</tspan></text>
+<text transform="translate(85.53 23.60)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">c = 2/5</tspan></text>
+<text transform="translate(82.47 108.60)" font-family="ArialMT, Arial" font-size="10" fill="#1b2430"><tspan x="0" y="0">p = 1/10</tspan></text>
+<text transform="translate(4.00 99.50)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="10" fill="#1b2430"><tspan x="0" y="0">steady state 2</tspan></text>
+</g>
+<text transform="translate(285.00 166.00)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">on arrows: flux r*</tspan></text>
+<text transform="translate(285.00 177.00)" font-family="ArialMT, Arial" font-size="8" fill="#9aa3ad"><tspan x="0" y="0">width ∝ √r*</tspan></text>
+<line x1="285.00" y1="189.00" x2="305.00" y2="189.00" fill="none" stroke="#000" stroke-width="2.2627416997969525"/>
+<text transform="translate(310.00 191.60)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">2</tspan></text>
+<line x1="285.00" y1="198.00" x2="305.00" y2="198.00" fill="none" stroke="#000" stroke-width="1.1313708498984762"/>
+<text transform="translate(310.00 200.60)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">1/2</tspan></text>
+<line x1="285.00" y1="207.00" x2="305.00" y2="207.00" fill="none" stroke="#000" stroke-width="0.5059644256269408"/>
+<text transform="translate(310.00 209.60)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">1/10</tspan></text>
+<text transform="translate(285.00 225.00)" font-family="ArialMT, Arial" font-size="8" fill="#9aa3ad"><tspan x="0" y="0">x, c, p: concentrations</tspan></text>
+</g>
+<g id="E_acr_table">
+<text transform="translate(4.302 250)" fill="#1b2430" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">E</tspan></text>
+<text transform="translate(24.00 248.00)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">ACR, per metabolite</tspan></text>
+<text transform="translate(62.21 261.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">steady state 1</tspan></text>
+<text transform="translate(118.21 261.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">steady state 2</tspan></text>
+<text transform="translate(189.00 261.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">truth</tspan></text>
+<text transform="translate(238.33 261.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">iterated</tspan></text>
+<text transform="translate(292.32 261.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">tangent</tspan></text>
+<text transform="translate(343.02 261.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">certificate</tspan></text>
+<text transform="translate(289.55 253.00)" font-family="ArialMT, Arial" font-size="6.5" fill="#9aa3ad"><tspan x="0" y="0">local ACR</tspan></text>
+<text transform="translate(240.06 253.00)" font-family="ArialMT, Arial" font-size="6.5" fill="#9aa3ad"><tspan x="0" y="0">proven</tspan></text>
+<text transform="translate(37.33 275.00)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="8" fill="#1b2430"><tspan x="0" y="0">X</tspan></text>
+<text transform="translate(81.92 275.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">1</tspan></text>
+<text transform="translate(137.91 275.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">1</tspan></text>
+<rect x="184.50" y="267.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f2c14e"/>
+<text transform="translate(188.61 275.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
+<rect x="238.50" y="267.70" width="23.00" height="9.60" rx="2" ry="2" fill="none" stroke="#c9a227" stroke-width="0.8" stroke-dasharray="2 1.2"/>
+<text transform="translate(248.05 275.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
+<rect x="292.50" y="267.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f2c14e"/>
+<text transform="translate(296.61 275.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
+<rect x="346.50" y="267.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f2c14e"/>
+<text transform="translate(350.61 275.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
+<text transform="translate(37.11 288.00)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="8" fill="#1b2430"><tspan x="0" y="0">C</tspan></text>
+<text transform="translate(76.70 288.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">1/10</tspan></text>
+<text transform="translate(134.79 288.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">2/5</tspan></text>
+<text transform="translate(194.05 288.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
+<text transform="translate(248.05 288.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
+<rect x="292.50" y="280.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f6c9c2" stroke="#c8453b" stroke-width="0.8"/>
+<text transform="translate(296.61 288.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
+<text transform="translate(356.05 288.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
+<text transform="translate(37.33 301.00)" font-family="Arial-BoldMT, Arial" font-weight="700" font-size="8" fill="#1b2430"><tspan x="0" y="0">P</tspan></text>
+<text transform="translate(78.79 301.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">2/5</tspan></text>
+<text transform="translate(132.70 301.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">1/10</tspan></text>
+<text transform="translate(194.05 301.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
+<text transform="translate(248.05 301.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
+<rect x="292.50" y="293.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f6c9c2" stroke="#c8453b" stroke-width="0.8"/>
+<text transform="translate(296.61 301.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
+<text transform="translate(356.05 301.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
+<line x1="30.00" y1="308.50" x2="374.00" y2="308.50" fill="none" stroke="#dde1e6" stroke-width="0.6"/>
+<text transform="translate(199.08 318.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">correct</tspan></text>
+<path d="M246.80,315.20 L249.00,317.70 L253.40,312.40" fill="none" stroke="#3a9d5d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M301.40,312.80 L306.60,318.00 M306.60,312.80 L301.40,318.00" fill="none" stroke="#c8453b" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M354.80,315.20 L357.00,317.70 L361.40,312.40" fill="none" stroke="#3a9d5d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<text transform="translate(191.57 330.00)" font-family="ArialMT, Arial" font-size="7.5" fill="#1b2430"><tspan x="0" y="0">complete</tspan></text>
+<path d="M247.40,324.80 L252.60,330.00 M252.60,324.80 L247.40,330.00" fill="none" stroke="#c8453b" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M300.80,327.20 L303.00,329.70 L307.40,324.40" fill="none" stroke="#3a9d5d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M354.80,327.20 L357.00,329.70 L361.40,324.40" fill="none" stroke="#3a9d5d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="408.00" y="267.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f2c14e"/>
+<text transform="translate(412.11 275.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
+<text transform="translate(436.00 275.20)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">reported</tspan></text>
+<rect x="408.00" y="280.70" width="23.00" height="9.60" rx="2" ry="2" fill="none" stroke="#c9a227" stroke-width="0.8" stroke-dasharray="2 1.2"/>
+<text transform="translate(417.55 288.00)" font-family="ArialMT, Arial" font-size="7" fill="#9aa3ad"><tspan x="0" y="0">–</tspan></text>
+<text transform="translate(436.00 288.20)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">missed</tspan></text>
+<rect x="408.00" y="293.70" width="23.00" height="9.60" rx="2" ry="2" fill="#f6c9c2" stroke="#c8453b" stroke-width="0.8"/>
+<text transform="translate(412.11 301.00)" font-family="ArialMT, Arial" font-size="7" fill="#1b2430"><tspan x="0" y="0">ACR</tspan></text>
+<text transform="translate(436.00 301.20)" font-family="ArialMT, Arial" font-size="8" fill="#1b2430"><tspan x="0" y="0">false</tspan></text>
 </g>
 </svg>
