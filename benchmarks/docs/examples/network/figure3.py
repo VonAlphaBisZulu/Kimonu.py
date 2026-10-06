@@ -1,16 +1,19 @@
 """Figure 3, panels A-D: a network whose answer is known, where the iterated and the tangent route disagree.
 
-A: metabolite view, as Figure 1A. Dimerising proteins A, B (supply, decay, homo- and heterodimer removal)
-   next to an autocatalytic switch C, P: in C + 2P -> 3P, P is consumed twice and produced three times, so
-   its net change is +1 and the net stoichiometry (C -> P) hides the autocatalysis. Halos mark true ACR.
+A protein X is made, degraded and assembled into an inactive kinase (2X -> C); the active kinase P activates
+C cooperatively (C + 2P -> 3P), and C and P are degraded.
+A: metabolite view, as Figure 1A. In C + 2P -> 3P, P is consumed twice and produced three times, so its net
+   change is +1 and the net stoichiometry (C -> P) hides the autocatalysis. Halos mark true ACR (X).
 B: complex view, as Figure 1B. The iterated route's one kinetic module, {P, C+2P}, is outlined; it fixes
    C·P, not C or P.
-C: nullclines at the rate constants of test_example_network_for_the_completeness_figure. A and B cross
-   once, C and P twice: two positive steady states that differ in C and P.
+C: steady states at the rate constants of test_natural_candidates_for_the_completeness_figure. X has one
+   (supply 2 = loss x + x^2 at x = 1); in the (C, P) plane at x = 1 the nullclines cross twice, at
+   (1/10, 2/5) and (2/5, 1/10).
 D: ACR per metabolite, truth against the iterated route, the tangent route (local ACR) and the sign certificate.
 A and B are drawn in Figure 1's units (bold 14 pt nodes, 1.2 pt strokes, harpoons with the reverse direction
-in #bbb) and shrunk by S to sit side by side; C and D are drawn at final size, 518.4 pt wide in all. Arial
-has no glyph for the empty set or for check marks, so those are paths.
+in #bbb) and shrunk by S to sit side by side; every reaction is its own group, so the drawing can be
+rearranged in Illustrator. C and D are drawn at final size, 518.4 pt wide in all. Arial has no glyph for the
+empty set or for check marks, so those are paths.
 
     python figure3.py <out.svg>
 """
@@ -27,18 +30,17 @@ REG = {**dict(zip("ABCDEFGHIJKLMNOPQRSTUVWXYZ", [.667, .667, .722, .722, .667, .
                                                   .556, .556, .556, .556, .333, .5, .278, .556, .5, .722, .5, .5, .5])),
        **{str(d): .556 for d in range(10)}, " ": .278, ".": .278, ",": .278, "=": .584, "/": .278, "(": .333, ")": .333,
        "+": .584, "-": .333, ":": .278, "·": .278, "–": .556}                        # Arial advance widths
-BLD = {**REG, "A": .722, "B": .722, "P": .667, "C": .722}                             # Arial Bold, for the complexes
+BLD = {**REG, "A": .722, "B": .722, "P": .667, "C": .722, "X": .667}                             # Arial Bold, for the complexes
 width = lambda s, fs, w=REG: fs * sum(w[c] for c in s)
 
 # ---- the model: reactions with the rate constants of the test, and its positive steady states ----
-RX = [("0", "A", 2), ("A", "0", 1), ("2A", "0", .5), ("0", "B", 1), ("B", "0", 1), ("A+B", "0", 1),
-      ("0", "C", 4), ("C", "0", 1), ("P", "0", 1), ("C+2P", "3P", 1)]
-# mass action: dA = 2 - A - 2*.5*A^2 - A*B, dB = 1 - B - A*B, dC = 4 - C - C*P^2, dP = -P + C*P^2
-a_ss = brentq(lambda a: 2 - a - a * a - a / (1 + a), .01, 2); b_ss = 1 / (1 + a_ss)
-cp_ss = [(2 - 3 ** .5, 2 + 3 ** .5), (2 + 3 ** .5, 2 - 3 ** .5)]      # C*P = 1 and C + P = 4
-assert abs(2 - a_ss - a_ss ** 2 - a_ss * b_ss) < 1e-12 and abs(1 - b_ss - a_ss * b_ss) < 1e-12
-for c, p in cp_ss:
-    assert abs(4 - c - c * p * p) < 1e-12 and abs(-p + c * p * p) < 1e-12
+from fractions import Fraction as F
+RX = [("0", "X", 2), ("X", "0", 1), ("2X", "C", F(1, 2)), ("C", "0", 1), ("C+2P", "3P", 25), ("P", "0", 1)]
+# mass action: dX = 2 - X - X^2, dC = X^2/2 - C - 25 C P^2, dP = 25 C P^2 - P
+SS = [dict(X=F(1), C=F(1, 10), P=F(2, 5)), dict(X=F(1), C=F(2, 5), P=F(1, 10))]
+for v in SS:
+    x, c, p = v["X"], v["C"], v["P"]
+    assert 2 - x - x * x == 0 and x * x / 2 - c - 25 * c * p * p == 0 and 25 * c * p * p - p == 0
 
 def t(x, y, s, size=8, fill=INK, bold=False, anchor=None):
     """text at baseline (x, y); anchor "middle" or "end" shifts by the Arial advance width"""
@@ -64,8 +66,8 @@ def cross(x, y):
 # ---- A: complex network, pills as in Figure 1B ----
 PH, PAD = 20.26, 5.8                                   # pill height and side padding of Figure 1B
 def pill_w(c): return max(22.46, width(c, 14, BLD) + 2 * PAD) if c != "0" else 22.46
-POS = {"0": (112, 106), "A": (38, 44), "2A": (26, 92), "A+B": (32, 136), "B": (48, 180),
-       "C": (184, 58), "P": (176, 136), "C+2P": (176, 180), "3P": (240, 180)}
+POS = {"0": (118, 118), "X": (38, 72), "2X": (112, 30), "C": (196, 30), "P": (196, 130),
+       "C+2P": (196, 182), "3P": (256, 182)}
 
 def pill(c, fill="#fff"):
     x, y = POS[c]; w = pill_w(c)
@@ -110,19 +112,18 @@ A_ = []
 mx0 = POS["C+2P"][0] - pill_w("C+2P") / 2 - 6; mx1 = POS["C+2P"][0] + pill_w("C+2P") / 2 + 6
 A_.append(rect(mx0, POS["P"][1] - PH / 2 - 6, mx1 - mx0, POS["C+2P"][1] - POS["P"][1] + PH + 12, KIN, rx=12,
                stroke="#000", sw=1.5, dash="6 2"))
-arrows = []
-for s, p, _ in RX:
-    if (p, s) in {(a, b) for a, b, _ in RX} and (p, s) < (s, p):
+for s_, p_, _ in RX:
+    if (p_, s_) in {(a, b) for a, b, _ in RX} and (p_, s_) < (s_, p_):
         continue                                        # reverse of a pair: drawn with its forward reaction
-    arrows += arrow(s, p, (p, s) in {(a, b) for a, b, _ in RX})
-A_ += arrows
+    rid = f"{s_}_to_{p_}".replace("+", "_").replace("0", "zero")
+    A_ += [f'<g id="B_{rid}">', *arrow(s_, p_, (p_, s_) in {(a, b) for a, b, _ in RX}), '</g>']
 for c in POS:
     A_ += pill(c)
 A_ += [rect(12, 213, 10.5, 8.6, KIN, rx=4.2, stroke="#000", sw=1.5, dash="6 2"),
        t(28, 221, "kinetic module (iterated route)", 10.5)]
 
 # ---- metabolite view, as Figure 1A: species with halos, reactions as arrows between them ----
-SP = {"A": (78, 62), "B": (78, 160), "C": (196, 62), "P": (196, 160)}
+SP = {"X": (62, 112), "C": (150, 50), "P": (150, 172)}
 NODE_R = 12                                            # halo radius 9.5 plus a gap, Figure 1 units
 def zero(x, y, r=4.2):
     """where an exchange reaction meets the environment: nothing is drawn. The zero complex belongs to
@@ -162,41 +163,36 @@ def on_circle(centre, towards, r):
     u = unit(centre, towards); return (centre[0] + r * u[0], centre[1] + r * u[1])
 
 M_ = []
-TRUE_ACR = {"A", "B"}                                  # halos: the true answer, as Figure 1A marks ACR
-for m, (x, y) in SP.items():
-    M_.append(f'<circle cx="{x}" cy="{y}" r="9.5" fill="{ACR_FILL if m in TRUE_ACR else "#fff"}"'
-              f'{"" if m in TRUE_ACR else " stroke=\"#c9ced4\" stroke-width=\"1\""}/>')
-# exchanges: supply and decay of A, B, C as reversible pairs with the environment; P only decays
-for m, z in (("A", (20, 62)), ("B", (20, 160)), ("C", (196, 14))):
-    M_ += zero(*z) + pair(z, SP[m], 6.5, NODE_R)
-M_ += zero(196, 210) + single(SP["P"], (196, 210), NODE_R, 6.5)
-# 2A -> 0: one arrow leaving A, labelled with the 2 molecules it consumes
-M_ += zero(78, 14) + single(SP["A"], (78, 14), NODE_R, 6.5)
-M_.append(t(83, 34, "2", 10.5))
-# A + B -> 0: two lines merging into one arrow
-J1 = (116, 111); Z1 = (150, 111)
-for m in "AB":
-    a = on_circle(SP[m], J1, NODE_R); M_.append(line(a[0], a[1], J1[0], J1[1], "#000"))
-M_ += zero(*Z1) + single(J1, Z1, 0, 6.5)
+TRUE_ACR = {"X"}                                       # halos: the true answer, as Figure 1A marks ACR
+g = lambda name, items: [f'<g id="A_{name}">', *items, '</g>']
+# supply and decay of X: a reversible pair with the environment (open space, no zero complex here)
+M_ += g("X_supply_decay", pair((12, 112), SP["X"], 0, NODE_R))
+# 2X -> C, labelled with the two molecules it consumes
+M_ += g("2X_to_C", single(SP["X"], SP["C"], NODE_R, NODE_R) + [t(88, 76, "2", 10.5)])
+M_ += g("C_decay", single(SP["C"], (150, 6), NODE_R, 0))
+M_ += g("P_decay", single(SP["P"], (150, 218), NODE_R, 0))
 # C + 2P -> 3P: C and P merge into the reaction, which returns to P; numbers give consumed and produced
-J2 = (240, 111)
-c = on_circle(SP["C"], J2, NODE_R); M_ += bez(c, (238, 70), J2, arrow=False)
-p_out = on_circle(SP["P"], (222, 140), NODE_R); M_ += bez(p_out, (228, 132), J2, arrow=False)
-p_in = on_circle(SP["P"], (230, 166), NODE_R); M_ += bez(J2, (262, 168), p_in)
-M_ += [t(206, 134, "2", 10.5), t(232, 180, "3", 10.5)]
-M_ += [t(x, y + 5.1, m, 14, "#000", bold=True, anchor="middle") for m, (x, y) in SP.items()]
+J2 = (212, 112)
+c_ = on_circle(SP["C"], J2, NODE_R); p_out = on_circle(SP["P"], (180, 140), NODE_R); p_in = on_circle(SP["P"], (190, 184), NODE_R)
+M_ += g("C_2P_to_3P", bez(c_, (210, 62), J2, arrow=False) + bez(p_out, (196, 140), J2, arrow=False)
+        + bez(J2, (240, 182), p_in) + [t(170, 140, "2", 10.5), t(214, 186, "3", 10.5)])
+for m, (x, y) in SP.items():
+    M_ += g(f"species_{m}", [f'<circle cx="{x}" cy="{y}" r="9.5" fill="{ACR_FILL if m in TRUE_ACR else "#fff"}"'
+                             f'{"" if m in TRUE_ACR else " stroke=\"#c9ced4\" stroke-width=\"1\""}/>',
+                             t(x, y + 5.1, m, 14, "#000", bold=True, anchor="middle")])
 M_ += [f'<circle cx="18" cy="225" r="5.2" fill="{ACR_FILL}"/>', t(28, 229, "ACR (true)", 10.5)]
 
 # ---- C: nullclines, stacked in the right column ----
-def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title):
+def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title, yticks=None):
     """data box of w x h pt with its lower left corner at (x0, y0); curves as (points, colour, label, (x, y))"""
     X = lambda v: x0 + v / xmax * w
     Yp = lambda v: y0 - v / ymax * h
     o = [t(x0 + w / 2, y0 - h - 8, title, anchor="middle"),
          line(x0, y0, x0 + w, y0, INK, .6), line(x0, y0, x0, y0 - h, INK, .6)]
     for v in ticks:
-        o += [line(X(v), y0, X(v), y0 + 2.5, INK, .6), t(X(v), y0 + 10, f"{v:g}", 7, MUTE, anchor="middle"),
-              line(x0, Yp(v), x0 - 2.5, Yp(v), INK, .6), t(x0 - 4.5, Yp(v) + 2.5, f"{v:g}", 7, MUTE, anchor="end")]
+        o += [line(X(v), y0, X(v), y0 + 2.5, INK, .6), t(X(v), y0 + 10, f"{v:g}", 7, MUTE, anchor="middle")]
+    for v in (ticks if yticks is None else yticks):
+        o += [line(x0, Yp(v), x0 - 2.5, Yp(v), INK, .6), t(x0 - 4.5, Yp(v) + 2.5, f"{v:g}", 7, MUTE, anchor="end")]
     o += [t(x0 + w / 2, y0 + 20, xlab, 8, anchor="middle"), t(x0 - 17, y0 - h / 2 + 3, ylab, 8, anchor="middle")]
     for pts, col, lab, (lx, ly) in curves:
         seg = [(X(a), Yp(b)) for a, b in pts if 0 <= a <= xmax and 0 <= b <= ymax]
@@ -210,16 +206,17 @@ def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title):
 grid = lambda lo, hi, n: [lo + (hi - lo) * i / n for i in range(n + 1)]
 NX, NW, NH = 404, 100, 54                              # data boxes of the two stacked plots
 B_ = []
-B_ += plot(NX, 84, NW, NH, 1.5, 1.5, [0, 1],
-           [([(a, (2 - a - a * a) / a) for a in grid(.62, 1, 200)], BLUE, "dA/dt = 0", (1.0, 1.3)),
-            ([(a, 1 / (1 + a)) for a in grid(0, 1.5, 200)], ORANGE, "dB/dt = 0", (.05, 1.1))],
-           [((a_ss, b_ss), "1, 2", (4, -4), None)], "A", "B", "A, B: one steady state")
-B_ += plot(NX, 184, NW, NH, 4.5, 4.5, [0, 2, 4],
-           [([(4 / (1 + p * p), p) for p in grid(0, 4.5, 300)], BLUE, "dC/dt = 0", (2.0, 2.75)),
-            ([(c, 1 / c) for c in grid(.2, 4.5, 300)], ORANGE, "dP/dt = 0", (2.0, 2.15))],
-           [(cp_ss[0], "1", (4, 2.5), None), (cp_ss[1], "2", (0, -5), "middle")], "C", "P", "C, P: two steady states")
-# the orange curve is the iterated route's kinetic module: C·P = k9/k10 on every steady state
-B_.append(t(NX + 2.0 / 4.5 * NW, 184 - 1.55 / 4.5 * NH, "C·P = 1", 7.5, ORANGE))
+# X: supply 2 against loss x + x^2, one crossing at x = 1 (both steady states)
+B_ += plot(NX, 84, NW, NH, 1.6, 4, [0, 1], [([(x, 2) for x in grid(0, 1.6, 2)], ORANGE, "supply 2", (.05, 2.35)),
+                                            ([(x, x + x * x) for x in grid(0, 1.6, 200)], BLUE, "loss x + x²", (.45, 3.2))],
+           [((1, 2), "1, 2", (4, 9), None)], "X", "rate", "X: one steady state", yticks=[0, 2, 4])
+# C, P at x = 1: dC/dt = 0 is c (1 + 25 p^2) = 1/2, dP/dt = 0 is 25 c p = 1; they cross twice
+B_ += plot(NX, 184, NW, NH, .6, .6, [0, .2, .4],
+           [([(.5 / (1 + 25 * p * p), p) for p in grid(0, .6, 300)], BLUE, "dC/dt = 0", (.3, .5)),
+            ([(1 / (25 * p), p) for p in grid(1 / 15, .6, 300)], ORANGE, "dP/dt = 0", (.3, .4))],
+           [((.1, .4), "1", (4, 2.5), None), ((.4, .1), "2", (0, -5), "middle")], "C", "P", "C, P: two steady states")
+# the orange curve is where the iterated route's kinetic module holds: C·P = 1/25 at every steady state
+B_.append(t(NX + .3 / .6 * NW, 184 - .31 / .6 * NH, "C·P = 1/25", 7.5, ORANGE))
 
 # ---- D: ACR per metabolite ----
 Y0 = 226
@@ -230,9 +227,10 @@ for name, x in COLS:
     C_.append(t(x, Y0 + 6, name, 7, MUTE, anchor="middle"))
 C_.append(t(304, Y0 - 2, "local ACR", 6.5, MUTE, anchor="middle"))   # the tangent route decides local ACR
 C_.append(t(250, Y0 - 2, "proven", 6.5, MUTE, anchor="middle"))
-SS = {"A": (a_ss, a_ss), "B": (b_ss, b_ss), "C": (cp_ss[0][0], cp_ss[1][0]), "P": (cp_ss[0][1], cp_ss[1][1])}
-TRUTH = {"A": True, "B": True, "C": False, "P": False}
-CALLS = {"iterated": set(), "tangent": {"A", "B", "C", "P"}, "certificate": {"A", "B"}}
+ROWS = "XCP"
+VAL = {m: (str(SS[0][m]), str(SS[1][m])) for m in ROWS}      # exact fractions: 1, 1/10, 2/5
+TRUTH = {"X": True, "C": False, "P": False}
+CALLS = {"iterated": set(), "tangent": {"X", "C", "P"}, "certificate": {"X"}}
 RH = 13
 def cell(x, y, claimed, true):
     """ACR claimed: amber chip; claimed but false: red chip; missed: dashed outline around a dash"""
@@ -244,21 +242,21 @@ def cell(x, y, claimed, true):
         return [rect(x - 11.5, y - 7.3, 23, 9.6, "none", rx=2, stroke=MISS_LINE, sw=.8, dash="2 1.2"),
                 t(x, y, "–", 7, MUTE, anchor="middle")]
     return [t(x, y, "–", 7, MUTE, anchor="middle")]
-for i, m in enumerate("ABCP"):
+for i, m in enumerate(ROWS):
     y = Y0 + 7 + (i + 1) * RH
     C_ += [t(40, y, m, 8, INK, bold=True, anchor="middle"),
-           t(84, y, f"{SS[m][0]:.3f}", 7.5, anchor="middle"), t(140, y, f"{SS[m][1]:.3f}", 7.5, anchor="middle")]
+           t(84, y, VAL[m][0], 7.5, anchor="middle"), t(140, y, VAL[m][1], 7.5, anchor="middle")]
     C_ += cell(196, y, TRUTH[m], TRUTH[m])
     for name, x in COLS[3:]:
         C_ += cell(x, y, m in CALLS[name], TRUTH[m])
 # the two properties the figure is about: no false ACR claims (correct), no missed ACR (complete)
-ys = Y0 + 7 + 5 * RH + 4
+ys = Y0 + 7 + (len(ROWS) + 1) * RH + 4
 C_.append(line(30, ys - 9.5, 374, ys - 9.5, "#dde1e6", .6))
 for j, prop in enumerate(("correct", "complete")):
     y = ys + j * 12
     C_.append(t(222, y, prop, 7.5, INK, anchor="end"))
     for name, x in COLS[3:]:
-        wrong = [m for m in "ABCP" if (m in CALLS[name]) != TRUTH[m] and (m in CALLS[name]) == (prop == "correct")]
+        wrong = [m for m in ROWS if (m in CALLS[name]) != TRUTH[m] and (m in CALLS[name]) == (prop == "correct")]
         C_.append(cross(x, y - 2.6) if wrong else check(x, y - 2.6))
 # legend
 LX = 408
@@ -269,7 +267,7 @@ C_ += [rect(LX, Y0 + 12.7, 23, 9.6, ACR_FILL, rx=2), t(LX + 11.5, Y0 + 20, "ACR"
        rect(LX, Y0 + 38.7, 23, 9.6, FALSE_FILL, rx=2, stroke=FALSE_LINE), t(LX + 11.5, Y0 + 46, "ACR", 7, INK, anchor="middle"),
        t(LX + 28, Y0 + 46.2, "false", 8)]
 
-H = Y0 + 92
+H = Y0 + 92 - RH
 svg = ['<?xml version="1.0" encoding="UTF-8"?>',
        f'<svg id="Figure3" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 518.4 {H}" width="518.4pt" height="{H}pt">',
        '<rect x="0" y="0" width="518.4" height="%d" fill="#fff"/>' % H,
