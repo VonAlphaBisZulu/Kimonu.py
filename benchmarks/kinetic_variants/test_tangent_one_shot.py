@@ -215,3 +215,32 @@ def test_published_local_acr_criterion_matches_the_nullspace_readout():
         r = run_network(name, A, Y, N, S, truth, limit=60)
         assert r["agree_rref"] and r["agree_minors"] and not r["degenerate"], name
         assert r["chain_ok"], name
+
+
+def test_natural_candidates_for_the_completeness_figure():
+    """a protein X made, degraded and assembled into an inactive kinase C (2X -> C); active P activates C
+    cooperatively (C + 2P -> 3P), or bimolecularly through its dimer D (2P <-> D, C + D -> P + D). X has one
+    steady-state value (true ACR) that the iterated route misses; C and P take two values at the same k,
+    which the tangent route calls fixed"""
+    from fractions import Fraction as F
+    nets = {
+        "cooperative": ([("0", "X"), ("X", "0"), ("X+X", "C"), ("C", "0"), ("C+P+P", "P+P+P"), ("P", "0")],
+                        ["X", "C", "P"], [2, 1, F(1, 2), 1, 25, 1],
+                        [dict(X=1, C=F(1, 10), P=F(2, 5)), dict(X=1, C=F(2, 5), P=F(1, 10))]),
+        "dimer": ([("0", "X"), ("X", "0"), ("X+X", "C"), ("C", "0"), ("P+P", "D"), ("D", "P+P"), ("C+D", "P+D"), ("P", "0")],
+                  ["X", "C", "P", "D"], [2, 1, F(1, 2), 1, 1, 1, 25, 1],
+                  [dict(X=1, C=F(1, 10), P=F(2, 5), D=F(4, 25)), dict(X=1, C=F(2, 5), P=F(1, 10), D=F(1, 100))]),
+    }
+    for name, (R, S, k, states) in nets.items():
+        A, Y, N, cx = _crn(R, S)
+        it = kimonu.kinetic_modules(A, Y, N)
+        assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == [], name
+        assert sorted(one_shot_exact(A, Y, N, False)[1]) == list(range(len(S))), name
+        for x in states:
+            f = {s: F(0) for s in S}
+            for (sub, prod), kj in zip(R, k):
+                rate = F(kj)
+                for t in ([] if sub == "0" else sub.split("+")): rate *= x[t]
+                for t in ([] if sub == "0" else sub.split("+")): f[t] -= rate
+                for t in ([] if prod == "0" else prod.split("+")): f[t] += rate
+            assert all(v == 0 for v in f.values()), (name, x)

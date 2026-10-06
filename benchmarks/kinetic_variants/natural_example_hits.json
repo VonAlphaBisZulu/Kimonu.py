@@ -1,0 +1,3932 @@
+{
+ "seconds": 1136.9480240345001,
+ "hits": [
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": false,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "open",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": false,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": false,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "open",
+    "D": "open"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "open",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": false,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 6,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 6,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 7,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 7,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 7,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 7,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 7,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 8,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "open"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 4,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X",
+     "0"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 3,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "P",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P",
+     "P+P"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "D",
+     "P+P"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  },
+  {
+   "reactions": [
+    [
+     "0",
+     "X"
+    ],
+    [
+     "X+X",
+     "C"
+    ],
+    [
+     "X",
+     "C"
+    ],
+    [
+     "C",
+     "0"
+    ],
+    [
+     "D",
+     "0"
+    ],
+    [
+     "C+P+P",
+     "P+P+P"
+    ],
+    [
+     "P+P",
+     "D"
+    ],
+    [
+     "C+D",
+     "P+D"
+    ],
+    [
+     "P",
+     "C"
+    ]
+   ],
+   "species": [
+    "X",
+    "C",
+    "P",
+    "D"
+   ],
+   "missed_true": [
+    "X"
+   ],
+   "false_local": [
+    "C",
+    "P",
+    "D"
+   ],
+   "iterated": [],
+   "n_reactions": 9,
+   "termolecular": true,
+   "sinks": 2,
+   "verdict": {
+    "X": "true",
+    "C": "false",
+    "P": "false",
+    "D": "false"
+   }
+  }
+ ]
+}
