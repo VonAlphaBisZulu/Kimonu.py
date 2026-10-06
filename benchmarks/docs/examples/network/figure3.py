@@ -125,9 +125,9 @@ A_ += [rect(12, 213, 10.5, 8.6, KIN, rx=4.2, stroke="#000", sw=1.5, dash="6 2"),
 SP = {"A": (78, 62), "B": (78, 160), "C": (196, 62), "P": (196, 160)}
 NODE_R = 12                                            # halo radius 9.5 plus a gap, Figure 1 units
 def zero(x, y, r=4.2):
-    """small empty-set sign where an exchange reaction meets the environment"""
-    return [f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{r}" fill="none" stroke="#000" stroke-width="1.2"/>',
-            line(x - r, y + 1.35 * r, x + r, y - 1.35 * r, "#000", 1.2)]
+    """where an exchange reaction meets the environment: nothing is drawn. The zero complex belongs to
+    the complex view; in the metabolite view uptakes and exports simply start and end in open space."""
+    return []
 def head(tip, v, col="#000", harpoon_side=None):
     """full arrowhead at tip pointing along unit v, or a harpoon on side n (Figure 1 sizes)"""
     n = (v[1], -v[0])
