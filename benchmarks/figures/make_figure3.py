@@ -1,19 +1,19 @@
 """Figure 3: kinetic modules and ACR, bounded from both sides.
 
-A, B  the 33 benchmark models: iterated route (proven) against tangent route (local ACR), make_hierarchy.py
-C-E   the toy network where local and global differ: network, nullclines, ACR per metabolite (figure3.py)
-F, G  the tangent route at scale: symbolic local-ACR criterion against one exact nullspace, and float64
+A-D   the toy network where local and global differ: metabolite view, complex view, nullclines, ACR per
+      metabolite (figure3.py, which draws its own letters A-D)
+E, F  the 33 benchmark models: iterated route (proven) against tangent route (local ACR), make_hierarchy.py
+G, H  the tangent route at scale: symbolic local-ACR criterion against one exact nullspace, and float64
       against exact arithmetic (make_tangent_benchmark.py)
 
 The three parts are drawn by their own scripts at the size they get here (text kept as text) and nested
-into one SVG with transforms; the panel letters are added here, in Figure 1's style.
+into one SVG with transforms; letters E-H are added here, in Figure 1's style.
 
     python figures/make_figure3.py      # from benchmarks/
 """
 import os, re, subprocess, sys, tempfile
 
 W, GAP = 518.4, 4                         # Figure 1's artboard width; vertical gap between rows (pt)
-TOY_SCALE = 0.9                           # the toy row is drawn at 518.4 x 330 pt and shrunk to fit
 LETTER = '<text transform="translate({x:.2f} {y:.2f})" fill="#1b2430" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700">{L}</text>'
 
 tmp = tempfile.mkdtemp()
@@ -32,23 +32,20 @@ def part(path):
     return w, h, s[root.end():s.rindex("</svg>")]
 
 rows, y, letters = [], 0.0, []
-# A, B: hierarchy
-w, h, body = part(f"{tmp}/hierarchy.svg"); s = W / w
-rows.append(f'<g id="AB_hierarchy" transform="translate(0 {y:.2f}) scale({s:.4f})">{body}</g>')
-letters += [LETTER.format(x=2, y=y + 16, L="A"), LETTER.format(x=W / 2 - 12, y=y + 16, L="B")]
-y += h * s + GAP
-# C, D, E: toy network; its own 18 pt letters are replaced by ours
+# A-D: toy network, drawn at final width with its own letters
 w, h, body = part(f"{tmp}/toy.svg")
-body = re.sub(r'<text[^>]*font-size="18"[^>]*>.*?</text>', "", body)
 body = re.sub(r'<rect x="0" y="0" width="518.4" height="\d+" fill="#fff"/>', "", body)
-rows.append(f'<g id="CDE_toy" transform="translate(0 {y:.2f}) scale({TOY_SCALE})">{body}</g>')
-letters += [LETTER.format(x=2, y=y + 17, L="C"), LETTER.format(x=262 * TOY_SCALE, y=y + 17, L="D"),
-            LETTER.format(x=2, y=y + 231 * TOY_SCALE + 2, L="E")]
-y += h * TOY_SCALE + GAP
-# F, G: tangent-route benchmark
+rows.append(f'<g id="AD_toy" transform="translate(0 {y:.2f})">{body}</g>')
+y += h + GAP
+# E, F: hierarchy
+w, h, body = part(f"{tmp}/hierarchy.svg"); s = W / w
+rows.append(f'<g id="EF_hierarchy" transform="translate(0 {y:.2f}) scale({s:.4f})">{body}</g>')
+letters += [LETTER.format(x=2, y=y + 16, L="E"), LETTER.format(x=W / 2 - 12, y=y + 16, L="F")]
+y += h * s + GAP
+# G, H: tangent-route benchmark
 w, h, body = part(f"{tmp}/tangent.svg"); s = W / w
-rows.append(f'<g id="FG_tangent" transform="translate(0 {y:.2f}) scale({s:.4f})">{body}</g>')
-letters += [LETTER.format(x=2, y=y + 14, L="F"), LETTER.format(x=0.51 * W, y=y + 14, L="G")]
+rows.append(f'<g id="GH_tangent" transform="translate(0 {y:.2f}) scale({s:.4f})">{body}</g>')
+letters += [LETTER.format(x=2, y=y + 14, L="G"), LETTER.format(x=0.51 * W, y=y + 14, L="H")]
 y += h * s
 
 H = round(y + 2, 1)
