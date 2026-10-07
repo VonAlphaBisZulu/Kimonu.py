@@ -244,3 +244,34 @@ def test_natural_candidates_for_the_completeness_figure():
                 for t in ([] if sub == "0" else sub.split("+")): f[t] -= rate
                 for t in ([] if prod == "0" else prod.split("+")): f[t] += rate
             assert all(v == 0 for v in f.values()), (name, x)
+
+
+def test_integer_example_for_the_completeness_figure():
+    """the cooperative kinase of Figure 3 at k = (20, 1, 1/20, 1, 1/4, 1), chosen for integer steady states:
+    X = 10 in both, (C, P) = (1, 4) or (4, 1). The iterated route misses X, the tangent route calls X, C and P
+    fixed (generically, and at both steady states themselves, which are nondegenerate), and the sign
+    certificate proves X alone"""
+    from fractions import Fraction as F
+    import scipy.sparse as sp
+    import sympy as sy
+    from kinetic_variants.branch_certificate import certify
+    R = [("0", "X"), ("X", "0"), ("X+X", "C"), ("C", "0"), ("C+P+P", "P+P+P"), ("P", "0")]
+    S, k = ["X", "C", "P"], [20, 1, F(1, 20), 1, F(1, 4), 1]
+    A, Y, N, cx = _crn(R, S)
+    it = kimonu.kinetic_modules(A, Y, N)
+    assert {frozenset(cx[i] for i in m) for m in it.modules if len(m) > 1} == {frozenset({"P", "C+P+P"})}
+    assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == []
+    assert sorted(one_shot_exact(A, Y, N, False)[1]) == [0, 1, 2]
+    G = (A.toarray() < 0).astype(int).T @ Y.toarray().T          # reactions x species: substrate compositions
+    for state in (dict(X=10, C=1, P=4), dict(X=10, C=4, P=1)):
+        rates = []
+        for (sub, _), kj in zip(R, k):
+            r = F(kj)
+            for t in ([] if sub == "0" else sub.split("+")): r *= state[t]
+            rates.append(r)
+        assert all(v == 0 for v in (sy.Matrix(N.toarray()) * sy.Matrix(rates)))      # a steady state
+        J = sy.Matrix(N.toarray()) * sy.diag(*rates) * sy.Matrix(G)                # d f / d ln x
+        assert J.rank() == 3 and J.nullspace() == []                               # nondegenerate: T = {0}
+    Nf = sp.csr_matrix(N.toarray().astype(float))
+    proven = [s for i, s in enumerate(S) if "infeasible" in certify(Nf, sp.csr_matrix(G.astype(float)), np.eye(3)[i])[0]]
+    assert proven == ["X"]

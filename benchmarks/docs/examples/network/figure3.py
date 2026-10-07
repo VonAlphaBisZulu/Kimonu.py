@@ -6,10 +6,10 @@ A: metabolite view, as Figure 1A. In C + 2P -> 3P, P is consumed twice and produ
    change is +1 and the net stoichiometry (C -> P) hides the autocatalysis. Halos mark true ACR (X).
 B: complex view, as Figure 1B. The iterated route's one kinetic module, {P, C+2P}, is outlined; it fixes
    C·P, not C or P.
-C: steady states at the rate constants of test_natural_candidates_for_the_completeness_figure. X has one
-   (supply 2 = loss x + x^2 at x = 1); in the (C, P) plane at x = 1 the nullclines cross twice, at
-   (1/10, 2/5) and (2/5, 1/10).
-D: the two steady states on the network of A: exact flux r* on each arrow, shaft width 2·√r*, and the
+C: steady states at k = (20, 1, 1/20, 1/4, 1, 1) for R1..R6, chosen so that every steady state is an integer
+   (test_integer_example_for_the_completeness_figure). X has one (supply 20 = loss x + x^2/10 at x = 10); in
+   the (C, P) plane at x = 10 the nullclines cross twice, at (1, 4) and (4, 1).
+D: the two steady states on the network of A: exact flux r* on each arrow, shaft width 2·√(r*/10), and the
    concentrations. X and the fluxes through it are the same in both; C is routed mostly into C + 2P -> 3P
    in one and mostly into decay in the other.
 E: ACR per metabolite, truth against the iterated route, the tangent route (local ACR) and the sign certificate.
@@ -39,12 +39,12 @@ width = lambda s, fs, w=REG: fs * sum(w[c] for c in s)
 
 # ---- the model: reactions with the rate constants of the test, and its positive steady states ----
 from fractions import Fraction as F
-RX = [("0", "X", 2), ("X", "0", 1), ("2X", "C", F(1, 2)), ("C", "0", 1), ("C+2P", "3P", 25), ("P", "0", 1)]
-# mass action: dX = 2 - X - X^2, dC = X^2/2 - C - 25 C P^2, dP = 25 C P^2 - P
-SS = [dict(X=F(1), C=F(1, 10), P=F(2, 5)), dict(X=F(1), C=F(2, 5), P=F(1, 10))]
+RX = [("0", "X", 20), ("X", "0", 1), ("2X", "C", F(1, 20)), ("C", "0", 1), ("C+2P", "3P", F(1, 4)), ("P", "0", 1)]
+# mass action: dX = 20 - X - X^2/10, dC = X^2/20 - C - C P^2/4, dP = C P^2/4 - P
+SS = [dict(X=F(10), C=F(1), P=F(4)), dict(X=F(10), C=F(4), P=F(1))]
 for v in SS:
     x, c, p = v["X"], v["C"], v["P"]
-    assert 2 - x - x * x == 0 and x * x / 2 - c - 25 * c * p * p == 0 and 25 * c * p * p - p == 0
+    assert 20 - x - x * x / 10 == 0 and x * x / 20 - c - c * p * p / 4 == 0 and c * p * p / 4 - p == 0
 
 def t(x, y, s, size=8, fill=INK, bold=False, anchor=None):
     """text at baseline (x, y); anchor "middle" or "end" shifts by the Arial advance width"""
@@ -157,14 +157,15 @@ def rate(i, v):
             r *= v[m] ** n
     return r
 FLUX = [{r: rate(i, v) for r, i in RID.items()} for v in SS]
-assert [FLUX[0][r] for r in RID] == [2, 1, F(1, 2), F(2, 5), F(1, 10), F(2, 5)]
-assert [FLUX[1][r] for r in RID] == [2, 1, F(1, 2), F(1, 10), F(2, 5), F(1, 10)]
+assert [FLUX[0][r] for r in RID] == [20, 10, 5, 4, 1, 4]
+assert [FLUX[1][r] for r in RID] == [20, 10, 5, 1, 4, 1]
+WIDTH = lambda r: 2 * math.sqrt(r / 10)                # shaft width in pt: 20 -> 2.8, 5 -> 1.4, 1 -> 0.6
 
 def metabolite_view(flux=None, conc=None, fs=8, pre="A"):
-    """the network of A. With flux (one steady state), shafts are 2·√r* wide and carry r* instead of the
+    """the network of A. With flux (one steady state), shafts are 2·√(r*/10) wide and carry r* instead of the
     reaction names, and conc labels the species; the stoichiometric numbers are left out."""
     (xX, yR), (xC, _), (_, yP) = NODE["X"], NODE["C"], NODE["P"]
-    W = lambda r: 1.2 if flux is None else 2 * math.sqrt(flux[r])
+    W = lambda r: 1.2 if flux is None else WIDTH(flux[r])
     name = lambda r: r if flux is None else str(flux[r])
     o = [f'<circle cx="{xX}" cy="{yR}" r="9.5" fill="{ACR_FILL}"/>']
     # R1/R2: uptake and decay of X, a reversible pair from open space (there is no zero complex here)
@@ -205,14 +206,14 @@ for k, ox in enumerate((18, 150)):
 # key: numbers on arrows are the steady-state flux r*, exact; shaft width grows with its square root
 KX, KY = 285, 166
 D_ += [t(KX, KY, "on arrows: flux r*", 8), t(KX, KY + 11, "width ∝ √r*", 8, MUTE)]
-for j, r in enumerate((F(2), F(1, 2), F(1, 10))):
+for j, r in enumerate((20, 5, 1)):
     yy = KY + 23 + j * 9
-    D_ += [line(KX, yy, KX + 20, yy, "#000", DS * 2 * math.sqrt(r)), t(KX + 25, yy + 2.6, str(r), 8)]
+    D_ += [line(KX, yy, KX + 20, yy, "#000", DS * WIDTH(r)), t(KX + 25, yy + 2.6, str(r), 8)]
 D_ += [t(KX, KY + 59, "x, c, p: concentrations", 8, MUTE)]
 
 
 # ---- C: nullclines, stacked in the right column ----
-def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title, yticks=None):
+def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title, yticks=None, ylab_dx=17):
     """data box of w x h pt with its lower left corner at (x0, y0); curves as (points, colour, label, (x, y))"""
     X = lambda v: x0 + v / xmax * w
     Yp = lambda v: y0 - v / ymax * h
@@ -222,7 +223,7 @@ def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title, yti
         o += [line(X(v), y0, X(v), y0 + 2.5, INK, .6), t(X(v), y0 + 10, f"{v:g}", 7, MUTE, anchor="middle")]
     for v in (ticks if yticks is None else yticks):
         o += [line(x0, Yp(v), x0 - 2.5, Yp(v), INK, .6), t(x0 - 4.5, Yp(v) + 2.5, f"{v:g}", 7, MUTE, anchor="end")]
-    o += [t(x0 + w / 2, y0 + 20, xlab, 8, anchor="middle"), t(x0 - 17, y0 - h / 2 + 3, ylab, 8, anchor="middle")]
+    o += [t(x0 + w / 2, y0 + 20, xlab, 8, anchor="middle"), t(x0 - ylab_dx, y0 - h / 2 + 3, ylab, 8, anchor="middle")]
     for pts, col, lab, (lx, ly) in curves:
         seg = [(X(a), Yp(b)) for a, b in pts if 0 <= a <= xmax and 0 <= b <= ymax]
         o.append(f'<polyline points="{" ".join(f"{a:.2f},{b:.2f}" for a, b in seg)}" fill="none" stroke="{col}" stroke-width="1.2"/>')
@@ -235,17 +236,17 @@ def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title, yti
 grid = lambda lo, hi, n: [lo + (hi - lo) * i / n for i in range(n + 1)]
 NX, NW, NH = 404, 100, 54                              # data boxes of the two stacked plots
 B_ = []
-# X: supply 2 against loss x + x^2, one crossing at x = 1 (both steady states)
-B_ += plot(NX, 84, NW, NH, 1.6, 4, [0, 1], [([(x, 2) for x in grid(0, 1.6, 2)], ORANGE, "supply 2", (.05, 2.35)),
-                                            ([(x, x + x * x) for x in grid(0, 1.6, 200)], BLUE, "loss x + x²", (.45, 3.2))],
-           [((1, 2), "1, 2", (4, 9), None)], "X", "rate", "X: one steady state", yticks=[0, 2, 4])
-# C, P at x = 1: dC/dt = 0 is c (1 + 25 p^2) = 1/2, dP/dt = 0 is 25 c p = 1; they cross twice
-B_ += plot(NX, 184, NW, NH, .6, .6, [0, .2, .4],
-           [([(.5 / (1 + 25 * p * p), p) for p in grid(0, .6, 300)], BLUE, "dC/dt = 0", (.3, .5)),
-            ([(1 / (25 * p), p) for p in grid(1 / 15, .6, 300)], ORANGE, "dP/dt = 0", (.3, .4))],
-           [((.1, .4), "1", (4, 2.5), None), ((.4, .1), "2", (0, -5), "middle")], "C", "P", "C, P: two steady states")
-# the orange curve is where the iterated route's kinetic module holds: C·P = 1/25 at every steady state
-B_.append(t(NX + .3 / .6 * NW, 184 - .31 / .6 * NH, "C·P = 1/25", 7.5, ORANGE))
+# X: supply 20 against loss x + x^2/10, one crossing at x = 10 (both steady states)
+B_ += plot(NX, 84, NW, NH, 16, 40, [0, 10], [([(x, 20) for x in grid(0, 16, 2)], ORANGE, "supply 20", (.5, 23.5)),
+                                            ([(x, x + x * x / 10) for x in grid(0, 16, 200)], BLUE, "loss x + x²/10", (3.6, 32))],
+           [((10, 20), "1, 2", (4, 9), None)], "X", "rate", "X: one steady state", yticks=[0, 20, 40], ylab_dx=23)
+# C, P at x = 10: dC/dt = 0 is c (1 + p^2/4) = 5, dP/dt = 0 is c p = 4; they cross twice
+B_ += plot(NX, 184, NW, NH, 6, 6, [0, 2, 4],
+           [([(5 / (1 + p * p / 4), p) for p in grid(0, 6, 300)], BLUE, "dC/dt = 0", (3, 5)),
+            ([(4 / p, p) for p in grid(2 / 3, 6, 300)], ORANGE, "dP/dt = 0", (3, 4))],
+           [((1, 4), "1", (4, 2.5), None), ((4, 1), "2", (0, -5), "middle")], "C", "P", "C, P: two steady states")
+# the orange curve is where the iterated route's kinetic module holds: C·P = 4 at every steady state
+B_.append(t(NX + 3 / 6 * NW, 184 - 3.1 / 6 * NH, "C·P = 4", 7.5, ORANGE))
 
 # ---- E: ACR per metabolite ----
 Y0 = 255
@@ -257,7 +258,7 @@ for name, x in COLS:
 C_.append(t(304, Y0 - 2, "local ACR", 6.5, MUTE, anchor="middle"))   # the tangent route decides local ACR
 C_.append(t(250, Y0 - 2, "proven", 6.5, MUTE, anchor="middle"))
 ROWS = "XCP"
-VAL = {m: (str(SS[0][m]), str(SS[1][m])) for m in ROWS}      # exact fractions: 1, 1/10, 2/5
+VAL = {m: (str(SS[0][m]), str(SS[1][m])) for m in ROWS}      # exact, here integers: 10, 1, 4
 TRUTH = {"X": True, "C": False, "P": False}
 CALLS = {"iterated": set(), "tangent": {"X", "C", "P"}, "certificate": {"X"}}
 RH = 13
