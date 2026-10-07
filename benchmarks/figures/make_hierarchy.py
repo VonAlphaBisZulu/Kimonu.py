@@ -4,7 +4,7 @@ Per model (ordered by number of complexes) an interval from the iterated route's
 proven for all rate constants) to the tangent route's count (upper bound, local ACR in the sense of
 Pascual-Escudero & Feliu); the true count lies in between. Where both coincide the model is decided and
 gets one marker. Left: pairs of complexes with a fixed concentration ratio (kinetic coupling). Right:
-fixed metabolite relations, ACR metabolites plus ACRR pairs, free metabolites as in Figure 2. Attached
+fixed metabolite relations, ACR metabolites plus ACRR pairs, free metabolites as in Figure 3. Attached
 uptakes. Data: kinetic_variants/hierarchy/<model>.json (hierarchy_data.py).
 
     python figures/make_hierarchy.py [out_dir]   # from benchmarks/; default figures/main
@@ -16,10 +16,10 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
 
 out = sys.argv[1] if len(sys.argv) > 1 else "figures/main"
-# composed into Figure 3 by make_figure3.py: a shorter panel, no letters (the composition adds them)
+# composed into Figure 2 by make_figure2.py: a shorter panel, no letters (the composition adds them)
 HEIGHT_IN = float(os.environ.get("FIG_HEIGHT_IN", 2.9)); LETTERS = os.environ.get("FIG_LETTERS", "1") == "1"
 NAME = os.environ.get("FIG_NAME", "hierarchy")
-LEGEND_BOTTOM = os.environ.get("FIG_LEGEND_BOTTOM", "0") == "1"   # Figure 3: the top band holds the panel letters
+LEGEND_BOTTOM = os.environ.get("FIG_LEGEND_BOTTOM", "0") == "1"   # Figure 2: the top band holds the panel letters
 plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6,
                      "ytick.labelsize": 6.5, "legend.fontsize": 6.5, "axes.linewidth": 0.6,
                      "svg.fonttype": "none", "pdf.fonttype": 42})

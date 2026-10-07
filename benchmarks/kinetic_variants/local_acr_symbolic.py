@@ -75,7 +75,7 @@ NETWORKS = {
                ["X1", "X2", "X3", "X4", "X5"], {"X4": True}),
     # ours: Figure 1 (Langary's EnvZ-OmpR); truth from the iterated route (proof) and two-point counterexamples
     "Fig1": (ENVZ, ENVZ_SPECIES, {s: s == "Yp" for s in ENVZ_SPECIES}),
-    # Figure 3: A, B have ACR (unique steady state of their subsystem); C, P take two values
+    # former completeness toy (dimers plus a switch): A, B have ACR (unique steady state of their subsystem); C, P take two values
     "Fig3": ([("0", "A"), ("A", "0"), ("A+A", "0"), ("0", "B"), ("B", "0"), ("A+B", "0"), ("0", "C"), ("C", "0"),
               ("P", "0"), ("C+P+P", "P+P+P")], ["A", "B", "C", "P"], {"A": True, "B": True, "C": False, "P": False}),
     "dimer": ([("0", "X"), ("X", "0"), ("X+X", "0")], ["X"], {"X": True}),

@@ -1,4 +1,4 @@
-"""Figure 3, panels A-E: a network whose answer is known, where the iterated and the tangent route disagree.
+"""Figure 2, panels A-E: a network whose answer is known, where the iterated and the tangent route disagree.
 
 A protein X is made, degraded and assembled into an inactive kinase (2X -> C); the active kinase P activates
 C cooperatively (C + 2P -> 3P), and C and P are degraded.
@@ -19,7 +19,7 @@ heads sit half a stroke out, flush with the outer edge of the shaft. Every react
 drawing can be rearranged in Illustrator. All panels are drawn at final size, 518.4 pt wide. Arial has no
 glyph for the empty set or for check marks, so those are paths.
 
-    python figure3.py <out.svg>
+    python figure2.py <out.svg>
 """
 import math, sys
 from scipy.optimize import brentq

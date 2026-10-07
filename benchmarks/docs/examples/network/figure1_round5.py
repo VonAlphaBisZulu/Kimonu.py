@@ -61,7 +61,7 @@ def arrow(x1, y1, x2, y2, curve=None):
     return (f'<path d="{d}" fill="none" stroke="{INK}" stroke-width="1"/>'
             f'<polygon points="{x2},{y2} {x2 - 4.5 * sgn},{y2 - 2.2} {x2 - 4.5 * sgn},{y2 + 2.2}" fill="{INK}"/>')
 g = [f'<text transform="translate(208 438)" fill="{INK}" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700">G</text>',
-     t(228, 437, "iterated route (Fig. 3)", 8, INK, True),
+     t(228, 437, "iterated route (Fig. 2)", 8, INK, True),
      box(212, 448, 86, 40, KIN),
      t(255, 460, f'ker({b("W")})', 8, anchor="middle"),
      t(255, 471, f'{b("W")} = {b("N")}·diag({b("r")}*)·{b("S")}ᵀ', 7, anchor="middle"),

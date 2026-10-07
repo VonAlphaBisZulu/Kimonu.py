@@ -19,7 +19,7 @@ ratio). For fixed dxi this is an LP (`realise`, exact version `exact_realise` fo
 iterated route's fixed log-combinations (V dxi = 0) and one sign per kinetic module. The tangent space is the
 first-order version of the criterion, the sign MILP its sign relaxation.
 
-Small networks (tests in `test_tangent_one_shot.py`): Figure 3 C and P disproven exactly (x' = (1, 1, 2, 1/2)),
+Small networks (tests in `test_tangent_one_shot.py`): former completeness toy, C and P disproven exactly (x' = (1, 1, 2, 1/2)),
 and found by the search without the known steady states; A and B proven. Figure 1: G proven only with V;
 D, E and the six ACRR metabolites individually disproven. EnvZ-OmpR Yp: no counterexample, proven only with V.
 The iHN637 witness (7 reactions): all three metabolites proven by the MILP.

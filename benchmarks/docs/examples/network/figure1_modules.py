@@ -33,7 +33,7 @@ def arrow(x1, y1, x2, y2, c=INK, curve=None):
     d = f'M{x1},{y1} Q{curve[0]},{curve[1]} {x2},{y2}' if curve else f'M{x1},{y1} L{x2},{y2}'
     return f'<path d="{d}" fill="none" stroke="{c}" stroke-width="1"/>' + head
 g = [f'<text transform="translate(208 438)" fill="{INK}" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700">G</text>',
-     t(228, 437, "iterated route (Fig. 3)", 8, INK, True),
+     t(228, 437, "iterated route (Fig. 2)", 8, INK, True),
      box(212, 452, 74, 30, KIN), t(249, 465, "ker(", 8, INK, anchor="middle"),
      box(330, 452, 74, 30, "#fff"),
      t(249, 465, "", 8),

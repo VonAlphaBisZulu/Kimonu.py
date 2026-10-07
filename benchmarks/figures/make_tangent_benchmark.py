@@ -19,7 +19,7 @@ from matplotlib.lines import Line2D
 LACR = "/scratch/sadreyev_lab/pschneider/kimonu_local_acr"
 TF = "/scratch/sadreyev_lab/pschneider/kimonu_tangent_float"
 OUT = os.environ.get("FIG_OUT", "figures/main"); LIMIT = 3600
-# composed into Figure 3 by make_figure3.py: a shorter panel, no letters (the composition adds them)
+# composed into Figure 2 by make_figure2.py: a shorter panel, no letters (the composition adds them)
 HEIGHT_CM = float(os.environ.get("FIG_HEIGHT_CM", 6.2)); LETTERS = os.environ.get("FIG_LETTERS", "1") == "1"
 NAME = os.environ.get("FIG_NAME", "tangent_benchmark")
 plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6.5,

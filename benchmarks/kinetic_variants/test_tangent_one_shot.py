@@ -187,7 +187,7 @@ def test_terminal_complexes_join_the_module_they_are_coupled_to():
 
 
 def test_autonomous_blocks_prove_what_uniqueness_gives():
-    """{A, B} of Figure 3 is autonomous, conservation-free and injective: A and B have ACR (the iterated route
+    """{A, B} of the former completeness toy (dimers plus a switch) is autonomous, conservation-free and injective: A and B have ACR (the iterated route
     misses both). {C, P} is not injective (two steady states). Detached uptakes give free sources: nothing."""
     import scipy.sparse as sp
     from kinetic_variants.autonomous_blocks import run
@@ -247,7 +247,7 @@ def test_natural_candidates_for_the_completeness_figure():
 
 
 def test_integer_example_for_the_completeness_figure():
-    """the cooperative kinase of Figure 3 at k = (20, 1, 1/20, 1, 1/4, 1), chosen for integer steady states:
+    """the cooperative kinase of Figure 2 at k = (20, 1, 1/20, 1, 1/4, 1), chosen for integer steady states:
     X = 10 in both, (C, P) = (1, 4) or (4, 1). The iterated route misses X, the tangent route calls X, C and P
     fixed (generically, and at both steady states themselves, which are nondegenerate), and the sign
     certificate proves X alone"""

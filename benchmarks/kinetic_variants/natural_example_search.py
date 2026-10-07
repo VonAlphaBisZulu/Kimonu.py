@@ -1,4 +1,4 @@
-"""Search for a natural replacement of the Figure 3 toy network.
+"""Search for a natural replacement of the completeness toy network (now in Figure 2).
 
 The toy must show both failure modes at once:
   P1  the iterated route misses a true ACR (or ACRR): a sign certificate proves it, the iterated route
