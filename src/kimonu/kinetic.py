@@ -17,10 +17,10 @@ Langary et al. (2025, Supplement S.4.1):
 1. Linear: complexes whose rows in a basis of ker(W) are proportional keep a fixed ψ ratio at every
    positive steady state; they are kinetically coupled.
 2. Log: within a coupled set, ln ψ_c - ln ψ_d = (y_c - y_d)ᵀ ln x is constant, so the composition
-   differences span a space of fixed log-combinations, extended by the unit vectors of metabolites
-   found to have ACR (Remark S3-6). The readout of acr.py groups the complexes whose compositions
-   differ by such a combination (Proposition S3-4) and finds the ACR metabolites; this is repeated
-   until neither the groups nor the ACR metabolites change.
+   differences span a space of fixed log-combinations. The readout of acr.py groups the complexes
+   whose compositions differ by such a combination (Proposition S3-4) and finds the ACR metabolites.
+   One readout suffices: the differences within a merged group and the unit vectors of the ACR
+   metabolites (Remark S3-6) already lie in the span, so repeating it returns the same readout.
 3. Feedback: a merge found in log space is a new linear fact, u_c = u_d for the merged complexes,
    since their ratio is fixed and equals one at u = 1. Added to W, it can make further rows of ker(W)
    proportional, which the proportional-row readout alone misses because it ignores linear relations
@@ -96,20 +96,17 @@ def _psi_coupled(A, Y, N, flux, detach_uptakes, equal=()):
 
 
 def _closure(Y, sets, skip):
-    """Merge sets whose compositions differ by a fixed log-combination (Proposition S3-4), with the ACR
-    metabolites found on the way added to those combinations (Remark S3-6), until neither the sets nor
-    the ACR metabolites change.
+    """Merge sets whose compositions differ by a fixed log-combination (Proposition S3-4) and find the
+    ACR metabolites, in one readout at L = ker(YΔᵀ).
 
-    Each round is one readout at L = ker(YΔᵀ). Within a set every composition difference is a column of
-    YΔ, so all its members have the same row of Yᵀ L and the readout only merges whole sets.
+    Within a set every composition difference is a column of YΔ, so all its members have the same row
+    of Yᵀ L and the readout only merges whole sets. One readout is already closed: complexes it groups
+    differ by a vector of im(YΔ), and the unit vector of an ACR metabolite lies in im(YΔ), so YΔ built
+    from the merged sets and those unit vectors (Remark S3-6) has the same span, the same L and the same
+    readout.
     """
-    known, rounds = set(), 0
-    while True:
-        rounds += 1
-        found = readout(Y, free_directions(Y, sets, known), skip)
-        if len(found.modules) == len(sets) and set(found.acr) == known:
-            return found.modules, known, rounds
-        sets, known = found.modules, set(found.acr)
+    found = readout(Y, free_directions(Y, sets), skip)
+    return found.modules, set(found.acr)
 
 
 def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
@@ -135,14 +132,14 @@ def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
     flux = positive_flux(N, seed)
     equal, rounds = [], 0
     while True:
+        rounds += 1
         # 2) Linear part: every steady state for these k solves W u = 0; proportional rows of ker(W)
         #    are complexes with fixed ψ ratios.
         coupled, _ = _psi_coupled(A, Y, N, flux, detach_uptakes, equal)
         coupled = [s for s in coupled if s]
         # 3) Log part: merge sets whose compositions differ by a fixed log-combination, and fix the
         #    metabolites that become ACR on the way.
-        sets, known, r = _closure(Y, coupled, skip)
-        rounds += r
+        sets, known = _closure(Y, coupled, skip)
         # 4) Feedback: a merge found in log space is the linear fact u_c = u_d; add it to W and repeat
         #    until nothing merges.
         if len(sets) == len(coupled):
