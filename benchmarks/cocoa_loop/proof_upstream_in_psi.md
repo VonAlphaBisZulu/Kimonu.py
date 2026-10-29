@@ -36,7 +36,7 @@ sets never contain ∅ and never contain an uptake product (autonomy). With deta
 ∅'s column in W by one source per uptake reaction; for a set C0 avoiding ∅ and uptake products, autonomy,
 feeding and the block L00 are unchanged, so (a) holds in both modes.
 
-## (b) Every step of the S.4.1 loop is matched at Kimonu's fixed point — PROVEN except Proposition S4-8
+## (b) Every step of the S.4.1 loop is matched at Kimonu's fixed point — PROVEN
 
 Let E∞ be Kimonu's final equality set, V := ker W_{E∞}, and K∞ its final modules. At the fixed point
 (F1) the modules of size > 1 are exactly the classes of proportional rows of V (the last round merged
@@ -68,16 +68,23 @@ u_c = u_d on V for the whole class. ✓
 Theorem S4-6 applied to a single unbalanced module. Then all complexes form one extended module whose
 upstream set is the set of nonterminal complexes (Theorem S2-7); (a) applies. ✓
 
-Not covered: COCOA's deficiency shortcut (check_mass_action_deficiency) declares δ_k = 1 when
-δ − (number of concordance merges) = 1 and the network is not weakly reversible (Proposition S4-8: each
-merge lowers δ_k by at least one), and then merges all unbalanced modules. Transferring this to V needs
-that each merge also lowers dim(L·V) by one; not shown. It only triggers when δ − merges = 1, i.e. on
-networks of small deficiency (genome-scale δ is in the hundreds), and the comparison below records whether
-it ever fired.
+Deficiency shortcut (Lemma S4-5, S4-7, Proposition S4-8, Theorem S4-6). COCOA declares δ_k = 1 when
+δ − (number of concordance merges) = 1 and the network is not weakly reversible, then merges all unbalanced
+concordance modules and couples all nonterminal complexes. The bounds are sound, so the shortcut fires only
+when the mass-action deficiency δ_k = dim(ker Y ∩ im A_k) is one. im L = im A_k, since
+diag(r*)·Sᵀ = diag(k)·Sᵀ·diag(ψ*). Kimonu's first ker W already holds both conclusions in that case.
+ker W = {u : L u ∈ ker Y ∩ im L}, and L·1 = A r* lies in ker Y (N r* = 0) and is nonzero (r* is not
+complex-balanced in a network that is not weakly reversible). So ker Y ∩ im L = span(L·1) and
+ker W = ker L + span(1). Vectors in ker L vanish on nonterminal complexes (L is a Laplacian with positive
+weights; its kernel lives on the terminal strong linkage classes). Hence every u ∈ ker W, and every u in
+the smaller ker W_E, has u_c = λ(u) on all nonterminal complexes: they form one class of proportional rows.
+Also a(u) = L u = λ(u)·L·1 on ker W, so all unbalanced complexes are V-concordant and the merged module
+satisfies I1. ✓ Checked on 300 random deficiency-one networks (202 with two or more nonterminal
+complexes): ker W couples all nonterminal complexes in every one (deficiency_one_check.py).
 
 Conclusion. For every network with an exact concordance partition and generic r*, every COCOA kinetic
 module (kinetic stage, efficient=false, fed with the same concordance) lies inside one module of Kimonu's
-iterated route, and COCOA's ACR set lies inside Kimonu's — except possibly where the δ_k shortcut fires.
+iterated route, and COCOA's ACR set lies inside Kimonu's.
 
 ## What the proof does not say
 
