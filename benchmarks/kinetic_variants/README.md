@@ -27,3 +27,56 @@ The iHN637 witness (7 reactions): all three metabolites proven by the MILP.
 iHN637 gap (`two_point_gap.py`, results `two_point_iHN637.json`): 2 ACR + 12 ACRR links, all undecided.
 The MILP found neither a sign pattern nor infeasibility in 3 h per relation, and the search does not work at
 genome scale (it fails even on metabolites the tangent route leaves free, where counterexamples exist).
+
+## Second order on the gap models (`second_order_modp.py`, 2026-10-28)
+
+Tests whether the tangent-only relations break at second order along the steady states through z* (J q =
+-N (r o (G h)^2), relation v breaks iff v^T q != 0), exactly over GF(2^31 - 1) at a random r in ker N, 4 random
+h in ker J. Results in `second_order_results/`. All tangent-only relations give v^T q = 0 on iCN718, iHN637 and
+iNJ661 (ACR 4/2/0, ACRR 390/1198/231 pairs, complex pairs 6391/5057/1398), and all stay orthogonal to ker J at
+the new r (the first-order claim at a second, independent flux). Controls: proven relations 0, random row-space
+vectors nonzero 20/20. As expected from the argument in src/kimonu/tangent.py: a fixed pair relation
+orthogonal to ker J(r) at generic r is orthogonal at every interior r, so it is constant along every path of
+steady states, to every order. The gap can only close globally (separate steady states at the same k).
+iHN637: rank J = 2919 < rank W = 2920 at generic r (structurally degenerate), the second-order system was still
+consistent. The float version (`second_order.py`) is not usable: at r* scale 10^6 lsqr stalls and the proven
+controls come out larger than the candidates.
+
+## Attached against detached uptakes (`uptake_modes.py`, `uptake_lists.py`, 2026-10-30)
+
+Both routes from src, both uptake modes, all 33 models (`uptake_modes/<model>.json`; the three slowest models
+also as `<model>.detached.json`). The attached block reproduces `hierarchy/<model>.json` and the gap numbers of
+the draft (relations 31/6/14, g_rel 21/3/7 on iCN718/iNJ661/iHN637). Detached gives the same three gap models
+with the same relations and the same g_rel. `uptake_lists.py` (iterated route, lists in
+/scratch/sadreyev_lab/pschneider/kimonu_uptake_modes/lists): over the 33 models, free-metabolite ACR drops from
+265 (attached) to 16 (detached); 150 of the 249 lost are extracellular and 18 periplasmic; 132 of the 249 stay
+in detached ACRR groups. No metabolite gains ACR by detaching (detached within attached, as the theory says:
+the detached steady states for given rate constants are the union of the attached ones over all supplies).
+
+## The gap hangs on a few root relations (`gap_roots.py`, 2026-10-30)
+
+Assume some open relations hold (roots) and feed them back: an ACR metabolite is dropped from every complex
+(its constant goes into the rate constants), an ACRR pair a/b is merged into one metabolite (balances summed).
+The original steady states are then steady states of the reduced network, and the iterated route holds for
+every k there, so whatever it proves on the reduced network holds on the original once the roots are proven.
+Attached uptakes, relations of `two_point_gap.py prepare`.
+- iHN637: roots glyc3p and ser__L (the two open ACR) close all 14 relations.
+- iNJ661: any single one of the 6 relations, as root, closes all 6.
+- iCN718: nadph, malACP, acACP, propacp (the four open ACR) close 30 of 31; adding E_89/E231_ACP_accoa closes
+  31. Single roots close at most 8 (nadph), pairs with nadph at most 13.
+- Controls: no root closes 0 (rebuild reproduces the original, all reactions kept); four random free-metabolite
+  pairs of similar degree (iHN637) close 0 of 14.
+The gap is therefore 8 root questions (2 + 1 + 5) rather than 51 relations; a certificate only has to settle
+the roots.
+
+## Local sign certificate with lazy rows (`two_point_local.py`, 2026-10-30)
+
+The sign MILP of `two_point.certify` (with V and module classes) on a subset of balance rows, grown from the
+target's rows by the reactions that move in each solution (hubs last), 900 s per round, at most 8 rounds or
+1500 rows. Dropping rows only relaxes the MILP, so an infeasible subsystem would prove the relation. Toys behave
+as expected (Figure 2 kinase X proven, C and P not; completeness toy A, B proven, C, P not; Figure 1 G proven
+with V, D and E not). Gap models (attached, job 568337, outputs in
+/scratch/sadreyev_lab/pschneider/kimonu_twopoint_local/): 0 of 51 proven. Every subsystem had a sign pattern
+while small (up to 95-865 rows), and the MILP hit 900 s at 500-1434 rows; iCN718 link E_89/E231_ACP_accoa
+reached the row cap with sign patterns throughout. The local sign patterns mostly extend to N d = 0 on the whole
+network. No small local proof exists in these neighbourhoods; the obstruction, if any, is global.

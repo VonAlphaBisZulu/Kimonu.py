@@ -1,0 +1,1824 @@
+{
+ "model": "iCN718",
+ "n_complexes": 6044,
+ "n_metabolites": 3790,
+ "n_free": 452,
+ "attached": {
+  "seconds_iterated": 20.366050243377686,
+  "seconds_tangent": 55.24025583267212,
+  "tangent_dim": 493,
+  "it": {
+   "modules": 311,
+   "giant": 46,
+   "pairs": 2422,
+   "acr": 4,
+   "acrr_pairs": 439,
+   "acr_free": 4,
+   "acrr_pairs_free": 10
+  },
+  "tan": {
+   "modules": 353,
+   "giant": 115,
+   "pairs": 8813,
+   "acr": 8,
+   "acrr_pairs": 829,
+   "acr_free": 8,
+   "acrr_pairs_free": 10
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": true,
+  "relations": [
+   {
+    "kind": "ACR",
+    "c": {
+     "malACP[c]": 1
+    }
+   },
+   {
+    "kind": "ACR",
+    "c": {
+     "acACP[c]": 1
+    }
+   },
+   {
+    "kind": "ACR",
+    "c": {
+     "nadph[c]": 1
+    }
+   },
+   {
+    "kind": "ACR",
+    "c": {
+     "propacp[c]": 1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E_90": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E_434": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E_435": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E231_ACP[c]_accoa[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E89_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E89_acACP[c]_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E90_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E90_acACP[c]_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E434_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E434_acACP[c]_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E435_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E435_acACP[c]_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E89_malACP[c]_nadph[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E90_malACP[c]_nadph[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E434_malACP[c]_nadph[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E435_malACP[c]_nadph[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "uaagtmda[c]",
+     "biomass[c]",
+     "E193_pep[c]_uacgam[c]_complex",
+     "E196_h[c]_uaccg[c]_complex",
+     "E196_h[c]_nadph[c]_uaccg[c]_complex",
+     "E414_ala__D[c]_atp[c]_complex",
+     "E241_ala__L[c]_atp[c]_uamr[c]_complex",
+     "E243_atp[c]_glu__D[c]_uama[c]_complex",
+     "E244_26dap__M[c]_atp[c]_uamag[c]_complex",
+     "E246_alaala[c]_atp[c]_ugmd[c]_complex",
+     "E247_udcpp[c]_ugmda[c]_complex",
+     "E249_h2o[c]_udcpdp[c]_complex"
+    ],
+    "c": {
+     "uaagtmda[c]": 1,
+     "E196_h[c]_uaccg[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E107_dttp[c]_g1p[c]_h[c]_complex",
+     "E123_dtdpglu[c]_complex",
+     "E124_dtdp4d6dg[c]_complex",
+     "E99_dtdp4d6dm[c]_h[c]_complex",
+     "E99_dtdp4d6dm[c]_h[c]_nadph[c]_complex"
+    ],
+    "c": {
+     "E107_dttp[c]_g1p[c]_h[c]_complex": 1,
+     "E99_dtdp4d6dm[c]_h[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E18_h[c]_trdox[c]_complex",
+     "E18_h[c]_nadph[c]_trdox[c]_complex"
+    ],
+    "c": {
+     "E18_h[c]_trdox[c]_complex": 1,
+     "E18_h[c]_nadph[c]_trdox[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E211_h[c]_so3[c]_complex",
+     "E211_h[c]_nadph[c]_so3[c]_complex"
+    ],
+    "c": {
+     "E211_h[c]_so3[c]_complex": 1,
+     "E211_h[c]_nadph[c]_so3[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E33_h[c]_so3[c]_complex",
+     "E33_h[c]_nadph[c]_so3[c]_complex"
+    ],
+    "c": {
+     "E33_h[c]_so3[c]_complex": 1,
+     "E33_h[c]_nadph[c]_so3[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E157_h[c]_trdox[c]_complex",
+     "E157_h[c]_nadph[c]_trdox[c]_complex"
+    ],
+    "c": {
+     "E157_h[c]_trdox[c]_complex": 1,
+     "E157_h[c]_nadph[c]_trdox[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E107_dttp[c]_g1p[c]_complex",
+     "E99_dtdp4d6dm[c]_complex"
+    ],
+    "c": {
+     "E107_dttp[c]_g1p[c]_complex": 1,
+     "E99_dtdp4d6dm[c]_complex": -1
+    }
+   }
+  ],
+  "n_relations": 31,
+  "dim_kerV": 3293,
+  "g_rel": 21,
+  "seconds_g_rel": 0.360271692276001
+ },
+ "detached": {
+  "seconds_iterated": 19.547635078430176,
+  "seconds_tangent": 54.122647285461426,
+  "tangent_dim": 554,
+  "it": {
+   "modules": 310,
+   "giant": 46,
+   "pairs": 2412,
+   "acr": 0,
+   "acrr_pairs": 439,
+   "acr_free": 0,
+   "acrr_pairs_free": 10
+  },
+  "tan": {
+   "modules": 352,
+   "giant": 115,
+   "pairs": 8803,
+   "acr": 4,
+   "acrr_pairs": 829,
+   "acr_free": 4,
+   "acrr_pairs_free": 10
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": true,
+  "relations": [
+   {
+    "kind": "ACR",
+    "c": {
+     "malACP[c]": 1
+    }
+   },
+   {
+    "kind": "ACR",
+    "c": {
+     "acACP[c]": 1
+    }
+   },
+   {
+    "kind": "ACR",
+    "c": {
+     "nadph[c]": 1
+    }
+   },
+   {
+    "kind": "ACR",
+    "c": {
+     "propacp[c]": 1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E_90": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E_434": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E_435": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E231_ACP[c]_accoa[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E89_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E89_acACP[c]_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E90_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E90_acACP[c]_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E434_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E434_acACP[c]_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E435_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E435_acACP[c]_malACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E89_malACP[c]_nadph[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E90_malACP[c]_nadph[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E434_malACP[c]_nadph[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E435_malACP[c]_nadph[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_89",
+     "E_90",
+     "E_434",
+     "E_435",
+     "E231_ACP[c]_accoa[c]_complex",
+     "E275_h[c]_ps160[c]_complex",
+     "E237_ara5p[c]_h2o[c]_pep[c]_complex",
+     "E238_h2o[c]_kdo8p[c]_complex",
+     "E89_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_complex",
+     "E89_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_complex",
+     "E90_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_complex",
+     "E434_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_complex",
+     "E435_acACP[c]_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_complex",
+     "E89_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E90_malACP[c]_nadph[c]_complex",
+     "E90_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E434_malACP[c]_nadph[c]_complex",
+     "E434_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E435_malACP[c]_nadph[c]_complex",
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex",
+     "E445_accoa[c]_glyc3p[c]_complex"
+    ],
+    "c": {
+     "E_89": 1,
+     "E435_malACP[c]_nadph[c]_propacp[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "uaagtmda[c]",
+     "biomass[c]",
+     "E193_pep[c]_uacgam[c]_complex",
+     "E196_h[c]_uaccg[c]_complex",
+     "E196_h[c]_nadph[c]_uaccg[c]_complex",
+     "E414_ala__D[c]_atp[c]_complex",
+     "E241_ala__L[c]_atp[c]_uamr[c]_complex",
+     "E243_atp[c]_glu__D[c]_uama[c]_complex",
+     "E244_26dap__M[c]_atp[c]_uamag[c]_complex",
+     "E246_alaala[c]_atp[c]_ugmd[c]_complex",
+     "E247_udcpp[c]_ugmda[c]_complex",
+     "E249_h2o[c]_udcpdp[c]_complex"
+    ],
+    "c": {
+     "uaagtmda[c]": 1,
+     "E196_h[c]_uaccg[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E107_dttp[c]_g1p[c]_h[c]_complex",
+     "E123_dtdpglu[c]_complex",
+     "E124_dtdp4d6dg[c]_complex",
+     "E99_dtdp4d6dm[c]_h[c]_complex",
+     "E99_dtdp4d6dm[c]_h[c]_nadph[c]_complex"
+    ],
+    "c": {
+     "E107_dttp[c]_g1p[c]_h[c]_complex": 1,
+     "E99_dtdp4d6dm[c]_h[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E18_h[c]_trdox[c]_complex",
+     "E18_h[c]_nadph[c]_trdox[c]_complex"
+    ],
+    "c": {
+     "E18_h[c]_trdox[c]_complex": 1,
+     "E18_h[c]_nadph[c]_trdox[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E211_h[c]_so3[c]_complex",
+     "E211_h[c]_nadph[c]_so3[c]_complex"
+    ],
+    "c": {
+     "E211_h[c]_so3[c]_complex": 1,
+     "E211_h[c]_nadph[c]_so3[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E33_h[c]_so3[c]_complex",
+     "E33_h[c]_nadph[c]_so3[c]_complex"
+    ],
+    "c": {
+     "E33_h[c]_so3[c]_complex": 1,
+     "E33_h[c]_nadph[c]_so3[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E157_h[c]_trdox[c]_complex",
+     "E157_h[c]_nadph[c]_trdox[c]_complex"
+    ],
+    "c": {
+     "E157_h[c]_trdox[c]_complex": 1,
+     "E157_h[c]_nadph[c]_trdox[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E107_dttp[c]_g1p[c]_complex",
+     "E99_dtdp4d6dm[c]_complex"
+    ],
+    "c": {
+     "E107_dttp[c]_g1p[c]_complex": 1,
+     "E99_dtdp4d6dm[c]_complex": -1
+    }
+   }
+  ],
+  "n_relations": 31,
+  "dim_kerV": 3297,
+  "g_rel": 21,
+  "seconds_g_rel": 0.3579549789428711
+ }
+}

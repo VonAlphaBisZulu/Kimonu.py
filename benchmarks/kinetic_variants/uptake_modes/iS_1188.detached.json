@@ -1,0 +1,37 @@
+{
+ "model": "iS_1188",
+ "n_complexes": 14311,
+ "n_metabolites": 8897,
+ "n_free": 1017,
+ "detached": {
+  "seconds_iterated": 155.43738293647766,
+  "seconds_tangent": 2196.3655264377594,
+  "tangent_dim": 944,
+  "it": {
+   "modules": 1017,
+   "giant": 94,
+   "pairs": 7106,
+   "acr": 0,
+   "acrr_pairs": 1485,
+   "acr_free": 0,
+   "acrr_pairs_free": 25
+  },
+  "tan": {
+   "modules": 1017,
+   "giant": 94,
+   "pairs": 7106,
+   "acr": 0,
+   "acrr_pairs": 1485,
+   "acr_free": 0,
+   "acrr_pairs_free": 25
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ }
+}

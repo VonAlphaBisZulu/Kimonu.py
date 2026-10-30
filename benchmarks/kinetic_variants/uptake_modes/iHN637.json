@@ -1,0 +1,874 @@
+{
+ "model": "iHN637",
+ "n_complexes": 5099,
+ "n_metabolites": 3361,
+ "n_free": 448,
+ "attached": {
+  "seconds_iterated": 14.386285305023193,
+  "seconds_tangent": 32.41973376274109,
+  "tangent_dim": 442,
+  "it": {
+   "modules": 244,
+   "giant": 243,
+   "pairs": 30637,
+   "acr": 0,
+   "acrr_pairs": 7346,
+   "acr_free": 0,
+   "acrr_pairs_free": 121
+  },
+  "tan": {
+   "modules": 246,
+   "giant": 263,
+   "pairs": 35694,
+   "acr": 2,
+   "acrr_pairs": 8544,
+   "acr_free": 2,
+   "acrr_pairs_free": 128
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": true,
+  "relations": [
+   {
+    "kind": "ACR",
+    "c": {
+     "glyc3p[c]": 1
+    }
+   },
+   {
+    "kind": "ACR",
+    "c": {
+     "ser__L[c]": 1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "air[c]",
+     "dhptd[c]",
+     "mththf[c]",
+     "E414_h[c]_malACP[c]_tdeACP[c]_complex",
+     "E414_h[c]_hdeACP[c]_malACP[c]_complex",
+     "E414_butACP[c]_h[c]_malACP[c]_complex",
+     "E414_h[c]_hexACP[c]_malACP[c]_complex",
+     "E414_h[c]_malACP[c]_ocACP[c]_complex",
+     "E414_dcaACP[c]_h[c]_malACP[c]_complex",
+     "E414_cdec3eACP[c]_h[c]_malACP[c]_complex",
+     "E414_ddcaACP[c]_h[c]_malACP[c]_complex",
+     "E414_cddec5eACP[c]_h[c]_malACP[c]_complex",
+     "E414_h[c]_malACP[c]_myrsACP[c]_complex",
+     "E304_adocbip[c]_gtp[c]_h[c]_complex",
+     "E82_accoa[c]_atp[c]_hco3[c]_complex",
+     "E153_adcobhex[c]_applp[c]_atp[c]_complex",
+     "E138_asp__L[c]_h[c]_complex",
+     "E166_agdpcbi[c]_rdmbzi[c]_complex",
+     "E168_25aics[c]_complex",
+     "E174_ahcys[c]_h2o[c]_complex",
+     "E135_atp[c]_cu2[e]_h2o[c]_complex",
+     "E137_atp[c]_ca2[e]_h2o[c]_complex",
+     "E191_atp[c]_co1dam[c]_h[c]_complex",
+     "E27_asp__L[c]_cbp[c]_complex",
+     "E190_btn[e]_h[e]_complex",
+     "E232_amet[c]_copre2[c]_complex",
+     "E234_amet[c]_copre3[c]_complex",
+     "E236_amet[c]_copre4[c]_complex",
+     "E54_amet[c]_codhpre6[c]_complex",
+     "E53_amet[c]_copre5[c]_h2o[c]_complex",
+     "E241_copre6[c]_h[c]_nadph[c]_complex",
+     "E129_ctp[c]_glyc3p[c]_h[c]_complex",
+     "E314_fol[c]_nadph[c]_complex",
+     "E286_ctp[c]_h[c]_pa140[c]_complex",
+     "E286_ctp[c]_h[c]_pa160[c]_complex",
+     "E354_h[c]_nadh[c]_tdec2eACP[c]_complex",
+     "E286_ctp[c]_h[c]_pa161[c]_complex",
+     "E286_ctp[c]_h[c]_pa181[c]_complex",
+     "E374_atp[c]_fmn[c]_h[c]_complex",
+     "E227_myrsACP[c]_complex",
+     "E227_glyc3p[c]_myrsACP[c]_complex",
+     "E227_octeACP[c]_complex",
+     "E227_glyc3p[c]_octeACP[c]_complex",
+     "E227_glyc3p[c]_palmACP[c]_complex",
+     "E227_glyc3p[c]_hdeACP[c]_complex",
+     "E426_atp[c]_glu__L[c]_complex",
+     "E144_gln__L[c]_h2o[c]_prpp[c]_complex",
+     "E249_glu5p[c]_h[c]_nadph[c]_complex",
+     "E147_glutrna[c]_h[c]_nadph[c]_complex",
+     "E151_atp[c]_glu__L[c]_trnaglu[c]_complex",
+     "E78_dhor__S[c]_mqn8[c]_complex",
+     "E202_h2o[c]_ppbng[c]_complex",
+     "E342_atp[c]_dpcoa[c]_complex",
+     "E345_2dhp[c]_h[c]_nadph[c]_complex",
+     "E126_3mob[c]_h2o[c]_mlthf[c]_complex",
+     "E63_atp[c]_h2o[c]_k[e]_complex",
+     "E133_atp[c]_h2o[c]_ni2[e]_complex",
+     "E140_ala_B[c]_atp[c]_pant__R[c]_complex",
+     "E131_h2o[c]_pgp160[c]_complex",
+     "E364_atp[c]_nad[c]_complex",
+     "E131_h2o[c]_pgp161[c]_complex",
+     "E131_h2o[c]_pgp181[c]_complex",
+     "E187_h[c]_nac[c]_prpp[c]_complex",
+     "E209_atp[c]_h[c]_nicrnt[c]_complex",
+     "E210_dmbzid[c]_nicrnt[c]_complex",
+     "E374_atp[c]_ribflv[c]_complex",
+     "E329_h[c]_ps160[c]_complex",
+     "E329_h[c]_ps161[c]_complex",
+     "E329_h[c]_ps181[c]_complex",
+     "E329_h[c]_ps140[c]_complex",
+     "E233_h[c]_orot5p[c]_complex",
+     "E337_cdpdtdecg[c]_complex",
+     "E337_cdpdtdecg[c]_ser__L[c]_complex",
+     "E337_cdpdhdecg[c]_complex",
+     "E337_cdpdhdecg[c]_ser__L[c]_complex",
+     "E337_cdpdhdec9eg[c]_complex",
+     "E337_cdpdhdec9eg[c]_ser__L[c]_complex",
+     "E343_atp[c]_h[c]_pan4p[c]_complex",
+     "E349_dhap[c]_iasp[c]_complex",
+     "E355_rhcys[c]_complex",
+     "E357_h[e]_ribflv[e]_complex",
+     "E125_dump[c]_mlthf[c]_complex",
+     "E127_atp[c]_thmmp[c]_complex",
+     "E377_5prdmbz[c]_h2o[c]_complex",
+     "E272_cdpdtdecg[c]_complex",
+     "E272_cdpdtdecg[c]_glyc3p[c]_complex",
+     "E272_cdpdhdecg[c]_complex",
+     "E272_cdpdhdecg[c]_glyc3p[c]_complex",
+     "E272_cdpdhdec9eg[c]_complex",
+     "E272_cdpdhdec9eg[c]_glyc3p[c]_complex",
+     "E381_cobalt2[c]_dscl[c]_complex",
+     "E283_atp[c]_pnto__R[c]_complex",
+     "E289_3hdecACP[c]_complex",
+     "E289_3hddecACP[c]_complex",
+     "E289_3hcddec5eACP[c]_complex",
+     "E289_3hmrsACP[c]_complex",
+     "E289_3hcmrs7eACP[c]_complex",
+     "E289_3hpalmACP[c]_complex",
+     "E289_3hcpalm9eACP[c]_complex",
+     "E391_h[c]_thrp[c]_complex",
+     "E289_3hcvac11eACP[c]_complex",
+     "E289_3haACP[c]_complex",
+     "E289_3hhexACP[c]_complex",
+     "E289_3hoctACP[c]_complex",
+     "E292_5aop[c]_complex",
+     "E295_4ppan[c]_ctp[c]_cys__L[c]_complex",
+     "E295_4ppcys[c]_h[c]_complex",
+     "E305_nad[c]_pphn[c]_complex",
+     "E309_atp[c]_gly[c]_pram[c]_complex",
+     "E371_amet[c]_uppg3[c]_complex",
+     "E371_hmbil[c]_complex",
+     "E315_atp[c]_fpram[c]_complex",
+     "E354_h[c]_nadh[c]_t3c9palmeACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c11vaceACP[c]_complex",
+     "E354_but2eACP[c]_h[c]_nadh[c]_complex",
+     "E354_h[c]_nadh[c]_thex2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_toct2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_tddec2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c5ddeceACP[c]_complex",
+     "E354_h[c]_nadh[c]_tmrs2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c7mrseACP[c]_complex",
+     "E354_h[c]_nadh[c]_tpalm2eACP[c]_complex",
+     "E272_cdpdodec11eg[c]_complex",
+     "E272_cdpdodec11eg[c]_glyc3p[c]_complex",
+     "E337_cdpdodec11eg[c]_complex",
+     "E337_cdpdodec11eg[c]_ser__L[c]_complex"
+    ],
+    "c": {
+     "air[c]": 1,
+     "E227_myrsACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "air[c]",
+     "dhptd[c]",
+     "mththf[c]",
+     "E414_h[c]_malACP[c]_tdeACP[c]_complex",
+     "E414_h[c]_hdeACP[c]_malACP[c]_complex",
+     "E414_butACP[c]_h[c]_malACP[c]_complex",
+     "E414_h[c]_hexACP[c]_malACP[c]_complex",
+     "E414_h[c]_malACP[c]_ocACP[c]_complex",
+     "E414_dcaACP[c]_h[c]_malACP[c]_complex",
+     "E414_cdec3eACP[c]_h[c]_malACP[c]_complex",
+     "E414_ddcaACP[c]_h[c]_malACP[c]_complex",
+     "E414_cddec5eACP[c]_h[c]_malACP[c]_complex",
+     "E414_h[c]_malACP[c]_myrsACP[c]_complex",
+     "E304_adocbip[c]_gtp[c]_h[c]_complex",
+     "E82_accoa[c]_atp[c]_hco3[c]_complex",
+     "E153_adcobhex[c]_applp[c]_atp[c]_complex",
+     "E138_asp__L[c]_h[c]_complex",
+     "E166_agdpcbi[c]_rdmbzi[c]_complex",
+     "E168_25aics[c]_complex",
+     "E174_ahcys[c]_h2o[c]_complex",
+     "E135_atp[c]_cu2[e]_h2o[c]_complex",
+     "E137_atp[c]_ca2[e]_h2o[c]_complex",
+     "E191_atp[c]_co1dam[c]_h[c]_complex",
+     "E27_asp__L[c]_cbp[c]_complex",
+     "E190_btn[e]_h[e]_complex",
+     "E232_amet[c]_copre2[c]_complex",
+     "E234_amet[c]_copre3[c]_complex",
+     "E236_amet[c]_copre4[c]_complex",
+     "E54_amet[c]_codhpre6[c]_complex",
+     "E53_amet[c]_copre5[c]_h2o[c]_complex",
+     "E241_copre6[c]_h[c]_nadph[c]_complex",
+     "E129_ctp[c]_glyc3p[c]_h[c]_complex",
+     "E314_fol[c]_nadph[c]_complex",
+     "E286_ctp[c]_h[c]_pa140[c]_complex",
+     "E286_ctp[c]_h[c]_pa160[c]_complex",
+     "E354_h[c]_nadh[c]_tdec2eACP[c]_complex",
+     "E286_ctp[c]_h[c]_pa161[c]_complex",
+     "E286_ctp[c]_h[c]_pa181[c]_complex",
+     "E374_atp[c]_fmn[c]_h[c]_complex",
+     "E227_myrsACP[c]_complex",
+     "E227_glyc3p[c]_myrsACP[c]_complex",
+     "E227_octeACP[c]_complex",
+     "E227_glyc3p[c]_octeACP[c]_complex",
+     "E227_glyc3p[c]_palmACP[c]_complex",
+     "E227_glyc3p[c]_hdeACP[c]_complex",
+     "E426_atp[c]_glu__L[c]_complex",
+     "E144_gln__L[c]_h2o[c]_prpp[c]_complex",
+     "E249_glu5p[c]_h[c]_nadph[c]_complex",
+     "E147_glutrna[c]_h[c]_nadph[c]_complex",
+     "E151_atp[c]_glu__L[c]_trnaglu[c]_complex",
+     "E78_dhor__S[c]_mqn8[c]_complex",
+     "E202_h2o[c]_ppbng[c]_complex",
+     "E342_atp[c]_dpcoa[c]_complex",
+     "E345_2dhp[c]_h[c]_nadph[c]_complex",
+     "E126_3mob[c]_h2o[c]_mlthf[c]_complex",
+     "E63_atp[c]_h2o[c]_k[e]_complex",
+     "E133_atp[c]_h2o[c]_ni2[e]_complex",
+     "E140_ala_B[c]_atp[c]_pant__R[c]_complex",
+     "E131_h2o[c]_pgp160[c]_complex",
+     "E364_atp[c]_nad[c]_complex",
+     "E131_h2o[c]_pgp161[c]_complex",
+     "E131_h2o[c]_pgp181[c]_complex",
+     "E187_h[c]_nac[c]_prpp[c]_complex",
+     "E209_atp[c]_h[c]_nicrnt[c]_complex",
+     "E210_dmbzid[c]_nicrnt[c]_complex",
+     "E374_atp[c]_ribflv[c]_complex",
+     "E329_h[c]_ps160[c]_complex",
+     "E329_h[c]_ps161[c]_complex",
+     "E329_h[c]_ps181[c]_complex",
+     "E329_h[c]_ps140[c]_complex",
+     "E233_h[c]_orot5p[c]_complex",
+     "E337_cdpdtdecg[c]_complex",
+     "E337_cdpdtdecg[c]_ser__L[c]_complex",
+     "E337_cdpdhdecg[c]_complex",
+     "E337_cdpdhdecg[c]_ser__L[c]_complex",
+     "E337_cdpdhdec9eg[c]_complex",
+     "E337_cdpdhdec9eg[c]_ser__L[c]_complex",
+     "E343_atp[c]_h[c]_pan4p[c]_complex",
+     "E349_dhap[c]_iasp[c]_complex",
+     "E355_rhcys[c]_complex",
+     "E357_h[e]_ribflv[e]_complex",
+     "E125_dump[c]_mlthf[c]_complex",
+     "E127_atp[c]_thmmp[c]_complex",
+     "E377_5prdmbz[c]_h2o[c]_complex",
+     "E272_cdpdtdecg[c]_complex",
+     "E272_cdpdtdecg[c]_glyc3p[c]_complex",
+     "E272_cdpdhdecg[c]_complex",
+     "E272_cdpdhdecg[c]_glyc3p[c]_complex",
+     "E272_cdpdhdec9eg[c]_complex",
+     "E272_cdpdhdec9eg[c]_glyc3p[c]_complex",
+     "E381_cobalt2[c]_dscl[c]_complex",
+     "E283_atp[c]_pnto__R[c]_complex",
+     "E289_3hdecACP[c]_complex",
+     "E289_3hddecACP[c]_complex",
+     "E289_3hcddec5eACP[c]_complex",
+     "E289_3hmrsACP[c]_complex",
+     "E289_3hcmrs7eACP[c]_complex",
+     "E289_3hpalmACP[c]_complex",
+     "E289_3hcpalm9eACP[c]_complex",
+     "E391_h[c]_thrp[c]_complex",
+     "E289_3hcvac11eACP[c]_complex",
+     "E289_3haACP[c]_complex",
+     "E289_3hhexACP[c]_complex",
+     "E289_3hoctACP[c]_complex",
+     "E292_5aop[c]_complex",
+     "E295_4ppan[c]_ctp[c]_cys__L[c]_complex",
+     "E295_4ppcys[c]_h[c]_complex",
+     "E305_nad[c]_pphn[c]_complex",
+     "E309_atp[c]_gly[c]_pram[c]_complex",
+     "E371_amet[c]_uppg3[c]_complex",
+     "E371_hmbil[c]_complex",
+     "E315_atp[c]_fpram[c]_complex",
+     "E354_h[c]_nadh[c]_t3c9palmeACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c11vaceACP[c]_complex",
+     "E354_but2eACP[c]_h[c]_nadh[c]_complex",
+     "E354_h[c]_nadh[c]_thex2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_toct2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_tddec2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c5ddeceACP[c]_complex",
+     "E354_h[c]_nadh[c]_tmrs2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c7mrseACP[c]_complex",
+     "E354_h[c]_nadh[c]_tpalm2eACP[c]_complex",
+     "E272_cdpdodec11eg[c]_complex",
+     "E272_cdpdodec11eg[c]_glyc3p[c]_complex",
+     "E337_cdpdodec11eg[c]_complex",
+     "E337_cdpdodec11eg[c]_ser__L[c]_complex"
+    ],
+    "c": {
+     "air[c]": 1,
+     "E337_cdpdtdecg[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "cdpdtdecg[c]",
+     "cdpdhdec9eg[c]",
+     "cdpdhdecg[c]",
+     "cdpdodec11eg[c]"
+    ],
+    "c": {
+     "cdpdtdecg[c]": 1,
+     "cdpdhdec9eg[c]": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "cdpdtdecg[c]",
+     "cdpdhdec9eg[c]",
+     "cdpdhdecg[c]",
+     "cdpdodec11eg[c]"
+    ],
+    "c": {
+     "cdpdtdecg[c]": 1,
+     "cdpdhdecg[c]": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "cdpdtdecg[c]",
+     "cdpdhdec9eg[c]",
+     "cdpdhdecg[c]",
+     "cdpdodec11eg[c]"
+    ],
+    "c": {
+     "cdpdtdecg[c]": 1,
+     "cdpdodec11eg[c]": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_272",
+     "E_337"
+    ],
+    "c": {
+     "E_272": 1,
+     "E_337": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_98",
+     "E98_ser__L[c]_complex"
+    ],
+    "c": {
+     "E_98": 1,
+     "E98_ser__L[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E264_hcys__L[c]_complex",
+     "E264_hcys__L[c]_ser__L[c]_complex"
+    ],
+    "c": {
+     "E264_hcys__L[c]_complex": 1,
+     "E264_hcys__L[c]_ser__L[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E396_indole[c]_complex",
+     "E396_indole[c]_ser__L[c]_complex",
+     "E398_3ig3p[c]_complex"
+    ],
+    "c": {
+     "E396_indole[c]_complex": 1,
+     "E396_indole[c]_ser__L[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "myrsACP[c]",
+     "octeACP[c]"
+    ],
+    "c": {
+     "myrsACP[c]": 1,
+     "octeACP[c]": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_96",
+     "E96_ser__L[c]_complex"
+    ],
+    "c": {
+     "E_96": 1,
+     "E96_ser__L[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E110_3ig3p[c]_complex",
+     "E110_3ig3p[c]_ser__L[c]_complex"
+    ],
+    "c": {
+     "E110_3ig3p[c]_complex": 1,
+     "E110_3ig3p[c]_ser__L[c]_complex": -1
+    }
+   }
+  ],
+  "n_relations": 14,
+  "dim_kerV": 2819,
+  "g_rel": 7,
+  "seconds_g_rel": 0.5840492248535156
+ },
+ "detached": {
+  "seconds_iterated": 14.218925714492798,
+  "seconds_tangent": 114.9500982761383,
+  "tangent_dim": 462,
+  "it": {
+   "modules": 244,
+   "giant": 243,
+   "pairs": 30637,
+   "acr": 0,
+   "acrr_pairs": 7346,
+   "acr_free": 0,
+   "acrr_pairs_free": 121
+  },
+  "tan": {
+   "modules": 246,
+   "giant": 263,
+   "pairs": 35694,
+   "acr": 2,
+   "acrr_pairs": 8544,
+   "acr_free": 2,
+   "acrr_pairs_free": 128
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": true,
+  "relations": [
+   {
+    "kind": "ACR",
+    "c": {
+     "glyc3p[c]": 1
+    }
+   },
+   {
+    "kind": "ACR",
+    "c": {
+     "ser__L[c]": 1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "air[c]",
+     "dhptd[c]",
+     "mththf[c]",
+     "E414_h[c]_malACP[c]_tdeACP[c]_complex",
+     "E414_h[c]_hdeACP[c]_malACP[c]_complex",
+     "E414_butACP[c]_h[c]_malACP[c]_complex",
+     "E414_h[c]_hexACP[c]_malACP[c]_complex",
+     "E414_h[c]_malACP[c]_ocACP[c]_complex",
+     "E414_dcaACP[c]_h[c]_malACP[c]_complex",
+     "E414_cdec3eACP[c]_h[c]_malACP[c]_complex",
+     "E414_ddcaACP[c]_h[c]_malACP[c]_complex",
+     "E414_cddec5eACP[c]_h[c]_malACP[c]_complex",
+     "E414_h[c]_malACP[c]_myrsACP[c]_complex",
+     "E304_adocbip[c]_gtp[c]_h[c]_complex",
+     "E82_accoa[c]_atp[c]_hco3[c]_complex",
+     "E153_adcobhex[c]_applp[c]_atp[c]_complex",
+     "E138_asp__L[c]_h[c]_complex",
+     "E166_agdpcbi[c]_rdmbzi[c]_complex",
+     "E168_25aics[c]_complex",
+     "E174_ahcys[c]_h2o[c]_complex",
+     "E135_atp[c]_cu2[e]_h2o[c]_complex",
+     "E137_atp[c]_ca2[e]_h2o[c]_complex",
+     "E191_atp[c]_co1dam[c]_h[c]_complex",
+     "E27_asp__L[c]_cbp[c]_complex",
+     "E190_btn[e]_h[e]_complex",
+     "E232_amet[c]_copre2[c]_complex",
+     "E234_amet[c]_copre3[c]_complex",
+     "E236_amet[c]_copre4[c]_complex",
+     "E54_amet[c]_codhpre6[c]_complex",
+     "E53_amet[c]_copre5[c]_h2o[c]_complex",
+     "E241_copre6[c]_h[c]_nadph[c]_complex",
+     "E129_ctp[c]_glyc3p[c]_h[c]_complex",
+     "E314_fol[c]_nadph[c]_complex",
+     "E286_ctp[c]_h[c]_pa140[c]_complex",
+     "E286_ctp[c]_h[c]_pa160[c]_complex",
+     "E354_h[c]_nadh[c]_tdec2eACP[c]_complex",
+     "E286_ctp[c]_h[c]_pa161[c]_complex",
+     "E286_ctp[c]_h[c]_pa181[c]_complex",
+     "E374_atp[c]_fmn[c]_h[c]_complex",
+     "E227_myrsACP[c]_complex",
+     "E227_glyc3p[c]_myrsACP[c]_complex",
+     "E227_octeACP[c]_complex",
+     "E227_glyc3p[c]_octeACP[c]_complex",
+     "E227_glyc3p[c]_palmACP[c]_complex",
+     "E227_glyc3p[c]_hdeACP[c]_complex",
+     "E426_atp[c]_glu__L[c]_complex",
+     "E144_gln__L[c]_h2o[c]_prpp[c]_complex",
+     "E249_glu5p[c]_h[c]_nadph[c]_complex",
+     "E147_glutrna[c]_h[c]_nadph[c]_complex",
+     "E151_atp[c]_glu__L[c]_trnaglu[c]_complex",
+     "E78_dhor__S[c]_mqn8[c]_complex",
+     "E202_h2o[c]_ppbng[c]_complex",
+     "E342_atp[c]_dpcoa[c]_complex",
+     "E345_2dhp[c]_h[c]_nadph[c]_complex",
+     "E126_3mob[c]_h2o[c]_mlthf[c]_complex",
+     "E63_atp[c]_h2o[c]_k[e]_complex",
+     "E133_atp[c]_h2o[c]_ni2[e]_complex",
+     "E140_ala_B[c]_atp[c]_pant__R[c]_complex",
+     "E131_h2o[c]_pgp160[c]_complex",
+     "E364_atp[c]_nad[c]_complex",
+     "E131_h2o[c]_pgp161[c]_complex",
+     "E131_h2o[c]_pgp181[c]_complex",
+     "E187_h[c]_nac[c]_prpp[c]_complex",
+     "E209_atp[c]_h[c]_nicrnt[c]_complex",
+     "E210_dmbzid[c]_nicrnt[c]_complex",
+     "E374_atp[c]_ribflv[c]_complex",
+     "E329_h[c]_ps160[c]_complex",
+     "E329_h[c]_ps161[c]_complex",
+     "E329_h[c]_ps181[c]_complex",
+     "E329_h[c]_ps140[c]_complex",
+     "E233_h[c]_orot5p[c]_complex",
+     "E337_cdpdtdecg[c]_complex",
+     "E337_cdpdtdecg[c]_ser__L[c]_complex",
+     "E337_cdpdhdecg[c]_complex",
+     "E337_cdpdhdecg[c]_ser__L[c]_complex",
+     "E337_cdpdhdec9eg[c]_complex",
+     "E337_cdpdhdec9eg[c]_ser__L[c]_complex",
+     "E343_atp[c]_h[c]_pan4p[c]_complex",
+     "E349_dhap[c]_iasp[c]_complex",
+     "E355_rhcys[c]_complex",
+     "E357_h[e]_ribflv[e]_complex",
+     "E125_dump[c]_mlthf[c]_complex",
+     "E127_atp[c]_thmmp[c]_complex",
+     "E377_5prdmbz[c]_h2o[c]_complex",
+     "E272_cdpdtdecg[c]_complex",
+     "E272_cdpdtdecg[c]_glyc3p[c]_complex",
+     "E272_cdpdhdecg[c]_complex",
+     "E272_cdpdhdecg[c]_glyc3p[c]_complex",
+     "E272_cdpdhdec9eg[c]_complex",
+     "E272_cdpdhdec9eg[c]_glyc3p[c]_complex",
+     "E381_cobalt2[c]_dscl[c]_complex",
+     "E283_atp[c]_pnto__R[c]_complex",
+     "E289_3hdecACP[c]_complex",
+     "E289_3hddecACP[c]_complex",
+     "E289_3hcddec5eACP[c]_complex",
+     "E289_3hmrsACP[c]_complex",
+     "E289_3hcmrs7eACP[c]_complex",
+     "E289_3hpalmACP[c]_complex",
+     "E289_3hcpalm9eACP[c]_complex",
+     "E391_h[c]_thrp[c]_complex",
+     "E289_3hcvac11eACP[c]_complex",
+     "E289_3haACP[c]_complex",
+     "E289_3hhexACP[c]_complex",
+     "E289_3hoctACP[c]_complex",
+     "E292_5aop[c]_complex",
+     "E295_4ppan[c]_ctp[c]_cys__L[c]_complex",
+     "E295_4ppcys[c]_h[c]_complex",
+     "E305_nad[c]_pphn[c]_complex",
+     "E309_atp[c]_gly[c]_pram[c]_complex",
+     "E371_amet[c]_uppg3[c]_complex",
+     "E371_hmbil[c]_complex",
+     "E315_atp[c]_fpram[c]_complex",
+     "E354_h[c]_nadh[c]_t3c9palmeACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c11vaceACP[c]_complex",
+     "E354_but2eACP[c]_h[c]_nadh[c]_complex",
+     "E354_h[c]_nadh[c]_thex2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_toct2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_tddec2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c5ddeceACP[c]_complex",
+     "E354_h[c]_nadh[c]_tmrs2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c7mrseACP[c]_complex",
+     "E354_h[c]_nadh[c]_tpalm2eACP[c]_complex",
+     "E272_cdpdodec11eg[c]_complex",
+     "E272_cdpdodec11eg[c]_glyc3p[c]_complex",
+     "E337_cdpdodec11eg[c]_complex",
+     "E337_cdpdodec11eg[c]_ser__L[c]_complex"
+    ],
+    "c": {
+     "air[c]": 1,
+     "E227_myrsACP[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "air[c]",
+     "dhptd[c]",
+     "mththf[c]",
+     "E414_h[c]_malACP[c]_tdeACP[c]_complex",
+     "E414_h[c]_hdeACP[c]_malACP[c]_complex",
+     "E414_butACP[c]_h[c]_malACP[c]_complex",
+     "E414_h[c]_hexACP[c]_malACP[c]_complex",
+     "E414_h[c]_malACP[c]_ocACP[c]_complex",
+     "E414_dcaACP[c]_h[c]_malACP[c]_complex",
+     "E414_cdec3eACP[c]_h[c]_malACP[c]_complex",
+     "E414_ddcaACP[c]_h[c]_malACP[c]_complex",
+     "E414_cddec5eACP[c]_h[c]_malACP[c]_complex",
+     "E414_h[c]_malACP[c]_myrsACP[c]_complex",
+     "E304_adocbip[c]_gtp[c]_h[c]_complex",
+     "E82_accoa[c]_atp[c]_hco3[c]_complex",
+     "E153_adcobhex[c]_applp[c]_atp[c]_complex",
+     "E138_asp__L[c]_h[c]_complex",
+     "E166_agdpcbi[c]_rdmbzi[c]_complex",
+     "E168_25aics[c]_complex",
+     "E174_ahcys[c]_h2o[c]_complex",
+     "E135_atp[c]_cu2[e]_h2o[c]_complex",
+     "E137_atp[c]_ca2[e]_h2o[c]_complex",
+     "E191_atp[c]_co1dam[c]_h[c]_complex",
+     "E27_asp__L[c]_cbp[c]_complex",
+     "E190_btn[e]_h[e]_complex",
+     "E232_amet[c]_copre2[c]_complex",
+     "E234_amet[c]_copre3[c]_complex",
+     "E236_amet[c]_copre4[c]_complex",
+     "E54_amet[c]_codhpre6[c]_complex",
+     "E53_amet[c]_copre5[c]_h2o[c]_complex",
+     "E241_copre6[c]_h[c]_nadph[c]_complex",
+     "E129_ctp[c]_glyc3p[c]_h[c]_complex",
+     "E314_fol[c]_nadph[c]_complex",
+     "E286_ctp[c]_h[c]_pa140[c]_complex",
+     "E286_ctp[c]_h[c]_pa160[c]_complex",
+     "E354_h[c]_nadh[c]_tdec2eACP[c]_complex",
+     "E286_ctp[c]_h[c]_pa161[c]_complex",
+     "E286_ctp[c]_h[c]_pa181[c]_complex",
+     "E374_atp[c]_fmn[c]_h[c]_complex",
+     "E227_myrsACP[c]_complex",
+     "E227_glyc3p[c]_myrsACP[c]_complex",
+     "E227_octeACP[c]_complex",
+     "E227_glyc3p[c]_octeACP[c]_complex",
+     "E227_glyc3p[c]_palmACP[c]_complex",
+     "E227_glyc3p[c]_hdeACP[c]_complex",
+     "E426_atp[c]_glu__L[c]_complex",
+     "E144_gln__L[c]_h2o[c]_prpp[c]_complex",
+     "E249_glu5p[c]_h[c]_nadph[c]_complex",
+     "E147_glutrna[c]_h[c]_nadph[c]_complex",
+     "E151_atp[c]_glu__L[c]_trnaglu[c]_complex",
+     "E78_dhor__S[c]_mqn8[c]_complex",
+     "E202_h2o[c]_ppbng[c]_complex",
+     "E342_atp[c]_dpcoa[c]_complex",
+     "E345_2dhp[c]_h[c]_nadph[c]_complex",
+     "E126_3mob[c]_h2o[c]_mlthf[c]_complex",
+     "E63_atp[c]_h2o[c]_k[e]_complex",
+     "E133_atp[c]_h2o[c]_ni2[e]_complex",
+     "E140_ala_B[c]_atp[c]_pant__R[c]_complex",
+     "E131_h2o[c]_pgp160[c]_complex",
+     "E364_atp[c]_nad[c]_complex",
+     "E131_h2o[c]_pgp161[c]_complex",
+     "E131_h2o[c]_pgp181[c]_complex",
+     "E187_h[c]_nac[c]_prpp[c]_complex",
+     "E209_atp[c]_h[c]_nicrnt[c]_complex",
+     "E210_dmbzid[c]_nicrnt[c]_complex",
+     "E374_atp[c]_ribflv[c]_complex",
+     "E329_h[c]_ps160[c]_complex",
+     "E329_h[c]_ps161[c]_complex",
+     "E329_h[c]_ps181[c]_complex",
+     "E329_h[c]_ps140[c]_complex",
+     "E233_h[c]_orot5p[c]_complex",
+     "E337_cdpdtdecg[c]_complex",
+     "E337_cdpdtdecg[c]_ser__L[c]_complex",
+     "E337_cdpdhdecg[c]_complex",
+     "E337_cdpdhdecg[c]_ser__L[c]_complex",
+     "E337_cdpdhdec9eg[c]_complex",
+     "E337_cdpdhdec9eg[c]_ser__L[c]_complex",
+     "E343_atp[c]_h[c]_pan4p[c]_complex",
+     "E349_dhap[c]_iasp[c]_complex",
+     "E355_rhcys[c]_complex",
+     "E357_h[e]_ribflv[e]_complex",
+     "E125_dump[c]_mlthf[c]_complex",
+     "E127_atp[c]_thmmp[c]_complex",
+     "E377_5prdmbz[c]_h2o[c]_complex",
+     "E272_cdpdtdecg[c]_complex",
+     "E272_cdpdtdecg[c]_glyc3p[c]_complex",
+     "E272_cdpdhdecg[c]_complex",
+     "E272_cdpdhdecg[c]_glyc3p[c]_complex",
+     "E272_cdpdhdec9eg[c]_complex",
+     "E272_cdpdhdec9eg[c]_glyc3p[c]_complex",
+     "E381_cobalt2[c]_dscl[c]_complex",
+     "E283_atp[c]_pnto__R[c]_complex",
+     "E289_3hdecACP[c]_complex",
+     "E289_3hddecACP[c]_complex",
+     "E289_3hcddec5eACP[c]_complex",
+     "E289_3hmrsACP[c]_complex",
+     "E289_3hcmrs7eACP[c]_complex",
+     "E289_3hpalmACP[c]_complex",
+     "E289_3hcpalm9eACP[c]_complex",
+     "E391_h[c]_thrp[c]_complex",
+     "E289_3hcvac11eACP[c]_complex",
+     "E289_3haACP[c]_complex",
+     "E289_3hhexACP[c]_complex",
+     "E289_3hoctACP[c]_complex",
+     "E292_5aop[c]_complex",
+     "E295_4ppan[c]_ctp[c]_cys__L[c]_complex",
+     "E295_4ppcys[c]_h[c]_complex",
+     "E305_nad[c]_pphn[c]_complex",
+     "E309_atp[c]_gly[c]_pram[c]_complex",
+     "E371_amet[c]_uppg3[c]_complex",
+     "E371_hmbil[c]_complex",
+     "E315_atp[c]_fpram[c]_complex",
+     "E354_h[c]_nadh[c]_t3c9palmeACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c11vaceACP[c]_complex",
+     "E354_but2eACP[c]_h[c]_nadh[c]_complex",
+     "E354_h[c]_nadh[c]_thex2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_toct2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_tddec2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c5ddeceACP[c]_complex",
+     "E354_h[c]_nadh[c]_tmrs2eACP[c]_complex",
+     "E354_h[c]_nadh[c]_t3c7mrseACP[c]_complex",
+     "E354_h[c]_nadh[c]_tpalm2eACP[c]_complex",
+     "E272_cdpdodec11eg[c]_complex",
+     "E272_cdpdodec11eg[c]_glyc3p[c]_complex",
+     "E337_cdpdodec11eg[c]_complex",
+     "E337_cdpdodec11eg[c]_ser__L[c]_complex"
+    ],
+    "c": {
+     "air[c]": 1,
+     "E337_cdpdtdecg[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "cdpdtdecg[c]",
+     "cdpdhdec9eg[c]",
+     "cdpdhdecg[c]",
+     "cdpdodec11eg[c]"
+    ],
+    "c": {
+     "cdpdtdecg[c]": 1,
+     "cdpdhdec9eg[c]": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "cdpdtdecg[c]",
+     "cdpdhdec9eg[c]",
+     "cdpdhdecg[c]",
+     "cdpdodec11eg[c]"
+    ],
+    "c": {
+     "cdpdtdecg[c]": 1,
+     "cdpdhdecg[c]": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "cdpdtdecg[c]",
+     "cdpdhdec9eg[c]",
+     "cdpdhdecg[c]",
+     "cdpdodec11eg[c]"
+    ],
+    "c": {
+     "cdpdtdecg[c]": 1,
+     "cdpdodec11eg[c]": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_272",
+     "E_337"
+    ],
+    "c": {
+     "E_272": 1,
+     "E_337": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_98",
+     "E98_ser__L[c]_complex"
+    ],
+    "c": {
+     "E_98": 1,
+     "E98_ser__L[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E264_hcys__L[c]_complex",
+     "E264_hcys__L[c]_ser__L[c]_complex"
+    ],
+    "c": {
+     "E264_hcys__L[c]_complex": 1,
+     "E264_hcys__L[c]_ser__L[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E396_indole[c]_complex",
+     "E396_indole[c]_ser__L[c]_complex",
+     "E398_3ig3p[c]_complex"
+    ],
+    "c": {
+     "E396_indole[c]_complex": 1,
+     "E396_indole[c]_ser__L[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "myrsACP[c]",
+     "octeACP[c]"
+    ],
+    "c": {
+     "myrsACP[c]": 1,
+     "octeACP[c]": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E_96",
+     "E96_ser__L[c]_complex"
+    ],
+    "c": {
+     "E_96": 1,
+     "E96_ser__L[c]_complex": -1
+    }
+   },
+   {
+    "kind": "ACRR",
+    "group": [
+     "E110_3ig3p[c]_complex",
+     "E110_3ig3p[c]_ser__L[c]_complex"
+    ],
+    "c": {
+     "E110_3ig3p[c]_complex": 1,
+     "E110_3ig3p[c]_ser__L[c]_complex": -1
+    }
+   }
+  ],
+  "n_relations": 14,
+  "dim_kerV": 2819,
+  "g_rel": 7,
+  "seconds_g_rel": 0.49944543838500977
+ }
+}

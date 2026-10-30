@@ -1,0 +1,68 @@
+{
+ "model": "iIS312_Amastigote",
+ "n_complexes": 1446,
+ "n_metabolites": 927,
+ "n_free": 196,
+ "attached": {
+  "seconds_iterated": 1.500802755355835,
+  "seconds_tangent": 4.812376022338867,
+  "tangent_dim": 118,
+  "it": {
+   "modules": 47,
+   "giant": 45,
+   "pairs": 1053,
+   "acr": 20,
+   "acrr_pairs": 34,
+   "acr_free": 15,
+   "acrr_pairs_free": 32
+  },
+  "tan": {
+   "modules": 47,
+   "giant": 45,
+   "pairs": 1053,
+   "acr": 20,
+   "acrr_pairs": 34,
+   "acr_free": 15,
+   "acrr_pairs_free": 32
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ },
+ "detached": {
+  "seconds_iterated": 1.363067388534546,
+  "seconds_tangent": 6.363490104675293,
+  "tangent_dim": 149,
+  "it": {
+   "modules": 35,
+   "giant": 9,
+   "pairs": 79,
+   "acr": 0,
+   "acrr_pairs": 10,
+   "acr_free": 0,
+   "acrr_pairs_free": 5
+  },
+  "tan": {
+   "modules": 35,
+   "giant": 9,
+   "pairs": 79,
+   "acr": 0,
+   "acrr_pairs": 10,
+   "acr_free": 0,
+   "acrr_pairs_free": 5
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ }
+}

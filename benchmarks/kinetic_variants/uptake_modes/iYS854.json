@@ -1,0 +1,68 @@
+{
+ "model": "iYS854",
+ "n_complexes": 7745,
+ "n_metabolites": 5086,
+ "n_free": 729,
+ "attached": {
+  "seconds_iterated": 73.97497463226318,
+  "seconds_tangent": 343.4610061645508,
+  "tangent_dim": 619,
+  "it": {
+   "modules": 442,
+   "giant": 334,
+   "pairs": 57546,
+   "acr": 170,
+   "acrr_pairs": 968,
+   "acr_free": 17,
+   "acrr_pairs_free": 87
+  },
+  "tan": {
+   "modules": 442,
+   "giant": 334,
+   "pairs": 57546,
+   "acr": 170,
+   "acrr_pairs": 968,
+   "acr_free": 17,
+   "acrr_pairs_free": 87
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ },
+ "detached": {
+  "seconds_iterated": 49.82303714752197,
+  "seconds_tangent": 345.45193696022034,
+  "tangent_dim": 641,
+  "it": {
+   "modules": 425,
+   "giant": 318,
+   "pairs": 52205,
+   "acr": 0,
+   "acrr_pairs": 13028,
+   "acr_free": 0,
+   "acrr_pairs_free": 93
+  },
+  "tan": {
+   "modules": 425,
+   "giant": 318,
+   "pairs": 52205,
+   "acr": 0,
+   "acrr_pairs": 13028,
+   "acr_free": 0,
+   "acrr_pairs_free": 93
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ }
+}

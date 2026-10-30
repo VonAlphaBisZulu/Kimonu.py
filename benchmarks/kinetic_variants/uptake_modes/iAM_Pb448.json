@@ -1,0 +1,68 @@
+{
+ "model": "iAM_Pb448",
+ "n_complexes": 7574,
+ "n_metabolites": 4671,
+ "n_free": 636,
+ "attached": {
+  "seconds_iterated": 31.71379542350769,
+  "seconds_tangent": 201.36339020729065,
+  "tangent_dim": 442,
+  "it": {
+   "modules": 607,
+   "giant": 132,
+   "pairs": 10560,
+   "acr": 76,
+   "acrr_pairs": 325,
+   "acr_free": 29,
+   "acrr_pairs_free": 23
+  },
+  "tan": {
+   "modules": 607,
+   "giant": 132,
+   "pairs": 10560,
+   "acr": 76,
+   "acrr_pairs": 325,
+   "acr_free": 29,
+   "acrr_pairs_free": 23
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ },
+ "detached": {
+  "seconds_iterated": 31.668445587158203,
+  "seconds_tangent": 352.86024236679077,
+  "tangent_dim": 517,
+  "it": {
+   "modules": 540,
+   "giant": 102,
+   "pairs": 6681,
+   "acr": 0,
+   "acrr_pairs": 1490,
+   "acr_free": 0,
+   "acrr_pairs_free": 27
+  },
+  "tan": {
+   "modules": 540,
+   "giant": 102,
+   "pairs": 6681,
+   "acr": 0,
+   "acrr_pairs": 1490,
+   "acr_free": 0,
+   "acrr_pairs_free": 27
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ }
+}

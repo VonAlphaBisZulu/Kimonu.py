@@ -1,0 +1,68 @@
+{
+ "model": "ArabidopsisCoreModel",
+ "n_complexes": 6910,
+ "n_metabolites": 4387,
+ "n_free": 407,
+ "attached": {
+  "seconds_iterated": 22.095088005065918,
+  "seconds_tangent": 283.55293893814087,
+  "tangent_dim": 573,
+  "it": {
+   "modules": 588,
+   "giant": 18,
+   "pairs": 1312,
+   "acr": 0,
+   "acrr_pairs": 196,
+   "acr_free": 0,
+   "acrr_pairs_free": 23
+  },
+  "tan": {
+   "modules": 588,
+   "giant": 18,
+   "pairs": 1312,
+   "acr": 0,
+   "acrr_pairs": 196,
+   "acr_free": 0,
+   "acrr_pairs_free": 23
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ },
+ "detached": {
+  "seconds_iterated": 22.309019804000854,
+  "seconds_tangent": 286.3616871833801,
+  "tangent_dim": 573,
+  "it": {
+   "modules": 588,
+   "giant": 18,
+   "pairs": 1312,
+   "acr": 0,
+   "acrr_pairs": 196,
+   "acr_free": 0,
+   "acrr_pairs_free": 23
+  },
+  "tan": {
+   "modules": 588,
+   "giant": 18,
+   "pairs": 1312,
+   "acr": 0,
+   "acrr_pairs": 196,
+   "acr_free": 0,
+   "acrr_pairs_free": 23
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ }
+}

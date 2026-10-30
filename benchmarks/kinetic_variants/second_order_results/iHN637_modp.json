@@ -1,0 +1,48 @@
+{
+ "model": "iHN637",
+ "p": 2147483647,
+ "n_metabolites": 3361,
+ "dim_T_real": 442,
+ "dim_T_modp": 442,
+ "rank_N": 2921,
+ "rank_W": 2920,
+ "rank_J": 2919,
+ "regular": false,
+ "second_order_consistent": true,
+ "n_h": 4,
+ "seconds_routes": 47.41527438163757,
+ "seconds_modp": 303.9958209991455,
+ "control_proven": {
+  "n": 9346,
+  "not_orthogonal": 0,
+  "nonzero": 0
+ },
+ "control_random_rowspace": {
+  "n": 20,
+  "not_orthogonal": 0,
+  "nonzero": 20
+ },
+ "candidates": {
+  "acr": {
+   "n": 2,
+   "n_free": 2,
+   "not_orthogonal": 0,
+   "nonzero": 0,
+   "nonzero_items": []
+  },
+  "acrr": {
+   "n": 1198,
+   "n_free": 7,
+   "not_orthogonal": 0,
+   "nonzero": 0,
+   "nonzero_items": []
+  },
+  "complex_pairs": {
+   "n": 5057,
+   "n_free": 0,
+   "not_orthogonal": 0,
+   "nonzero": 0,
+   "nonzero_items": []
+  }
+ }
+}

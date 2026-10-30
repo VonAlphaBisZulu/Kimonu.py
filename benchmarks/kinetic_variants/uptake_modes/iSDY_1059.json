@@ -1,0 +1,68 @@
+{
+ "model": "iSDY_1059",
+ "n_complexes": 13267,
+ "n_metabolites": 8315,
+ "n_free": 1026,
+ "attached": {
+  "seconds_iterated": 115.7379674911499,
+  "seconds_tangent": 1638.2171075344086,
+  "tangent_dim": 851,
+  "it": {
+   "modules": 957,
+   "giant": 107,
+   "pairs": 8755,
+   "acr": 0,
+   "acrr_pairs": 1880,
+   "acr_free": 0,
+   "acrr_pairs_free": 23
+  },
+  "tan": {
+   "modules": 957,
+   "giant": 107,
+   "pairs": 8755,
+   "acr": 0,
+   "acrr_pairs": 1880,
+   "acr_free": 0,
+   "acrr_pairs_free": 23
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ },
+ "detached": {
+  "seconds_iterated": 118.39067482948303,
+  "seconds_tangent": 1394.8987567424774,
+  "tangent_dim": 872,
+  "it": {
+   "modules": 957,
+   "giant": 107,
+   "pairs": 8755,
+   "acr": 0,
+   "acrr_pairs": 1880,
+   "acr_free": 0,
+   "acrr_pairs_free": 23
+  },
+  "tan": {
+   "modules": 957,
+   "giant": 107,
+   "pairs": 8755,
+   "acr": 0,
+   "acrr_pairs": 1880,
+   "acr_free": 0,
+   "acrr_pairs_free": 23
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ }
+}

@@ -1,0 +1,68 @@
+{
+ "model": "iIS312",
+ "n_complexes": 1740,
+ "n_metabolites": 1113,
+ "n_free": 212,
+ "attached": {
+  "seconds_iterated": 2.2777533531188965,
+  "seconds_tangent": 6.875364780426025,
+  "tangent_dim": 146,
+  "it": {
+   "modules": 65,
+   "giant": 45,
+   "pairs": 1068,
+   "acr": 20,
+   "acrr_pairs": 33,
+   "acr_free": 15,
+   "acrr_pairs_free": 31
+  },
+  "tan": {
+   "modules": 65,
+   "giant": 45,
+   "pairs": 1068,
+   "acr": 20,
+   "acrr_pairs": 33,
+   "acr_free": 15,
+   "acrr_pairs_free": 31
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ },
+ "detached": {
+  "seconds_iterated": 2.143993616104126,
+  "seconds_tangent": 8.781076669692993,
+  "tangent_dim": 177,
+  "it": {
+   "modules": 51,
+   "giant": 9,
+   "pairs": 98,
+   "acr": 0,
+   "acrr_pairs": 9,
+   "acr_free": 0,
+   "acrr_pairs_free": 4
+  },
+  "tan": {
+   "modules": 51,
+   "giant": 9,
+   "pairs": 98,
+   "acr": 0,
+   "acrr_pairs": 9,
+   "acr_free": 0,
+   "acrr_pairs_free": 4
+  },
+  "violations": {
+   "pairs": 0,
+   "acr": 0,
+   "acrr_pairs": 0
+  },
+  "gap": false,
+  "relations": [],
+  "n_relations": 0
+ }
+}
