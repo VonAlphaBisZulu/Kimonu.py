@@ -4,14 +4,15 @@ A protein X is made, degraded and assembled into an inactive kinase (2X -> C); t
 C cooperatively (C + 2P -> 3P), and C and P are degraded.
 A: metabolite view, as Figure 1A. In C + 2P -> 3P, P is consumed twice and produced three times, so its net
    change is +1 and the net stoichiometry (C -> P) hides the autocatalysis. Halos mark true ACR (X).
-B: complex view, as Figure 1B. The iterated route's one kinetic module, {P, C+2P}, is outlined; it fixes
-   C·P, not C or P.
+B: complex view, as Figure 1B, with the two true kinetic modules boxed, {0, X, 2X} and {P, C+2P}, and the
+   concentration of every complex as a formula. The iterated route finds only {P, C+2P}.
 C: steady states at k = (20, 1, 1/20, 1/4, 1, 1) for R1..R6, chosen so that every steady state is an integer
    (test_integer_example_for_the_completeness_figure). X has one (supply 20 = loss x + x^2/10 at x = 10); in
    the (C, P) plane at x = 10 the nullclines cross twice, at (1, 4) and (4, 1).
-D: the two steady states on the network of A: exact flux r* on each arrow, shaft width 2·√(r*/10), and the
-   concentrations. X and the fluxes through it are the same in both; C is routed mostly into C + 2P -> 3P
-   in one and mostly into decay in the other.
+D: the two steady states on the network of B: exact flux r* on each arrow, shaft width 2·√(r*/10), and the
+   concentration ψ of every complex. X and the fluxes through it are the same in both; C is routed mostly
+   into C + 2P -> 3P in one and mostly into decay in the other. ψ_C and ψ_P swap, while the module's ratio
+   ψ_{C+2P} / ψ_P = 4 is the same in both.
 E: ACR per metabolite, truth against the iterated route, the tangent route (local ACR) and the sign certificate.
 A and B follow Phil's layout of 2026-10-06 (figure3_phil_2026-10-06.svg) in Figure 1's units: bold 14 pt
 nodes, 8 pt labels, 1.2 pt strokes, Figure 1's heads, and harpoons with the reverse direction in #bbb whose
@@ -21,8 +22,10 @@ glyph for the empty set or for check marks, so those are paths.
 
     python figure2.py <out.svg>
 """
-import math, sys
+import math, os, sys
 from scipy.optimize import brentq
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from latex_text import place                           # formulas as LaTeX outlines, no math font needed
 
 INK, MUTE, GRAY, FONT = "#1b2430", "#9aa3ad", "#bbb", 'font-family="ArialMT, Arial"'
 BOLD = 'font-family="Arial-BoldMT, Arial" font-weight="700"'
@@ -104,8 +107,8 @@ def group(name, items): return [f'<g id="{name}">', *items, '</g>']
 # ---- B: complex view, as Figure 1B, on Phil's layout of 2026-10-06 ----
 PH, PAD = 20.26, 5.8                                   # pill height and side padding of Figure 1B
 def pill_w(c): return max(22.46, width(c, 14, BLD) + 2 * PAD) if c != "0" else 22.46
-POS = {"2X": (184.1, 26.7), "C": (240.1, 26.7), "X": (199.5, 54.0), "0": (280.2, 54.0), "P": (199.5, 83.5),
-       "C+2P": (199.5, 108.3), "3P": (264.8, 108.3)}     # 3P 6 pt right of Phil's, room for R4
+POS = {"2X": (184.1, 19.21), "C": (240.1, 19.21), "X": (180.97, 54.0), "0": (280.2, 54.0), "P": (199.5, 89.63),
+       "C+2P": (199.5, 114.43), "3P": (264.8, 114.43)}  # 3P 6 pt right of Phil's, room for R4; rows moved by Phil 2026-10-30; X flush left under 2X
 L_ = lambda c, gap=3: POS[c][0] - pill_w(c) / 2 - gap  # just outside a pill's left, right, top and bottom
 R_ = lambda c, gap=3: POS[c][0] + pill_w(c) / 2 + gap
 T_ = lambda c, gap=2.5: POS[c][1] - PH / 2 - gap
@@ -121,26 +124,76 @@ def pill(c, fill="#fff"):
         o.append(t(x, y + 5.1, c, 14, "#000", bold=True, anchor="middle"))
     return o
 
-A_ = []
-# the iterated route's kinetic module {P, C+2P}: psi_{C+2P} / psi_P = C·P is fixed, so C·P = k_R4 / k_R6
-mx0, mx1 = POS["C+2P"][0] - pill_w("C+2P") / 2 - 6, POS["C+2P"][0] + pill_w("C+2P") / 2 + 6
-my0, my1 = POS["P"][1] - PH / 2 - 6, POS["C+2P"][1] + PH / 2 + 6
-A_.append(rect(mx0, my0, mx1 - mx0, my1 - my0, KIN, rx=12, stroke="#000", sw=1.5, dash="6 2"))
-yX, y0 = POS["X"][1], POS["0"][1]
-A_ += group("B_R1_R2_zero_X", pair((L_("0"), y0), (R_("X"), yX), "B")      # R1 0 -> X travels left: black below
-            + [t((R_("X") + L_("0")) / 2 - 2.3, yX - 7.6, "R1", 8, INK, anchor="end"), t((R_("X") + L_("0")) / 2 - 2.3, yX - 7.6, "/R2", 8, GRAY)])
-A_ += group("B_R3_2X_C", arrow((R_("2X", 3.5), POS["2X"][1]), (L_("C"), POS["C"][1]), "B")
-            + [t((R_("2X", 3.5) + L_("C")) / 2, POS["C"][1] - 4, "R3", 8, INK, anchor="middle")])
-A_ += group("B_R5_C_zero", turn((R_("C"), POS["C"][1]), (1, 0), (POS["0"][0], T_("0")), (0, 1), "B")
-            + [t(R_("C") + 13, POS["C"][1] - 4, "R5", 8, INK, anchor="middle")])
-A_ += group("B_R6_P_zero", turn((R_("P"), POS["P"][1]), (1, 0), (POS["0"][0], B__("0")), (0, -1), "B")
-            + [t(250, POS["P"][1] - 4, "R6", 8, INK, anchor="middle")])
-A_ += group("B_R4_C2P_3P", arrow((R_("C+2P"), POS["C+2P"][1]), (L_("3P"), POS["3P"][1]), "B")
-            + [t((mx1 + .75 + L_("3P")) / 2, POS["3P"][1] - 4, "R4", 8, INK, anchor="middle")])
-for c in POS:
-    A_ += group(f"B_complex_{c.replace('+', '_').replace('0', 'zero')}", pill(c))
-A_ += [rect(mx0 + 4.5, 136.2, 7.85, 6.43, KIN, rx=3.17, stroke="#000", sw=1.5, dash="6 2"),
-       t(mx0 + 18.4, 141.5, "kinetic module (iterated route)", 8)]
+# the true kinetic modules, boxed as in Figure 1 (dashed, filled, one colour per module): {P, C+2P}
+# (psi_{C+2P} / psi_P = C·P = k_R6 / k_R4) in blue, and {0, X, 2X} (X has ACR, so psi_X and psi_2X are fixed
+# like psi_0 = 1) in green, an L around 2X, X and the zero complex that leaves C out.
+MOD2, MOD1 = KIN, "#cdf3df"
+mx0, mx1 = POS["C+2P"][0] - pill_w("C+2P") / 2 - 4, POS["C+2P"][0] + pill_w("C+2P") / 2 + 4
+my0, my1 = POS["P"][1] - PH / 2 - 4, POS["C+2P"][1] + PH / 2 + 4
+PSI = "#2f6fae"                                        # complex concentrations in B and D
+def rounded(pts, radii):
+    """closed path through pts, corner k rounded by radii[k] (a quadratic through the corner)"""
+    d, n = [], len(pts)
+    for k in range(n):
+        p0, p1, p2 = pts[k - 1], pts[k], pts[(k + 1) % n]
+        a = unit(p1, p0); b = unit(p1, p2); r = radii[k]
+        ra = min(r, math.dist(p0, p1) / 2); rb = min(r, math.dist(p1, p2) / 2)
+        s0 = (p1[0] + ra * a[0], p1[1] + ra * a[1]); s1 = (p1[0] + rb * b[0], p1[1] + rb * b[1])
+        d.append(f"{'M' if k == 0 else 'L'}{s0[0]:.2f},{s0[1]:.2f} Q{p1[0]:.2f},{p1[1]:.2f} {s1[0]:.2f},{s1[1]:.2f}")
+    return " ".join(d) + " Z"
+def module_boxes():
+    g = 2.5                                            # pad around 2X; the band around X and the zero complex
+    l, t, r2, b2 = POS["2X"][0] - pill_w("2X") / 2 - g, POS["2X"][1] - PH / 2 - g, POS["2X"][0] + pill_w("2X") / 2 + g, 37.5
+    r0, bb = POS["0"][0] + pill_w("0") / 2 + g, POS["X"][1] + PH / 2 + g   # band from 37.5: room for R1/R2 inside
+    L = [(l, t), (r2, t), (r2, b2), (r0, b2), (r0, bb), (l, bb)]
+    st = 'stroke="#000" stroke-width="1.5" stroke-dasharray="6 2"'
+    return [f'<path d="{rounded(L, (10, 8, 4, 8, 10, 10))}" fill="{MOD1}" {st}/>',
+            rect(mx0, my0, mx1 - mx0, my1 - my0, MOD2, rx=10, stroke="#000", sw=1.5, dash="6 2")]
+
+# Phil's Illustrator edits of 2026-10-30: R5 and R6 run straight and turn down/up just before the zero complex,
+# R4 leaves 0.4 pt earlier, A's R4 loop is a rounded rectangle, C moves 66.32 pt left, and D's flux key is gone.
+R5_PATH = "M254.33,19.21h4.357c12.847,0,21.513,5.71,21.513,17.83"
+R6_PATH = "M213.73,89.63h46.95c16.88,0,19.52-7.71,19.52-18.67"
+A_LOOP = "M100.685,67.03c0-17.7-29.195-17.7-29.195,0v13.988c0,10.006,6.375,14.252,14.597,14.252h6.587"
+def shaft(d, w): return f'<path d="{d}" fill="none" stroke="#000" stroke-width="{round(w, 3)}"/>'
+
+# where a complex's concentration goes: left of the column, above C, right of 3P and of the zero complex
+PSI_AT = lambda: {"2X": (164, POS["2X"][1] + 3.5, "right"), "X": (164, POS["X"][1] + 3.5, "right"),
+                  "P": (164, POS["P"][1] + 3.5, "right"), "C+2P": (164, POS["C+2P"][1] + 3.5, "right"),
+                  "C": (POS["C"][0], T_("C") - 2, "center"), "3P": (R_("3P") + 1, POS["3P"][1] + 3.5, "left"),
+                  "0": (R_("0") + 2, POS["0"][1] + 3.5, "left")}
+PSI_TEX = {"2X": r"x_{\mathrm{X}}^2", "X": r"x_{\mathrm{X}}", "C": r"x_{\mathrm{C}}", "P": r"x_{\mathrm{P}}",
+           "C+2P": r"x_{\mathrm{C}}\,x_{\mathrm{P}}^2", "3P": r"x_{\mathrm{P}}^3", "0": "1"}
+
+def complex_view(flux=None, psi=None, fs=8, pre="B", boxes=False):
+    """the network of B. With flux (one steady state), shafts are 2·√(r*/10) wide and carry r* instead of the
+    reaction names, and psi labels every complex with its concentration (numbers; B gets formulas instead)."""
+    W = lambda r: 1.2 if flux is None else WIDTH(flux[r])
+    name = lambda r: r if flux is None else str(flux[r])
+    o = module_boxes() if boxes else []
+    yX, y0 = POS["X"][1], POS["0"][1]
+    o += group(f"{pre}_R1_R2_zero_X", pair((L_("0"), y0), (R_("X"), yX), "B", (W("R1"), W("R2")))   # R1 0 -> X travels left: black below
+               + [t((R_("X") + L_("0")) / 2 - 2.3, yX - 7.6, name("R1"), fs, INK, anchor="end"),
+                  t((R_("X") + L_("0")) / 2 - 2.3, yX - 7.6, "/" + name("R2"), fs, GRAY)])
+    o += group(f"{pre}_R3_2X_C", arrow((R_("2X", 3.5), POS["2X"][1]), (L_("C"), POS["C"][1]), "B", w=W("R3"))
+               + [t((R_("2X", 3.5) + L_("C")) / 2, POS["C"][1] - 4, name("R3"), fs, INK, anchor="middle")])
+    o += group(f"{pre}_R5_C_zero", [shaft(R5_PATH, W("R5")), full_head((POS["0"][0], T_("0")), (0, 1), "B")]
+               + [t(R_("C") + 13, POS["C"][1] - 4, name("R5"), fs, INK, anchor="middle")])
+    o += group(f"{pre}_R6_P_zero", [shaft(R6_PATH, W("R6")), full_head((POS["0"][0], B__("0")), (0, -1), "B")]
+               + [t(250, POS["P"][1] - 4, name("R6"), fs, INK, anchor="middle")])
+    o += group(f"{pre}_R4_C2P_3P", arrow((mx1 + .75, POS["C+2P"][1]), (L_("3P"), POS["3P"][1]), "B", w=W("R4"))
+               + [t((mx1 + .75 + L_("3P")) / 2, POS["3P"][1] - 4, name("R4"), fs, INK, anchor="middle")])
+    for c in POS:
+        o += group(f"{pre}_complex_{c.replace('+', '_').replace('0', 'zero')}", pill(c))
+    if psi is not None:
+        anchor = {"right": "end", "center": "middle", "left": None}
+        o += [t(x, y, str(psi[c]), fs, PSI, anchor=anchor[a]) for c, (x, y, a) in PSI_AT().items()]
+    return o
+
+# B: the true modules boxed, every complex with its concentration as a formula (D gives the numbers)
+A_ = complex_view(boxes=True) + place([(x, y, 8, a, [("tex", PSI_TEX[c], PSI)]) for c, (x, y, a) in PSI_AT().items()]) + [
+    rect(mx0 + 4.5, 136.2, 7.85, 6.43, MOD1, rx=3.17, stroke="#000", sw=1.5, dash="6 2"),
+    rect(mx0 + 15.5, 136.2, 7.85, 6.43, MOD2, rx=3.17, stroke="#000", sw=1.5, dash="6 2"), t(mx0 + 29.4, 141.5, "kinetic modules", 8)]
 
 # ---- A: metabolite view, as Figure 1A, on Phil's layout; also the two copies of D ----
 NODE = {"X": (51.455, 34.2), "C": (100.685, 34.2), "P": (100.685, 95.27)}
@@ -185,7 +238,7 @@ def metabolite_view(flux=None, conc=None, fs=8, pre="A"):
     loop = (f"M{J[0]},{J[1]} C{J[0]},{J[1] - 17.7} {xl},{J[1] - 17.7} {xl},{J[1]} "
             f"C{xl},{J[1] + .552 * (yP - J[1]):.2f} {ye[0] - .552 * (ye[0] - xl):.2f},{yP} {ye[0]:.2f},{yP}")
     o += group(f"{pre}_R4", arrow((xC, yR + HALF["C"][1] + 3), (xC, yP - HALF["P"][1] - 3), "A", w=W("R4"))
-               + [f'<path d="{loop}" fill="none" stroke="#000" stroke-width="{W("R4"):.2f}"/>',
+               + [f'<path d="{A_LOOP if flux is None else loop}" fill="none" stroke="#000" stroke-width="{W("R4"):.2f}"/>',
                   t(66.5, 70.0, name("R4"), fs, INK, anchor="end")]
                + ([t(104.4, 52.5, "1", fs, INK), t(104.4, 82.5, "3", fs, INK), t(85.5, 90.0, "2", fs, INK)] if flux is None else []))
     for m, (x, y) in NODE.items():
@@ -197,19 +250,26 @@ def metabolite_view(flux=None, conc=None, fs=8, pre="A"):
 
 M_ = metabolite_view() + [f'<circle cx="19.0" cy="88.5" r="4.5" fill="{ACR_FILL}"/>', t(26.5, 91.4, "ACR (true)", 8)]
 
-# ---- D: the two steady states on the network of A ----
-DS, DY = 0.8, 140.8                                    # copies of A at 80 %; 10 pt labels print at 8 pt
+# ---- D: the two steady states on the network of B ----
+def complex_conc(c, v):
+    """concentration of complex c at metabolite concentrations v, exact"""
+    out = F(1)
+    for term in c.split("+"):
+        if term != "0":
+            n, m = (int(term[:-1]), term[-1]) if term[0].isdigit() else (1, term)
+            out *= v[m] ** n
+    return out
+PSIS = [{c: complex_conc(c, v) for c in POS} for v in SS]
+assert all(p["C+2P"] / p["P"] == 4 for p in PSIS)       # the module's ratio is the same in both
+DS, DY, DX0 = 0.8, 150, 146                            # copies of B at 80 %; 10 pt labels print at 8 pt
 D_ = [letter(4.302, 166, "D")]
 for k, ox in enumerate((18, 150)):
-    D_ += [f'<g id="D_steady_state_{k + 1}" transform="translate({ox} {DY}) scale({DS})">',
-           *metabolite_view(FLUX[k], SS[k], fs=10, pre=f"D{k + 1}"), t(4, 99.5, f"steady state {k + 1}", 10, INK, bold=True), '</g>']
-# key: numbers on arrows are the steady-state flux r*, exact; shaft width grows with its square root
+    D_ += [f'<g id="D_steady_state_{k + 1}" transform="translate({ox - DS * DX0:.2f} {DY}) scale({DS})">',
+           *complex_view(FLUX[k], PSIS[k], fs=10, pre=f"D{k + 1}"), t(DX0, 6, f"steady state {k + 1}", 10, INK, bold=True), '</g>']
+# key: on arrows the exact flux r* (width grows with its square root, see the caption), at complexes psi
 KX, KY = 285, 166
-D_ += [t(KX, KY, "on arrows: flux r*", 8), t(KX, KY + 11, "width ∝ √r*", 8, MUTE)]
-for j, r in enumerate((20, 5, 1)):
-    yy = KY + 23 + j * 9
-    D_ += [line(KX, yy, KX + 20, yy, "#000", DS * WIDTH(r)), t(KX + 25, yy + 2.6, str(r), 8)]
-D_ += [t(KX, KY + 59, "x, c, p: concentrations", 8, MUTE)]
+D_ += place([(KX, KY + 59, 8, "left", [("text", "at complexes: concentration ", PSI), ("tex", r"\psi", PSI)])])
+D_ += [t(KX, KY + 70, "ratio C+2P / P = 4 in both", 8, MUTE)]
 
 
 # ---- C: nullclines, stacked in the right column ----
@@ -227,81 +287,105 @@ def plot(x0, y0, w, h, xmax, ymax, ticks, curves, points, xlab, ylab, title, yti
     for pts, col, lab, (lx, ly) in curves:
         seg = [(X(a), Yp(b)) for a, b in pts if 0 <= a <= xmax and 0 <= b <= ymax]
         o.append(f'<polyline points="{" ".join(f"{a:.2f},{b:.2f}" for a, b in seg)}" fill="none" stroke="{col}" stroke-width="1.2"/>')
-        o.append(t(X(lx), Yp(ly), lab, 7.5, col))
+        if lab:
+            o.append(t(X(lx), Yp(ly), lab, 7.5, col))
     for (a, b), lab, (dx, dy), anchor in points:
         o += [f'<circle cx="{X(a):.2f}" cy="{Yp(b):.2f}" r="2.4" fill="{INK}" stroke="#fff" stroke-width=".8"/>',
               t(X(a) + dx, Yp(b) + dy, lab, 7, INK, anchor=anchor)]
     return o
 
 grid = lambda lo, hi, n: [lo + (hi - lo) * i / n for i in range(n + 1)]
-NX, NW, NH = 404, 100, 54                              # data boxes of the two stacked plots
+NX, NW, NH = 337.68, 100, 54                           # data boxes of the two stacked plots (Phil: 66.32 pt left)
 B_ = []
 # X: supply 20 against loss x + x^2/10, one crossing at x = 10 (both steady states)
 B_ += plot(NX, 84, NW, NH, 16, 40, [0, 10], [([(x, 20) for x in grid(0, 16, 2)], ORANGE, "supply 20", (.5, 23.5)),
-                                            ([(x, x + x * x / 10) for x in grid(0, 16, 200)], BLUE, "loss x + x²/10", (3.6, 32))],
+                                            ([(x, x + x * x / 10) for x in grid(0, 16, 200)], BLUE, "", (3.6, 32))],
            [((10, 20), "1, 2", (4, 9), None)], "X", "rate", "X: one steady state", yticks=[0, 20, 40], ylab_dx=23)
 # C, P at x = 10: dC/dt = 0 is c (1 + p^2/4) = 5, dP/dt = 0 is c p = 4; they cross twice
 B_ += plot(NX, 184, NW, NH, 6, 6, [0, 2, 4],
-           [([(5 / (1 + p * p / 4), p) for p in grid(0, 6, 300)], BLUE, "dC/dt = 0", (3, 5)),
-            ([(4 / p, p) for p in grid(2 / 3, 6, 300)], ORANGE, "dP/dt = 0", (3, 4))],
+           [([(5 / (1 + p * p / 4), p) for p in grid(0, 6, 300)], BLUE, "", (3, 5)),
+            ([(4 / p, p) for p in grid(2 / 3, 6, 300)], ORANGE, "", (3, 4))],
            [((1, 4), "1", (4, 2.5), None), ((4, 1), "2", (0, -5), "middle")], "C", "P", "C, P: two steady states")
-# the orange curve is where the iterated route's kinetic module holds: C·P = 4 at every steady state
-B_.append(t(NX + 3 / 6 * NW, 184 - 3.1 / 6 * NH, "C·P = 4", 7.5, ORANGE))
+# the nullclines as formulas: dC/dt = 0 is C (4 + P^2) = 20, dP/dt = 0 is C·P = 4 (the module {P, C+2P})
+LXN = NX + NW + 6                                      # right of the plot, where Phil's shift left made room
+B_ += place([(NX + 3.6 / 16 * NW, 84 - 32 / 40 * NH, 7.5, "left", [("text", "loss ", BLUE), ("tex", r"x + x^2/10", BLUE)]),
+             (LXN, 141, 7.5, "left", [("tex", r"d\mathrm{C}/dt = 0", BLUE)]),
+             (LXN, 151, 7.5, "left", [("tex", r"\mathrm{P} = \sqrt{20/\mathrm{C} - 4}", BLUE)]),
+             (LXN, 164, 7.5, "left", [("tex", r"d\mathrm{P}/dt = 0", ORANGE)]),
+             (LXN, 174, 7.5, "left", [("tex", r"\mathrm{P} = 4/\mathrm{C}", ORANGE)])])
 
-# ---- E: ACR per metabolite ----
-Y0 = 255
-C_ = [letter(4.302, Y0 - 5, "E"), t(24, Y0 - 7, "ACR, per metabolite")]
-COLS = [("steady state 1", 84), ("steady state 2", 140), ("truth", 196), ("iterated", 250), ("tangent", 304),
-        ("certificate", 358)]
-for name, x in COLS:
-    C_.append(t(x, Y0 + 6, name, 7, MUTE, anchor="middle"))
-C_.append(t(304, Y0 - 2, "local ACR", 6.5, MUTE, anchor="middle"))   # the tangent route decides local ACR
-C_.append(t(250, Y0 - 2, "proven", 6.5, MUTE, anchor="middle"))
-ROWS = "XCP"
-VAL = {m: (str(SS[0][m]), str(SS[1][m])) for m in ROWS}      # exact, here integers: 10, 1, 4
-TRUTH = {"X": True, "C": False, "P": False}
-CALLS = {"iterated": set(), "tangent": {"X", "C", "P"}, "certificate": {"X"}}
+# ---- E: what each route reports, ACR per metabolite (left) and kinetic modules (right) ----
+Y0 = 272                                # below D
 RH = 13
-def cell(x, y, claimed, true):
-    """ACR claimed: amber chip; claimed but false: red chip; missed: dashed outline around a dash"""
+def chip(x, y, label, fill, w=23, stroke=None, dash=None, text=INK):
+    return [rect(x - w / 2, y - 7.3, w, 9.6, fill, rx=2, stroke=stroke, sw=.8, dash=dash), t(x, y, label, 7, text, anchor="middle")]
+def cell(x, y, claimed, true, label="ACR", fill=ACR_FILL, w=23):
+    """claimed and true: chip; claimed but false: red chip; missed: dashed outline around a dash"""
     if claimed:
-        o = [rect(x - 11.5, y - 7.3, 23, 9.6, ACR_FILL if true else FALSE_FILL, rx=2,
-                  stroke=None if true else FALSE_LINE)]
-        return o + [t(x, y, "ACR", 7, INK, anchor="middle")]
+        return chip(x, y, label, fill if true else FALSE_FILL, w, stroke=None if true else FALSE_LINE)
     if true:
-        return [rect(x - 11.5, y - 7.3, 23, 9.6, "none", rx=2, stroke=MISS_LINE, sw=.8, dash="2 1.2"),
-                t(x, y, "–", 7, MUTE, anchor="middle")]
+        return chip(x, y, "–", "none", w, stroke=MISS_LINE, dash="2 1.2", text=MUTE)
     return [t(x, y, "–", 7, MUTE, anchor="middle")]
-for i, m in enumerate(ROWS):
-    y = Y0 + 7 + (i + 1) * RH
-    C_ += [t(40, y, m, 8, INK, bold=True, anchor="middle"),
-           t(84, y, VAL[m][0], 7.5, anchor="middle"), t(140, y, VAL[m][1], 7.5, anchor="middle")]
-    C_ += cell(196, y, TRUTH[m], TRUTH[m])
-    for name, x in COLS[3:]:
-        C_ += cell(x, y, m in CALLS[name], TRUTH[m])
-# the two properties the figure is about: no false ACR claims (correct), no missed ACR (complete)
-ys = Y0 + 7 + (len(ROWS) + 1) * RH + 4
-C_.append(line(30, ys - 9.5, 374, ys - 9.5, "#dde1e6", .6))
-for j, prop in enumerate(("correct", "complete")):
-    y = ys + j * 12
-    C_.append(t(222, y, prop, 7.5, INK, anchor="end"))
-    for name, x in COLS[3:]:
-        wrong = [m for m in ROWS if (m in CALLS[name]) != TRUTH[m] and (m in CALLS[name]) == (prop == "correct")]
-        C_.append(cross(x, y - 2.6) if wrong else check(x, y - 2.6))
-# legend
-LX = 408
-C_ += [rect(LX, Y0 + 12.7, 23, 9.6, ACR_FILL, rx=2), t(LX + 11.5, Y0 + 20, "ACR", 7, INK, anchor="middle"),
-       t(LX + 28, Y0 + 20.2, "reported", 8),
-       rect(LX, Y0 + 25.7, 23, 9.6, "none", rx=2, stroke=MISS_LINE, sw=.8, dash="2 1.2"),
-       t(LX + 11.5, Y0 + 33, "–", 7, MUTE, anchor="middle"), t(LX + 28, Y0 + 33.2, "missed", 8),
-       rect(LX, Y0 + 38.7, 23, 9.6, FALSE_FILL, rx=2, stroke=FALSE_LINE), t(LX + 11.5, Y0 + 46, "ACR", 7, INK, anchor="middle"),
-       t(LX + 28, Y0 + 46.2, "false", 8)]
+ROUTES = ("iterated", "tangent", "certificate")
+HEAD = {"truth": ("", "truth"), "iterated": ("proven", "iterated"), "tangent": ("local", "tangent"),
+        "certificate": ("", "certificate")}
+def table(x_label, cols, rows, title, label, fill, w, span=None):
+    """rows: (name, truth, {route: claimed}, extra cells[, fill]); cols: {column: x}; span: {route: (first, last,
+    fills)} draws one box over those rows (the tangent route merging the two modules); returns svg and the y of
+    the check rows"""
+    o = [t(x_label - 16, Y0 - 7, title)]
+    for c, x in cols.items():
+        top, bottom = HEAD.get(c, ("", c))
+        o += [t(x, Y0 + 9, bottom, 7, MUTE, anchor="middle")] + ([t(x, Y0 + 1.5, top, 6.5, MUTE, anchor="middle")] if top else [])
+    span = span or {}
+    for i, (name, truth, calls, extra, *rf) in enumerate(rows):
+        y = Y0 + 10 + (i + 1) * RH; f = rf[0] if rf else fill
+        o += [t(x_label, y, name, 8, INK, bold=True)] + [t(cols[k], y, v, 7.5, anchor="middle") for k, v in extra.items()]
+        o += cell(cols["truth"], y, truth, truth, label, f, w)
+        o += sum((cell(cols[r], y, calls[r], truth, label, f, w) for r in ROUTES
+                  if not (r in span and span[r][0] <= i <= span[r][1])), [])
+    for r, (i0, i1, fills) in span.items():            # one box over several rows, one colour band per row
+        x, ya, yb = cols[r], Y0 + 10 + (i0 + 1) * RH - 7.3, Y0 + 10 + (i1 + 1) * RH + 2.3
+        band = (yb - ya) / len(fills)
+        o += [rect(x - w / 2, ya + k * band, w, band, f, rx=0) for k, f in enumerate(fills)]
+        o += [rect(x - w / 2, ya, w, yb - ya, "none", rx=2, stroke=MUTE, sw=.6), t(x, (ya + yb) / 2 + 2.5, label, 7, INK, anchor="middle")]
+    ys = Y0 + 10 + (len(rows) + 1) * RH + 4
+    o.append(line(x_label - 4, ys - 9.5, max(cols.values()) + 16, ys - 9.5, "#dde1e6", .6))
+    for j, prop in enumerate(("correct", "complete")):     # no false claim / nothing missed
+        y = ys + j * 12
+        for r in ROUTES:
+            wrong = [row[0] for row in rows if row[2][r] != row[1] and row[2][r] == (prop == "correct")]
+            o.append(cross(cols[r], y - 2.6) if wrong else check(cols[r], y - 2.6))
+    return o, ys
+C_ = [letter(4.302, Y0 - 5, "E")]
+# ACR: per metabolite, with its concentration in both steady states
+VAL = {m: (str(SS[0][m]), str(SS[1][m])) for m in "XCP"}      # exact, here integers: 10, 1, 4
+ACR_CALLS = {"iterated": set(), "tangent": {"X", "C", "P"}, "certificate": {"X"}}
+ACOL = {"1": 62, "2": 94, "truth": 128, "iterated": 160, "tangent": 192, "certificate": 226}
+acr_rows = [(m, m == "X", {r: m in ACR_CALLS[r] for r in ROUTES}, {"1": VAL[m][0], "2": VAL[m][1]}) for m in "XCP"]
+o, ys = table(36, ACOL, acr_rows, "ACR, per metabolite", "ACR", ACR_FILL, 23)
+C_ += o + [t(78, Y0 + 1.5, "steady state", 6.5, MUTE, anchor="middle")]
+C_ += [t(122, ys + j * 12, prop, 7.5, INK, anchor="end") for j, prop in enumerate(("correct", "complete"))]
+# kinetic modules: the two true ones, and the 17 other pairs of the 7 complexes that the tangent route couples
+# too (T = {0} at both steady states, so every complex looks fixed); the certificate proves X, and with it
+# the module {0, X, 2X}
+MCOL = {"truth": 316, "iterated": 350, "tangent": 384, "certificate": 418}
+mod_rows = [("{Ø, X, 2X}", True, {"iterated": False, "tangent": True, "certificate": True}, {}, MOD1),
+            ("{P, C+2P}", True, {"iterated": True, "tangent": True, "certificate": True}, {}, MOD2),
+            ("17 other pairs", False, {"iterated": False, "tangent": True, "certificate": False}, {})]
+o, _ = table(250, MCOL, mod_rows, "Kinetic modules", "coupled", KIN, 30, span={"tangent": (0, 1, (MOD1, MOD2))})
+C_ += o
+# legend: reported (ACR, coupled), missed, false
+LX = 440
+C_ += chip(LX + 15, Y0 + 23, "ACR", ACR_FILL) + chip(LX + 15, Y0 + 36, "coupled", KIN, 30) + [t(LX + 34, Y0 + 32.7, "reported", 7.5)]
+C_ += chip(LX + 15, Y0 + 49, "–", "none", 23, stroke=MISS_LINE, dash="2 1.2", text=MUTE) + [t(LX + 34, Y0 + 49.2, "missed", 7.5)]
+C_ += chip(LX + 15, Y0 + 62, "ACR", FALSE_FILL, stroke=FALSE_LINE) + [t(LX + 34, Y0 + 62.2, "false", 7.5)]
 
-H = Y0 + 92 - RH
+H = Y0 + 95 - RH
 svg = ['<?xml version="1.0" encoding="UTF-8"?>',
        f'<svg id="Figure3" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 518.4 {H}" width="518.4pt" height="{H}pt">',
        '<rect x="0" y="0" width="518.4" height="%d" fill="#fff"/>' % H,
-       letter(4.302, 16.991, "A"), letter(151.109, 16.991, "B"), letter(374, 16.991, "C"),
+       letter(4.302, 16.991, "A"), letter(151.109, 16.991, "B"), letter(307.68, 16.991, "C"),
        '<g id="A_metabolite_view">', *M_, '</g>', '<g id="B_complex_view">', *A_, '</g>',
        '<g id="C_nullclines">', *B_, '</g>', '<g id="D_steady_states">', *D_, '</g>',
        '<g id="E_acr_table">', *C_, '</g>', '</svg>']

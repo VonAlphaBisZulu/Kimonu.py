@@ -1,0 +1,13 @@
+{
+ "model": "iIS312_Trypomastigote",
+ "attached": {
+  "seconds": 0.9189844131469727,
+  "seconds_old": 2.072359800338745,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 2.522678852081299,
+  "seconds_old": 7.911759376525879,
+  "same_counts": true
+ }
+}

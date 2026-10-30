@@ -1,0 +1,32 @@
+{
+ "model": "iAF1260b",
+ "n_complexes": 14973,
+ "n_metabolites": 9382,
+ "tangent_dim": 1041,
+ "seconds_iterated": 160.9784393310547,
+ "seconds_tangent": 1811.7413742542267,
+ "it": {
+  "modules": 1087,
+  "giant": 96,
+  "pairs": 8332,
+  "acr": 0,
+  "acrr_pairs": 1780,
+  "acr_free": 0,
+  "acrr_pairs_free": 18
+ },
+ "tan": {
+  "modules": 1087,
+  "giant": 96,
+  "pairs": 8332,
+  "acr": 0,
+  "acrr_pairs": 1780,
+  "acr_free": 0,
+  "acrr_pairs_free": 18
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

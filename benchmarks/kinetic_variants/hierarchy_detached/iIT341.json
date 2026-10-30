@@ -1,0 +1,32 @@
+{
+ "model": "iIT341",
+ "n_complexes": 3193,
+ "n_metabolites": 2200,
+ "tangent_dim": 327,
+ "seconds_iterated": 5.046870231628418,
+ "seconds_tangent": 19.34333300590515,
+ "it": {
+  "modules": 112,
+  "giant": 196,
+  "pairs": 19675,
+  "acr": 0,
+  "acrr_pairs": 4138,
+  "acr_free": 0,
+  "acrr_pairs_free": 25
+ },
+ "tan": {
+  "modules": 112,
+  "giant": 196,
+  "pairs": 19675,
+  "acr": 0,
+  "acrr_pairs": 4138,
+  "acr_free": 0,
+  "acrr_pairs_free": 25
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

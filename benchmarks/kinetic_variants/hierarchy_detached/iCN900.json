@@ -1,0 +1,32 @@
+{
+ "model": "iCN900",
+ "n_complexes": 3329,
+ "n_metabolites": 2127,
+ "tangent_dim": 318,
+ "seconds_iterated": 2.8398478031158447,
+ "seconds_tangent": 3.5603482723236084,
+ "it": {
+  "modules": 250,
+  "giant": 19,
+  "pairs": 706,
+  "acr": 0,
+  "acrr_pairs": 97,
+  "acr_free": 0,
+  "acrr_pairs_free": 8
+ },
+ "tan": {
+  "modules": 250,
+  "giant": 19,
+  "pairs": 706,
+  "acr": 0,
+  "acrr_pairs": 97,
+  "acr_free": 0,
+  "acrr_pairs_free": 8
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

@@ -1,0 +1,13 @@
+{
+ "model": "iSB619",
+ "attached": {
+  "seconds": 16.94497323036194,
+  "seconds_old": 69.93761444091797,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 19.446621894836426,
+  "seconds_old": 77.50167465209961,
+  "same_counts": true
+ }
+}

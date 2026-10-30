@@ -1,0 +1,13 @@
+{
+ "model": "iJR904",
+ "attached": {
+  "seconds": 55.9447968006134,
+  "seconds_old": 210.2020125389099,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 47.32998299598694,
+  "seconds_old": 166.94199752807617,
+  "same_counts": true
+ }
+}

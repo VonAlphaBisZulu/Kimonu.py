@@ -1,0 +1,32 @@
+{
+ "model": "Saha2011iRS1597",
+ "n_complexes": 3642,
+ "n_metabolites": 2380,
+ "tangent_dim": 383,
+ "seconds_iterated": 5.925456523895264,
+ "seconds_tangent": 4.168508291244507,
+ "it": {
+  "modules": 185,
+  "giant": 115,
+  "pairs": 6787,
+  "acr": 3,
+  "acrr_pairs": 2567,
+  "acr_free": 0,
+  "acrr_pairs_free": 949
+ },
+ "tan": {
+  "modules": 185,
+  "giant": 115,
+  "pairs": 6787,
+  "acr": 3,
+  "acrr_pairs": 2567,
+  "acr_free": 0,
+  "acrr_pairs_free": 949
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

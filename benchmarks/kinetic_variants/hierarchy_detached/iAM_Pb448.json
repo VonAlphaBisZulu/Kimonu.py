@@ -1,0 +1,32 @@
+{
+ "model": "iAM_Pb448",
+ "n_complexes": 7574,
+ "n_metabolites": 4671,
+ "tangent_dim": 517,
+ "seconds_iterated": 31.668445587158203,
+ "seconds_tangent": 352.86024236679077,
+ "it": {
+  "modules": 540,
+  "giant": 102,
+  "pairs": 6681,
+  "acr": 0,
+  "acrr_pairs": 1490,
+  "acr_free": 0,
+  "acrr_pairs_free": 27
+ },
+ "tan": {
+  "modules": 540,
+  "giant": 102,
+  "pairs": 6681,
+  "acr": 0,
+  "acrr_pairs": 1490,
+  "acr_free": 0,
+  "acrr_pairs_free": 27
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

@@ -1,0 +1,32 @@
+{
+ "model": "iSynCJ816",
+ "n_complexes": 7282,
+ "n_metabolites": 4716,
+ "tangent_dim": 771,
+ "seconds_iterated": 15.275416135787964,
+ "seconds_tangent": 13.509618043899536,
+ "it": {
+  "modules": 1620,
+  "giant": 30,
+  "pairs": 2855,
+  "acr": 2,
+  "acrr_pairs": 338,
+  "acr_free": 2,
+  "acrr_pairs_free": 53
+ },
+ "tan": {
+  "modules": 1620,
+  "giant": 30,
+  "pairs": 2855,
+  "acr": 2,
+  "acrr_pairs": 338,
+  "acr_free": 2,
+  "acrr_pairs_free": 53
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

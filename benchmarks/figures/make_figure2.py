@@ -2,7 +2,8 @@
 
 A-E   the toy network where local and global differ: metabolite view, complex view, nullclines, the two
       steady states on the network, ACR per metabolite (figure2.py, which draws its own letters A-E)
-F, G  the 33 benchmark models: iterated route (proven) against tangent route (local ACR), make_hierarchy.py
+F, G  the 33 benchmark models, detached uptakes: iterated route (proven) against tangent route (local ACR),
+      make_hierarchy.py
 H, I  the tangent route at scale: symbolic local-ACR criterion against one exact nullspace, and how many of
       the exact ACR/ACRR relations float64 still finds (make_tangent_benchmark.py)
 
@@ -18,8 +19,9 @@ LETTER = '<text transform="translate({x:.2f} {y:.2f})" fill="#1b2430" font-famil
 
 tmp = tempfile.mkdtemp()
 env = dict(os.environ, FIG_LETTERS="0", FIG_OUT=tmp)
-subprocess.run([sys.executable, "figures/make_hierarchy.py", tmp], check=True,
-               env=dict(env, FIG_HEIGHT_IN="2.3", FIG_NAME="hierarchy", FIG_LEGEND_BOTTOM="1"))
+subprocess.run([sys.executable, "figures/make_hierarchy.py", tmp], check=True,       # detached uptakes, the default
+               env=dict(env, FIG_HEIGHT_IN="2.3", FIG_NAME="hierarchy", FIG_LEGEND_BOTTOM="1",
+                        HIERARCHY_DIR="kinetic_variants/hierarchy_detached"))
 subprocess.run([sys.executable, "figures/make_tangent_benchmark.py"], check=True,
                env=dict(env, FIG_HEIGHT_CM="5.3", FIG_NAME="tangent"))
 subprocess.run([sys.executable, "docs/examples/network/figure2.py", f"{tmp}/toy.svg"], check=True)

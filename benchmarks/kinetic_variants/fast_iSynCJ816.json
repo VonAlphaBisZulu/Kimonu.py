@@ -1,0 +1,13 @@
+{
+ "model": "iSynCJ816",
+ "attached": {
+  "seconds": 14.95159387588501,
+  "seconds_old": 65.82108354568481,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 13.577630519866943,
+  "seconds_old": 53.65238118171692,
+  "same_counts": true
+ }
+}

@@ -1,0 +1,32 @@
+{
+ "model": "iAB_RBC_283",
+ "n_complexes": 6034,
+ "n_metabolites": 3656,
+ "tangent_dim": 463,
+ "seconds_iterated": 14.772211074829102,
+ "seconds_tangent": 40.28326988220215,
+ "it": {
+  "modules": 499,
+  "giant": 17,
+  "pairs": 890,
+  "acr": 0,
+  "acrr_pairs": 109,
+  "acr_free": 0,
+  "acrr_pairs_free": 10
+ },
+ "tan": {
+  "modules": 499,
+  "giant": 17,
+  "pairs": 890,
+  "acr": 0,
+  "acrr_pairs": 109,
+  "acr_free": 0,
+  "acrr_pairs_free": 10
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

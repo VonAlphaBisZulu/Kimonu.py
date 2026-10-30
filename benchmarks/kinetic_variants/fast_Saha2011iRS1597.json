@@ -1,0 +1,13 @@
+{
+ "model": "Saha2011iRS1597",
+ "attached": {
+  "seconds": 4.534750461578369,
+  "seconds_old": 11.998841047286987,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 4.8625898361206055,
+  "seconds_old": 13.468810319900513,
+  "same_counts": true
+ }
+}

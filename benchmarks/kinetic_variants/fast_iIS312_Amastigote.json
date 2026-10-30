@@ -1,0 +1,13 @@
+{
+ "model": "iIS312_Amastigote",
+ "attached": {
+  "seconds": 4.981205224990845,
+  "seconds_old": 21.50592303276062,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 6.551346302032471,
+  "seconds_old": 26.273115634918213,
+  "same_counts": true
+ }
+}

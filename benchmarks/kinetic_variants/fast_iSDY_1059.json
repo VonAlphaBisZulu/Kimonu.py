@@ -1,0 +1,13 @@
+{
+ "model": "iSDY_1059",
+ "attached": {
+  "seconds": 1539.1838150024414,
+  "seconds_old": 6966.247291564941,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 1407.942496061325,
+  "seconds_old": 6376.460929632187,
+  "same_counts": true
+ }
+}

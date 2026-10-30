@@ -1,0 +1,13 @@
+{
+ "model": "iYO844",
+ "attached": {
+  "seconds": 261.9119963645935,
+  "seconds_old": 1032.5380201339722,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 223.48009967803955,
+  "seconds_old": 905.2732338905334,
+  "same_counts": true
+ }
+}

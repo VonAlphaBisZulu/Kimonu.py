@@ -1,0 +1,13 @@
+{
+ "model": "ArabidopsisCoreModel",
+ "attached": {
+  "seconds": 279.94601130485535,
+  "seconds_old": 1144.188265800476,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 278.88887667655945,
+  "seconds_old": 1116.2319152355194,
+  "same_counts": true
+ }
+}

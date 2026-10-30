@@ -1,0 +1,13 @@
+{
+ "model": "iAF1260b",
+ "attached": {
+  "seconds": 2164.912127494812,
+  "seconds_old": 10694.910009860992,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 1818.4968872070312,
+  "seconds_old": 9108.220957279205,
+  "same_counts": true
+ }
+}

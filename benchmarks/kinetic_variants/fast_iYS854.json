@@ -1,0 +1,13 @@
+{
+ "model": "iYS854",
+ "attached": {
+  "seconds": 323.09342432022095,
+  "seconds_old": 829.0226850509644,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 309.9091935157776,
+  "seconds_old": 789.0267429351807,
+  "same_counts": true
+ }
+}

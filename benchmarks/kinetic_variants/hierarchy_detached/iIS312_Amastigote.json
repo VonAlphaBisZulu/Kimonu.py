@@ -1,0 +1,32 @@
+{
+ "model": "iIS312_Amastigote",
+ "n_complexes": 1446,
+ "n_metabolites": 927,
+ "tangent_dim": 149,
+ "seconds_iterated": 1.363067388534546,
+ "seconds_tangent": 6.363490104675293,
+ "it": {
+  "modules": 35,
+  "giant": 9,
+  "pairs": 79,
+  "acr": 0,
+  "acrr_pairs": 10,
+  "acr_free": 0,
+  "acrr_pairs_free": 5
+ },
+ "tan": {
+  "modules": 35,
+  "giant": 9,
+  "pairs": 79,
+  "acr": 0,
+  "acrr_pairs": 10,
+  "acr_free": 0,
+  "acrr_pairs_free": 5
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

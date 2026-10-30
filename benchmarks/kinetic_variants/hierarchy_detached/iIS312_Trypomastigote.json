@@ -1,0 +1,32 @@
+{
+ "model": "iIS312_Trypomastigote",
+ "n_complexes": 1046,
+ "n_metabolites": 708,
+ "tangent_dim": 133,
+ "seconds_iterated": 1.0373649597167969,
+ "seconds_tangent": 2.4264297485351562,
+ "it": {
+  "modules": 30,
+  "giant": 11,
+  "pairs": 100,
+  "acr": 0,
+  "acrr_pairs": 14,
+  "acr_free": 0,
+  "acrr_pairs_free": 1
+ },
+ "tan": {
+  "modules": 30,
+  "giant": 11,
+  "pairs": 100,
+  "acr": 0,
+  "acrr_pairs": 14,
+  "acr_free": 0,
+  "acrr_pairs_free": 1
+ },
+ "violations": {
+  "pairs": 0,
+  "acr": 0,
+  "acrr_pairs": 0
+ },
+ "gap": false
+}

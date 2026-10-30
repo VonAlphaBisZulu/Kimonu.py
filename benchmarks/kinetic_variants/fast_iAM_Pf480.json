@@ -1,0 +1,13 @@
+{
+ "model": "iAM_Pf480",
+ "attached": {
+  "seconds": 260.7867314815521,
+  "seconds_old": 1206.4872064590454,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 333.23103046417236,
+  "seconds_old": 1499.054839849472,
+  "same_counts": true
+ }
+}

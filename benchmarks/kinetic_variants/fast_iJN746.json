@@ -1,0 +1,13 @@
+{
+ "model": "iJN746",
+ "attached": {
+  "seconds": 102.71149945259094,
+  "seconds_old": 474.0117118358612,
+  "same_counts": true
+ },
+ "detached": {
+  "seconds": 101.01200079917908,
+  "seconds_old": 450.29466676712036,
+  "same_counts": true
+ }
+}
