@@ -51,7 +51,7 @@ from kimonu.linalg import exact, null_space_rows, positive_flux
 
 TangentResult = namedtuple(
     "TangentResult",
-    ["modules", "module_of", "n_modules", "giant_module", "acr", "acrr", "dimension"],
+    ["modules", "module_of", "n_modules", "giant_module", "acr", "acrr", "dimension", "flux"],
 )
 
 
@@ -72,7 +72,8 @@ def tangent_route(A, Y, N, detach_uptakes=False, seed=0, metabolite_ids=None):
     :func:`kimonu.kinetic_modules`; ``acr`` are the metabolites with local ACR and ``acrr`` the
     sorted pairs with local ACRR, both in the sense of Pascual-Escudero & Feliu (2022), so they can
     claim relations that differ between separate steady states (see the module docstring);
-    ``dimension`` is dim T.
+    ``dimension`` is dim T. ``flux`` is the interior flux r* the route ran at, so the relations are local
+    around the steady state x = 1 for the rate constants k = r* (see :func:`kimonu.rate_constants`).
     """
     n, m = A.shape[0], Y.shape[0]
     skip = zero_complexes(Y) if detach_uptakes else set()
@@ -111,4 +112,5 @@ def tangent_route(A, Y, N, detach_uptakes=False, seed=0, metabolite_ids=None):
         acr=[names[i] for i in found.acr],
         acrr=sorted(acrr),
         dimension=len({j for r in rows for j in r}),
+        flux=flux,
     )

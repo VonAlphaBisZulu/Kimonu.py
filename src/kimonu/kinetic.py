@@ -52,7 +52,7 @@ from kimonu.linalg import entries, exact, null_space_rows, positive_flux, propor
 
 KineticResult = namedtuple(
     "KineticResult",
-    ["modules", "module_of", "n_modules", "giant_module", "known_acr", "rounds"],
+    ["modules", "module_of", "n_modules", "giant_module", "known_acr", "rounds", "flux"],
 )
 
 
@@ -125,6 +125,8 @@ def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
     Returns a :class:`KineticResult`; every complex belongs to exactly one module, singletons
     included, and modules are ordered by their first complex. ``known_acr`` are the metabolites the
     route proves to have ACR; :func:`kimonu.acr_acrr` reports them again together with the ACRR pairs.
+    ``flux`` is the interior flux r* the route ran at: the rate constants k = r* have the steady state
+    x = 1, and :func:`kimonu.rate_constants` moves it to any other x.
     """
     n = A.shape[0]
     skip = zero_complexes(Y) if detach_uptakes else set()
@@ -160,4 +162,5 @@ def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
         giant_module=max((len(m) for m in modules), default=0),
         known_acr=sorted(known),
         rounds=rounds,
+        flux=flux,
     )

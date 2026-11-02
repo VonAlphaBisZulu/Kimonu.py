@@ -20,7 +20,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7"]
+# symbolic_formulas only
+symbolic = ["sympy>=1.12"]
+dev = ["pytest>=7", "sympy>=1.12"]
 
 [project.urls]
 Homepage = "https://github.com/VonAlphaBisZulu/Kimonu.py"
