@@ -80,3 +80,22 @@ with V, D and E not). Gap models (attached, job 568337, outputs in
 while small (up to 95-865 rows), and the MILP hit 900 s at 500-1434 rows; iCN718 link E_89/E231_ACP_accoa
 reached the row cap with sign patterns throughout. The local sign patterns mostly extend to N d = 0 on the whole
 network. No small local proof exists in these neighbourhoods; the obstruction, if any, is global.
+
+## Relation values at given k (`relation_values.py`, 2026-11-02)
+
+kimonu.relation_values on the 33 models, attached and detached (job 568428, outputs in
+/scratch/sadreyev_lab/pschneider/kimonu_values/). Round trip: x random small rationals (1 on metabolites with a
+fractional substrate coefficient), k = r* / ψ(x) by kimonu.rate_constants with the integer r* (scale 10^6). Every
+ACR value came back as x_i, every ACRR ratio as x_j / x_i and every module ratio as ψ_d(x) / ψ_c(x), exactly, in
+all 66 runs, and the relation counts equal the iterated route's (uptake_modes/). At most 57 s, 1 to 4 rounds;
+every feedback ratio was rational. At prime rate constants (k_j = a permuted j-th prime), 20 models attached and
+12 detached have no positive steady state (a complex forced to zero): random k rarely admits one at genome scale.
+
+## Monomial formulas from flux coupling (`binomial_formulas.py`, 2026-11-02)
+
+kimonu.binomial_formulas on the 33 models (job 568461, outputs in /scratch/sadreyev_lab/pschneider/kimonu_binomial/),
+each formula evaluated at the k of `relation_values.py` and compared with the exact value there: 0 wrong, at most
+78 s. Values with a monomial formula (each against the first member of its group): detached ACR 84/93, ACRR
+3745/4945, module ratios 4253/24566; attached ACR 176/860, ACRR 3221/4502, module ratios 4390/25272. Up to 18 rate
+constants in one formula. Flux coupling constrains k in 9 models attached and 8 detached (iSB619 and iYO844 5
+constraints each); the k of rate_constants satisfies all of them.
