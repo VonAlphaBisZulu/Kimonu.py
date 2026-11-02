@@ -1,0 +1,3 @@
+#!/bin/bash
+# install Kimonu itself from the repository; its dependencies come from requirements.txt
+pip install --no-deps .

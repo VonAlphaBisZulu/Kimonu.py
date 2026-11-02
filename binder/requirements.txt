@@ -1,0 +1,4 @@
+# Kimonu needs RationalMatrix.from_fractions, which is on straindesign main but not yet in a release (1.19.1)
+straindesign @ git+https://github.com/klamt-lab/straindesign@main
+cobra>=0.26
+sympy>=1.12
