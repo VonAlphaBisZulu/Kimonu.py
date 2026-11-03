@@ -70,7 +70,7 @@ mets = crn["metabolites"]; mets = [m if isinstance(m, str) else m.get("id") for 
 free = set(range(mets.index("E_1") if "E_1" in mets else nm))
 
 t0 = time.time()
-it = kimonu.kinetic_modules(A, Y, S)
+it = kimonu.kinetic_modules(A, Y, S, detach_uptakes=False)
 ar = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
 t_it = time.time() - t0
 t0 = time.time(); mods, acr_t, acrr_g, dim = tangent(A, Y, S); t_tan = time.time() - t0

@@ -70,7 +70,7 @@ def gap(keep, exact=False):
         A, Y, N, ms = network(kept)
         if target in ms:
             ti = ms.index(target)
-            it = kimonu.kinetic_modules(A, Y, N)
+            it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
             acr_it = set(kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr)
             if ti not in acr_it:
                 if exact:

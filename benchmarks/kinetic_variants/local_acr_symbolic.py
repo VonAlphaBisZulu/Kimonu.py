@@ -206,7 +206,7 @@ def run_network(name, A, Y, N, species, truth=None, limit=3600):
     _, acr_k, groups_k, dimT = res
     rec["kimonu"] = dict(seconds=t, acr=sorted(acr_k), acrr=groups_to_pairs(groups_k), dim_T=dimT)
     # iterated route (proven)
-    it = kimonu.kinetic_modules(A, Y, N)
+    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
     ar = kimonu.acr_acrr(Y, it.modules, metabolite_ids=list(range(m)), known_acr=it.known_acr)
     rec["iterated"] = dict(acr=sorted(int(x) for x in ar.acr), acrr=sorted((min(i, j), max(i, j)) for i, j in ar.acrr))
     # symbolic criterion

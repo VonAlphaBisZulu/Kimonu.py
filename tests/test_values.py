@@ -35,7 +35,7 @@ def test_open_network_closed_form():
     """0 -> a, a <-> b, b -> 0: b = k1 / k4 and a = k1 (k3 + k4) / (k2 k4); detached only a / b is left."""
     A, Y, N, _ = _crn(OPEN, ["a", "b"])
     k = [2, 3, 5, 7]
-    v = kimonu.relation_values(A, Y, N, k, metabolite_ids=["a", "b"])
+    v = kimonu.relation_values(A, Y, N, k, metabolite_ids=["a", "b"], detach_uptakes=False)
     assert v.acr == {"a": Fraction(2 * 12, 3 * 7), "b": Fraction(2, 7)}
     v = kimonu.relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=["a", "b"])
     assert v.acr == {} and v.acrr == [("a", {"b": Fraction(3, 12)})]
@@ -44,10 +44,10 @@ def test_open_network_closed_form():
 def test_square_root_value():
     """dx/dt = k1 - 2 k2 x^2: x = (k1 / 2 k2)^(1/2), irrational for k = (3, 5) and exact as a Value."""
     A, Y, N, _ = _crn(SQRT, ["X"])
-    x = kimonu.relation_values(A, Y, N, [3, 5], metabolite_ids=["X"]).acr["X"]
+    x = kimonu.relation_values(A, Y, N, [3, 5], metabolite_ids=["X"], detach_uptakes=False).acr["X"]
     assert x.rational is None and (x.r, x.b, x.q) == (1, Fraction(3, 10), 2)
     assert float(x) == pytest.approx((3 / 10) ** 0.5, rel=1e-15)
-    assert kimonu.relation_values(A, Y, N, [8, 1], metabolite_ids=["X"]).acr["X"] == 2
+    assert kimonu.relation_values(A, Y, N, [8, 1], metabolite_ids=["X"], detach_uptakes=False).acr["X"] == 2
 
 
 @pytest.mark.parametrize("name", sorted(TOYS))

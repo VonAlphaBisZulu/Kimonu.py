@@ -37,7 +37,7 @@ def test_zero_complex_has_its_own_row():
 def test_attached_uptake_fixes_its_product():
     """psi_0 = 1: with a constant inflow, a's steady state is fixed, as in the matrix-built test."""
     crn = build_crn(_toy())
-    kin = kimonu.kinetic_modules(crn.A, crn.Y, crn.N_exact)
+    kin = kimonu.kinetic_modules(crn.A, crn.Y, crn.N_exact, detach_uptakes=False)
     acr = kimonu.acr_acrr(crn.Y, kin.modules, metabolite_ids=crn.metabolite_ids, known_acr=kin.known_acr)
     assert "a" in acr.acr
 

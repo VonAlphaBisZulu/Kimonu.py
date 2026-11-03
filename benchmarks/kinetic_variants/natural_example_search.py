@@ -55,7 +55,7 @@ def routes(R, S):
     reactions (no strictly positive steady-state flux)."""
     A, Y, N, cx = _crn(R, S)
     try:
-        it = kimonu.kinetic_modules(A, Y, N)
+        it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
     except ValueError:
         return None
     ia = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)

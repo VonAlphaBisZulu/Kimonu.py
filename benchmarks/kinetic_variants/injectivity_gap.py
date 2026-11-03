@@ -113,7 +113,7 @@ def gap_dims(crn, A, Y, N, Nf, relations=(), seeds=4, log=print):
     ACRR e_i - e_j) add to C_iter. All ranks exact."""
     import kimonu
     m = Nf.shape[0]; t0 = time.time()
-    it = kimonu.kinetic_modules(A, Y, N)
+    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
     Vx, Vrows = exact_V(crn["Y"], m, it.modules, it.known_acr)
     dKV = kernel_dim([Vrows], m); log(f"iterated route {time.time() - t0:.0f}s, V {len(Vrows)} rows, dim ker V {dKV}")
     # T(r) for several generic r. If every later T lies in the first one (J_0 T_k = 0, an exact product), the
@@ -159,7 +159,7 @@ def tangent_sum(M, max_seeds=20, primes=(4611686018427387847, 230584300921369395
     import flint
     crn, A, Y, Nf = load(M); N = to_exact(Nf); m = Nf.shape[0]; mets = crn["metabolites"]; t0 = time.time()
     import kimonu
-    it = kimonu.kinetic_modules(A, Y, N)
+    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
     _, Vrows = exact_V(crn["Y"], m, it.modules, it.known_acr)
     relf = f"/scratch/sadreyev_lab/pschneider/kimonu_twopoint/{M}_relations.json"
     C = [{mets.index(k): Fraction(v) for k, v in r["c"].items()} for r in json.load(open(relf))["relations"]]

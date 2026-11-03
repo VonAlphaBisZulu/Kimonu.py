@@ -111,7 +111,7 @@ def test_result_does_not_depend_on_the_seed():
 def test_attached_uptake_couples_through_the_zero_complex():
     """psi_0 = 1: with a constant inflow, a's steady state is fixed, so a has ACR."""
     A, Y, N, cx = _crn(OPEN, ["a", "b"])
-    kin = kimonu.kinetic_modules(A, Y, N)
+    kin = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
     zero, a = cx.index("0"), cx.index("a")
     assert kin.module_of[zero] == kin.module_of[a]
     acr = kimonu.acr_acrr(Y, kin.modules, metabolite_ids=["a", "b"], known_acr=kin.known_acr)

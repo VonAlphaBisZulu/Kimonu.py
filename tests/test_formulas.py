@@ -19,9 +19,9 @@ COUPLED = [("0", "A"), ("0", "B"), ("A+B", "C"), ("C", "0")]
 
 def test_open_network():
     A, Y, N, _ = _crn(OPEN, ["a", "b"])
-    b = kimonu.binomial_formulas(A, Y, N, metabolite_ids=["a", "b"])
+    b = kimonu.binomial_formulas(A, Y, N, metabolite_ids=["a", "b"], detach_uptakes=False)
     assert b.acr["a"] is None and b.acr["b"].exponents == {0: 1, 3: -1} and b.acr["b"].constant == 1
-    s = kimonu.symbolic_formulas(A, Y, N, metabolite_ids=["a", "b"])
+    s = kimonu.symbolic_formulas(A, Y, N, metabolite_ids=["a", "b"], detach_uptakes=False)
     k0, k1, k2, k3 = sp.symbols("k0:4", positive=True)
     assert sp.simplify(s.acr["a"] - k0 * (k2 + k3) / (k1 * k3)) == 0
 
@@ -29,9 +29,9 @@ def test_open_network():
 def test_coupled_uptakes_constrain_k():
     """Attached, both uptakes run at k0 and k1 with equal fluxes: k0 = k1. Detached, nothing is constrained."""
     A, Y, N, _ = _crn(COUPLED, ["A", "B", "C"])
-    b = kimonu.binomial_formulas(A, Y, N)
+    b = kimonu.binomial_formulas(A, Y, N, detach_uptakes=False)
     assert [c.exponents for c in b.constraints] in ([{0: 1, 1: -1}], [{0: -1, 1: 1}])
-    s = kimonu.symbolic_formulas(A, Y, N)
+    s = kimonu.symbolic_formulas(A, Y, N, detach_uptakes=False)
     assert len(s.constraints) == 1
     assert kimonu.binomial_formulas(A, Y, N, detach_uptakes=True).constraints == []
 

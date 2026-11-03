@@ -66,9 +66,9 @@ def test_kinase_tangent_route_claims_what_holds_only_locally():
             for s in ([] if prod == "0" else prod.split("+")):
                 dx[s] += rate
         assert not any(dx.values()), state
-    tan = kimonu.tangent_route(A, Y, N, metabolite_ids=KINASE_SPECIES)
+    tan = kimonu.tangent_route(A, Y, N, metabolite_ids=KINASE_SPECIES, detach_uptakes=False)
     assert sorted(tan.acr) == ["C", "P", "X"] and tan.dimension == 0
-    it = kimonu.kinetic_modules(A, Y, N)
+    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
     assert kimonu.acr_acrr(Y, it.modules, metabolite_ids=KINASE_SPECIES, known_acr=it.known_acr).acr == []
 
 
@@ -89,7 +89,7 @@ def test_iterated_route_is_contained_in_the_tangent_route():
 def test_tangent_route_detached_uptakes():
     """A detached uptake is a free source: a loses its ACR, and the zero complex is a module of its own."""
     A, Y, N, cx = _crn(OPEN, ["a", "b"])
-    attached = kimonu.tangent_route(A, Y, N, metabolite_ids=["a", "b"])
+    attached = kimonu.tangent_route(A, Y, N, metabolite_ids=["a", "b"], detach_uptakes=False)
     detached = kimonu.tangent_route(A, Y, N, detach_uptakes=True, metabolite_ids=["a", "b"])
     assert attached.acr == ["a", "b"] and detached.acr == []
     assert {cx.index("0")} in detached.modules
@@ -100,8 +100,8 @@ def test_cubic_is_fixed_on_each_branch_only():
     """Each of the three steady states is isolated (T = {0}), so the tangent route calls A fixed; it takes three
     values, and the iterated route reports nothing."""
     A, Y, N, cx = _crn(CUBIC, ["A"])
-    assert kimonu.tangent_route(A, Y, N).acr == [0]
-    it = kimonu.kinetic_modules(A, Y, N)
+    assert kimonu.tangent_route(A, Y, N, detach_uptakes=False).acr == [0]
+    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
     assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == []
 
 
