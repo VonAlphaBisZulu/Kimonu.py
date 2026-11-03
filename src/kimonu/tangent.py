@@ -34,9 +34,9 @@ of rate constants; T = {0} at both, so this route calls X, C and P fixed, while 
 iterated route claims neither C nor P, and misses X: for generic rate constants,
 iterated ⊆ true ⊆ tangent.
 
-The zero complex has ψ = 1. Attached (default), its uptake reactions run at constant rate and add
-nothing to J. Detached, each uptake reaction gets a source coordinate of its own, a free variable in
-T; only the metabolite rows of T are read, and the zero complex is a module of its own.
+The zero complex has ψ = 1. Detached (default), each uptake reaction gets a source coordinate of its own,
+a free variable in T; only the metabolite rows of T are read, and the zero complex is a module of its own.
+Attached, its uptake reactions run at constant rate and add nothing to J.
 """
 from collections import namedtuple
 from fractions import Fraction
@@ -55,7 +55,7 @@ TangentResult = namedtuple(
 )
 
 
-def tangent_route(A, Y, N, detach_uptakes=False, seed=0, metabolite_ids=None):
+def tangent_route(A, Y, N, detach_uptakes=True, seed=0, metabolite_ids=None):
     """Kinetic modules, local ACR and local ACRR from the tangent space of the steady states.
 
     Args:

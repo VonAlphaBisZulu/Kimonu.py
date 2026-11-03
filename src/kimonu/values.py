@@ -232,7 +232,7 @@ def _difference(Ycsc, c, d):
     return out
 
 
-def relation_values(A, Y, N, k, detach_uptakes=False, metabolite_ids=None):
+def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
     """Exact values of the ACR, ACRR and kinetic-module relations at the rate constants k.
 
     Args:

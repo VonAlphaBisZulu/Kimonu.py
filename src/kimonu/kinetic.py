@@ -37,9 +37,10 @@ module exactly when their composition differs from a member's by a fixed log-com
 coupling of Langary et al. (2025, Supplement S.1), which is not restricted to substrates. Joining adds no
 new vector to the span, so it changes no ACR or ACRR, and the u_c = u_d it feeds back only fixes u_c.
 
-The zero complex has ψ = 1. Attached (default), its uptake reactions run at constant rate and complexes
-coupled to it share its module: a fixed medium. Detached, each uptake reaction is given its own source,
-so only couplings that hold whatever the uptake rates remain, and the zero complex is a module of its own.
+The zero complex has ψ = 1. Detached (default, as in the published tools), each uptake reaction is given
+its own source, so only couplings that hold whatever the uptake rates remain, and the zero complex is a
+module of its own. Attached, its uptake reactions run at constant rate and complexes coupled to it share its
+module: a fixed medium.
 """
 from collections import namedtuple
 from fractions import Fraction
@@ -109,7 +110,7 @@ def _closure(Y, sets, skip):
     return found.modules, set(found.acr)
 
 
-def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
+def kinetic_modules(A, Y, N, detach_uptakes=True, seed=0):
     """Kinetic modules of a network with no blocked reactions, by the iterated route.
 
     Args:
@@ -117,8 +118,9 @@ def kinetic_modules(A, Y, N, detach_uptakes=False, seed=0):
         Y: metabolites x complexes composition matrix.
         N: metabolites x reactions stoichiometric matrix, exact (straindesign RationalMatrix) or
             integer; N = Y A.
-        detach_uptakes: give every reaction out of the zero complex its own source, so couplings
-            through the constant zero-complex monomial are not used.
+        detach_uptakes: give every reaction out of the zero complex its own source (default), so
+            couplings through the constant zero-complex monomial are not used; False attaches the
+            uptakes to the zero complex, a fixed medium.
         seed: seed of the random interior flux. Results hold for generic rate constants, so the
             seed changes them only with probability zero.
 

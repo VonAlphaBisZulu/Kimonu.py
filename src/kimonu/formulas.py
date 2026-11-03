@@ -113,7 +113,7 @@ def _assemble(found, formula, names):
     return list(acr.items()), list(acrr.items()), list(modules.items())
 
 
-def binomial_formulas(A, Y, N, detach_uptakes=False, metabolite_ids=None, seed=0):
+def binomial_formulas(A, Y, N, detach_uptakes=True, metabolite_ids=None, seed=0):
     """Monomial formulas in k for the relations that flux coupling fixes, and the constraints it puts on k.
 
     Args:
@@ -170,7 +170,7 @@ class _SymbolicSpan(_Span):
         pass
 
 
-def symbolic_formulas(A, Y, N, detach_uptakes=False, metabolite_ids=None, reaction_ids=None):
+def symbolic_formulas(A, Y, N, detach_uptakes=True, metabolite_ids=None, reaction_ids=None):
     """Every relation the iterated route proves, with its value as a sympy expression in k.
 
     The derivation of :func:`kimonu.relation_values` over the field Q(k) of rational functions in the
