@@ -68,6 +68,10 @@ Attached uptakes, relations of `two_point_gap.py prepare`.
   pairs of similar degree (iHN637) close 0 of 14.
 The gap is therefore 8 root questions (2 + 1 + 5) rather than 51 relations; a certificate only has to settle
 the roots.
+- Detached uptakes (`DETACH=1`, 2026-11-02, job 568497, outputs in /scratch/sadreyev_lab/pschneider/kimonu_gaproots/):
+  the same roots close the same relations (iHN637 14/14, iNJ661 each single root 6/6, iCN718 5 roots 31/31 and the
+  four ACR 30/31), no root closes 0 on all three, and the attached reruns reproduce the counts above. 8 is an upper
+  bound on iCN718 and iHN637, where smaller root sets were not searched exhaustively.
 
 ## Local sign certificate with lazy rows (`two_point_local.py`, 2026-10-30)
 

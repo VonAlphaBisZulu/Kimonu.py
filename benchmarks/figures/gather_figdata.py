@@ -8,10 +8,14 @@ reference_final/retest/ where present) and reference_final_sampled/. Earlier ref
 Free metabolites are those listed before "E_1" in the model's own metabolite list.
 
     python figures/gather_figdata.py [--check]   # --check diffs kimonu/COCOA arms against the committed file
+
+KIMONU_DET_DIR and KIMONU_REF_DIR replace triplicate_psi_detached3/ and triplicate_refmode/ (e.g. a rerun on scratch).
 """
 import csv, glob, json, os, re, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(B)
+DET_DIR = os.environ.get("KIMONU_DET_DIR", "triplicate_psi_detached3")
+REF_DIR = os.environ.get("KIMONU_REF_DIR", "triplicate_refmode")
 
 def free_set(m):
     mets = json.load(open(f"unblocked/{m}_fixed.crn.json"))["metabolites"]
@@ -35,7 +39,7 @@ def kimonu_rec(m, root="triplicate_psi"):
 
 def kimonu_ref_rec(m):
     """reference-equivalent mode (run_kimonu_refmode.py): the reference's definitions from null spaces"""
-    reps = [json.load(open(f)) for f in sorted(glob.glob(f"triplicate_refmode/kimonu_{m}_rep*.json"))]
+    reps = [json.load(open(f)) for f in sorted(glob.glob(f"{REF_DIR}/kimonu_{m}_rep*.json"))]
     if not reps: return None
     d = reps[0]; med = lambda k: sorted(r[k] for r in reps)[len(reps) // 2]
     return dict(balanced=d["balanced"], conc=d["conc"], n_kinetic=d["n_kinetic"], giant=d["giant"],
@@ -137,7 +141,7 @@ if __name__ == "__main__":
     D = dict(models=models, n_complexes={}, kimonu={}, kimonu_det={}, kimonu_up={}, kimonu_ref={}, cocoa_false={}, cocoa_true={}, ref_exh={}, ref_sampled={})
     for m in models:
         D["kimonu"][m], D["n_complexes"][m] = kimonu_rec(m)
-        D["kimonu_det"][m] = kimonu_rec(m, "triplicate_psi_detached3")[0]
+        D["kimonu_det"][m] = kimonu_rec(m, DET_DIR)[0]
         D["kimonu_up"][m] = kimonu_up_rec(m)[0]
         r = kimonu_ref_rec(m)
         if r: D["kimonu_ref"][m] = r

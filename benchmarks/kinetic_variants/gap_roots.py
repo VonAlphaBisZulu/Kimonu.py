@@ -12,6 +12,8 @@ every complex (the constant goes into the rate constants) and the two balances a
 original steady states satisfy as well.
 
     python kinetic_variants/gap_roots.py <model> [root ...]   # root: metabolite (ACR) or a/b (ACRR); default: the open ACR relations
+
+DETACH=1 runs the iterated route with detached uptakes (the open relations are the same in both modes).
 """
 import json, os, sys
 from fractions import Fraction
@@ -23,6 +25,7 @@ import kimonu
 from kimonu.io import exact_matrix
 
 M = sys.argv[1]
+DETACH = os.environ.get("DETACH") == "1"
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
 rel = json.load(open(f"/scratch/sadreyev_lab/pschneider/kimonu_twopoint/{M}_relations.json"))["relations"]
@@ -91,7 +94,7 @@ def fixed(rx, roots):
 
 
 def proven(A, Y, N, ms):
-    it = kimonu.kinetic_modules(A, Y, N)
+    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=DETACH)
     ar = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
     acr = {ms[i] for i in ar.acr}
     parent = {}
@@ -127,5 +130,5 @@ for r in rel:
         a, b = (name(n) for n in names)
         ok = a == b or (a in fixed_acr and b in fixed_acr) or (a in ms and b in ms and find1(a) == find1(b))
     (closed if ok else still).append(r)
-print(json.dumps(dict(model=M, roots=roots, reactions_kept=len(kept), n_relations=len(rel), closed=len(closed),
+print(json.dumps(dict(model=M, detached=DETACH, roots=roots, reactions_kept=len(kept), n_relations=len(rel), closed=len(closed),
                       open=[(r["kind"], r["c"]) for r in still]), indent=1))

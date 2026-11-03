@@ -1,5 +1,8 @@
-"""ACR/ACRR by the reference's combinatorial rule (Corollary S2-10 as implemented in
-Get_excel_tables_kinetic_modules.R) on Kimonu's own kinetic modules, for comparability.
+"""ACR/ACRR by the reference's pairwise rule (Get_excel_tables_kinetic_modules.R) on Kimonu's own
+kinetic modules, for comparability. The rule is the Shinar-Feinberg criterion (two complexes whose
+monomial ratio is fixed and that differ in one species fix that species) applied within each kinetic
+module. The file name keeps the earlier label "S2-10"; Corollary S2-10 of Langary et al. (2025) is that
+criterion restated for closed deficiency-one networks only, not the rule the code applies.
 
 ACR: two complexes of one module whose compositions differ in exactly one species.
 ACRR: two complexes differing in exactly two species, each complex having exactly one further

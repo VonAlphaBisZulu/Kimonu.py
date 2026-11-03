@@ -1,0 +1,717 @@
+{
+ "iIS312_Trypomastigote": {
+  "kimonu_det": {
+   "pairs": 100,
+   "fixed": 1
+  },
+  "kimonu_ref": {
+   "pairs": 90,
+   "fixed": 1
+  },
+  "ref_exh": {
+   "pairs": 90,
+   "fixed": 1
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 90,
+    "fixed": 1
+   },
+   {
+    "seed": 2026,
+    "pairs": 90,
+    "fixed": 1
+   },
+   {
+    "seed": 31337,
+    "pairs": 90,
+    "fixed": 1
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 93,
+    "fixed": 1
+   },
+   {
+    "seed": 2026,
+    "pairs": 93,
+    "fixed": 1
+   },
+   {
+    "seed": 31337,
+    "pairs": 93,
+    "fixed": 1
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 90,
+    "fixed": 1
+   },
+   {
+    "seed": 2026,
+    "pairs": 90,
+    "fixed": 1
+   },
+   {
+    "seed": 31337,
+    "pairs": 90,
+    "fixed": 1
+   }
+  ]
+ },
+ "iIS312_Amastigote": {
+  "kimonu_det": {
+   "pairs": 79,
+   "fixed": 5
+  },
+  "kimonu_ref": {
+   "pairs": 75,
+   "fixed": 1
+  },
+  "ref_exh": {
+   "pairs": 75,
+   "fixed": 1
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 75,
+    "fixed": 1
+   },
+   {
+    "seed": 2026,
+    "pairs": 75,
+    "fixed": 1
+   },
+   {
+    "seed": 31337,
+    "pairs": 75,
+    "fixed": 1
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 76,
+    "fixed": 5
+   },
+   {
+    "seed": 2026,
+    "pairs": 76,
+    "fixed": 5
+   },
+   {
+    "seed": 31337,
+    "pairs": 76,
+    "fixed": 5
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 75,
+    "fixed": 5
+   },
+   {
+    "seed": 2026,
+    "pairs": 75,
+    "fixed": 5
+   },
+   {
+    "seed": 31337,
+    "pairs": 75,
+    "fixed": 5
+   }
+  ]
+ },
+ "iIS312_Epimastigote": {
+  "kimonu_det": {
+   "pairs": 98,
+   "fixed": 4
+  },
+  "kimonu_ref": {
+   "pairs": 96,
+   "fixed": 1
+  },
+  "ref_exh": {
+   "pairs": 96,
+   "fixed": 1
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 96,
+    "fixed": 1
+   },
+   {
+    "seed": 2026,
+    "pairs": 96,
+    "fixed": 1
+   },
+   {
+    "seed": 31337,
+    "pairs": 96,
+    "fixed": 1
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 97,
+    "fixed": 4
+   },
+   {
+    "seed": 2026,
+    "pairs": 97,
+    "fixed": 4
+   },
+   {
+    "seed": 31337,
+    "pairs": 97,
+    "fixed": 4
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 96,
+    "fixed": 4
+   },
+   {
+    "seed": 2026,
+    "pairs": 96,
+    "fixed": 4
+   },
+   {
+    "seed": 31337,
+    "pairs": 96,
+    "fixed": 4
+   }
+  ]
+ },
+ "iIS312": {
+  "kimonu_det": {
+   "pairs": 98,
+   "fixed": 4
+  },
+  "kimonu_ref": {
+   "pairs": 96,
+   "fixed": 1
+  },
+  "ref_exh": {
+   "pairs": 96,
+   "fixed": 1
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 96,
+    "fixed": 1
+   },
+   {
+    "seed": 2026,
+    "pairs": 96,
+    "fixed": 1
+   },
+   {
+    "seed": 31337,
+    "pairs": 96,
+    "fixed": 1
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 97,
+    "fixed": 4
+   },
+   {
+    "seed": 2026,
+    "pairs": 97,
+    "fixed": 4
+   },
+   {
+    "seed": 31337,
+    "pairs": 97,
+    "fixed": 4
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 96,
+    "fixed": 4
+   },
+   {
+    "seed": 2026,
+    "pairs": 96,
+    "fixed": 4
+   },
+   {
+    "seed": 31337,
+    "pairs": 96,
+    "fixed": 4
+   }
+  ]
+ },
+ "iIT341": {
+  "kimonu_det": {
+   "pairs": 19675,
+   "fixed": 25
+  },
+  "kimonu_ref": {
+   "pairs": 19451,
+   "fixed": 4
+  },
+  "ref_exh": {
+   "pairs": 19451,
+   "fixed": 4
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 19379,
+    "fixed": 4
+   },
+   {
+    "seed": 2026,
+    "pairs": 19379,
+    "fixed": 4
+   },
+   {
+    "seed": 31337,
+    "pairs": 19379,
+    "fixed": 4
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 17451,
+    "fixed": 20
+   },
+   {
+    "seed": 2026,
+    "pairs": 18388,
+    "fixed": 24
+   },
+   {
+    "seed": 31337,
+    "pairs": 136503,
+    "fixed": 2120
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 18370,
+    "fixed": 20
+   },
+   {
+    "seed": 2026,
+    "pairs": 17437,
+    "fixed": 16
+   },
+   {
+    "seed": 31337,
+    "pairs": 9851,
+    "fixed": 16
+   }
+  ]
+ },
+ "iCN900": {
+  "kimonu_det": {
+   "pairs": 706,
+   "fixed": 8
+  },
+  "kimonu_ref": {
+   "pairs": 702,
+   "fixed": 1
+  },
+  "ref_exh": {
+   "pairs": 702,
+   "fixed": 1
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 691,
+    "fixed": 1
+   },
+   {
+    "seed": 2026,
+    "pairs": 691,
+    "fixed": 1
+   },
+   {
+    "seed": 31337,
+    "pairs": 691,
+    "fixed": 1
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 706,
+    "fixed": 8
+   },
+   {
+    "seed": 2026,
+    "pairs": 706,
+    "fixed": 8
+   },
+   {
+    "seed": 31337,
+    "pairs": 706,
+    "fixed": 8
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 706,
+    "fixed": 8
+   },
+   {
+    "seed": 2026,
+    "pairs": 706,
+    "fixed": 8
+   },
+   {
+    "seed": 31337,
+    "pairs": 706,
+    "fixed": 8
+   }
+  ]
+ },
+ "iLJ478": {
+  "kimonu_det": {
+   "pairs": 13417,
+   "fixed": 11
+  },
+  "kimonu_ref": {
+   "pairs": 12745,
+   "fixed": 6
+  },
+  "ref_exh": {
+   "pairs": 12745,
+   "fixed": 6
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 12725,
+    "fixed": 6
+   },
+   {
+    "seed": 2026,
+    "pairs": 12725,
+    "fixed": 6
+   },
+   {
+    "seed": 31337,
+    "pairs": 12725,
+    "fixed": 6
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 10255,
+    "fixed": 24
+   },
+   {
+    "seed": 2026,
+    "pairs": 10255,
+    "fixed": 24
+   },
+   {
+    "seed": 31337,
+    "pairs": 10255,
+    "fixed": 24
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 9949,
+    "fixed": 11
+   },
+   {
+    "seed": 2026,
+    "pairs": 9949,
+    "fixed": 11
+   },
+   {
+    "seed": 31337,
+    "pairs": 9949,
+    "fixed": 11
+   }
+  ]
+ },
+ "Saha2011iRS1597": {
+  "kimonu_det": {
+   "pairs": 6787,
+   "fixed": 949
+  },
+  "kimonu_ref": {
+   "pairs": 5252,
+   "fixed": 3
+  },
+  "ref_exh": {
+   "pairs": 5252,
+   "fixed": 3
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 5252,
+    "fixed": 3
+   },
+   {
+    "seed": 2026,
+    "pairs": 5252,
+    "fixed": 3
+   },
+   {
+    "seed": 31337,
+    "pairs": 5252,
+    "fixed": 3
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 4791,
+    "fixed": 531
+   },
+   {
+    "seed": 2026,
+    "pairs": 5181,
+    "fixed": 633
+   },
+   {
+    "seed": 31337,
+    "pairs": 4985,
+    "fixed": 598
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 5162,
+    "fixed": 598
+   },
+   {
+    "seed": 2026,
+    "pairs": 4966,
+    "fixed": 598
+   },
+   {
+    "seed": 31337,
+    "pairs": 4772,
+    "fixed": 531
+   }
+  ]
+ },
+ "iNF517": {
+  "kimonu_det": {
+   "pairs": 12458,
+   "fixed": 19
+  },
+  "kimonu_ref": {
+   "pairs": 12216,
+   "fixed": 8
+  },
+  "ref_exh": {
+   "pairs": 12216,
+   "fixed": 8
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 12204,
+    "fixed": 8
+   },
+   {
+    "seed": 2026,
+    "pairs": 12204,
+    "fixed": 8
+   },
+   {
+    "seed": 31337,
+    "pairs": 12204,
+    "fixed": 8
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 9143,
+    "fixed": 19
+   },
+   {
+    "seed": 2026,
+    "pairs": 9410,
+    "fixed": 19
+   },
+   {
+    "seed": 31337,
+    "pairs": 9143,
+    "fixed": 19
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 9869,
+    "fixed": 19
+   },
+   {
+    "seed": 2026,
+    "pairs": 9075,
+    "fixed": 19
+   },
+   {
+    "seed": 31337,
+    "pairs": 9075,
+    "fixed": 19
+   }
+  ]
+ },
+ "iSB619": {
+  "kimonu_det": {
+   "pairs": 10560,
+   "fixed": 11
+  },
+  "kimonu_ref": {
+   "pairs": 9978,
+   "fixed": 2
+  },
+  "ref_exh": {
+   "pairs": 9978,
+   "fixed": 2
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 9703,
+    "fixed": 2
+   },
+   {
+    "seed": 2026,
+    "pairs": 9703,
+    "fixed": 2
+   },
+   {
+    "seed": 31337,
+    "pairs": 9433,
+    "fixed": 2
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 4611,
+    "fixed": 9
+   },
+   {
+    "seed": 2026,
+    "pairs": 4611,
+    "fixed": 9
+   },
+   {
+    "seed": 31337,
+    "pairs": 4611,
+    "fixed": 9
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 5257,
+    "fixed": 9
+   },
+   {
+    "seed": 2026,
+    "pairs": 5257,
+    "fixed": 9
+   },
+   {
+    "seed": 31337,
+    "pairs": 5257,
+    "fixed": 9
+   }
+  ]
+ },
+ "iJB785": {
+  "kimonu_det": {
+   "pairs": 2900,
+   "fixed": 36
+  },
+  "kimonu_ref": {
+   "pairs": 2858,
+   "fixed": 14
+  },
+  "ref_exh": {
+   "pairs": 2858,
+   "fixed": 14
+  },
+  "ref_sampled": [
+   {
+    "seed": 1234,
+    "pairs": 2795,
+    "fixed": 14
+   },
+   {
+    "seed": 2026,
+    "pairs": 2795,
+    "fixed": 14
+   },
+   {
+    "seed": 31337,
+    "pairs": 2795,
+    "fixed": 14
+   }
+  ],
+  "cocoa_false": [
+   {
+    "seed": 1234,
+    "pairs": 2864,
+    "fixed": 26
+   },
+   {
+    "seed": 2026,
+    "pairs": 2864,
+    "fixed": 26
+   },
+   {
+    "seed": 31337,
+    "pairs": 2864,
+    "fixed": 26
+   }
+  ],
+  "cocoa_true": [
+   {
+    "seed": 1234,
+    "pairs": 2860,
+    "fixed": 24
+   },
+   {
+    "seed": 2026,
+    "pairs": 2860,
+    "fixed": 24
+   },
+   {
+    "seed": 31337,
+    "pairs": 2860,
+    "fixed": 24
+   }
+  ]
+ }
+}

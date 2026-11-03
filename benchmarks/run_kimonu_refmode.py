@@ -3,10 +3,11 @@
 Balanced complexes and concordance from ker N (M = A K); kinetic modules from upstream sets seeded by
 the multi-complex concordance classes only and merged where they overlap, as the reference's R stage
 does (compat/upstream.py with Y=None: no Proposition S3-4 or deficiency merge, which the reference does
-not apply); ACR/ACRR by the reference's combinatorial rule (Corollary S2-10). Timed end to end, blocked
+not apply); ACR/ACRR by the reference's pairwise rule, the Shinar-Feinberg criterion applied within
+kinetic modules (kinetic_variants/s210_criterion.py). Timed end to end, blocked
 reactions already removed.
 
-    python run_kimonu_refmode.py <model> <out.json>
+    python run_kimonu_refmode.py <model> <out.json>   # modules: the non-singleton kinetic modules, complex indices
 """
 import json, os, sys, time
 import numpy as np
@@ -32,5 +33,6 @@ json.dump(dict(model=M, seconds=t3 - t0, seconds_concordance=t1 - t0, seconds_ki
                n_complexes=nc - len(zero), balanced=res.n_balanced, conc=sum(1 for g in res.modules if len(g) > 1),
                n_kinetic=sum(1 for m in kin.modules if len(m) > 1), giant=kin.giant_module,
                acr=len(acr), acrr=len(acrr), acr_free=sum(1 for i in acr if i < cut),
-               acrr_free=sum(1 for i, j in acrr if i < cut and j < cut)), open(out, "w"), indent=1)
+               acrr_free=sum(1 for i, j in acrr if i < cut and j < cut),
+               modules=[sorted(map(int, m)) for m in kin.modules if len(m) > 1]), open(out, "w"), indent=1)
 print(f"{M}: {t3 - t0:.2f} s, kinetic modules {sum(1 for m in kin.modules if len(m) > 1)}, giant {kin.giant_module}")
