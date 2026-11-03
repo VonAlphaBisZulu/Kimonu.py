@@ -1,9 +1,13 @@
-"""Figure 3 of the paper: Kimonu in its reference-equivalent mode reproduces the published analysis exactly, in seconds.
+"""Figure 3 of the paper: Kimonu's relations against the published tools, and the reference reproduced in seconds.
 
-A  the key quantities on the eleven models where the exhaustive reference finished. Every value is identical
-   in both tools (asserted below), so each cell shows the shared value.
-B  wall time of that same computation, row-aligned with A, and the speedup.
-C  wall time vs network size on all 33 models for every arm, with a log-log least-squares line per arm.
+A  wall time vs network size on all 33 models for every arm, with a log-log least-squares line per arm.
+B  coupled complex pairs, C ACR metabolites plus ACRR pairs among free metabolites, per arm on the eleven
+   models where the exhaustive reference finished (bars: value or median over seeds, whiskers: seed range);
+   centred titles, "count" on each y axis and one legend below both, as Figure 2F, G.
+D, E  the map of relations and methods, and what each tool computes on iLJ478 (make_fig3_methods.py).
+Supplementary figure (figures/supp/FigS_reference_agreement): the key quantities of Kimonu's reference-equivalent
+   mode and the exhaustive reference on the eleven models (identical, asserted below) and the wall time of that
+   same computation, with the speedup.
 Supplementary figure (figures/supp/FigS_stage_timing): where the time goes on those eleven models: the concordance stage against everything after it (kinetic
    modules, ACR/ACRR), per tool, as the range over the models with the median marked. Measured vs derived:
    Kimonu's stage times are measured (median of three replicates); the reference's concordance stage is its
@@ -13,15 +17,17 @@ Supplementary figure (figures/supp/FigS_stage_timing): where the time goes on th
    and the rest is the measured total minus that.
 
 Kimonu here is run_kimonu_refmode.py (triplicate_refmode/, the median of three replicates), which follows the
-reference's definitions: concordance from ker(N), upstream sets merged by overlap only, ACR/ACRR by Corollary
-S2-10. Stochastic arms show the median over three seeds. Layout is in inches at 17.5 cm (double column) width;
-the table columns are sized from their measured text, so the axes of A and B are placed by hand.
+reference's definitions: concordance from ker(N), upstream sets merged by overlap only, ACR/ACRR by the
+reference's pairwise rule (the Shinar-Feinberg criterion within kinetic modules). Stochastic arms show the median over three seeds. Layout is in inches at 7.2 in (518.4 pt) width; the
+supplementary table columns are sized from their measured text, so its axes are placed by hand.
 
     python figures/make_figure3.py [out_dir]    # run from benchmarks/ after gather_figdata.py; default figures/main
 """
 import datetime as dt, glob, json, os, re, sys, numpy as np, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import svg_finish, svg_panels                             # live text, embedded fonts, no clipping; one group per panel
 
 out = sys.argv[1] if len(sys.argv) > 1 else "figures/main"
 D = json.load(open("figdata.json")); nC = D["n_complexes"]
@@ -33,14 +39,17 @@ for m in REF:
     for k in KEYS:
         assert D["kimonu_ref"][m][k] == D["ref_exh"][m][k], (m, k, D["kimonu_ref"][m][k], D["ref_exh"][m][k])
 
-plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6.5,
-                     "ytick.labelsize": 6.5, "legend.fontsize": 6.5, "axes.linewidth": 0.6,
+plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6,
+                     "ytick.labelsize": 6, "legend.fontsize": 6, "axes.linewidth": 0.6,
                      "xtick.major.width": 0.6, "ytick.major.width": 0.6, "xtick.major.size": 2.5, "ytick.major.size": 2.5,
-                     "svg.fonttype": "none", "pdf.fonttype": 42})
+                     **svg_finish.mathtext_rc()})               # words Arial, formulas Latin Modern (LaTeX), both live text
+CITE = {"ref_exh": "Langary et al., 2025", "ref_sampled": "Langary et al., 2025"}   # the publication behind each reference arm
+LETTER = dict(fontsize=18, fontweight="bold", family="Arial")                 # panel letters as in Figures 1 and 2 (18 pt bold)
 INK, MUTE, RULE, STRIPE = "#1b2430", "#6b7480", "#d5d9de", "#f1f3f5"
 GREEN, BLUE, RED = "#4DAF4A", "#377EB8", "#E41A1C"          # Set1, as in the earlier drafts; shapes carry identity too
 # arm: label, colour, marker, filled, fit line style
-ARMS = {"kimonu_ref":  ("Kimonu, reference-equivalent mode", GREEN, "o", True, "-"),
+ARMS = {"kimonu_det":  ("Kimonu (iterated route)",           GREEN, "o", True, "-"),
+        "kimonu_ref":  ("Kimonu, reference-equivalent mode", GREEN, "o", False, "--"),
         "ref_exh":     ("Reference, exhaustive",             BLUE,  "s", True, "-"),
         "ref_sampled": ("Reference, sampled",                BLUE,  "s", False, "--"),
         "cocoa_false": ("COCOA.jl, efficient=false",         RED,   "^", True, "-"),
@@ -60,7 +69,7 @@ def stages(arm, m):
     """(concordance stage, everything after it) in seconds for one model, or None; see the docstring for
     which part is measured and which derived."""
     if arm == "kimonu_ref":
-        R = [json.load(open(f)) for f in sorted(glob.glob(f"triplicate_refmode/kimonu_{m}_rep*.json"))]
+        R = [json.load(open(f)) for f in sorted(glob.glob(f"{os.environ.get('KIMONU_REF_DIR', 'triplicate_refmode')}/kimonu_{m}_rep*.json"))]
         return (float(np.median([r["seconds_concordance"] for r in R])),
                 float(np.median([r["seconds_kinetic"] + r["seconds_acr"] for r in R]))) if R else None
     if arm == "ref_exh":
@@ -88,30 +97,133 @@ def mark(ax, x, y, arm, s=16, z=3):
     ax.scatter(x, y, s=s, marker=mk, facecolor=col if filled else "white", edgecolor=col if not filled else "white",
                linewidths=0.9 if not filled else 0.5, zorder=z)
 
-# --- layout, in inches
-W, RH, HEAD, PAD = 6.89, 0.2, 2.6, 0.1                  # width, table row height, header rows, cell padding
+def save_finished(f, stem, pdf=True, panels=None):
+    """SVG with one group per panel (svg_panels), live text, fonts embedded and no clipping (svg_finish), plus PDF
+    (fonts embedded) and PNG for checking; the vault keeps only the SVG. Fails if removing the clipping would
+    change the drawing, i.e. if a mark reaches outside its axes. panels: [(name, [(x0, y0, x1, y1) in pt])]."""
+    import io, tempfile
+    buf = io.StringIO(); f.savefig(buf, format="svg"); raw = buf.getvalue()
+    if os.environ.get("RAW_SVG"): open(os.environ["RAW_SVG"], "w").write(raw)
+    n, box = svg_finish.check(raw, raw, tempfile.mkdtemp())
+    assert n == 0, f"{os.path.basename(stem)}: removing the clipping changes {n} pixels in {box} (pt)"
+    fg = svg_panels.Figure(raw)
+    miss = fg.assign(panels or [("all", [(0, 0, 1e4, 1e4)])])
+    assert not miss, f"{os.path.basename(stem)}: {len(miss)} elements outside every panel"
+    svg, used = svg_finish.finish(fg.svg())
+    open(stem + ".svg", "w", encoding="utf-8").write(svg)
+    if pdf: f.savefig(stem + ".pdf")
+    f.savefig(stem + ".png", dpi=300)
+    return used
+
+# --- layout, in inches: A scaling (top), B and C results per method (middle), D map and E computations (bottom, make_fig3_methods)
+W, RH, HEAD, PAD = 7.2, 0.2, 3.2, 0.1                  # width, table row height, header rows, cell padding
 n = len(REF)
-hA = (n + HEAD) * RH
-H = 0.06 + hA + 0.5 + 0.18 + 2.3 + 0.42
+hTab = (n + HEAD) * RH
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from make_fig3_methods import draw as draw_methods, HCD
+hS, hBar, gapSB, gapBC = 2.3, 1.05, 0.62, 0.8      # B, C: titles above, tick labels and the shared legend below
+H = 0.3 + hS + gapSB + hBar + gapBC + HCD
 fig = plt.figure(figsize=(W, H)); rend = fig.canvas.get_renderer()
 def width_in(s, size):
     t = fig.text(0, 0, s, fontsize=size); w = t.get_window_extent(rend).width / fig.dpi; t.remove(); return w
+
+# --- A: every model, every arm
+yS = H - 0.3 - hS
+axS = fig.add_axes([0.5 / W, yS / H, 3.95 / W, hS / H])
+for y, lab in {60: "1 min", 3600: "1 h", 86400: "1 day", 604800: "1 week"}.items():
+    axS.axhline(y, color=RULE, lw=0.5, zorder=1); axS.text(1.9e4, y * 1.18, lab, fontsize=6, color=MUTE, ha="right", va="bottom")
+handles = []
+A_ORDER = ["ref_exh", "ref_sampled", "cocoa_false", "cocoa_true", "kimonu_det", "kimonu_ref"]   # legend top to bottom, as the lines run
+for arm in A_ORDER:
+    lab, col, mk, filled, ls = ARMS[arm]
+    X = np.array([nC[m] for m in D["models"] if seconds(arm, m) is not None], float)
+    Y = np.array([seconds(arm, m) for m in D["models"] if seconds(arm, m) is not None], float)
+    b, a0 = np.polyfit(np.log10(X), np.log10(Y), 1); gx = np.linspace(np.log10(X.min()), np.log10(X.max()), 50)
+    axS.plot(10 ** gx, 10 ** (a0 + b * gx), color=col, lw=1.1, ls=ls, zorder=2)
+    mark(axS, X, Y, arm, s=14 if mk != "^" else 16)
+    handles.append(Line2D([], [], color=col, lw=1.1, ls=ls, marker=mk, ms=4 if mk != "^" else 4.5, mfc=col if filled else "white",
+                          mec="white" if filled else col, mew=0.5 if filled else 0.9, label=f"{lab}\n" + (f"({CITE[arm]})\n" if arm in CITE else "") + f"{len(X)} models, slope {b:.2f}"))
+axS.set_xscale("log"); axS.set_yscale("log"); axS.set_xlim(900, 2e4); axS.set_ylim(0.15, 2e6)
+axS.set_xticks([1000, 2000, 5000, 10000, 20000]); axS.set_xticklabels(["1000", "2000", "5000", "10 000", "20 000"]); axS.minorticks_off()
+axS.set_yticks([1, 10, 100, 1e3, 1e4, 1e5, 1e6]); axS.set_yticklabels(["1", "10", r"$10^2$", r"$10^3$", r"$10^4$", r"$10^5$", r"$10^6$"])
+axS.set_xlabel("complexes", labelpad=2); axS.set_ylabel("wall time (s)", labelpad=2)
+for s in ("top", "right"): axS.spines[s].set_visible(False)
+axS.legend(handles=handles, loc="upper left", bbox_to_anchor=(1.03, 1.06), frameon=False, handlelength=2.2, labelspacing=0.4)
+fig.text(4.72 / W, (yS + 0.0) / H, "Lines: least-squares fit of log wall time on log size.\nKimonu: median of three replicates; stochastic arms:\nmedian of three seeds. Missing points: the computation\ndid not finish within 7 days.",
+         fontsize=6, color=MUTE, va="bottom", linespacing=1.3)
+
+# --- B, C: what each method reports, on the eleven models where the exhaustive reference finished
+BARS = ["cocoa_false", "cocoa_true", "kimonu_det", "kimonu_ref", "ref_exh", "ref_sampled"]   # reference-equivalent next to the reference it matches
+PC = json.load(open("figures/pair_counts.json"))          # figures/pair_counts.py
+def counts(arm, m, k):
+    """(bar, low, high): the value, or for stochastic arms the median and range over seeds"""
+    v = PC[m].get(arm)
+    if v is None or v == []: return None
+    if isinstance(v, list):
+        x = sorted(r[k] for r in v); return x[len(x) // 2], x[0], x[-1]
+    return v[k], v[k], v[k]
+yBar = yS - gapSB - hBar
+wGap = 0.75                                               # room for C's own y label
+wBar = (W - 0.5 - wGap - 0.05) / 2
+axK = fig.add_axes([0.5 / W, yBar / H, wBar / W, hBar / H])
+axR = fig.add_axes([(0.5 + wBar + wGap) / W, yBar / H, wBar / W, hBar / H])
+bw = 0.8 / len(BARS)
+from matplotlib.colors import to_rgb
+tint = lambda c, t=0.6: tuple(t + (1 - t) * v for v in to_rgb(c))   # open arms: a light fill of the arm colour
+YLIM = {"pairs": (40, 40000), "fixed": (0.5, 2000)}
+for ax, k, title in ((axK, "pairs", "coupled complex pairs"), (axR, "fixed", "ACR metabolites plus ACRR pairs (free metabolites)")):
+    for j, arm in enumerate(BARS):
+        lab, col, mk, filled, _ = ARMS[arm]
+        for i, m in enumerate(REF):
+            c = counts(arm, m, k)
+            if c is None or c[0] <= 0: continue
+            x = i - 0.4 + (j + 0.5) * bw
+            lo, hi = YLIM[k]                       # bars start at the axis floor and whiskers stop at its top, so no
+            b0 = lo * 1.03                         # half an edge width above the floor: the edge stays on the spine
+            ax.bar(x, c[0] - b0, bottom=b0, width=bw * 0.92, color=col if filled else tint(col), edgecolor=col,   # clipping is needed
+                   lw=0.0 if filled else 0.6, zorder=2)
+            if c[2] > c[1]:
+                ax.plot([x, x], [max(c[1], 0.8, lo), min(c[2], hi)], color=INK, lw=0.5, zorder=3, solid_capstyle="butt")
+                if c[2] > hi: print(f"whisker cut at the axis top: {arm} {m} {k} {c}")
+    ax.set_yscale("log"); ax.set_xlim(-0.55, n - 0.45); ax.minorticks_off()
+    ax.set_xticks(range(n)); ax.set_xticklabels([SHORT.get(m, m).replace(" Trypomastigote", " Try").replace(" Amastigote", " Ama").replace(" Epimastigote", " Epi") for m in REF],
+                                                rotation=40, ha="right", rotation_mode="anchor", fontsize=6)
+    ax.tick_params(axis="x", length=0, pad=2); ax.tick_params(axis="y", colors=INK, length=2)
+    for s in ("top", "right"): ax.spines[s].set_visible(False)
+    ax.yaxis.grid(True, color=RULE, lw=0.4, zorder=0); ax.set_axisbelow(True)
+    ax.set_title(title, fontsize=8, color=INK, loc="center", pad=4)
+    ax.set_ylabel("count", labelpad=2)
+axK.set_ylim(*YLIM["pairs"]); axR.set_ylim(*YLIM["fixed"])
+axK.set_yticks([100, 1000, 10000]); axK.set_yticklabels(["100", "1000", "10 000"])
+axR.set_yticks([1, 10, 100, 1000]); axR.set_yticklabels(["1", "10", "100", "1000"])
+for ax in (axK, axR): ax.tick_params(axis="y", labelsize=6)
+from matplotlib.patches import Patch
+bar_handles = [Patch(facecolor=ARMS[a][1] if ARMS[a][3] else tint(ARMS[a][1]), edgecolor=ARMS[a][1], lw=0 if ARMS[a][3] else 0.6, label=ARMS[a][0] + (f" ({CITE[a]})" if a in CITE else "")) for a in BARS]
+yLeg = yBar - 0.45                                       # the legend of B and C sits below their tick labels, as in Figure 2
+fig.legend(handles=bar_handles, loc="upper left", bbox_to_anchor=(0.5 / W, yLeg / H), ncol=3, frameon=False,
+           fontsize=6, handlelength=1.2, handleheight=0.8, columnspacing=1.2, labelspacing=0.25, borderaxespad=0)
+
+# --- D, E: the map and the computations per tool
+axCD = fig.add_axes([0, 0, 1, HCD / H]); axCD.set_xlim(0, W); axCD.set_ylim(0, HCD); axCD.axis("off")
+math_texts = draw_methods(axCD, W, HCD)
+
+# --- supplementary figure (figures/supp/FigS_reference_agreement): the shared values and the same computation, timed
+HT = hTab + 0.55
+figT = plt.figure(figsize=(W, HT))
 labw = max(width_in(SHORT.get(m, m), 7) for m in REF) + PAD
 colw = [max(width_in(h, 6.5), *(width_in(str(nC[m] if k == "nC" else D["kimonu_ref"][m][k]), 7) for m in REF)) + PAD for k, h in COLS]
 wA = labw + sum(colw); x0A = 0.02
-SPD = 0.62                                               # speedup column right of B
+SPD = 0.62                                               # speedup column right of D
 x0B = x0A + wA + 0.12; wB = W - x0B - SPD - 0.02
-yA = H - 0.06 - hA
-axA = fig.add_axes([x0A / W, yA / H, wA / W, hA / H]); axB = fig.add_axes([x0B / W, yA / H, wB / W, hA / H])
+yA = 0.42
+axA = figT.add_axes([x0A / W, yA / HT, wA / W, hTab / HT]); axB = figT.add_axes([x0B / W, yA / HT, wB / W, hTab / HT])
 for ax in (axA, axB):
     ax.set_ylim(n, -HEAD)
     for i in range(0, n, 2): ax.axhspan(i, i + 1, color=STRIPE, lw=0, zorder=0)
-
-# --- A: the shared values
 axA.set_xlim(0, wA); axA.axis("off")
 right = labw + np.cumsum(colw) - PAD / 2                # right edge of each column's text
 for j, (k, h) in enumerate(COLS):
-    axA.text(right[j], -0.2, h, ha="right", va="bottom", color=MUTE if k == "nC" else INK, fontsize=6.5, linespacing=1.05)
+    axA.text(right[j], -0.2, h, ha="right", va="bottom", color=MUTE if k == "nC" else INK, fontsize=6, linespacing=1.05)
     for i, m in enumerate(REF):
         v = nC[m] if k == "nC" else D["kimonu_ref"][m][k]
         axA.text(right[j], i + 0.5, str(v), ha="right", va="center", color=MUTE if k == "nC" else INK, fontsize=7)
@@ -119,10 +231,9 @@ for i, m in enumerate(REF):
     axA.text(PAD / 2, i + 0.5, SHORT.get(m, m), ha="left", va="center", fontsize=7, color=INK)
 x1 = labw + colw[0] + PAD / 2                            # the spanner covers the six compared quantities
 axA.plot([x1, wA - PAD / 4], [-1.95, -1.95], color=INK, lw=0.6, clip_on=False)
-axA.text((x1 + wA) / 2, -2.05, "identical in Kimonu and the exhaustive reference", ha="center", va="bottom", fontsize=6.5, color=INK)
+axA.text((x1 + wA) / 2, -2.05, "identical in Kimonu's reference-equivalent mode and the exhaustive\nreference, on the 11 models where the exhaustive reference finished", ha="center", va="bottom", fontsize=6, color=INK, linespacing=1.1)
 axA.plot([0, wA], [n, n], color=RULE, lw=0.6, clip_on=False)
 
-# --- B: the same computation, timed
 axB.set_xscale("log"); axB.set_xlim(0.15, 2.5e6)
 axB.vlines(list(T), 0, n, color=RULE, lw=0.5, zorder=1)      # gridlines stop at the header, clear of the legend
 ratios = []
@@ -133,45 +244,26 @@ for i, m in enumerate(REF):
     e = int(np.floor(np.log10(r / k)))
     axB.text(1.0 + 0.08 / wB, i + 0.5, rf"${r / k / 10 ** e:.1f}\times10^{{{e}}}$", transform=axB.get_yaxis_transform(),
              ha="left", va="center", fontsize=7, color=INK, clip_on=False)
-axB.text(1.0 + 0.08 / wB, -0.2, "Speedup", transform=axB.get_yaxis_transform(), ha="left", va="bottom", fontsize=6.5, color=INK)
+axB.text(1.0 + 0.08 / wB, -0.2, "Speedup", transform=axB.get_yaxis_transform(), ha="left", va="bottom", fontsize=6, color=INK)
 axB.set_xticks(list(T)); axB.set_xticklabels(list(T.values())); axB.minorticks_off()
 axB.set_yticks([]); axB.tick_params(axis="x", colors=INK, length=2)
 for s in ("top", "right", "left"): axB.spines[s].set_visible(False)
 axB.spines["bottom"].set_color(MUTE)
 axB.set_xlabel("wall time", labelpad=2)
-axB.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc=GREEN, mec="white", mew=0.5, label="Kimonu, reference-equivalent mode"),
-                    Line2D([], [], ls="", marker="s", ms=4, mfc=BLUE, mec="white", mew=0.5, label="Reference, exhaustive")],
+axB.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc="white", mec=GREEN, mew=0.9, label="Kimonu, reference-equivalent mode"),
+                    Line2D([], [], ls="", marker="s", ms=4, mfc=BLUE, mec="white", mew=0.5, label=f"Reference, exhaustive ({CITE['ref_exh']})")],
            loc="upper left", bbox_to_anchor=(0.06, 1.0), frameon=False, handletextpad=0.2, borderaxespad=0.05, labelspacing=0.25)
 
-# --- C: every model, every arm
-hC, yC = 2.3, 0.42
-axC = fig.add_axes([0.5 / W, yC / H, 3.75 / W, hC / H])
-for y, lab in {60: "1 min", 3600: "1 h", 86400: "1 day", 604800: "1 week"}.items():
-    axC.axhline(y, color=RULE, lw=0.5, zorder=1); axC.text(1.9e4, y * 1.18, lab, fontsize=6, color=MUTE, ha="right", va="bottom")
-handles = []
-for arm, (lab, col, mk, filled, ls) in ARMS.items():
-    X = np.array([nC[m] for m in D["models"] if seconds(arm, m) is not None], float)
-    Y = np.array([seconds(arm, m) for m in D["models"] if seconds(arm, m) is not None], float)
-    b, a0 = np.polyfit(np.log10(X), np.log10(Y), 1); gx = np.linspace(np.log10(X.min()), np.log10(X.max()), 50)
-    axC.plot(10 ** gx, 10 ** (a0 + b * gx), color=col, lw=1.1, ls=ls, zorder=2)
-    mark(axC, X, Y, arm, s=14 if mk != "^" else 16)
-    handles.append(Line2D([], [], color=col, lw=1.1, ls=ls, marker=mk, ms=4 if mk != "^" else 4.5, mfc=col if filled else "white",
-                          mec="white" if filled else col, mew=0.5 if filled else 0.9, label=f"{lab}\n{len(X)} models, slope {b:.2f}"))
-axC.set_xscale("log"); axC.set_yscale("log"); axC.set_xlim(900, 2e4); axC.set_ylim(0.15, 2e6)
-axC.set_xticks([1000, 2000, 5000, 10000, 20000]); axC.set_xticklabels(["1000", "2000", "5000", "10 000", "20 000"]); axC.minorticks_off()
-axC.set_yticks([1, 10, 100, 1e3, 1e4, 1e5, 1e6]); axC.set_yticklabels(["1", "10", r"$10^2$", r"$10^3$", r"$10^4$", r"$10^5$", r"$10^6$"])
-axC.set_xlabel("complexes", labelpad=2); axC.set_ylabel("wall time (s)", labelpad=2)
-for s in ("top", "right"): axC.spines[s].set_visible(False)
-axC.legend(handles=handles, loc="upper left", bbox_to_anchor=(1.04, 1.0), frameon=False, handlelength=2.2, labelspacing=0.7)
-fig.text(4.5 / W, (yC + 0.02) / H, "Lines: least-squares fit of log wall time on\nlog size per arm. Stochastic arms: median of\nthree seeds; Kimonu: median of three replicates.\nCOCOA.jl did not finish iS_1188 and iSDY_1059\n(both settings) or iAF1260b (efficient=false)\nwithin 7 days.",
-         fontsize=6, color=MUTE, va="bottom", linespacing=1.3)
-
-for L, x, y in (("A", x0A, H - 0.06), ("B", x0B, H - 0.06), ("C", x0A, yC + hC + 0.2)):
-    fig.text(x / W, y / H, L, fontsize=10, fontweight="bold", va="top", ha="left", color=INK)
-
+for L, x, y in (("A", 0.0, H - 0.02), ("B", 0.0, yBar + hBar + 0.3), ("C", wBar + wGap, yBar + hBar + 0.3)):
+    fig.text(x / W, y / H, L, va="top", ha="left", color=INK, **LETTER)
 os.makedirs(out, exist_ok=True)
-for ext in ("svg", "pdf", "png"):
-    fig.savefig(os.path.join(out, f"Figure3_draft.{ext}"), dpi=300)
+Hpt, yAB, yCD = H * 72, (0.3 + hS + 0.28) * 72, (H - HCD) * 72      # panel bounds in pt from the top: below A's axis label, above D, E
+xBC, yL = (0.5 + wBar + 0.15) * 72, (H - yLeg + 0.03) * 72              # between the two bar charts; top of their legend
+save_finished(fig, os.path.join(out, "Figure3_draft"), panels=[
+    ("A", [(0, 0, 518.4, yAB)]), ("B", [(0, yAB, xBC, yL)]), ("C", [(xBC, yAB, 518.4, yL)]), ("legend_BC", [(0, yL, 518.4, yCD)]),
+    ("D", [(0, yCD, 225, Hpt)]), ("E", [(225, yCD, 518.4, Hpt)])])
+supp = os.path.join(os.path.dirname(os.path.abspath(out)), "supp"); os.makedirs(supp, exist_ok=True)
+save_finished(figT, os.path.join(supp, "FigS_reference_agreement"))
 # --- supplementary figure: concordance stage against the rest, per tool, over the eleven models of A
 hD, yD, HS = 1.0, 0.36, 1.5
 figS = plt.figure(figsize=(W, HS))
@@ -189,7 +281,7 @@ for i, arm in enumerate(ROWS):
         axD.scatter(mid, i + dy, s=18 if mk != "^" else 20, marker=mk, facecolor=col if fill else "white", edgecolor="white" if fill else col,
                     linewidths=0.5 if fill else 0.9, zorder=3)
     axD.text(0.035, i, lab.replace(", reference-equivalent mode", ""),
-             ha="right", va="center", fontsize=6.5, color=INK)
+             ha="right", va="center", fontsize=6, color=INK)
 axD.set_yticks([]); axD.minorticks_off()
 axD.set_xticks([1, 60, 3600, 86400, 604800]); axD.set_xticklabels(["1 s", "1 min", "1 h", "1 day", "1 week"])
 for sp in ("top", "right", "left"): axD.spines[sp].set_visible(False)
@@ -199,8 +291,5 @@ axD.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc=INK, mec="whit
                     Line2D([], [], ls="", marker="o", ms=4.5, mfc="white", mec=INK, mew=0.9, label="kinetic modules, ACR/ACRR")],
            loc="upper left", bbox_to_anchor=(1.01, 1.0), frameon=False, handletextpad=0.2, labelspacing=0.4)
 
-supp = os.path.join(os.path.dirname(os.path.abspath(out)), "supp")
-os.makedirs(supp, exist_ok=True)
-for ext in ("svg", "png"):
-    figS.savefig(os.path.join(supp, f"FigS_stage_timing.{ext}"), dpi=300)
+save_finished(figS, os.path.join(supp, "FigS_stage_timing"), pdf=False)
 print(f"speedup over the exhaustive reference: {min(ratios):.3g} to {max(ratios):.3g}, median {np.median(ratios):.3g} (11 models)")
