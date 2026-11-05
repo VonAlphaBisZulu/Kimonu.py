@@ -15,7 +15,7 @@ keywords = ["metabolic-networks", "concordance", "kinetic-modules", "ACR", "null
 dependencies = [
   # exact sparse nullspace comes from straindesign (straindesign.sparse_nullspace);
   # public API since 1.19.
-  "straindesign>=1.19",
+  "straindesign>=1.19.2",
   "cobra>=0.26",
 ]
 
