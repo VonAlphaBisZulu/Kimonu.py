@@ -13,7 +13,7 @@ import pytest
 from cobra.io import read_sbml_model
 
 import kimonu
-from kimonu.io import build_crn
+from kimonu.io import build_crn, irreversible
 
 SHARED = os.environ.get(
     "KIMONU_SHARED_MODELS",
@@ -33,7 +33,7 @@ def test_N_equals_Y_times_A():
     from cobra.util.array import create_stoichiometric_matrix
     m = _model("EnvZ_OmpR")
     crn = build_crn(m)
-    N_ref = create_stoichiometric_matrix(m)          # metabolites x reactions
+    N_ref = create_stoichiometric_matrix(irreversible(m))          # metabolites x reactions
     N_ya = np.asarray((crn.Y @ crn.A).todense(), dtype=float)
     assert np.array_equal(N_ref, N_ya)
 
@@ -48,7 +48,7 @@ def test_fractional_coefficients_are_exact():
     from cobra.util.array import create_stoichiometric_matrix
     m = _model("e_coli_core")
     crn = build_crn(m)
-    S = create_stoichiometric_matrix(m)
+    S = create_stoichiometric_matrix(irreversible(m))
 
     assert np.array_equal(S, np.asarray((crn.Y @ crn.A).todense(), dtype=float))
     assert any(float(c) != int(c) for comp in crn.complexes for _, c in comp), \
