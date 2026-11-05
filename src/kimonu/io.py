@@ -11,8 +11,15 @@ in COCOA's `:empty`). It gets its own row of A, so every reaction has a substrat
 complex; mass action needs that, because an uptake from the zero complex runs at rate k_j * psi_0 with
 psi_0 = 1. Complexes are enumerated in first-seen order over the reactions, matching COCOA's
 deterministic ordering.
+
+Mass action gives every reaction one substrate complex and one direction, so a reaction that can run
+both ways becomes two (irreversible). Each reaction is otherwise taken as one mass-action step: Kimonu
+does not split enzyme-catalyzed reactions into elementary steps, and networks that need them have to
+carry them already.
 """
 from fractions import Fraction
+
+import cobra
 
 import numpy as np
 from scipy import sparse
@@ -43,8 +50,32 @@ def exact_matrix(entries, shape):
         shape)
 
 
+def irreversible(model):
+    """``model`` with every reaction running in its written direction only.
+
+    A reaction with a negative lower bound gets a reverse reaction ``<id>_rev`` with the opposite
+    stoichiometry and mirrored bounds. It keeps its own forward direction if its upper bound is positive
+    and is replaced by the reverse reaction otherwise. The input is not changed: a model that needs no
+    split is returned as it is, any other as a changed copy.
+    """
+    if all(r.lower_bound >= 0 for r in model.reactions):
+        return model
+    out = model.copy()
+    for r in list(out.reactions):
+        if r.lower_bound >= 0:
+            continue
+        reverse = cobra.Reaction(r.id + "_rev", lower_bound=max(0, -r.upper_bound), upper_bound=-r.lower_bound)
+        out.add_reactions([reverse])
+        reverse.add_metabolites({m: -c for m, c in r.metabolites.items()})
+        if r.upper_bound > 0:
+            r.lower_bound = 0
+        else:
+            out.remove_reactions([r])
+    return out
+
+
 def build_crn(model):
-    """Return a namespace with A, Y, N and the id lists.
+    """Return a namespace with A, Y, N and the id lists, for ``model`` after :func:`irreversible`.
 
     Returns an object with attributes:
       A            scipy.csr int  (complexes x reactions), incidence
@@ -56,6 +87,7 @@ def build_crn(model):
 
     ``N_exact`` is what the exact nullspace is computed from.
     """
+    model = irreversible(model)
     met_ids = [m.id for m in model.metabolites]
     met_idx = {m: i for i, m in enumerate(met_ids)}
     rxn_ids = [r.id for r in model.reactions]

@@ -11,7 +11,7 @@ from fractions import Fraction
 
 import straindesign as sd
 
-from kimonu.io import build_crn
+from kimonu.io import build_crn, irreversible
 from kimonu.linalg import entries, exact, matrix_product
 
 ConcordanceResult = namedtuple(
@@ -24,8 +24,9 @@ ConcordanceResult = namedtuple(
 def concordance(model, preprocess=True, solver=None):
     """Compute the exact concordance partition of a cobra ``model``.
 
-    A wrapper around :func:`concordance_from_matrices`: it runs FVA to remove blocked reactions and
-    find pinned rates, builds the complex decomposition N = Y·A from the model, and hands A and N on.
+    A wrapper around :func:`concordance_from_matrices`: it splits reversible reactions into two
+    (:func:`kimonu.io.irreversible`), runs FVA to remove blocked reactions and find pinned rates, builds
+    the complex decomposition N = Y·A from the model, and hands A and N on.
 
     Args:
         preprocess: if True (default), run that FVA first (scenario i). Pass a model that is already
@@ -42,7 +43,7 @@ def concordance(model, preprocess=True, solver=None):
         # some rate is constant across P: at zero, a blocked reaction, which is removed; or pinned at a
         # nonzero value. Two independent pins couple reactions that ker(N) does not, so the pins enter
         # the kernel as extra rows of N (_with_pins). This FVA is the only LP in the analysis.
-        model = model.copy()
+        model = irreversible(model).copy()
         ranges = sd.fva(model, solver=solver) if solver else sd.fva(model)
         blocked = [r for r in ranges.index
                    if abs(ranges.at[r, "minimum"]) <= 1e-9 and abs(ranges.at[r, "maximum"]) <= 1e-9]

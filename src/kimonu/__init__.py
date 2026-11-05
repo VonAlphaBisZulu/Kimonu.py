@@ -15,7 +15,7 @@ bounds the iterated route from above. relation_values gives the values those rel
 rate constants, exactly, and rate_constants the rate constants at which they take given values;
 binomial_formulas and symbolic_formulas give the values as formulas in the rate constants.
 """
-from kimonu.io import build_crn
+from kimonu.io import build_crn, irreversible
 from kimonu.concordance import concordance, concordance_from_matrices, ConcordanceResult
 from kimonu.kinetic import kinetic_modules, KineticResult
 from kimonu.acr import acr_acrr, AcrResult, readout, Readout
@@ -24,7 +24,7 @@ from kimonu.values import relation_values, rate_constants, Values, Value
 from kimonu.formulas import binomial_formulas, symbolic_formulas, Formulas, Monomial
 
 __version__ = "0.0.1"
-__all__ = ["build_crn", "concordance", "concordance_from_matrices", "ConcordanceResult",
+__all__ = ["build_crn", "irreversible", "concordance", "concordance_from_matrices", "ConcordanceResult",
            "kinetic_modules", "KineticResult", "acr_acrr", "AcrResult", "readout", "Readout",
            "tangent_route", "TangentResult", "relation_values", "rate_constants", "Values", "Value",
            "binomial_formulas", "symbolic_formulas", "Formulas", "Monomial", "__version__"]
