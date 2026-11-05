@@ -3,6 +3,10 @@
 straindesign's exact matrices come in three types: a RationalMatrix (what Kimonu builds N as), and from
 sparse_nullspace either a scipy integer matrix (entries fit in int64) or an ExactCOO (they do not).
 Everything here reads them through entries() and never checks the type elsewhere.
+
+An ExactCOO holds every entry over one common denominator, the lcm of all denominators in the matrix. On a
+kernel at a generic flux that lcm is huge, so every entry becomes a huge integer. Kernels are therefore read
+as fractions from the RationalMatrix itself (null_space_rows).
 """
 from fractions import Fraction
 from math import lcm
@@ -10,13 +14,17 @@ from math import lcm
 import numpy as np
 import straindesign as sd
 from scipy import sparse
+from straindesign.compression import nullspace
 from scipy.optimize import linprog
 
 
 def entries(M):
     """(row, column, Fraction) triples of M, and its shape."""
     if isinstance(M, sd.RationalMatrix):
-        M = M.to_coo_exact()
+        shape = (M.get_row_count(), M.get_column_count())
+        if 0 in shape:                                   # an empty kernel has no sparse storage to read
+            return [], shape
+        return [(int(i), int(j), v) for i, row in M.to_sparse_pattern()[1].items() for j, v in row.items()], shape
     if isinstance(M, sd.ExactCOO):
         return [(int(i), int(j), Fraction(int(v), int(M.denom)))
                 for i, j, v in zip(M.rows, M.cols, M.data)], tuple(M.shape)
@@ -55,8 +63,10 @@ def matrix_product(A, K):
 
 def null_space_rows(M):
     """An exact basis of ker(M) in row form: one {basis vector: value} dict per column of M."""
-    rows = [{} for _ in range(M.get_column_count() if isinstance(M, sd.RationalMatrix) else M.shape[1])]
-    for i, j, v in entries(sd.sparse_nullspace(M))[0]:
+    if not isinstance(M, sd.RationalMatrix):
+        M = exact(*entries(M))
+    rows = [{} for _ in range(M.get_column_count())]
+    for i, j, v in entries(nullspace(M))[0]:
         rows[i][j] = v
     return rows
 
