@@ -140,3 +140,56 @@ def test_pins_reach_the_concordance_partition():
     assert sizes(kimonu.concordance(_toy(net))) == [1, 3, 3]
     assert sizes(kimonu.concordance(_toy(net, {"k": 2}))) == [1, 3, 3]
     assert sizes(kimonu.concordance(_toy(net, {"k": 2, "l": 7}))) == [7]
+
+
+def _random_irreversible(rng):
+    """A small random network with bounds 0 to 1000; dead ends and one-way loops make some reactions blocked."""
+    import cobra
+    m = cobra.Model("random")
+    n_met, n_rxn = rng.integers(3, 12), rng.integers(4, 30)
+    mets = [cobra.Metabolite(f"M{i}") for i in range(n_met)]
+    m.add_metabolites(mets)
+    for j in range(n_rxn):
+        r = cobra.Reaction(f"R{j}", lower_bound=0, upper_bound=1000)
+        m.add_reactions([r])
+        picked = rng.choice(n_met, size=rng.integers(1, 4), replace=False)
+        r.add_metabolites({mets[i]: float(rng.choice([-2, -1, 1, 2])) for i in picked})
+    return m
+
+
+def test_one_lp_finds_the_blocked_reactions_of_fva():
+    import cobra
+    import straindesign as sd
+    from kimonu.concordance import _preprocess
+    cobra.Configuration().solver = "glpk"
+    rng = np.random.default_rng(0)
+    seen = 0
+    for _ in range(60):
+        m = _random_irreversible(rng)
+        ranges = sd.fva(m, solver="glpk")
+        fva = {r for r in ranges.index if abs(ranges.at[r, "maximum"]) <= 1e-9}
+        blocked, pins = _preprocess(m)
+        assert set(blocked) == fva and pins == {}
+        seen += 0 < len(fva) < len(m.reactions)
+    assert seen >= 10
+
+
+def test_one_lp_keeps_both_branches_that_compete_for_flux():
+    """r_u = r_a + r_b: maximizing the sum of the rates under bounds can stop with r_b = 0."""
+    import cobra
+    from kimonu.concordance import _preprocess
+    m = _toy({"u": {"X": 1}, "a": {"X": -1}, "b": {"X": -1}, "dead": {"Y": 1}})
+    assert _preprocess(m)[0] == ["dead"]
+
+
+def test_one_lp_respects_closed_reactions():
+    from kimonu.concordance import _preprocess
+    m = _toy({"u": {"X": 1}, "a": {"X": -1}})
+    m.reactions.get_by_id("a").upper_bound = 0
+    assert set(_preprocess(m)[0]) == {"u", "a"}
+
+
+def test_forced_flux_goes_through_fva_and_finds_pins():
+    from kimonu.concordance import _preprocess
+    blocked, pins = _preprocess(_toy(TWO_FEEDS, {"k": 5, "l": 5}))
+    assert blocked == [] and pins == {"k": Fraction(5), "l": Fraction(5)}
