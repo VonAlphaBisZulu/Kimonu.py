@@ -95,6 +95,27 @@ def left_null_rows(M):
     return [tuple(sorted(r.items())) for r in rows]
 
 
+def blocked_reactions(N, closed=()):
+    """Boolean array, True for the reactions of N that no steady state with r >= 0 can run.
+
+    One LP: max sum(z) subject to N r = 0, r >= 0, 0 <= z <= 1 and z <= r. The steady states form a cone,
+    and two steady states add up to one that runs the reactions of both, so a single r runs every reaction
+    that can run at all. Scaling it brings each of them to at least 1, which makes z_j = 1 for those and
+    z_j = 0 for the blocked ones. Maximizing sum(r) under upper bounds instead stops at a vertex and leaves
+    reactions that can run at zero. ``closed`` lists the indices of reactions with an upper bound of zero.
+    """
+    Nf = to_float(N); m, q = Nf.shape
+    closed = set(closed)
+    bounds = [(0, 0 if j in closed else None) for j in range(q)] + [(0, 1)] * q
+    A_eq = sparse.hstack([Nf, sparse.csr_matrix((m, q))], format="csr")
+    A_ub = sparse.hstack([-sparse.identity(q), sparse.identity(q)], format="csr")
+    lp = linprog(np.r_[np.zeros(q), -np.ones(q)], A_ub=A_ub, b_ub=np.zeros(q), A_eq=A_eq, b_eq=np.zeros(m),
+                 bounds=bounds, method="highs")
+    if lp.status != 0:
+        raise ValueError(f"blocked-reaction LP failed: {lp.message}")
+    return lp.x[q:] <= 0.5
+
+
 def positive_flux(N, seed=0, scale=None):
     """An exact vector r in ker(N) with every entry strictly positive.
 

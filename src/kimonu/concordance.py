@@ -4,15 +4,18 @@ Concordance is flux coupling lifted one matrix product up. With N = Y·A and K =
 M = A·K describe how each complex's activity moves over the steady states: a complex is balanced when
 its row is zero, and two complexes are concordant when their rows are proportional. Everything is exact
 linear algebra over the rationals, with K from straindesign's sparse null space; the only LP is the
-FVA beforehand, which finds blocked reactions and rates pinned by the bounds.
+one beforehand that finds blocked reactions. FVA is needed only when lower bounds force a flux, since
+only then can a bound pin a rate.
 """
 from collections import namedtuple
 from fractions import Fraction
 
+import numpy as np
 import straindesign as sd
+from cobra.util.array import create_stoichiometric_matrix
 
 from kimonu.io import build_crn, irreversible
-from kimonu.linalg import entries, exact, matrix_product
+from kimonu.linalg import blocked_reactions, entries, exact, matrix_product
 
 ConcordanceResult = namedtuple(
     "ConcordanceResult",
@@ -25,13 +28,13 @@ def concordance(model, preprocess=True, solver=None):
     """Compute the exact concordance partition of a cobra ``model``.
 
     A wrapper around :func:`concordance_from_matrices`: it splits reversible reactions into two
-    (:func:`kimonu.io.irreversible`), runs FVA to remove blocked reactions and find pinned rates, builds
-    the complex decomposition N = Y·A from the model, and hands A and N on.
+    (:func:`kimonu.io.irreversible`), removes blocked reactions and finds pinned rates (:func:`_preprocess`),
+    builds the complex decomposition N = Y·A from the model, and hands A and N on.
 
     Args:
-        preprocess: if True (default), run that FVA first (scenario i). Pass a model that is already
-            FVA-unblocked and has no pinned rates with ``preprocess=False``.
-        solver: solver for that FVA; None lets straindesign choose.
+        preprocess: if True (default), do that first. Pass a model that has no blocked reactions and
+            no pinned rates with ``preprocess=False``.
+        solver: solver for FVA, if the model needs it; None lets straindesign choose.
 
     Returns a :class:`ConcordanceResult`. ``modules`` are groups of mutually concordant complexes
     (proportional M-rows, singletons included); ``balanced`` are complexes whose activity is
@@ -42,17 +45,31 @@ def concordance(model, preprocess=True, solver=None):
         # The partition is exact over the feasible steady states P. Their linear span is ker(N) unless
         # some rate is constant across P: at zero, a blocked reaction, which is removed; or pinned at a
         # nonzero value. Two independent pins couple reactions that ker(N) does not, so the pins enter
-        # the kernel as extra rows of N (_with_pins). This FVA is the only LP in the analysis.
+        # the kernel as extra rows of N (_with_pins).
         model = irreversible(model).copy()
-        ranges = sd.fva(model, solver=solver) if solver else sd.fva(model)
-        blocked = [r for r in ranges.index
-                   if abs(ranges.at[r, "minimum"]) <= 1e-9 and abs(ranges.at[r, "maximum"]) <= 1e-9]
-        pins = _pins(model, ranges)
+        blocked, pins = _preprocess(model, solver)
         if blocked:
             model.remove_reactions(blocked, remove_orphans=True)
     crn = build_crn(model)
     return concordance_from_matrices(crn.A, _with_pins(crn.N_exact, crn.reaction_ids, pins),
                                      complexes=crn.complexes, reaction_ids=crn.reaction_ids)
+
+
+def _preprocess(model, solver=None):
+    """(ids of the blocked reactions, pinned rates) of an irreversible model.
+
+    With every lower bound at zero, r = 0 is a steady state, so a rate that is constant over the steady
+    states is zero: nothing is pinned, and finite upper bounds only scale, so they cannot block a reaction.
+    One LP then settles it. A positive lower bound forces flux and needs FVA.
+    """
+    if all(r.lower_bound <= 0 for r in model.reactions):
+        S = create_stoichiometric_matrix(model, array_type="lil")
+        closed = [j for j, r in enumerate(model.reactions) if r.upper_bound <= 0]
+        return [model.reactions[j].id for j in np.flatnonzero(blocked_reactions(S.tocsr(), closed))], {}
+    ranges = sd.fva(model, solver=solver) if solver else sd.fva(model)
+    blocked = [r for r in ranges.index
+               if abs(ranges.at[r, "minimum"]) <= 1e-9 and abs(ranges.at[r, "maximum"]) <= 1e-9]
+    return blocked, _pins(model, ranges)
 
 
 def _pins(model, ranges, tol=1e-9):
