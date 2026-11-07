@@ -1,10 +1,14 @@
 """Figure 3 of the paper: Kimonu's relations against the published tools, and the reference reproduced in seconds.
 
 A  wall time vs network size on all 33 models for every arm, with a log-log least-squares line per arm.
-B  coupled complex pairs, C ACR metabolites plus ACRR pairs among free metabolites, per arm on the eleven
+B  the tangent route at scale: the published symbolic local-ACR criterion against one exact nullspace, on the small
+   networks and the size ladder (symbolic and exact) and the 33 models (exact, detached uptakes). Symbolic times from
+   kinetic_variants/local_acr_symbolic.py ($KIMONU_LACR), exact times from kinetic_variants/timing_exclusive.sbatch
+   ($KIMONU_TIMING, median of the replicates).
+C  coupled complex pairs, D ACR metabolites plus ACRR pairs among free metabolites, per arm on the eleven
    models where the exhaustive reference finished (bars: value or median over seeds, whiskers: seed range);
    centred titles, "count" on each y axis and one legend below both, as Figure 2F, G.
-D, E  the map of relations and methods, and what each tool computes on iLJ478 (make_fig3_methods.py).
+E, F  the map of relations and methods, and what each tool computes on iLJ478 (make_fig3_methods.py).
 Supplementary figure (figures/supp/FigS_reference_agreement): the key quantities of Kimonu's reference-equivalent
    mode and the exhaustive reference on the eleven models (identical, asserted below) and the wall time of that
    same computation, with the speedup.
@@ -115,13 +119,14 @@ def save_finished(f, stem, pdf=True, panels=None):
     f.savefig(stem + ".png", dpi=300)
     return used
 
-# --- layout, in inches: A scaling (top), B and C results per method (middle), D map and E computations (bottom, make_fig3_methods)
+# --- layout, in inches: A scaling and B tangent route (top), C and D results per method (middle), E map and F computations (bottom, make_fig3_methods)
 W, RH, HEAD, PAD = 7.2, 0.2, 3.2, 0.1                  # width, table row height, header rows, cell padding
 n = len(REF)
 hTab = (n + HEAD) * RH
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from make_fig3_methods import draw as draw_methods, HCD
-hS, hBar, gapSB, gapBC = 2.3, 1.05, 0.62, 0.8      # B, C: titles above, tick labels and the shared legend below
+hS, hBar, gapSB, gapBC = 2.05, 1.05, 1.26, 0.8      # A, B: axis label and the legend of A below; C, D: titles above, tick labels and the shared legend below
+xA, wS, xB, wB = 0.5, 3.0, 4.2, 2.9                # the two scaling panels
 H = 0.3 + hS + gapSB + hBar + gapBC + HCD
 fig = plt.figure(figsize=(W, H)); rend = fig.canvas.get_renderer()
 def width_in(s, size):
@@ -129,9 +134,9 @@ def width_in(s, size):
 
 # --- A: every model, every arm
 yS = H - 0.3 - hS
-axS = fig.add_axes([0.5 / W, yS / H, 3.95 / W, hS / H])
+axS = fig.add_axes([xA / W, yS / H, wS / W, hS / H])
 for y, lab in {60: "1 min", 3600: "1 h", 86400: "1 day", 604800: "1 week"}.items():
-    axS.axhline(y, color=RULE, lw=0.5, zorder=1); axS.text(1.9e4, y * 1.18, lab, fontsize=6, color=MUTE, ha="right", va="bottom")
+    axS.axhline(y, color=RULE, lw=0.5, zorder=1); axS.text(2.6e4, y * 1.18, lab, fontsize=6, color=MUTE, ha="right", va="bottom")
 handles = []
 A_ORDER = ["ref_exh", "ref_sampled", "cocoa_false", "cocoa_true", "kimonu_det", "kimonu_ref"]   # legend top to bottom, as the lines run
 for arm in A_ORDER:
@@ -143,16 +148,54 @@ for arm in A_ORDER:
     mark(axS, X, Y, arm, s=14 if mk != "^" else 16)
     handles.append(Line2D([], [], color=col, lw=1.1, ls=ls, marker=mk, ms=4 if mk != "^" else 4.5, mfc=col if filled else "white",
                           mec="white" if filled else col, mew=0.5 if filled else 0.9, label=f"{lab}\n" + (f"({CITE[arm]})\n" if arm in CITE else "") + f"{len(X)} models, slope {b:.2f}"))
-axS.set_xscale("log"); axS.set_yscale("log"); axS.set_xlim(900, 2e4); axS.set_ylim(0.15, 2e6)
+axS.set_xscale("log"); axS.set_yscale("log"); axS.set_xlim(900, 2.7e4); axS.set_ylim(0.05, 2e6)
 axS.set_xticks([1000, 2000, 5000, 10000, 20000]); axS.set_xticklabels(["1000", "2000", "5000", "10 000", "20 000"]); axS.minorticks_off()
-axS.set_yticks([1, 10, 100, 1e3, 1e4, 1e5, 1e6]); axS.set_yticklabels(["1", "10", r"$10^2$", r"$10^3$", r"$10^4$", r"$10^5$", r"$10^6$"])
+axS.set_yticks([0.1, 1, 10, 100, 1e3, 1e4, 1e5, 1e6]); axS.set_yticklabels(["0.1", "1", "10", r"$10^2$", r"$10^3$", r"$10^4$", r"$10^5$", r"$10^6$"])
 axS.set_xlabel("complexes", labelpad=2); axS.set_ylabel("wall time (s)", labelpad=2)
 for s in ("top", "right"): axS.spines[s].set_visible(False)
-axS.legend(handles=handles, loc="upper left", bbox_to_anchor=(1.03, 1.06), frameon=False, handlelength=2.2, labelspacing=0.4)
-fig.text(4.72 / W, (yS + 0.0) / H, "Lines: least-squares fit of log wall time on log size.\nKimonu: median of three replicates; stochastic arms:\nmedian of three seeds. Missing points: the computation\ndid not finish within 7 days.",
-         fontsize=6, color=MUTE, va="bottom", linespacing=1.3)
+# one column per tool: filled arm above, open arm below (handles are in that order)
+for h_ in handles:
+    h_.set_label(h_.get_label().replace("Kimonu, reference-equivalent mode", "Kimonu, reference-\nequivalent mode"))
+fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.06 / W, (yS - 0.36) / H), ncol=3, frameon=False, handlelength=2.1,
+           labelspacing=0.45, columnspacing=0.55, borderaxespad=0, handletextpad=0.4)
 
-# --- B, C: what each method reports, on the eleven models where the exhaustive reference finished
+# --- B: the tangent route at scale, symbolic criterion against one exact nullspace
+LACR = os.environ.get("KIMONU_LACR", "/scratch/sadreyev_lab/pschneider/kimonu_local_acr")
+TIMING = os.environ.get("KIMONU_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu_timing")
+LIMIT = 3600
+PURPLE, ORANGE = "#984EA3", "#FF7F00"
+def med_times(arm, stem=""):
+    runs = {}
+    for f in glob.glob(f"{TIMING}/{arm}/tangent_*_rep*.json"):
+        r = json.load(open(f)); runs.setdefault(r["network"], []).append(r)
+    return {k: (v[0]["complexes"], float(np.median([x["seconds"] for x in v]))) for k, v in runs.items()}
+small, genome = med_times("small"), med_times("tan")
+rows = json.load(open(f"{LACR}/small.json")) + [json.load(open(f)) for f in sorted(glob.glob(f"{LACR}/ladder_*.json"))]
+axB = fig.add_axes([xB / W, yS / H, wB / W, hS / H])
+for y, lab in ((1, "1 s"), (60, "1 min")):
+    axB.axhline(y, color=RULE, lw=0.5, zorder=1); axB.text(1.5, y * 1.25, lab, fontsize=6, color=MUTE, ha="left", va="bottom")
+axB.axhline(LIMIT, color=RULE, lw=0.5, zorder=1); axB.text(1.5, LIMIT * 1.25, "1 h limit (open: not finished)", fontsize=6, color=MUTE, ha="left", va="bottom")
+b_handles = []
+for key, col, mk, lab in (("minors", PURPLE, "s", "Symbolic minors (Pascual-Escudero & Feliu, 2022)"),
+                          ("rref", ORANGE, "^", "Symbolic elimination (same rank condition, this work)")):
+    done = [(r["complexes"], r[key]["seconds"]) for r in rows if r.get(key)]
+    out_ = [(r["complexes"], LIMIT) for r in rows if not r.get(key) and r.get(f"{key}_timeout") is not None]
+    x, y = zip(*done); axB.scatter(x, np.maximum(y, 1e-3), s=14, color=col, marker=mk, lw=0, zorder=3)
+    if out_:
+        x, y = zip(*out_); axB.scatter(x, y, s=16, facecolors="white", edgecolors=col, marker=mk, lw=0.8, zorder=3)
+    b_handles.append(Line2D([], [], ls="", marker=mk, ms=4, color=col, mew=0, label=lab))
+exact = [small[r["network"]] for r in rows if r["network"] in small] + list(genome.values())
+x, y = zip(*exact); axB.scatter(x, np.maximum(y, 1e-3), s=14, color=GREEN, marker="o", edgecolor="white", linewidths=0.3, zorder=4)
+b_handles.append(Line2D([], [], ls="", marker="o", ms=4, color=GREEN, mew=0, label=f"One exact nullspace (Kimonu, tangent route)\nslowest of {len(genome)} models: {max(t for _, t in genome.values()):.0f} s, one core"))
+axB.set_xscale("log"); axB.set_yscale("log"); axB.set_xlim(1.4, 2.7e4); axB.set_ylim(6e-4, LIMIT * 6); axB.minorticks_off()
+axB.set_xticks([10, 100, 1000, 10000]); axB.set_xticklabels(["10", r"$10^2$", r"$10^3$", r"$10^4$"])
+axB.set_yticks([1e-3, 1e-2, 0.1, 1, 10, 100, 1e3]); axB.set_yticklabels(["0.001", "0.01", "0.1", "1", "10", r"$10^2$", r"$10^3$"])
+axB.set_xlabel("complexes", labelpad=2); axB.set_ylabel("wall time (s)", labelpad=2)
+for s_ in ("top", "right"): axB.spines[s_].set_visible(False)
+fig.legend(handles=b_handles, loc="upper left", bbox_to_anchor=((xB - 0.2) / W, (yS - 0.36) / H), frameon=False, handletextpad=0.3,
+           labelspacing=0.45, borderaxespad=0)
+
+# --- C, D: what each method reports, on the eleven models where the exhaustive reference finished
 BARS = ["cocoa_false", "cocoa_true", "kimonu_det", "kimonu_ref", "ref_exh", "ref_sampled"]   # reference-equivalent next to the reference it matches
 PC = json.load(open("figures/pair_counts.json"))          # figures/pair_counts.py
 def counts(arm, m, k):
@@ -170,8 +213,8 @@ axR = fig.add_axes([(0.5 + wBar + wGap) / W, yBar / H, wBar / W, hBar / H])
 bw = 0.8 / len(BARS)
 from matplotlib.colors import to_rgb
 tint = lambda c, t=0.6: tuple(t + (1 - t) * v for v in to_rgb(c))   # open arms: a light fill of the arm colour
-YLIM = {"pairs": (40, 40000), "fixed": (0.5, 2000)}
-for ax, k, title in ((axK, "pairs", "coupled complex pairs"), (axR, "fixed", "ACR metabolites plus ACRR pairs (free metabolites)")):
+YLIM = {"pairs": (40, 40000), "fixed": (0.5, 200)}
+for ax, k, title in ((axK, "pairs", "coupled complex pairs"), (axR, "fixed", "fixed relations, ACR and ACRR (free metabolites)")):
     for j, arm in enumerate(BARS):
         lab, col, mk, filled, _ = ARMS[arm]
         for i, m in enumerate(REF):
@@ -195,15 +238,15 @@ for ax, k, title in ((axK, "pairs", "coupled complex pairs"), (axR, "fixed", "AC
     ax.set_ylabel("count", labelpad=2)
 axK.set_ylim(*YLIM["pairs"]); axR.set_ylim(*YLIM["fixed"])
 axK.set_yticks([100, 1000, 10000]); axK.set_yticklabels(["100", "1000", "10 000"])
-axR.set_yticks([1, 10, 100, 1000]); axR.set_yticklabels(["1", "10", "100", "1000"])
+axR.set_yticks([1, 10, 100]); axR.set_yticklabels(["1", "10", "100"])
 for ax in (axK, axR): ax.tick_params(axis="y", labelsize=6)
 from matplotlib.patches import Patch
 bar_handles = [Patch(facecolor=ARMS[a][1] if ARMS[a][3] else tint(ARMS[a][1]), edgecolor=ARMS[a][1], lw=0 if ARMS[a][3] else 0.6, label=ARMS[a][0] + (f" ({CITE[a]})" if a in CITE else "")) for a in BARS]
-yLeg = yBar - 0.45                                       # the legend of B and C sits below their tick labels, as in Figure 2
+yLeg = yBar - 0.45                                       # the legend of C and D sits below their tick labels, as in Figure 2
 fig.legend(handles=bar_handles, loc="upper left", bbox_to_anchor=(0.5 / W, yLeg / H), ncol=3, frameon=False,
            fontsize=6, handlelength=1.2, handleheight=0.8, columnspacing=1.2, labelspacing=0.25, borderaxespad=0)
 
-# --- D, E: the map and the computations per tool
+# --- E, F: the map and the computations per tool
 axCD = fig.add_axes([0, 0, 1, HCD / H]); axCD.set_xlim(0, W); axCD.set_ylim(0, HCD); axCD.axis("off")
 math_texts = draw_methods(axCD, W, HCD)
 
@@ -234,7 +277,7 @@ axA.plot([x1, wA - PAD / 4], [-1.95, -1.95], color=INK, lw=0.6, clip_on=False)
 axA.text((x1 + wA) / 2, -2.05, "identical in Kimonu's reference-equivalent mode and the exhaustive\nreference, on the 11 models where the exhaustive reference finished", ha="center", va="bottom", fontsize=6, color=INK, linespacing=1.1)
 axA.plot([0, wA], [n, n], color=RULE, lw=0.6, clip_on=False)
 
-axB.set_xscale("log"); axB.set_xlim(0.15, 2.5e6)
+axB.set_xscale("log"); axB.set_xlim(0.05, 2.5e6)
 axB.vlines(list(T), 0, n, color=RULE, lw=0.5, zorder=1)      # gridlines stop at the header, clear of the legend
 ratios = []
 for i, m in enumerate(REF):
@@ -254,14 +297,15 @@ axB.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc="white", mec=G
                     Line2D([], [], ls="", marker="s", ms=4, mfc=BLUE, mec="white", mew=0.5, label=f"Reference, exhaustive ({CITE['ref_exh']})")],
            loc="upper left", bbox_to_anchor=(0.06, 1.0), frameon=False, handletextpad=0.2, borderaxespad=0.05, labelspacing=0.25)
 
-for L, x, y in (("A", 0.0, H - 0.02), ("B", 0.0, yBar + hBar + 0.3), ("C", wBar + wGap, yBar + hBar + 0.3)):
+for L, x, y in (("A", 0.0, H - 0.02), ("B", xB - 0.5, H - 0.02), ("C", 0.0, yBar + hBar + 0.3), ("D", wBar + wGap, yBar + hBar + 0.3)):
     fig.text(x / W, y / H, L, va="top", ha="left", color=INK, **LETTER)
 os.makedirs(out, exist_ok=True)
-Hpt, yAB, yCD = H * 72, (0.3 + hS + 0.28) * 72, (H - HCD) * 72      # panel bounds in pt from the top: below A's axis label, above D, E
+Hpt, yAB, yCD = H * 72, (H - yBar - hBar - 0.3) * 72, (H - HCD) * 72  # panel bounds in pt from the top: below the legends of A, B; above E, F
+xAB = (xB - 0.5) * 72                                                     # between A and B
 xBC, yL = (0.5 + wBar + 0.15) * 72, (H - yLeg + 0.03) * 72              # between the two bar charts; top of their legend
 save_finished(fig, os.path.join(out, "Figure3_draft"), panels=[
-    ("A", [(0, 0, 518.4, yAB)]), ("B", [(0, yAB, xBC, yL)]), ("C", [(xBC, yAB, 518.4, yL)]), ("legend_BC", [(0, yL, 518.4, yCD)]),
-    ("D", [(0, yCD, 225, Hpt)]), ("E", [(225, yCD, 518.4, Hpt)])])
+    ("A", [(0, 0, xAB, yAB)]), ("B", [(xAB, 0, 518.4, yAB)]), ("C", [(0, yAB, xBC, yL)]), ("D", [(xBC, yAB, 518.4, yL)]),
+    ("legend_CD", [(0, yL, 518.4, yCD)]), ("E", [(0, yCD, 225, Hpt)]), ("F", [(225, yCD, 518.4, Hpt)])])
 supp = os.path.join(os.path.dirname(os.path.abspath(out)), "supp"); os.makedirs(supp, exist_ok=True)
 save_finished(figT, os.path.join(supp, "FigS_reference_agreement"))
 # --- supplementary figure: concordance stage against the rest, per tool, over the eleven models of A

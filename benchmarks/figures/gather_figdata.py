@@ -9,7 +9,8 @@ Free metabolites are those listed before "E_1" in the model's own metabolite lis
 
     python figures/gather_figdata.py [--check]   # --check diffs kimonu/COCOA arms against the committed file
 
-KIMONU_DET_DIR and KIMONU_REF_DIR replace triplicate_psi_detached3/ and triplicate_refmode/ (e.g. a rerun on scratch).
+KIMONU_DET_DIR, KIMONU_REF_DIR and KIMONU_ATT_DIR replace triplicate_psi_detached3/, triplicate_refmode/ and triplicate_psi/
+(e.g. a rerun on scratch).
 """
 import csv, glob, json, os, re, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +27,9 @@ def n_free(items, free):
     """items: metabolite names (ACR) or name pairs (ACRR); a pair is free when both members are."""
     return sum(all(x in free for x in (it if isinstance(it, list) else [it])) for it in items)
 
-def kimonu_rec(m, root="triplicate_psi"):
+ATT_DIR = os.environ.get("KIMONU_ATT_DIR", "triplicate_psi")
+
+def kimonu_rec(m, root=ATT_DIR):
     """psi route; the replicates agree on every count, so only the times vary."""
     reps = [json.load(open(f)) for f in sorted(glob.glob(f"{root}/kimonu_{m}_rep*.json"))]
     d, free = reps[0], free_set(m)

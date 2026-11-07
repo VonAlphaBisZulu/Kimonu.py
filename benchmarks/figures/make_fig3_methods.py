@@ -13,15 +13,15 @@ E  The computations per tool and stage on iLJ478 (3439 complexes), each cell in 
    timed on scratch (ref_rstage_timing_2026-11-03, median of three); sweep/cocoa_eff/cell_iLJ478_seed1234.log
    (COCOA.jl efficient=true pair funnel and concordance time); COCOA's kinetic stage rerun alone from the
    saved concordance labels (cocoa_kin_timing_2026-11-03: 2 rounds, warm median of three, same ACR, ACRR and
-   giant module as the full run); the Kimonu rerun (kimonu_trip_2026-11-02: iterated route 2 rounds, median
-   stage times; reference-equivalent mode 1.6 s in all). Kimonu's kinetic cell names what the iterated route
+   giant module as the full run); Kimonu from figdata.json (timing_exclusive.sbatch: iterated route 2 rounds, median
+   stage times; reference-equivalent mode in all; read from figdata.json). Kimonu's kinetic cell names what the iterated route
    computes: equal rows of ker W and of Y^T ker((Y Delta)^T), which contains B, not B itself.
    The dashed green line marks Kimonu's reference-equivalent mode: Kimonu's concordance, then the reference's
    kinetic stage, labelled on the right. It runs in a lane above the wall time of each cell.
 
     python figures/make_fig3_methods.py <out_dir>     # from benchmarks/; make_figure3.py imports draw()
 """
-import os, sys
+import json, os, sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -35,6 +35,7 @@ HCD = 2.95                                # height of the C, D block in inches
 REF_KIN = "3.5 min"                       # reference R stages, kinetic 209 s (incl. 3.4 s load) + ACR 2.5 s, median of three
 
 def draw(ax, W=7.2, H=HCD):
+    fd = json.load(open("figdata.json")); KD, KR = fd["kimonu_det"]["iLJ478"], fd["kimonu_ref"]["iLJ478"]   # Kimonu's times on iLJ478
     """Draw C and D on ax, whose data coordinates are inches (0..W, 0..H); returns the texts that carry math."""
     def box(x, y, w, h, face="white", edge=RULE, lw=0.6, r=0.04, z=1, ls="-"):
         ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0,rounding_size={r}", fc=face, ec=edge, lw=lw, ls=ls, zorder=z))
@@ -101,9 +102,9 @@ def draw(ax, W=7.2, H=HCD):
              ["LPs per pair, float, after sampling", "LPs on 90 k pairs", "skipped: 5.82 M by three filters", "", "3.1 h"],
              ["upstream sets, merged by overlap", "reuses concordance modules, no LP", "1 graph search per module, 2 rounds", SF, "4.5 s"]),
             ("Kimonu", "", GREEN,
-             ["proportional rows of $\\mathbf{A}\\mathbf{K}$, exact", "1 nullspace: $\\ker\\mathbf{N}$", "skipped: all, one readout", "", "0.9 s"],
+             ["proportional rows of $\\mathbf{A}\\mathbf{K}$, exact", "1 nullspace: $\\ker\\mathbf{N}$", "skipped: all, one readout", "", f"{KD['sec_conc']:.1f} s"],
              ["equal rows of $\\ker\\mathbf{W}$, $\\mathbf{Y}^\\top\\ker((\\mathbf{Y}\\Delta)^\\top)$", "all of $\\ker\\mathbf{N}$ at one flux $\\mathbf{r}^{*}$, 1 LP",
-              "2 nullspaces per round, 2 rounds", "ACR, ACRR: zero and equal rows", "7.3 s + 0.1 s"])]
+              "2 nullspaces per round, 2 rounds", "ACR, ACRR: zero and equal rows", f"{KD['sec_kin'] + KD['sec_acr']:.1f} s"])]
     cell_y = []
     for k, (lab, cite, col, c1, c2) in enumerate(ROWS):
         y = yh - 0.06 - (k + 1) * rh - k * gap; cell_y.append(y)
@@ -117,8 +118,8 @@ def draw(ax, W=7.2, H=HCD):
                 text(x + 0.05, top - n * step, ln, size=6, ha="left")
             text(x + 0.05, y + 0.08, lines[4], size=6, ha="left")
 
-    # Kimonu's reference-equivalent mode: Kimonu's concordance, then the reference's kinetic stage (1.6 s in all,
-    # median of three, kimonu_trip_2026-11-02/refmode). The line runs in the lane above the wall times.
+    # Kimonu's reference-equivalent mode: Kimonu's concordance, then the reference's kinetic stage (all of it,
+    # median of three, figdata.json). The line runs in the lane above the wall times.
     yK, yR = cell_y[2] + lane, cell_y[0] + lane
     xg = xd + wl + wc1 - 0.03 + (gut + 0.03) / 2              # middle of the gutter between the two columns
     xe = xd + wl + wc1 + gut + wc2 - 0.03 + 0.09              # just right of the kinetic column
@@ -126,9 +127,9 @@ def draw(ax, W=7.2, H=HCD):
             solid_joinstyle="miter", dash_joinstyle="miter", zorder=6)
     arrow((xg + 0.05, yR), (xe, yR), color=GREEN, ls=(0, (3, 1.6)), lw=1.0, z=6)
     text(xe + 0.03, yR + 0.05, "Kimonu,\nreference-\nequivalent\nmode", size=6, color=GREEN, ha="left", va="bottom")
-    text(xe + 0.03, yR + 0.01, "1.6 s", size=6, ha="left", va="top")
+    text(xe + 0.03, yR + 0.01, f"{KR['seconds']:.1f} s", size=6, ha="left", va="top")
 
-    for L, x in (("D", 0.0), ("E", xd - 0.05)):
+    for L, x in (("E", 0.0), ("F", xd - 0.05)):
         ax.text(x, H - 0.02, L, fontsize=18, fontweight="bold", family="Arial", va="top", ha="left", color=INK)
     return [t for t in ax.texts if "$" in t.get_text()]
 

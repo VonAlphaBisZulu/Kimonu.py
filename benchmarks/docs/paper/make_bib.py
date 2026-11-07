@@ -15,7 +15,7 @@ TEX = {'ü': '{\\"u}', 'ö': '{\\"o}', 'ä': '{\\"a}', 'á': "{\\'a}", 'é': "{\
 
 md_path, bib_path = sys.argv[1:3]
 dois = list(dict.fromkeys(d.rstrip('.').lower() for d in
-                          re.findall(r'https://doi\.org/([^)\s]+)', open(md_path).read())))
+                          re.findall(r'https://doi\.org/((?:[^()\s]|\([^()\s]*\))+)', open(md_path).read())))
 try:
     old = open(bib_path).read()
 except FileNotFoundError:
@@ -28,7 +28,11 @@ for doi in dois:
     if doi in have:
         continue
     req = urllib.request.Request('https://doi.org/' + doi, headers={'Accept': 'application/x-bibtex'})
-    raw = urllib.request.urlopen(req, timeout=30).read().decode().strip()
+    try:
+        raw = urllib.request.urlopen(req, timeout=30).read().decode().strip()
+    except OSError as e:
+        print('FAILED', doi, e)
+        continue
     typ = re.match(r'@(\w+)\{', raw).group(1)
     fields = dict((k.lower(), v) for k, v in re.findall(r'(\w+)=\{((?:[^{}]|\{[^{}]*\})*)\}', raw))
     fields.update((k, v) for k, v in re.findall(r'(\w+)=(\d+)\b', raw) if k not in fields)

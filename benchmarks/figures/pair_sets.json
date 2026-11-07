@@ -1,0 +1,2613 @@
+{
+ "iIS312_Trypomastigote": {
+  "kimonu_det": [
+   {
+    "pairs": 100,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 90,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 90,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 90,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10
+   },
+   {
+    "pairs": 90,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10
+   },
+   {
+    "pairs": 90,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 93,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 7
+   },
+   {
+    "pairs": 93,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 7
+   },
+   {
+    "pairs": 93,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 7
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 90,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10
+   },
+   {
+    "pairs": 90,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10
+   },
+   {
+    "pairs": 90,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10
+   }
+  ]
+ },
+ "iIS312_Amastigote": {
+  "kimonu_det": [
+   {
+    "pairs": 79,
+    "fixed": 4,
+    "fixed_pairs": 5,
+    "acr": 0,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 75,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 75,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 75,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   },
+   {
+    "pairs": 75,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   },
+   {
+    "pairs": 75,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 76,
+    "fixed": 4,
+    "fixed_pairs": 5,
+    "acr": 0,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3
+   },
+   {
+    "pairs": 76,
+    "fixed": 4,
+    "fixed_pairs": 5,
+    "acr": 0,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3
+   },
+   {
+    "pairs": 76,
+    "fixed": 4,
+    "fixed_pairs": 5,
+    "acr": 0,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 75,
+    "fixed": 4,
+    "fixed_pairs": 5,
+    "acr": 0,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   },
+   {
+    "pairs": 75,
+    "fixed": 4,
+    "fixed_pairs": 5,
+    "acr": 0,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   },
+   {
+    "pairs": 75,
+    "fixed": 4,
+    "fixed_pairs": 5,
+    "acr": 0,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   }
+  ]
+ },
+ "iIS312_Epimastigote": {
+  "kimonu_det": [
+   {
+    "pairs": 98,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   },
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   },
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 97,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1
+   },
+   {
+    "pairs": 97,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1
+   },
+   {
+    "pairs": 97,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 96,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   },
+   {
+    "pairs": 96,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   },
+   {
+    "pairs": 96,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   }
+  ]
+ },
+ "iIS312": {
+  "kimonu_det": [
+   {
+    "pairs": 98,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   },
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   },
+   {
+    "pairs": 96,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 97,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1
+   },
+   {
+    "pairs": 97,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1
+   },
+   {
+    "pairs": 97,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 96,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   },
+   {
+    "pairs": 96,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   },
+   {
+    "pairs": 96,
+    "fixed": 3,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2
+   }
+  ]
+ },
+ "iIT341": {
+  "kimonu_det": [
+   {
+    "pairs": 19675,
+    "fixed": 18,
+    "fixed_pairs": 25,
+    "acr": 0,
+    "acrr": 25,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 19451,
+    "fixed": 4,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 224
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 19451,
+    "fixed": 4,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 224
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 19379,
+    "fixed": 4,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 296
+   },
+   {
+    "pairs": 19379,
+    "fixed": 4,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 296
+   },
+   {
+    "pairs": 19379,
+    "fixed": 4,
+    "fixed_pairs": 4,
+    "acr": 0,
+    "acrr": 4,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 296
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 17451,
+    "fixed": 16,
+    "fixed_pairs": 20,
+    "acr": 0,
+    "acrr": 20,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 2764,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4988
+   },
+   {
+    "pairs": 18388,
+    "fixed": 17,
+    "fixed_pairs": 24,
+    "acr": 0,
+    "acrr": 24,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 3468,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4755
+   },
+   {
+    "pairs": 136503,
+    "fixed": 78,
+    "fixed_pairs": 85,
+    "acr": 65,
+    "acrr": 20,
+    "acr_acr_pairs_dropped": 2069,
+    "pairs_not_in_kimonu": 116842,
+    "acr_not_in_kimonu": [
+     "5mta[c]",
+     "ac[e]",
+     "acald[c]",
+     "acald[e]",
+     "actACP[c]",
+     "adphep_LD[c]",
+     "ahcys[c]",
+     "akg[e]",
+     "ala__D[e]",
+     "ala__L[e]",
+     "amob[c]",
+     "arg__L[e]",
+     "asp__L[e]",
+     "atp[c]",
+     "co2[c]",
+     "co2[e]",
+     "dhptd[c]",
+     "dmlz[c]",
+     "etoh[e]",
+     "fe2[e]",
+     "for[c]",
+     "for[e]",
+     "fum[c]",
+     "fum[e]",
+     "glu__L[e]",
+     "h2co3[c]",
+     "h2co3[e]",
+     "h2o[c]",
+     "h2o[e]",
+     "h[e]",
+     "his__L[e]",
+     "hmfurn[c]",
+     "hxan[c]",
+     "hxan[e]",
+     "ile__L[e]",
+     "lac__L[e]",
+     "leu__L[e]",
+     "lys__L[e]",
+     "mal__L[e]",
+     "met__L[e]",
+     "myrsACP[c]",
+     "nh4[c]",
+     "nh4[e]",
+     "no3[c]",
+     "no3[e]",
+     "orn[e]",
+     "phe__L[e]",
+     "pheme[e]",
+     "pi[e]",
+     "pime[c]",
+     "pime[e]",
+     "pro__L[e]",
+     "pyr[e]",
+     "ser__L[e]",
+     "so4[e]",
+     "succ[e]",
+     "thm[e]",
+     "thr__L[e]",
+     "trp__L[e]",
+     "tyr__L[e]",
+     "u23ga_HP[c]",
+     "uaagmda[c]",
+     "udcpdp[c]",
+     "urea[e]",
+     "val__L[e]"
+    ],
+    "acrr_not_in_kimonu": [
+     [
+      "malACP[c]",
+      "xmp[c]"
+     ],
+     [
+      "ser__L[c]",
+      "thr__L[c]"
+     ],
+     [
+      "1pyr5c[c]",
+      "glu5sa[c]"
+     ],
+     [
+      "gln__L[c]",
+      "h[c]"
+     ],
+     [
+      "hco3[c]",
+      "nadph[c]"
+     ],
+     [
+      "fgam[c]",
+      "xmp[c]"
+     ],
+     [
+      "hco3[c]",
+      "xmp[c]"
+     ],
+     [
+      "1p3h5c[c]",
+      "glu5sa[c]"
+     ],
+     [
+      "fgam[c]",
+      "nadph[c]"
+     ],
+     [
+      "ctp[c]",
+      "dctp[c]"
+     ],
+     [
+      "1p3h5c[c]",
+      "1pyr5c[c]"
+     ],
+     [
+      "3ig3p[c]",
+      "indole[c]"
+     ],
+     [
+      "nadph[c]",
+      "xmp[c]"
+     ],
+     [
+      "hco3[c]",
+      "malACP[c]"
+     ],
+     [
+      "fgam[c]",
+      "hco3[c]"
+     ],
+     [
+      "2ahhmd[c]",
+      "2ahhmp[c]"
+     ],
+     [
+      "fgam[c]",
+      "malACP[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 14
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 18370,
+    "fixed": 14,
+    "fixed_pairs": 20,
+    "acr": 0,
+    "acrr": 20,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 3468,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4773
+   },
+   {
+    "pairs": 17437,
+    "fixed": 13,
+    "fixed_pairs": 16,
+    "acr": 0,
+    "acrr": 16,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 2764,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 5002
+   },
+   {
+    "pairs": 9851,
+    "fixed": 13,
+    "fixed_pairs": 16,
+    "acr": 0,
+    "acrr": 16,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 592,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 10416
+   }
+  ]
+ },
+ "iCN900": {
+  "kimonu_det": [
+   {
+    "pairs": 706,
+    "fixed": 8,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 702,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 702,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 4
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 691,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 15
+   },
+   {
+    "pairs": 691,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 15
+   },
+   {
+    "pairs": 691,
+    "fixed": 1,
+    "fixed_pairs": 1,
+    "acr": 0,
+    "acrr": 1,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 15
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 706,
+    "fixed": 8,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   },
+   {
+    "pairs": 706,
+    "fixed": 8,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   },
+   {
+    "pairs": 706,
+    "fixed": 8,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 706,
+    "fixed": 8,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   },
+   {
+    "pairs": 706,
+    "fixed": 8,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   },
+   {
+    "pairs": 706,
+    "fixed": 8,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ]
+ },
+ "iLJ478": {
+  "kimonu_det": [
+   {
+    "pairs": 13417,
+    "fixed": 11,
+    "fixed_pairs": 11,
+    "acr": 6,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 12745,
+    "fixed": 6,
+    "fixed_pairs": 6,
+    "acr": 1,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "glyc[c]",
+      "udpg[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 672
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 12745,
+    "fixed": 6,
+    "fixed_pairs": 6,
+    "acr": 1,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "glyc[c]",
+      "udpg[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 672
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 12725,
+    "fixed": 6,
+    "fixed_pairs": 6,
+    "acr": 1,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "glyc[c]",
+      "udpg[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 692
+   },
+   {
+    "pairs": 12725,
+    "fixed": 6,
+    "fixed_pairs": 6,
+    "acr": 1,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "glyc[c]",
+      "udpg[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 692
+   },
+   {
+    "pairs": 12725,
+    "fixed": 6,
+    "fixed_pairs": 6,
+    "acr": 1,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "glyc[c]",
+      "udpg[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 692
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 10255,
+    "fixed": 11,
+    "fixed_pairs": 11,
+    "acr": 6,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 15,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3162
+   },
+   {
+    "pairs": 10255,
+    "fixed": 11,
+    "fixed_pairs": 11,
+    "acr": 6,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 15,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3162
+   },
+   {
+    "pairs": 10255,
+    "fixed": 11,
+    "fixed_pairs": 11,
+    "acr": 6,
+    "acrr": 5,
+    "acr_acr_pairs_dropped": 15,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3162
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 9949,
+    "fixed": 10,
+    "fixed_pairs": 10,
+    "acr": 4,
+    "acrr": 6,
+    "acr_acr_pairs_dropped": 4,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3468
+   },
+   {
+    "pairs": 9949,
+    "fixed": 10,
+    "fixed_pairs": 10,
+    "acr": 4,
+    "acrr": 6,
+    "acr_acr_pairs_dropped": 4,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3468
+   },
+   {
+    "pairs": 9949,
+    "fixed": 10,
+    "fixed_pairs": 10,
+    "acr": 4,
+    "acrr": 6,
+    "acr_acr_pairs_dropped": 4,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3468
+   }
+  ]
+ },
+ "Saha2011iRS1597": {
+  "kimonu_det": [
+   {
+    "pairs": 6787,
+    "fixed": 46,
+    "fixed_pairs": 949,
+    "acr": 0,
+    "acrr": 949,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 5252,
+    "fixed": 3,
+    "fixed_pairs": 3,
+    "acr": 0,
+    "acrr": 3,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1535
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 5252,
+    "fixed": 3,
+    "fixed_pairs": 3,
+    "acr": 0,
+    "acrr": 3,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1535
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 5252,
+    "fixed": 3,
+    "fixed_pairs": 3,
+    "acr": 0,
+    "acrr": 3,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1535
+   },
+   {
+    "pairs": 5252,
+    "fixed": 3,
+    "fixed_pairs": 3,
+    "acr": 0,
+    "acrr": 3,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1535
+   },
+   {
+    "pairs": 5252,
+    "fixed": 3,
+    "fixed_pairs": 3,
+    "acr": 0,
+    "acrr": 3,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1535
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 4791,
+    "fixed": 35,
+    "fixed_pairs": 531,
+    "acr": 0,
+    "acrr": 531,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1996
+   },
+   {
+    "pairs": 5181,
+    "fixed": 38,
+    "fixed_pairs": 633,
+    "acr": 0,
+    "acrr": 633,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 293,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "C00049[c]",
+      "hvo[c]"
+     ],
+     [
+      "C02646[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00073[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00458[c]"
+     ],
+     [
+      "C00037[m]",
+      "C02325[c]"
+     ],
+     [
+      "C00037[m]",
+      "C12137[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00286[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00183[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00063[c]"
+     ],
+     [
+      "C00369[p]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00047[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00041[c]"
+     ],
+     [
+      "C00089[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00044[c]"
+     ],
+     [
+      "C00063[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00185[c]"
+     ],
+     [
+      "C00078[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C05835[c]"
+     ],
+     [
+      "C00082[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00123[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00079[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00760[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00249[c]"
+     ],
+     [
+      "C00148[c]",
+      "hvo[c]"
+     ],
+     [
+      "Biomass[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00075[c]"
+     ],
+     [
+      "C00131[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00407[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00458[c]",
+      "hvo[c]"
+     ],
+     [
+      "C12137[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00097[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00590[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00123[c]"
+     ],
+     [
+      "C00181[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00079[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00760[c]"
+     ],
+     [
+      "C00037[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00049[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00407[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00131[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00459[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00989[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00181[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00369[p]"
+     ],
+     [
+      "C00185[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00078[c]"
+     ],
+     [
+      "C00044[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00089[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00188[c]"
+     ],
+     [
+      "C00188[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00459[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "hvo[c]"
+     ],
+     [
+      "Biomass[c]",
+      "C00037[m]"
+     ],
+     [
+      "C00037[m]",
+      "C00148[c]"
+     ],
+     [
+      "C00989[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C02646[c]"
+     ],
+     [
+      "C02325[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00073[c]"
+     ],
+     [
+      "C05835[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00082[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00097[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00590[c]"
+     ],
+     [
+      "C00041[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00183[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00286[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00249[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00047[c]",
+      "hvo[c]"
+     ],
+     [
+      "C00037[c]",
+      "C00037[m]"
+     ],
+     [
+      "C00075[c]",
+      "hvo[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 1899
+   },
+   {
+    "pairs": 4985,
+    "fixed": 37,
+    "fixed_pairs": 598,
+    "acr": 0,
+    "acrr": 598,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 97,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "C00037[m]",
+      "C02325[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00458[c]"
+     ],
+     [
+      "C00037[m]",
+      "C12137[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00286[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00183[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00063[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00041[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00047[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00044[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00185[c]"
+     ],
+     [
+      "C00037[m]",
+      "C05835[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00249[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00075[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00123[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00079[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00760[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00049[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00407[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00131[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00459[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00989[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00181[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00369[p]"
+     ],
+     [
+      "C00037[m]",
+      "C00078[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00089[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00188[c]"
+     ],
+     [
+      "Biomass[c]",
+      "C00037[m]"
+     ],
+     [
+      "C00037[m]",
+      "C00148[c]"
+     ],
+     [
+      "C00037[m]",
+      "C02646[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00073[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00082[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00097[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00590[c]"
+     ],
+     [
+      "C00037[c]",
+      "C00037[m]"
+     ]
+    ],
+    "kimonu_pairs_missing": 1899
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 5162,
+    "fixed": 37,
+    "fixed_pairs": 598,
+    "acr": 0,
+    "acrr": 598,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 293,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "C00037[m]",
+      "C02325[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00458[c]"
+     ],
+     [
+      "C00037[m]",
+      "C12137[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00286[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00183[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00063[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00041[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00047[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00044[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00185[c]"
+     ],
+     [
+      "C00037[m]",
+      "C05835[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00249[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00075[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00123[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00079[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00760[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00049[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00407[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00131[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00459[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00989[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00181[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00369[p]"
+     ],
+     [
+      "C00037[m]",
+      "C00078[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00089[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00188[c]"
+     ],
+     [
+      "Biomass[c]",
+      "C00037[m]"
+     ],
+     [
+      "C00037[m]",
+      "C00148[c]"
+     ],
+     [
+      "C00037[m]",
+      "C02646[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00073[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00082[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00097[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00590[c]"
+     ],
+     [
+      "C00037[c]",
+      "C00037[m]"
+     ]
+    ],
+    "kimonu_pairs_missing": 1918
+   },
+   {
+    "pairs": 4966,
+    "fixed": 37,
+    "fixed_pairs": 598,
+    "acr": 0,
+    "acrr": 598,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 97,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "C00037[m]",
+      "C02325[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00458[c]"
+     ],
+     [
+      "C00037[m]",
+      "C12137[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00286[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00183[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00063[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00041[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00047[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00044[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00185[c]"
+     ],
+     [
+      "C00037[m]",
+      "C05835[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00249[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00075[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00123[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00079[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00760[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00049[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00407[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00131[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00459[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00989[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00181[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00369[p]"
+     ],
+     [
+      "C00037[m]",
+      "C00078[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00089[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00188[c]"
+     ],
+     [
+      "Biomass[c]",
+      "C00037[m]"
+     ],
+     [
+      "C00037[m]",
+      "C00148[c]"
+     ],
+     [
+      "C00037[m]",
+      "C02646[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00073[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00082[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00097[c]"
+     ],
+     [
+      "C00037[m]",
+      "C00590[c]"
+     ],
+     [
+      "C00037[c]",
+      "C00037[m]"
+     ]
+    ],
+    "kimonu_pairs_missing": 1918
+   },
+   {
+    "pairs": 4772,
+    "fixed": 35,
+    "fixed_pairs": 531,
+    "acr": 0,
+    "acrr": 531,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2015
+   }
+  ]
+ },
+ "iNF517": {
+  "kimonu_det": [
+   {
+    "pairs": 12458,
+    "fixed": 16,
+    "fixed_pairs": 19,
+    "acr": 0,
+    "acrr": 19,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 12216,
+    "fixed": 5,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "pgp_LLA[c]",
+      "udcpdp[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 242
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 12216,
+    "fixed": 5,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "pgp_LLA[c]",
+      "udcpdp[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 242
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 12204,
+    "fixed": 5,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "pgp_LLA[c]",
+      "udcpdp[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 254
+   },
+   {
+    "pairs": 12204,
+    "fixed": 5,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "pgp_LLA[c]",
+      "udcpdp[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 254
+   },
+   {
+    "pairs": 12204,
+    "fixed": 5,
+    "fixed_pairs": 8,
+    "acr": 0,
+    "acrr": 8,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [
+     [
+      "pgp_LLA[c]",
+      "udcpdp[c]"
+     ]
+    ],
+    "kimonu_pairs_missing": 254
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 9143,
+    "fixed": 16,
+    "fixed_pairs": 19,
+    "acr": 0,
+    "acrr": 19,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3315
+   },
+   {
+    "pairs": 9410,
+    "fixed": 16,
+    "fixed_pairs": 19,
+    "acr": 0,
+    "acrr": 19,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3048
+   },
+   {
+    "pairs": 9143,
+    "fixed": 16,
+    "fixed_pairs": 19,
+    "acr": 0,
+    "acrr": 19,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3315
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 9869,
+    "fixed": 16,
+    "fixed_pairs": 19,
+    "acr": 0,
+    "acrr": 19,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 2589
+   },
+   {
+    "pairs": 9075,
+    "fixed": 16,
+    "fixed_pairs": 19,
+    "acr": 0,
+    "acrr": 19,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3383
+   },
+   {
+    "pairs": 9075,
+    "fixed": 16,
+    "fixed_pairs": 19,
+    "acr": 0,
+    "acrr": 19,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 3383
+   }
+  ]
+ },
+ "iSB619": {
+  "kimonu_det": [
+   {
+    "pairs": 10560,
+    "fixed": 8,
+    "fixed_pairs": 11,
+    "acr": 0,
+    "acrr": 11,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 9978,
+    "fixed": 2,
+    "fixed_pairs": 2,
+    "acr": 0,
+    "acrr": 2,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 582
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 9978,
+    "fixed": 2,
+    "fixed_pairs": 2,
+    "acr": 0,
+    "acrr": 2,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 582
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 9703,
+    "fixed": 2,
+    "fixed_pairs": 2,
+    "acr": 0,
+    "acrr": 2,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 857
+   },
+   {
+    "pairs": 9703,
+    "fixed": 2,
+    "fixed_pairs": 2,
+    "acr": 0,
+    "acrr": 2,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 857
+   },
+   {
+    "pairs": 9433,
+    "fixed": 2,
+    "fixed_pairs": 2,
+    "acr": 0,
+    "acrr": 2,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 1127
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 4611,
+    "fixed": 6,
+    "fixed_pairs": 9,
+    "acr": 0,
+    "acrr": 9,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 5949
+   },
+   {
+    "pairs": 4611,
+    "fixed": 6,
+    "fixed_pairs": 9,
+    "acr": 0,
+    "acrr": 9,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 5949
+   },
+   {
+    "pairs": 4611,
+    "fixed": 6,
+    "fixed_pairs": 9,
+    "acr": 0,
+    "acrr": 9,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 5949
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 5257,
+    "fixed": 6,
+    "fixed_pairs": 9,
+    "acr": 0,
+    "acrr": 9,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 5303
+   },
+   {
+    "pairs": 5257,
+    "fixed": 6,
+    "fixed_pairs": 9,
+    "acr": 0,
+    "acrr": 9,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 5303
+   },
+   {
+    "pairs": 5257,
+    "fixed": 6,
+    "fixed_pairs": 9,
+    "acr": 0,
+    "acrr": 9,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 5303
+   }
+  ]
+ },
+ "iJB785": {
+  "kimonu_det": [
+   {
+    "pairs": 2900,
+    "fixed": 26,
+    "fixed_pairs": 36,
+    "acr": 0,
+    "acrr": 36,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 0
+   }
+  ],
+  "kimonu_ref": [
+   {
+    "pairs": 2858,
+    "fixed": 13,
+    "fixed_pairs": 16,
+    "acr": 0,
+    "acrr": 16,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 42
+   }
+  ],
+  "ref_exh": [
+   {
+    "pairs": 2858,
+    "fixed": 13,
+    "fixed_pairs": 16,
+    "acr": 0,
+    "acrr": 16,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 42
+   }
+  ],
+  "ref_sampled": [
+   {
+    "pairs": 2795,
+    "fixed": 13,
+    "fixed_pairs": 16,
+    "acr": 0,
+    "acrr": 16,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 105
+   },
+   {
+    "pairs": 2795,
+    "fixed": 13,
+    "fixed_pairs": 16,
+    "acr": 0,
+    "acrr": 16,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 105
+   },
+   {
+    "pairs": 2795,
+    "fixed": 13,
+    "fixed_pairs": 16,
+    "acr": 0,
+    "acrr": 16,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 105
+   }
+  ],
+  "cocoa_false": [
+   {
+    "pairs": 2864,
+    "fixed": 19,
+    "fixed_pairs": 26,
+    "acr": 0,
+    "acrr": 26,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 36
+   },
+   {
+    "pairs": 2864,
+    "fixed": 19,
+    "fixed_pairs": 26,
+    "acr": 0,
+    "acrr": 26,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 36
+   },
+   {
+    "pairs": 2864,
+    "fixed": 19,
+    "fixed_pairs": 26,
+    "acr": 0,
+    "acrr": 26,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 36
+   }
+  ],
+  "cocoa_true": [
+   {
+    "pairs": 2860,
+    "fixed": 19,
+    "fixed_pairs": 26,
+    "acr": 0,
+    "acrr": 26,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 40
+   },
+   {
+    "pairs": 2860,
+    "fixed": 19,
+    "fixed_pairs": 26,
+    "acr": 0,
+    "acrr": 26,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 40
+   },
+   {
+    "pairs": 2860,
+    "fixed": 19,
+    "fixed_pairs": 26,
+    "acr": 0,
+    "acrr": 26,
+    "acr_acr_pairs_dropped": 0,
+    "pairs_not_in_kimonu": 0,
+    "acr_not_in_kimonu": [],
+    "acrr_not_in_kimonu": [],
+    "kimonu_pairs_missing": 40
+   }
+  ]
+ }
+}
