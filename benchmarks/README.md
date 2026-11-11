@@ -1,85 +1,163 @@
-# Benchmarks — Kimonu vs COCOA.jl vs the MATLAB reference
+# Benchmarks and the records behind the paper
 
-Correctness and speed comparison against COCOA.jl and against the MATLAB reference implementation
-(ankueken/Upstream_Algorithm), mirroring the benchmark COCOA.jl ran against that same predecessor —
-with Kimonu in the challenger seat. The reference runs under Octave and needs no MATLAB licence;
-see `matlab_reference/`.
+This folder holds every script that produced a figure, table or number of the paper "Exact nullspaces find and
+certify kinetic modules and other mass-action invariants in metabolic networks", the frozen harness that ran
+COCOA.jl and the reference implementation of Langary et al. (2025), and the small result files. The Kimonu package
+itself is in `../src/kimonu`. Large results live on the cluster scratch space and in the Zenodo archive
+(`ZENODO_README.md`). Files removed on 2026-11-11 are listed in `HISTORY.md`.
 
-## Design
+## How to run
 
-**One preprocessed model, all tools.** The Julia side runs COCOA's own preprocessing pipeline and
-writes the resulting network to `processed/<profile>/<model>.json`; the Python side reads exactly
-that file and runs with `preprocess=False`. Complex counts depend on which preprocessing steps ran,
-so tools that preprocess separately are not comparable — this removes the question entirely.
+- Run every script from `benchmarks/`. Most scripts put `benchmarks/` and `../src` on `sys.path` themselves, and the
+  sbatch files add `benchmarks/` to `PYTHONPATH`.
+- Python 3.12 with StrainDesign 1.19.2 (`pip install "straindesign>=1.19.2"`, or on the cluster
+  `PYTHONPATH=$HOME/sd-kernel-nonzeros`, the tag v1.19.2), cobra, SciPy and, for `cert_modp.py`, python-flint.
+  The cluster environment is `~/miniconda3/envs/straindesign/bin/python`.
+- Every `.sbatch` file carries absolute paths to this checkout and writes to a directory under
+  `/scratch/sadreyev_lab/pschneider/` named in its header. Most take an environment variable for the output
+  directory (`TIMING_OUT`, `SO_OUT`, `SEED_OUT`, `GAP_OUT`, ...) and `SD_TREE` for the StrainDesign tree. Several
+  recorded runs used the tree `~/sd-scip-pricing` (1.19.1 plus a branch on SCIP's LP pricing). Their counts agree with
+  those of the timing runs on 1.19.2 (modules, largest module, ACR and ACRR of `uptake_modes/` against `figdata.json`,
+  both uptake modes, all 33 networks). The rerun uses 1.19.2 throughout.
+- Timed runs use `kinetic_variants/timing_exclusive.sbatch`, one process pinned to one core on an exclusive node.
 
-**Complexes are matched by composition, not by name.** Neither tool's complex identifiers mean
-anything to the other. The comparison keys every complex by its `{metabolite: coefficient}` map.
+To rerun the Kimonu results (COCOA.jl and the reference are not rerun), in this order:
+1. `sbatch kinetic_variants/timing_exclusive.sbatch det att ref`, then the arms `tan`, `tanatt` and `small`, each with
+   a new `TIMING_OUT`.
+2. `sbatch kinetic_variants/uptake_modes.sbatch`, then `python kinetic_variants/hierarchy_detached.py`.
+3. `member_counts.sbatch`, `uptake_lists.sbatch`, `fb_vs_ma.sbatch` (then `fb_vs_ma_summary.py`), `gap_roots.sbatch`,
+   `cert_modp.sbatch`, `refmode_modules.sbatch`, `seed_invariance.sbatch` (all in `kinetic_variants/`).
+4. Only if the reference flux or the readout changes, `float_exactcmp.sbatch`, `float_four.sbatch` and
+   `second_order_modp.sbatch`.
+5. Rebuild as in `ZENODO_README.md`, with the `KIMONU_*` variables pointing at the new directories, and compare
+   the output of `figures/paper_numbers.py` with the text.
 
-**Partitions are compared, not counts.** Two runs can agree on the number of modules and still
-disagree about which complexes belong together. `compare.py` compares the induced set partitions,
-and when they differ it reports the *direction* — whether one tool's concordant pairs are a strict
-subset of the other's (missed concordances) or a strict superset (invented ones) — plus the
-offending complexes.
+## Paper item, script, input and output
 
-**Singletons are excluded from module and pair counts.** COCOA labels a complex concordant with
-nothing as `-1`; Kimonu returns it as a one-element group. Counting them differently manufactures
-disagreements that are not there.
+"K" marks a Kimonu run, "F" a frozen COCOA.jl or reference result. Scripts under `figures/` draw, scripts under
+`kinetic_variants/` compute. The vault is Phil's manuscript folder, which holds the final figures.
 
-## Running
+| paper item | script | input | output |
+|---|---|---|---|
+| Fig. 1 | Illustrator master, edited by `docs/examples/network/figure1_layers.py`, `figure1_matrix_labels.py`, `figure1_panelG_shared_W.py`, `figure12_panels.py`. Matrices from `figure1_lower.py` (SymPy) | none | vault `figures/Figure1.svg` |
+| Fig. 2 | `docs/examples/network/figure2.py` (networks, steady states, values), then `figure2_conventions.py`, `figure2_loglog.py`, `figure2_panelE.py`, `figure12_panels.py` | closed form | vault `Figure2.svg` |
+| Fig. 3A, B (K) | `figures/make_hierarchy.py` | `kinetic_variants/hierarchy_detached/` from `hierarchy_detached.py` from `uptake_modes/` (`uptake_modes.py`, `.sbatch`) | vault `Figure3.svg` (through `figures/split_figure2.py`) |
+| Fig. 3C, D (K) | `figures/extend_figure3.py`, in place on the vault SVG | `kinetic_variants/member_counts/` (`member_counts.py`, `.sbatch`) | vault `Figure3.svg` |
+| Fig. 3E, F (K) | `figures/make_figure2_bottom.py` (uses `make_float_four.draw_certificate`) | scratch `kimonu_float_four/parts` from `float_exactcmp.py` (E) and `float_four.py` (F), their `.sbatch` and part lists | vault `Figure3.svg` |
+| Fig. 4A (K, F) | `figures/make_figure3.py` | `figdata.json` from `figures/gather_figdata.py`, which reads scratch `kimonu_timing_seeds/{det,att}`, `kimonu_timing_final/ref` (`timing_exclusive.sbatch` running `run_kimonu_crn.py`, `run_kimonu_refmode.py`) and `sweep/cocoa_v110`, `sweep/cocoa_eff`, `reference_final`, `reference_final_sampled` | vault `Figure4.svg` |
+| Fig. 4B (K) | `figures/make_figure3.py` | scratch `kimonu_timing_seeds/{tan,small}` (`tangent_cell.py`), `kimonu_local_acr` (`local_acr_symbolic.py`, `local_acr_ladder.sbatch`) | same |
+| Fig. 4C, D (K, F) | `figures/make_figure3.py` | `figures/pair_counts.json`, `pair_sets.json` from `figures/pair_sets.py`, which runs Kimonu's default and reads scratch `kimonu_trip_2026-11-02/refmode_modules` (`refmode_modules.sbatch`) and the module files of COCOA.jl and the reference | same |
+| Fig. 4E, F (F) | `figures/make_fig3_methods.py`, called by `make_figure3.py` | `figdata.json`, `reference_final/reference_iLJ478.json`, `sweep/cocoa_eff/cell_iLJ478_seed1234.log` | same |
+| fig. S1 (K, F) | `figures/make_figure3.py` | `KIMONU_REF_DIR`, `reference_final/acr/*.log`, COCOA.jl logs | `figures/supp/FigS_stage_timing.svg` |
+| fig. S2 (K, F) | `figures/make_figure3.py` (asserts that the reference-equivalent mode equals the exhaustive reference) | `figdata.json` | `figures/supp/FigS_reference_agreement.svg` |
+| fig. S3 (K) | `figures/make_supp_figures.py` | `figdata.json` (arms `kimonu`, `kimonu_det`) | `FigS_uptakes.svg` |
+| fig. S4 (K, F) | `figures/make_supp_figures.py` | `figures/seed_spread.json` from `figures/seed_spread.py`, which reads the COCOA.jl and sampled-reference seeds and scratch `kimonu_seeds` (`seed_invariance.py`, `.sbatch`) | `FigS_seeds.svg` |
+| figs. S5, S6 (K) | `figures/make_float_four.py` | scratch `kimonu_float_four/parts` | `FigS_certificate.svg`, `FigS_float_errors.svg` |
+| Text S1 (K) | `figures/supp_walkthrough.py` | Kimonu at r* = K·1 | Markdown for the Supplement |
+| Table S2 | `figures/make_table_s2.py` | `unblocked/`, `deficiency/deficiency_33.json` (`deficiency_split.py`), `figdata.json` | Markdown table |
+| Data S1 (K, F) | `figures/make_data_s1_s2.py` | `figdata.json`, `figures/pair_counts.json` | `DataS1_values.csv` |
+| Data S2 (K) | `figures/make_data_s1_s2.py` | scratch `kimonu_uptake_modes/lists` (`uptake_lists.py`, `.sbatch`) | `DataS2_uptake_acr.csv` |
+| numbers of Results and Methods | `figures/paper_numbers.py` | all of the above | one line per number with its source |
 
-```bash
-# 1. Export the preprocessed network and COCOA's complex decomposition (A, Y, S, bounds)
-julia --project=benchmarks/julia benchmarks/export_crn.jl
+Runs behind single sentences, all in `kinetic_variants/` and read by `paper_numbers.py`: `fb_vs_ma.py` with
+`fb_vs_ma_summary.py` (flux coupling under mass action), `gap_roots.py` with `gap_roots.sbatch` and
+`gap_roots_cases.txt` (the open questions), `cert_modp.py` (second evaluation modulo a prime), `sz_flux.py` with
+`sz_flux.sbatch` and `sz_flux33.sbatch` (the uniformly drawn flux), `one_lp.py` (one LP against FVA,
+`one_lp_results.log`), `preprocess_time.py` with `crn_to_sbml.py` (preprocessing time), `fva_time.sbatch` with
+`fva_one_process.py` (FVA time), `second_order_modp.py` (second-order test, `second_order_results/`).
 
-# 2. COCOA: run the LP sweep, record the partition
-julia --project=benchmarks/julia benchmarks/run_cocoa.jl
+## Paper scripts (Kimonu runs)
 
-# 3. Kimonu: same model, exact nullspace
-python benchmarks/run_kimonu.py
+- Runners. `run_kimonu_crn.py` runs concordance and the iterated route on a crn.json (route name `psi`, uptakes
+  attached unless `--detach-uptakes`) and holds the crn.json loader (`triplets_to_sparse`, `to_exact`) that most
+  scripts import. `run_kimonu_refmode.py` is the reference-equivalent mode. It uses `compat/upstream.py` (upstream sets
+  merged by overlap only, `Y=None`) and `kinetic_variants/s210_criterion.py` (the Shinar–Feinberg rule).
+  `kinetic_variants/tangent_cell.py` times the tangent route.
+- `kinetic_variants/`. `timing_exclusive.sbatch`, `uptake_modes.py`, `hierarchy_detached.py`, `member_counts.py`,
+  `uptake_lists.py`, `fb_vs_ma.py`, `fb_vs_ma_summary.py`, `gap_roots.py`, `cert_modp.py`, `float_exactcmp.py`,
+  `float_four.py`, `sz_flux.py`, `one_lp.py`, `preprocess_time.py`, `second_order_modp.py`, `seed_invariance.py`, each
+  with its `.sbatch`. `models33.txt` and `models_gap.txt` are the array indices.
+- `figures/`. `gather_figdata.py`, `pair_sets.py`, `seed_spread.py`, `make_figure3.py`, `make_fig3_methods.py`,
+  `make_hierarchy.py`, `extend_figure3.py`, `make_figure2_bottom.py`, `split_figure2.py` (the one-off split of the
+  combined figure into Figures 2 and 3), `make_float_four.py`, `make_supp_figures.py`, `supp_walkthrough.py`,
+  `make_data_s1_s2.py`, `make_table_s2.py`, `paper_numbers.py`.
+- `deficiency/deficiency_split.py` (deficiency, linkage classes and ranks of the 33 networks).
+- `docs/examples/network/` (the edit scripts of Figures 1 and 2).
 
-# 4. MATLAB reference, under Octave (optional; see matlab_reference/README.md)
-export UPSTREAM_ALGORITHM=/path/to/Upstream_Algorithm
-octave --no-gui benchmarks/matlab_reference/run_reference.m \
-    benchmarks/processed/concordance/e_coli_core.crn.json \
-    benchmarks/results/reference_concordance_i_e_coli_core.json
+## Frozen comparison harness (COCOA.jl, reference)
 
-# 5. Compare
-python benchmarks/compare.py
-```
+These ran in August and September and are kept as the record. Their results cannot be rerun in the time of the
+paper, so do not change them or their inputs.
+- Inputs. `export_split_model.py` converted the reference's elementary-step models (.mat) into `sweep/*_fixed.crn.json`.
+  `write_unblocked_crn.py` (`make_unblocked.sbatch`, FVA with SCIP) removed the blocked reactions and wrote
+  `unblocked/`, the input of every tool. `matlab_reference/write_coupling_exact.py` wrote `coupling_exact/`, the exact
+  coupling matrices that the reference's R stage reads.
+- COCOA.jl v1.1.0. `run_cocoa_acr.jl` with the Julia project `julia_v110/`, run by `cocoa_v110*.sbatch`
+  (efficient=false), `cocoa_eff*.sbatch` (efficient=true), `cocoa_gap_*.sbatch` and `cocoa_iaf_false.sbatch`, with
+  their cell lists (`*_cells.txt`). Results in `sweep/cocoa_v110/` and `sweep/cocoa_eff/` (git-ignored).
+- Reference. `matlab_reference/run_reference.m` under Octave with the shims in `matlab_reference/compat/` and the
+  CPLEX bridge `matlab_reference/compat/lp_server.py`, run by `ref_final.sbatch` (exhaustive, `final_models.txt`) and
+  `ref_final_sampled.sbatch` (`final_sampled_cells.txt`). The R stage is `reference_final/acr/run_chain.sh` with the
+  fork's R code in `reference_final*/acr/Code/` (`reference_final/rerun_chain.sbatch` reran it where a coupling matrix
+  was missing). `ref_finish.sbatch` with `matlab_reference/retest_pairs.py` and `retest_rejected.m` retested the
+  rejected pairs. `ref_fixed_validate.sbatch`, `ref_fixed2_validate.sbatch`, `matlab_reference/test_*.m` and
+  `test_kinetic_na_indexing.R` test the adaptations. `patch_mat_names.m` adds metabolite names for the R stage.
+- The settings of the reference that needed adjusting at genome scale are in pull request 1 of the fork
+  (https://github.com/ankueken/Upstream_Algorithm/pull/1) and in Supplementary Text S3. `compare.py` is an August
+  module kept because `matlab_reference/retest_pairs.py` imports it.
 
-All three tools consume the same exported network, and the reference and Kimonu additionally use
-COCOA's complex decomposition (`export_crn.jl` writes A and Y), so complex enumeration is held
-fixed and only the decision procedure varies.
+## Experiments behind Supplement statements
 
-Both runners take `--model M` (repeatable), `--profile`, and `--repeats`. Timings report the
-fastest of `--repeats` runs, which the Julia side needs so that JIT compilation of the first call
-is not charged to COCOA.
+One-off runs whose result the Supplement states in words. `kinetic_variants/README.md` records them by date.
+- Two steady states at the same rate constants. `two_point.py`, `two_point_gap.py`, `two_point_local.py`.
+- Sign condition. `injectivity.py`, `injectivity_gap.py`.
+- Descartes step. `descartes.py`, `descartes_vs_tangent.py`.
+- Shrinking the iHN637 gap. `reduce_gap.py`, `reduce_contract.py`, `reduce_stage3.py`.
+- Basis of the tolerance comparison. `ortho_vs_rref.py`.
+- Deficiency one. `cocoa_loop/deficiency_one_check.py`. COCOA.jl's kinetic stage on Kimonu's partition, `cocoa_loop/`
+  and `matlab_reference/cocoa_isolation/isolate.jl`. Containment of the upstream sets in the iterated route,
+  `cocoa_loop/proof_upstream_in_psi.md`.
+- One-off checks with no number in the paper. `autonomous_blocks.py`, `binomial_formulas.py`, `relation_values.py`,
+  `terminal_join.py`, `zero_module.py`, `single_round.py`, `lumped_toric.py`, `toric_check.py`,
+  `natural_example_search.py`, `deficiency/deficiency_kuken.py`, the August diagnosis scripts in `matlab_reference/`,
+  `compare_to_published.py`, `validate_sweep.py`, `validate_acr_published.py`, `cocoa_s5000.sbatch`.
+- Imported modules of earlier stages. `kinetic_variants/tangent_one_shot.py` and `tangent_fast.py` (the first exact
+  readouts of the tangent route, used by the scripts above and by `second_order_modp.py` and `local_acr_symbolic.py`),
+  `kinetic_variants/branch_certificate.py`.
 
-`benchmarks/julia` is a separate Julia project that `dev`s the COCOA checkout. Point it at whichever
-COCOA tree should be measured — benchmark against upstream `main`, not a working branch.
+## Tools and loaders
 
-### Profiles
+- `figures/svg_finish.py`, `svg_panels.py` (fonts, size, panel groups of every SVG), `fonts_single_family.py`,
+  `docs/examples/network/latex_text.py` (formulas as outlines).
+- `figures/record_inputs.py` (records the files a script reads) and `make_zenodo_bundle.py` (the Zenodo archive).
+- `docs/paper/` (`make_bib.py`, `kimonu.bib`, `md_to_sciadv.py`, `md_to_kimonu_tex.py`, the manuscript in LaTeX).
 
-| profile | preprocessing |
-|---|---|
-| `concordance` | `normalize_bounds`, `remove_blocked_reactions`, `remove_orphans`, `split_into_irreversible` |
-| `kinetic` | the above plus `split_into_elementary` (COCOA's recommendation for kinetic-module analysis) |
+## Tests
 
-The `kinetic` profile is what reproduces the complex counts in the Julia proof-of-concept. Kimonu
-has no elementary-step splitter of its own yet (roadmap Phase 1b); until it does, the split model
-has to come from the Julia side, which is fine for benchmarking but not for standalone use.
+`../tests/` is the package test suite (pytest, run by CI). `compat/test_upstream.py` tests the upstream sets of the
+reference-equivalent mode. `kinetic_variants/test_tangent_one_shot.py` tests the code of the Supplement experiments
+(it needs CPLEX and is not run by CI).
 
-### Scenarios
+## Data folders
 
-`i` is the full steady-state cone. `ii` additionally bounds the objective to within a relative
-tolerance of its optimum. Only the COCOA runner accepts `--scenario ii`; Kimonu's scenario (ii)
-needs the kernel restricted to reactions left free under the bound, which is not implemented.
+| folder | content | status |
+|---|---|---|
+| `unblocked/`, `sweep/*_fixed.crn.json`, `coupling_exact/` | the 33 networks and the coupling matrices the reference read | input, frozen |
+| `figdata.json`, `figures/pair_counts.json`, `pair_sets.json`, `seed_spread.json` | the values the figures show | paper (K, F) |
+| `kinetic_variants/uptake_modes/`, `hierarchy_detached/`, `member_counts/`, `fb_vs_ma/`, `second_order_results/`, `one_lp_results.log` | Kimonu results small enough for git | paper (K) |
+| `deficiency/deficiency_33.json` | deficiency of the 33 networks | paper (Table S2) |
+| `reference_final/`, `reference_final_sampled/` | the reference, exhaustive and sampled (stage logs git-ignored) | paper (F) |
+| `sweep/cocoa_v110/`, `sweep/cocoa_eff/` | COCOA.jl v1.1.0 (git-ignored) | paper (F) |
+| `reference_fixed/`, `reference_fixed2/` | gate runs of the fork | record behind Supplementary Text S3 |
+| `kinetic_variants/injectivity_results/`, `two_point_*.json`, `witness_*.json`, `descartes_*.json`, `deficiency/deficiency_kuken12.json` | Supplement experiments | Supplement |
+| `kinetic_variants/hierarchy/`, `local_acr_results/`, `tangent_float_results/`, `logs/`, `closure_*`, `fast_*`, `psi_*`, `s210_*`, `tangent_*` | September and October experiments (`s210_*` still read by `gather_figdata.py` for an arm no figure draws) | superseded |
+| `sweep_shared/`, `sweep_tentative/` | upstream-set route of September (read by `gather_figdata.py` for the same arm) | superseded |
+| `triplicate*/`, `sweep_unblocked/`, `seedcheck_psi/`, `processed/`, `published/`, `results/`, `archive/`, `sweep/cocoa/`, `sweep/cocoa_s5000/`, `sweep/modules/`, `sweep/kimonu_*` (mostly git-ignored) | August and September runs | superseded |
+| `reference/`, `reference_full/`, `reference_sampled/`, `reference_sampled_seeds/`, `reference_acr/`, `reference_glpk_broken/` | reference runs before the adaptations of the fork | superseded, never reported |
+| `figures/main/`, `figures/prelim/` | figure drafts of September and October | superseded |
 
-## Caveats
-
-- COCOA's `seed` defaults to `rand(UInt)`, so its sampling-based candidate filter is not
-  reproducible unless the seed is pinned. The runner pins it and records it.
-- COCOA is run in-process (`workers = Int[]`). It is designed to solve LPs in parallel, so this
-  measures single-worker performance on both sides rather than COCOA's best achievable wall-clock.
-- The models here are small. Nothing in these numbers speaks to genome-scale behaviour, which is
-  where COCOA's own scaling results live.
+Kimonu results on scratch (`/scratch/sadreyev_lab/pschneider/`). `kimonu_timing_seeds/` (det, att, tan, tanatt, small,
+fva), `kimonu_timing_final/ref`, `kimonu_uptake_modes/lists`, `kimonu_float_four/parts`, `kimonu_cert_modp`,
+`kimonu_gaproots`, `kimonu_seeds`, `kimonu_trip_2026-11-02/refmode_modules`, `kimonu_second_order`, `kimonu_local_acr`,
+`kimonu_sz_flux`, `kimonu_sz_flux_33`, `kimonu_fb_vs_ma`, `kimonu_member_counts`. The Zenodo bundle of 2026-11-06 is in
+`kimonu_zenodo`.
