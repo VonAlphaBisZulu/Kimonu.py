@@ -1,4 +1,10 @@
-"""Jacobian route against the iterated route on networks whose answer is known.
+"""Tests of the code behind the Supplement experiments (two-point criterion, sign condition, Descartes step,
+terminal joins, autonomous blocks, the search for the Figure 2 example), on networks whose answer is known. They need
+CPLEX and are not part of the package tests or CI. Run them with
+    PYTHONPATH=$HOME/sd-kernel-nonzeros python -m pytest kinetic_variants/test_tangent_one_shot.py   # from benchmarks/
+The package tests of both routes on the Shinar-Feinberg networks are in tests/test_shinar_feinberg.py.
+
+Jacobian route against the iterated route on networks whose answer is known.
 
 The one-species network 0 <-> A, 2A <-> 3A has three positive steady states for suitable rate
 constants (x_A = 1, 2, 3 when dA/dt = -(x-1)(x-2)(x-3)). The tangent space at each is {0}, so the

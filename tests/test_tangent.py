@@ -1,9 +1,9 @@
 """Tangent-route tests, and the readout both routes share.
 
 EnvZ-OmpR has one steady state per rate-constant set up to its conservation laws, so both routes must
-agree on it exactly. The cooperative kinase of Figure 3 is the case where they part: two separate
+agree on it exactly. The cooperative kinase of Figure 2 is the case where they part: two separate
 steady states at the same rate constants, X equal in both and C, P not. The tangent route calls all
-three fixed (local ACR), the iterated route none, and the truth (X alone) sits between them.
+three fixed (C and P falsely), the iterated route none, and the truth (X alone) sits between them.
 """
 from fractions import Fraction
 
@@ -16,8 +16,8 @@ from kimonu.io import zero_complexes
 from kimonu.linalg import positive_flux
 from test_kinetic import _crn, ENVZ, ENVZ_SPECIES, OPEN
 
-# Figure 3: protein X is made and degraded, dimerises into an inactive kinase C, and active P
-# activates C cooperatively. Reactions in the order of the rate constants K below.
+# Figure 2: protein X is made and degraded, dimerises into an inactive kinase C, and active P
+# activates C cooperatively. Reactions R1 to R6 in the order of the Figure 2 legend and of the rate constants K below.
 KINASE = [("0", "X"), ("X", "0"), ("X+X", "C"), ("C+P+P", "P+P+P"), ("C", "0"), ("P", "0")]
 KINASE_SPECIES = ["X", "C", "P"]
 K = [20, 1, Fraction(1, 20), Fraction(1, 4), 1, 1]
@@ -51,9 +51,9 @@ def test_envz_both_routes_agree():
     assert tan.module_of[cx.index("XD")] == tan.module_of[cx.index("XD+Yp")]
 
 
-def test_kinase_tangent_route_claims_what_holds_only_locally():
+def test_kinase_tangent_route_adds_false_relations():
     """At k = K the kinase has the steady states X = 10, (C, P) = (1, 4) and (4, 1). The tangent route calls
-    X, C and P fixed, the iterated route none: it misses X, and rightly does not claim C or P."""
+    X, C and P fixed (C and P falsely), the iterated route none: it misses X, and rightly does not claim C or P."""
     A, Y, N, cx = _crn(KINASE, KINASE_SPECIES)
     for state in ({"X": 10, "C": 1, "P": 4}, {"X": 10, "C": 4, "P": 1}):
         dx = {s: Fraction(0) for s in KINASE_SPECIES}
@@ -107,8 +107,8 @@ def test_cubic_is_fixed_on_each_branch_only():
 
 def test_readout_reproduces_the_iterated_modules():
     """At the iterated route's final L = ker(YΔᵀ), equal rows of Yᵀ L over all complexes are its modules, the
-    zero rows of L its ACR metabolites, and the grouping agrees with merging whole modules by the signature
-    of a representative (Proposition S3-4)."""
+    zero rows of L its ACR metabolites, and the grouping agrees with merging whole modules whose
+    representatives have the same coupling signature."""
     for name, (R, S) in TOYS.items():
         A, Y, N, cx = _crn(R, S)
         for detach in (False, True):

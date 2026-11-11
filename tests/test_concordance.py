@@ -1,9 +1,9 @@
-"""Phase-1 concordance core tests.
+"""Concordance tests.
 
 Validates the *method* (N = Y·A, K = ker(N), M = A·K, proportional-row grouping) structurally and
-for internal consistency. Exact agreement with the Julia PoC counts (EnvZ 13/5/3/8, e_coli
-895/209/110/2436) additionally requires the elementary-step splitting preprocessing the PoC used —
-see ROADMAP (Phase 1b); the shared SBML here are the un-split models.
+for internal consistency. Exact agreement with the counts of the Julia proof of concept (EnvZ 13/5/3/8,
+e_coli 895/209/110/2436) additionally requires the elementary-step splitting that the proof of concept
+used. The shared SBML here are the un-split models.
 """
 import os
 from fractions import Fraction
