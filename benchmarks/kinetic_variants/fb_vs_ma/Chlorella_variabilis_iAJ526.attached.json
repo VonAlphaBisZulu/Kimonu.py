@@ -1,0 +1,73 @@
+{
+ "model": "Chlorella_variabilis_iAJ526",
+ "uptakes": "attached",
+ "n_reactions": 9484,
+ "n_complexes": 7639,
+ "n_sources": 0,
+ "gap": false,
+ "flux_coupling": {
+  "pairs": 1910,
+  "groups": 53,
+  "members": 213,
+  "largest": 55
+ },
+ "shared_substrate": {
+  "pairs": 3012,
+  "groups": 1576,
+  "members": 3566,
+  "largest": 12,
+  "also_flux_coupled": 0
+ },
+ "flux_coupling_and_shared_substrate": {
+  "pairs": 8544,
+  "groups": 1484,
+  "members": 3634,
+  "largest": 93
+ },
+ "concordance": {
+  "pairs": 206758,
+  "groups": 885,
+  "members": 5801,
+  "largest": 587,
+  "balanced": 1657
+ },
+ "seconds_flux_balance": 2.305821180343628,
+ "rounds": 2,
+ "rates_iterated": {
+  "pairs": 17663,
+  "groups": 1470,
+  "members": 4261,
+  "largest": 137,
+  "beyond_flux_coupling": 15753,
+  "beyond_flux_coupling_and_shared_substrate": 9119,
+  "fixed_rate": 26,
+  "fixed_rate_src": 26
+ },
+ "complexes_iterated": {
+  "concordant": {
+   "flux_balance": 206758,
+   "mass_action": 6658,
+   "both": 2097,
+   "only_flux_balance": 204661,
+   "only_mass_action": 4561,
+   "flux_balance_refines_mass_action": false
+  },
+  "concordant_or_balanced": {
+   "flux_balance": 1578754,
+   "mass_action": 6658,
+   "both": 3157,
+   "only_flux_balance": 1575597,
+   "only_mass_action": 3501,
+   "flux_balance_refines_mass_action": false
+  },
+  "members_concordance": 5801,
+  "members_modules": 1332,
+  "members_both": 703,
+  "balanced_in_modules": 614
+ },
+ "fixed_complexes_iterated": 4,
+ "seconds_iterated": 11.197932243347168,
+ "rates_tangent": null,
+ "complexes_tangent": null,
+ "rates_routes_agree": true
+}

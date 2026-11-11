@@ -1,0 +1,105 @@
+{
+ "model": "Chlorella_variabilis_iAJ526",
+ "uptakes": "detached",
+ "n_reactions": 9484,
+ "n_complexes": 7639,
+ "n_sources": 11,
+ "gap": false,
+ "flux_coupling": {
+  "pairs": 1910,
+  "groups": 53,
+  "members": 213,
+  "largest": 55
+ },
+ "shared_substrate": {
+  "pairs": 2957,
+  "groups": 1575,
+  "members": 3555,
+  "largest": 12,
+  "also_flux_coupled": 0
+ },
+ "flux_coupling_and_shared_substrate": {
+  "pairs": 8489,
+  "groups": 1483,
+  "members": 3623,
+  "largest": 93
+ },
+ "concordance": {
+  "pairs": 206758,
+  "groups": 885,
+  "members": 5801,
+  "largest": 587,
+  "balanced": 1657
+ },
+ "seconds_flux_balance": 2.788827419281006,
+ "rounds": 2,
+ "rates_iterated": {
+  "pairs": 17432,
+  "groups": 1471,
+  "members": 4252,
+  "largest": 137,
+  "beyond_flux_coupling": 15522,
+  "beyond_flux_coupling_and_shared_substrate": 8943,
+  "fixed_rate": 0,
+  "fixed_rate_src": 0
+ },
+ "complexes_iterated": {
+  "concordant": {
+   "flux_balance": 206758,
+   "mass_action": 6653,
+   "both": 2097,
+   "only_flux_balance": 204661,
+   "only_mass_action": 4556,
+   "flux_balance_refines_mass_action": false
+  },
+  "concordant_or_balanced": {
+   "flux_balance": 1578754,
+   "mass_action": 6653,
+   "both": 3156,
+   "only_flux_balance": 1575598,
+   "only_mass_action": 3497,
+   "flux_balance_refines_mass_action": false
+  },
+  "members_concordance": 5801,
+  "members_modules": 1330,
+  "members_both": 703,
+  "balanced_in_modules": 613
+ },
+ "fixed_complexes_iterated": 0,
+ "seconds_iterated": 11.797020673751831,
+ "rates_tangent": {
+  "pairs": 17432,
+  "groups": 1471,
+  "members": 4252,
+  "largest": 137,
+  "beyond_flux_coupling": 15522,
+  "beyond_flux_coupling_and_shared_substrate": 8943,
+  "fixed_rate": 0,
+  "fixed_rate_src": 0
+ },
+ "complexes_tangent": {
+  "concordant": {
+   "flux_balance": 206758,
+   "mass_action": 6653,
+   "both": 2097,
+   "only_flux_balance": 204661,
+   "only_mass_action": 4556,
+   "flux_balance_refines_mass_action": false
+  },
+  "concordant_or_balanced": {
+   "flux_balance": 1578754,
+   "mass_action": 6653,
+   "both": 3156,
+   "only_flux_balance": 1575598,
+   "only_mass_action": 3497,
+   "flux_balance_refines_mass_action": false
+  },
+  "members_concordance": 5801,
+  "members_modules": 1330,
+  "members_both": 703,
+  "balanced_in_modules": 613
+ },
+ "fixed_complexes_tangent": 0,
+ "rates_routes_agree": true,
+ "seconds_tangent": 171.25070524215698
+}

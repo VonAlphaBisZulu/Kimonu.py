@@ -1,0 +1,73 @@
+{
+ "model": "iLJ478",
+ "uptakes": "attached",
+ "n_reactions": 4166,
+ "n_complexes": 3440,
+ "n_sources": 0,
+ "gap": false,
+ "flux_coupling": {
+  "pairs": 3711,
+  "groups": 20,
+  "members": 136,
+  "largest": 86
+ },
+ "shared_substrate": {
+  "pairs": 987,
+  "groups": 640,
+  "members": 1385,
+  "largest": 12,
+  "also_flux_coupled": 0
+ },
+ "flux_coupling_and_shared_substrate": {
+  "pairs": 13500,
+  "groups": 546,
+  "members": 1407,
+  "largest": 158
+ },
+ "concordance": {
+  "pairs": 311619,
+  "groups": 267,
+  "members": 2641,
+  "largest": 777,
+  "balanced": 778
+ },
+ "seconds_flux_balance": 0.6520168781280518,
+ "rounds": 3,
+ "rates_iterated": {
+  "pairs": 32706,
+  "groups": 560,
+  "members": 1684,
+  "largest": 250,
+  "beyond_flux_coupling": 28995,
+  "beyond_flux_coupling_and_shared_substrate": 19206,
+  "fixed_rate": 250,
+  "fixed_rate_src": 250
+ },
+ "complexes_iterated": {
+  "concordant": {
+   "flux_balance": 311619,
+   "mass_action": 14237,
+   "both": 4460,
+   "only_flux_balance": 307159,
+   "only_mass_action": 9777,
+   "flux_balance_refines_mass_action": false
+  },
+  "concordant_or_balanced": {
+   "flux_balance": 613872,
+   "mass_action": 14237,
+   "both": 7052,
+   "only_flux_balance": 606820,
+   "only_mass_action": 7185,
+   "flux_balance_refines_mass_action": false
+  },
+  "members_concordance": 2641,
+  "members_modules": 536,
+  "members_both": 302,
+  "balanced_in_modules": 232
+ },
+ "fixed_complexes_iterated": 167,
+ "seconds_iterated": 4.199546575546265,
+ "rates_tangent": null,
+ "complexes_tangent": null,
+ "rates_routes_agree": true
+}
