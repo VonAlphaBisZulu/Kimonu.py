@@ -75,10 +75,10 @@ def save_svg(fig, stem):
 
 def axes_style(ax, n):
     ax.set_xticks([XE] + [X[k] for k in dec])
-    ax.set_xticklabels(["0"] + [f"$10^{{{round(np.log10(TAUS[k]))}}}$" for k in dec])
+    ax.set_xticklabels(["0"] + [f"$\\mathregular{{10^{{{round(np.log10(TAUS[k]))}}}}}$" for k in dec])    # Arial, as every tick label
     ax.set_xlim(XE - WE / 2 - 0.2, X[-1] + 0.6); ax.set_ylim(0, max(n, 1))
     for s_ in ("top", "right"): ax.spines[s_].set_visible(False)
-    ax.tick_params(axis="x", length=0)
+    ax.tick_params(axis="both", length=2, colors=INK)
 
 
 def bars(ax, cls, zero, colors):
@@ -156,11 +156,11 @@ def certificate(ways, name):
     if len(ways) > 2:                                    # narrow panels: fewer tick labels, so that 0 stays clear
         for ax in axs:
             ax.set_xticks([XE] + [X[k] for k in dec[1::2]])
-            ax.set_xticklabels(["0"] + [f"$10^{{{round(np.log10(TAUS[k]))}}}$" for k in dec[1::2]])
+            ax.set_xticklabels(["0"] + [f"$\\mathregular{{10^{{{round(np.log10(TAUS[k]))}}}}}$" for k in dec[1::2]])
             ax.title.set_fontsize(7)
     for ax in axs:
-        ax.set_xlabel("tolerance (0: equal rows)")
-    axs[0].set_ylabel("models")
+        ax.set_xlabel("tolerance (0: rows exactly equal)", color=INK)
+    axs[0].set_ylabel("models", color=INK)
     certificate_legend(fig, right + 0.01, 0.8 if len(ways) > 2 else 0.86, out[ways[0]]["exact"])
     save_svg(fig, f"{OUT}/{name}"); plt.close(fig)
     return dict(n=max(len(v["models"]) for v in out.values()), ways=out)
@@ -183,9 +183,9 @@ def errors(ways, name):
                 for k, t in enumerate(TAUS):
                     cls[klass(runs[m][arm]["sweep"][t]), k] += 1
             bars(ax, cls, zero, (GREEN, RED, BLUE_, BOTH)); axes_style(ax, n)
-            ax.set_title(f"{route} route\n{WAYNAME[way]}", fontsize=6.5, color=INK, pad=3)
+            ax.set_title(f"{route} route\n{WAYNAME[way]}", fontsize=7, color=INK, pad=3)
             out[arm] = dict(right=cls[0].astype(int).tolist(), at_zero=zero.astype(int).tolist())
-    for ax in axs[1]: ax.set_xlabel("tolerance (0: bitwise equal rows)")
+    for ax in axs[1]: ax.set_xlabel("tolerance (0: rows exactly equal)", color=INK)
     for ax in axs[:, 0]: ax.set_ylabel("models")
     handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (BOTH, BLUE_, RED, GREEN)]
     fig.legend(handles, ["missed and made up", "relations missed", "relations made up", "all relations right"],

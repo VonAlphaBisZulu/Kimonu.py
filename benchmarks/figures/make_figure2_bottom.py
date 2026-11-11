@@ -40,11 +40,14 @@ axH = fig.add_axes([XH / Wpt, ay(AX1), WP / Wpt, (AX1 - AX0) / Hpt])
 axI = fig.add_axes([XI / Wpt, ay(AX1), WP / Wpt, (AX1 - AX0) / Hpt], sharey=axH)
 out = ff.draw_certificate([axH, axI], ["exactcmp", "svdabs"], {"exactcmp": "exact kernel", "svdabs": "SVD kernel"})
 plt.setp(axI.get_yticklabels(), visible=False)
-axH.set_ylabel("models", labelpad=2)
+for t in axI.texts:                                       # Phil's wording for the SVD bar at tolerance 0
+    if "false certificates" in t.get_text():
+        t.set_text("no rows ever exactly equal")
+axH.set_ylabel("models", labelpad=2, color=ff.INK)
 for ax in (axH, axI):
-    ax.set_xlabel("tolerance (0: equal rows)", labelpad=2)
+    ax.set_xlabel("tolerance (0: rows exactly equal)", labelpad=2, color=ff.INK)
     ax.tick_params(axis="x", pad=2)
-    ax.tick_params(axis="y", length=2.5)
+    ax.tick_params(axis="y", length=2)
 LEG_X = XI + WP + 8
 ff.certificate_legend(fig, LEG_X / Wpt, ay(AX0 - 12), out["exactcmp"]["exact"])
 x, s = out["exactcmp"], out["svdabs"]
@@ -69,7 +72,7 @@ groups = {g.get("id"): g for g in new.iter(f"{{{SVG}}}g") if (g.get("id") or "")
 for name in ("panel_H", "panel_I", "panel_legend_HI"):
     for old in [g for g in root.iter(f"{{{SVG}}}g") if g.get("id") == name]:
         next(p for p in root.iter() if old in list(p)).remove(old)
-parent = next(p for p in root.iter() if any(g.get("id") == "panel_G" for g in list(p)))
+parent = next((p for p in root.iter() if any(g.get("id") == "panel_G" for g in list(p))), root)   # Illustrator may ungroup F, G
 for k in ("panel_H", "panel_I", "panel_legend_HI"):
     parent.append(copy.deepcopy(groups[k]))
 for d in new.iter(f"{{{SVG}}}defs"):                      # definitions the new panels refer to; fonts are redone below
