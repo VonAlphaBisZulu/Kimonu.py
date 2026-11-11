@@ -57,25 +57,56 @@ KineticResult = namedtuple(
 )
 
 
+def rate_columns(A, Y, detach_uptakes):
+    """The column of u that carries each reaction's rate, {reaction: column}, and the number of columns.
+
+    Reaction j runs at r*_j u_c for its column c: its substrate complex, or, for a detached uptake, a
+    source of its own after the n complexes, numbered in the order of the reactions.
+    """
+    n = A.shape[0]
+    zero = zero_complexes(Y) if detach_uptakes else set()
+    column, n_columns = {}, n
+    for j, c in substrate_complexes(A).items():
+        if c in zero:
+            column[j], n_columns = n_columns, n_columns + 1
+        else:
+            column[j] = c
+    return column, n_columns
+
+
 def steady_state_map(A, Y, N, flux, detach_uptakes):
     """W = N diag(r*) Sᵀ as {(metabolite, column): value}, and its shape: dx/dt = W u.
 
     Column c collects, for every reaction consuming complex c, its stoichiometry times its rate at r*.
-    A detached uptake gets a column of its own after the n complexes, a free source rather than the
-    constant ψ_0 = 1. tangent.py builds its Jacobian from the same map.
+    A detached uptake gets a column of its own after the n complexes (:func:`rate_columns`), a free source
+    rather than the constant ψ_0 = 1. tangent.py builds its Jacobian from the same map.
     """
-    n = A.shape[0]
-    substrate, zero = substrate_complexes(A), zero_complexes(Y)
+    column, n_columns = rate_columns(A, Y, detach_uptakes)
     by_reaction = {}
     triples, (m, _) = entries(N)
     for i, j, v in triples:
         by_reaction.setdefault(j, []).append((i, v))
-    W, extra = {}, {}
-    for j, c in substrate.items():
-        col = extra.setdefault(j, n + len(extra)) if detach_uptakes and c in zero else c
+    W = {}
+    for j, col in column.items():
         for i, v in by_reaction.get(j, ()):
             W[(i, col)] = W.get((i, col), Fraction(0)) + flux[j] * v
-    return W, (m, n + len(extra))
+    return W, (m, n_columns)
+
+
+def coupled_columns(A, Y, N, flux, detach_uptakes, equal=()):
+    """Classes of the columns of W (complexes, then detached sources) whose u keep a fixed ratio.
+
+    ``equal`` lists pairs (c, d) already known to satisfy u_c = u_d at every steady state; they enter W
+    as extra rows. Every steady state solves W u = 0, so columns with proportional rows in ker(W) keep a
+    fixed ratio at every steady state, and since u = 1 is one of them, that ratio is 1. No row is zero,
+    so every column lands in exactly one class.
+    """
+    W, (m, n_columns) = steady_state_map(A, Y, N, flux, detach_uptakes)
+    for k, (c, d) in enumerate(equal):                    # u_c - u_d = 0
+        W[(m + k, c)], W[(m + k, d)] = Fraction(1), Fraction(-1)
+    W = exact(((i, j, v) for (i, j), v in W.items()), (m + len(equal), n_columns))
+    _, classes = proportional_classes(null_space_rows(W))
+    return classes
 
 
 def _psi_coupled(A, Y, N, flux, detach_uptakes, equal=()):
@@ -85,13 +116,7 @@ def _psi_coupled(A, Y, N, flux, detach_uptakes, equal=()):
     substrate complexes (the only complexes that appear in a rate law).
     """
     n = A.shape[0]
-    W, (m, n_columns) = steady_state_map(A, Y, N, flux, detach_uptakes)
-    for k, (c, d) in enumerate(equal):                    # u_c - u_d = 0
-        W[(m + k, c)], W[(m + k, d)] = Fraction(1), Fraction(-1)
-    W = exact(((i, j, v) for (i, j), v in W.items()), (m + len(equal), n_columns))
-    # proportional rows of ker(W): these complexes keep fixed ψ ratios at every steady state. No row is
-    # zero, since u = 1 is in ker(W), so every complex lands in some class.
-    _, classes = proportional_classes(null_space_rows(W))
+    classes = coupled_columns(A, Y, N, flux, detach_uptakes, equal)
     drop = zero_complexes(Y) if detach_uptakes else set()
     return [{c for c in g if c < n and c not in drop} for g in classes], set(substrate_complexes(A).values()) - drop
 

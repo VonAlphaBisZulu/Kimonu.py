@@ -55,6 +55,28 @@ TangentResult = namedtuple(
 )
 
 
+def tangent_space(A, Y, N, flux, detach_uptakes):
+    """An exact basis of T = ker(W Yᵀ) at the steady state x = 1 for the rate constants k = ``flux``.
+
+    One row per coordinate, each a sorted tuple of (basis vector, value): first the m metabolites (ln x),
+    then, with detached uptakes, the sources (ln u) in the order of :func:`kimonu.kinetic.rate_columns`.
+    """
+    n, m = A.shape[0], Y.shape[0]
+    # J = W Yᵀ: the column of complex c spreads over c's metabolites; a detached source keeps its own
+    # column, after the m metabolites.
+    W, (_, n_columns) = steady_state_map(A, Y, N, flux, detach_uptakes)
+    Ycsc = sparse.csc_matrix(Y)
+    J = {}
+    for (i, c), w in W.items():
+        if c >= n:
+            J[(i, m + c - n)] = w
+            continue
+        for k, y in zip(Ycsc.indices[Ycsc.indptr[c]:Ycsc.indptr[c + 1]], Ycsc.data[Ycsc.indptr[c]:Ycsc.indptr[c + 1]]):
+            J[(i, int(k))] = J.get((i, int(k)), Fraction(0)) + w * Fraction(str(y))
+    rows = null_space_rows(exact(((i, k, v) for (i, k), v in J.items()), (m, m + n_columns - n)))
+    return [tuple(sorted(r.items())) for r in rows]
+
+
 def tangent_route(A, Y, N, detach_uptakes=True, seed=0, metabolite_ids=None):
     """Kinetic modules, local ACR and local ACRR from the tangent space of the steady states.
 
@@ -81,21 +103,10 @@ def tangent_route(A, Y, N, detach_uptakes=True, seed=0, metabolite_ids=None):
     #    space of J is several times faster on integers, and at scale 100 the rounding was coarse
     #    enough to make r* non-generic (a spurious ACRR pair on iHN637); from 10^4 on the results agree.
     flux = positive_flux(N, seed, scale=10**6)
-    # 2) J = W Yᵀ: the column of complex c spreads over c's metabolites; a detached source keeps its own
-    #    column, after the m metabolites.
-    W, (_, n_columns) = steady_state_map(A, Y, N, flux, detach_uptakes)
-    Ycsc = sparse.csc_matrix(Y)
-    J = {}
-    for (i, c), w in W.items():
-        if c >= n:
-            J[(i, m + c - n)] = w
-            continue
-        for k, y in zip(Ycsc.indices[Ycsc.indptr[c]:Ycsc.indptr[c + 1]], Ycsc.data[Ycsc.indptr[c]:Ycsc.indptr[c + 1]]):
-            J[(i, int(k))] = J.get((i, int(k)), Fraction(0)) + w * Fraction(str(y))
-    # 3) T = ker(J), one row per coordinate; the metabolite rows are B
-    rows = null_space_rows(exact(((i, k, v) for (i, k), v in J.items()), (m, m + n_columns - n)))
-    found = readout(Y, [tuple(sorted(r.items())) for r in rows[:m]], skip)
-    # 4) A detached zero complex is coupled to nothing and forms a module of its own.
+    # 2) T = ker(J), J = W Yᵀ, one row per coordinate; the metabolite rows are B
+    rows = tangent_space(A, Y, N, flux, detach_uptakes)
+    found = readout(Y, rows[:m], skip)
+    # 3) A detached zero complex is coupled to nothing and forms a module of its own.
     modules = found.modules + [{c} for c in sorted(skip)]
     module_of = np.zeros(n, dtype=np.int64)
     for idx, group in enumerate(modules, start=1):
@@ -111,6 +122,6 @@ def tangent_route(A, Y, N, detach_uptakes=True, seed=0, metabolite_ids=None):
         giant_module=max((len(g) for g in modules), default=0),
         acr=[names[i] for i in found.acr],
         acrr=sorted(acrr),
-        dimension=len({j for r in rows for j in r}),
+        dimension=len({j for r in rows for j, _ in r}),
         flux=flux,
     )
