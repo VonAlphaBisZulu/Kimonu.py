@@ -1,0 +1,15 @@
+1 iHN637 glyc3p[c] ser__L[c]
+1 iHN637 none
+1 iNJ661 arab__D[c]/E256_PIM2[c]_pmtcoa[c]_complex
+1 iNJ661 arab__D[c]/E256_PIM1[c]_pmtcoa[c]_complex
+1 iNJ661 arab__D[c]/E286_Ac1PIM1[c]_gdpmann[c]_complex
+1 iNJ661 PIM2[c]/PIM1[c]
+1 iNJ661 PIM2[c]/E286_Ac1PIM1[c]_complex
+1 iNJ661 gdpmann[c]/E256_pmtcoa[c]_complex
+1 iNJ661 none
+1 iCN718 nadph[c] malACP[c] acACP[c] propacp[c] E_89/E231_ACP[c]_accoa[c]_complex
+1 iCN718 nadph[c] malACP[c] acACP[c] propacp[c]
+1 iCN718 none
+0 iHN637 glyc3p[c] ser__L[c]
+0 iNJ661 PIM2[c]/PIM1[c]
+0 iCN718 nadph[c] malACP[c] acACP[c] propacp[c] E_89/E231_ACP[c]_accoa[c]_complex
