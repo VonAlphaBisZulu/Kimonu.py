@@ -5,18 +5,19 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "kimonu"
 version = "0.0.1"
-description = "Exact, deterministic detection of concordance and kinetic modules in metabolic networks via sparse exact nullspace"
+description = "Concordance, kinetic modules, ACR and ACRR of metabolic networks from exact sparse nullspaces"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [{ name = "Philipp Schneider" }]
 keywords = ["metabolic-networks", "concordance", "kinetic-modules", "ACR", "nullspace", "cobra", "systems-biology"]
 # Pure-Python; a Julia toolchain is deliberately NOT required.
 dependencies = [
-  # exact sparse nullspace comes from straindesign (straindesign.sparse_nullspace);
-  # public API since 1.19.
+  # exact sparse nullspace from straindesign (straindesign.sparse_nullspace, RationalMatrix.from_fractions)
   "straindesign>=1.19.2",
   "cobra>=0.26",
+  "numpy",
+  "scipy",
 ]
 
 [project.optional-dependencies]

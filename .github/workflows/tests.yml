@@ -13,7 +13,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        # straindesign from GitHub main until RationalMatrix.from_fractions is released (after 1.19.1)
         run: |
           pip install -r binder/requirements.txt pytest nbconvert ipykernel
           pip install --no-deps .
