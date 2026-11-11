@@ -231,3 +231,6 @@ benchmarks/archive/
 benchmarks/unblocked/*.log
 octave-workspace
 benchmarks/seedcheck_psi/
+
+# SLURM logs that land in the submit directory
+slurm-*.out
