@@ -1,12 +1,13 @@
-"""Proven <= true <= local on the 33 benchmark models: the iterated route against the tangent route.
+"""Figure 3A, B. Proven <= true <= complete on the 33 benchmark models: the iterated route against the tangent route.
 
 Per model (ordered by number of complexes) an interval from the iterated route's count (lower bound,
-proven for all rate constants) to the tangent route's count (upper bound, local ACR in the sense of
-Pascual-Escudero & Feliu); the true count lies in between. Where both coincide the model is decided and
+proven for all rate constants) to the tangent route's count (upper bound, complete but with possible false
+couplings); the true count lies in between. Where both coincide the model is decided and
 gets one marker. Left: pairs of complexes with a fixed concentration ratio (kinetic coupling). Right:
-fixed metabolite relations, ACR metabolites plus ACRR pairs, free metabolites as in Figure 3. Attached
-uptakes. Data: kinetic_variants/hierarchy/<model>.json (hierarchy_data.py); HIERARCHY_DIR=kinetic_variants/hierarchy_detached
-draws the same panels for detached uptakes (from uptake_modes.py).
+fixed metabolite relations, ACR metabolites plus ACRR pairs, free metabolites as in Figure 4. Detached
+uptakes. Data: HIERARCHY_DIR, default kinetic_variants/hierarchy_detached/<model>.json (hierarchy_detached.py from
+uptake_modes.py), the input of Figure 3A, B. HIERARCHY_DIR=kinetic_variants/hierarchy draws the attached panels of
+October (hierarchy_data.py, removed, see HISTORY.md).
 
     python figures/make_hierarchy.py [out_dir]   # from benchmarks/; default figures/main
 """
@@ -18,16 +19,16 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
 
 out = sys.argv[1] if len(sys.argv) > 1 else "figures/main"
-# composed into Figure 2 by make_figure2.py: a shorter panel, no letters (the composition adds them)
+# the combined Figure 2 of October used FIG_HEIGHT_IN=2.3 FIG_LETTERS=0 FIG_LEGEND_BOTTOM=1 (make_figure2.py, see HISTORY.md)
 HEIGHT_IN = float(os.environ.get("FIG_HEIGHT_IN", 2.9)); LETTERS = os.environ.get("FIG_LETTERS", "1") == "1"
 NAME = os.environ.get("FIG_NAME", "hierarchy")
-LEGEND_BOTTOM = os.environ.get("FIG_LEGEND_BOTTOM", "0") == "1"   # Figure 2: the top band holds the panel letters
+LEGEND_BOTTOM = os.environ.get("FIG_LEGEND_BOTTOM", "0") == "1"   # combined figure: the top band holds the panel letters
 plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6,
                      "ytick.labelsize": 6.5, "legend.fontsize": 6.5, "axes.linewidth": 0.6,
                      "svg.fonttype": "none", "pdf.fonttype": 42})
 INK, MUTE, RULE = "#1b2430", "#6b7480", "#d5d9de"
 GREY, DARK = "#6b7480", "#3a4250"              # no colours: the two bounds differ by marker shape only
-HIERARCHY_DIR = os.environ.get("HIERARCHY_DIR", "kinetic_variants/hierarchy")
+HIERARCHY_DIR = os.environ.get("HIERARCHY_DIR", "kinetic_variants/hierarchy_detached")
 D = sorted((json.load(open(f)) for f in glob.glob(f"{HIERARCHY_DIR}/*.json")), key=lambda d: d["n_complexes"])
 SHORT = {"Chlorella_variabilis_iAJ526": "iAJ526", "Saha2011iRS1597": "iRS1597", "ArabidopsisCoreModel": "AraCore",
          "iIS312_Trypomastigote": "iIS312 T", "iIS312_Amastigote": "iIS312 A", "iIS312_Epimastigote": "iIS312 E"}

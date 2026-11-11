@@ -1,4 +1,4 @@
-"""Seed spread for the replacement of Figure 3C/D: per model and arm, the relations that change with the seed.
+"""Seed spread for fig. S4: per model and arm, the relations that change with the seed.
 
 For each stochastic arm (COCOA.jl both settings, three seeds; sampled reference, three seeds) and each model:
 coupled complex pairs found by some seed but not by all (from the module partitions, by inclusion-exclusion over

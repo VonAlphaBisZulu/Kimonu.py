@@ -1,9 +1,9 @@
 """Supplementary figures not drawn by make_figure3.py, in the figure conventions of the paper (svg_finish, svg_panels).
 
-fig. S_uptakes  attached against detached uptakes, per network (Kimonu, iterated route): kinetic modules (A), ACR
+fig. S3 (FigS_uptakes) attached against detached uptakes, per network (Kimonu, iterated route): kinetic modules (A), ACR
                 metabolites (B) and ACRR pairs (C) among free metabolites. figdata.json, arms "kimonu" (attached,
-                triplicate_psi/) and "kimonu_det" (detached).
-fig. S_seeds    relations that change with the random seed, per network and arm: coupled complex pairs (A) and ACR
+                $KIMONU_ATT_DIR) and "kimonu_det" (detached, $KIMONU_DET_DIR).
+fig. S4 (FigS_seeds) relations that change with the random seed, per network and arm: coupled complex pairs (A) and ACR
                 metabolites plus ACRR pairs among free metabolites (B) found by some seeds but not by all three.
                 figures/seed_spread.json (seed_spread.py); Kimonu's r* seeds 0, 1, 2 change nothing.
 

@@ -1,4 +1,5 @@
-"""Figure 3 D and E draft: the map of relations and methods (D) and what each tool computes, on one model (E).
+"""Figure 4E, F: the map of relations and methods (E) and what each tool computes, on one model (F). The letters D and E
+below are those of the draft; the file name dates from when this was Figure 3.
 
 D  Rows: flux balance (N r = 0, linear) and mass action (polynomial in x); columns: reaction or metabolite space
    and complex space. Each cell names the relation and the matrix it is read from; A and Y^T carry reaction and

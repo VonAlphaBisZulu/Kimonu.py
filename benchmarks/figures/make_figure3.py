@@ -1,4 +1,5 @@
-"""Figure 3 of the paper: Kimonu's relations against the published tools, and the reference reproduced in seconds.
+"""Figure 4 of the paper (A to D, E and F through make_fig3_methods.py) and figs. S1, S2: Kimonu's relations against the
+published tools, and the reference reproduced in seconds. The file name dates from when this was Figure 3.
 
 A  wall time vs network size on all 33 models for every arm, with a log-log least-squares line per arm.
 B  the tangent route at scale: the published symbolic local-ACR criterion against one exact nullspace, on the small
@@ -7,12 +8,12 @@ B  the tangent route at scale: the published symbolic local-ACR criterion agains
    ($KIMONU_TIMING, median of the replicates).
 C  coupled complex pairs, D ACR metabolites plus ACRR pairs among free metabolites, per arm on the eleven
    models where the exhaustive reference finished (bars: value or median over seeds, whiskers: seed range);
-   centred titles, "count" on each y axis and one legend below both, as Figure 2F, G.
+   centred titles, "count" on each y axis and one legend below both, as Figure 3A, B.
 E, F  the map of relations and methods, and what each tool computes on iLJ478 (make_fig3_methods.py).
-Supplementary figure (figures/supp/FigS_reference_agreement): the key quantities of Kimonu's reference-equivalent
+fig. S2 (figures/supp/FigS_reference_agreement): the key quantities of Kimonu's reference-equivalent
    mode and the exhaustive reference on the eleven models (identical, asserted below) and the wall time of that
    same computation, with the speedup.
-Supplementary figure (figures/supp/FigS_stage_timing): where the time goes on those eleven models: the concordance stage against everything after it (kinetic
+fig. S1 (figures/supp/FigS_stage_timing): where the time goes on those eleven models: the concordance stage against everything after it (kinetic
    modules, ACR/ACRR), per tool, as the range over the models with the median marked. Measured vs derived:
    Kimonu's stage times are measured (median of three replicates); the reference's concordance stage is its
    own measured time, and its R stage the wall time between the chain log's start stamp and the end of its
@@ -20,12 +21,15 @@ Supplementary figure (figures/supp/FigS_stage_timing): where the time goes on th
    COCOA's concordance stage is its own logged "Elapsed time", which ends before kinetic_analysis is called,
    and the rest is the measured total minus that.
 
-Kimonu here is run_kimonu_refmode.py (triplicate_refmode/, the median of three replicates), which follows the
+Kimonu here is run_kimonu_refmode.py ($KIMONU_REF_DIR through figdata.json, the median of three runs), which follows the
 reference's definitions: concordance from ker(N), upstream sets merged by overlap only, ACR/ACRR by the
 reference's pairwise rule (the Shinar-Feinberg criterion within kinetic modules). Stochastic arms show the median over three seeds. Layout is in inches at 7.2 in (518.4 pt) width; the
 supplementary table columns are sized from their measured text, so its axes are placed by hand.
 
-    python figures/make_figure3.py [out_dir]    # run from benchmarks/ after gather_figdata.py; default figures/main
+    python figures/make_figure3.py [out_dir]    # run from benchmarks/ after gather_figdata.py and pair_sets.py; default figures/main
+
+KIMONU_TIMING (default the paper's run, /scratch/sadreyev_lab/pschneider/kimonu_timing_seeds) holds the tangent-route
+times of B, KIMONU_LACR the symbolic baselines, KIMONU_REF_DIR the runs of the reference-equivalent mode for fig. S1.
 """
 import datetime as dt, glob, json, os, re, sys, numpy as np, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
@@ -161,7 +165,7 @@ fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.06 / W, (yS - 0.
 
 # --- B: the tangent route at scale, symbolic criterion against one exact nullspace
 LACR = os.environ.get("KIMONU_LACR", "/scratch/sadreyev_lab/pschneider/kimonu_local_acr")
-TIMING = os.environ.get("KIMONU_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu_timing")
+TIMING = os.environ.get("KIMONU_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds")
 LIMIT = 3600
 PURPLE, ORANGE = "#984EA3", "#FF7F00"
 def med_times(arm, stem=""):
@@ -197,7 +201,7 @@ fig.legend(handles=b_handles, loc="upper left", bbox_to_anchor=((xB - 0.2) / W, 
 
 # --- C, D: what each method reports, on the eleven models where the exhaustive reference finished
 BARS = ["cocoa_false", "cocoa_true", "kimonu_det", "kimonu_ref", "ref_exh", "ref_sampled"]   # reference-equivalent next to the reference it matches
-PC = json.load(open("figures/pair_counts.json"))          # figures/pair_counts.py
+PC = json.load(open("figures/pair_counts.json"))          # figures/pair_sets.py
 def counts(arm, m, k):
     """(bar, low, high): the value, or for stochastic arms the median and range over seeds"""
     v = PC[m].get(arm)
@@ -330,7 +334,7 @@ axD.set_yticks([]); axD.minorticks_off()
 axD.set_xticks([1, 60, 3600, 86400, 604800]); axD.set_xticklabels(["1 s", "1 min", "1 h", "1 day", "1 week"])
 for sp in ("top", "right", "left"): axD.spines[sp].set_visible(False)
 axD.spines["bottom"].set_color(MUTE); axD.tick_params(axis="x", colors=INK, length=2)
-axD.set_xlabel("wall time per stage (range over the 11 models of Fig. 3A, median marked)", labelpad=2)
+axD.set_xlabel("wall time per stage (range over the 11 models of Fig. 4C, median marked)", labelpad=2)
 axD.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc=INK, mec="white", mew=0.5, label="concordance"),
                     Line2D([], [], ls="", marker="o", ms=4.5, mfc="white", mec=INK, mew=0.9, label="kinetic modules, ACR/ACRR")],
            loc="upper left", bbox_to_anchor=(1.01, 1.0), frameon=False, handletextpad=0.2, labelspacing=0.4)

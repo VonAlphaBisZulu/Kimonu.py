@@ -1,7 +1,7 @@
-"""Figure 3B/C on one counting rule, and set containment against Kimonu, on the models where the exhaustive
+"""Figure 4C, D on one counting rule, and set containment against Kimonu, on the models where the exhaustive
 reference finished.
 
-Figure 3C counts independent fixed relations: one per ACR metabolite and k - 1 per ACRR group of k metabolites,
+Figure 4D counts independent fixed relations: one per ACR metabolite and k - 1 per ACRR group of k metabolites,
 which does not depend on how a tool lists its pairs ("fixed"; "fixed_pairs" is ACR plus ACRR pairs). Before
 counting, each tool's ACR and ACRR output is closed under what it implies, then counted among free
 metabolites. A metabolite in a fixed ratio with an ACR metabolite has ACR itself, and fixed ratios are transitive,
@@ -142,7 +142,7 @@ for m in REF:
                        for p, a, r, n in recs]
     print(m, {arm: [(v["pairs"], v["fixed"], v["pairs_not_in_kimonu"], len(v["acr_not_in_kimonu"]) + len(v["acrr_not_in_kimonu"]), v["acr_acr_pairs_dropped"]) for v in recs]
               for arm, recs in out[m].items()}, flush=True)
-    # one rule for Figure 3C: replace "fixed" in pair_counts.json, keep the old value
+    # one rule for Figure 4D: replace "fixed" in pair_counts.json, keep the old value
     for arm, v in counts[m].items():
         new = out[m][arm]
         # match by seed order: pair_counts lists are sorted by seed, as are the files read here

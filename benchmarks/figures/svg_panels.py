@@ -11,7 +11,7 @@
    centres line up stay centred, and text that continues a label on the same line (an exponent, "/R2" after
    "R1") moves with that label's end.
 4. Formulas. Outlined formulas (paths of glyphs from pdflatex) inside a given box are replaced by live text
-   typeset by matplotlib in Latin Modern, the same fonts as Figure 3, at the same left edge or centre and
+   typeset by matplotlib in Latin Modern, the same fonts as Figure 4, at the same left edge or centre and
    baseline.
 
     from svg_panels import Figure
@@ -207,7 +207,7 @@ _RC = {}
 
 def typeset(tex, size, colour):
     """A formula as live text: (<text> at the baseline origin, ink box (x0, y0, x1, y1) with y up), set by
-    matplotlib in Latin Modern exactly as in Figure 3. Script sizes are rounded up to half points."""
+    matplotlib in Latin Modern exactly as in Figure 4. Script sizes are rounded up to half points."""
     import matplotlib
     from matplotlib.font_manager import FontProperties
     from matplotlib.mathtext import MathTextParser

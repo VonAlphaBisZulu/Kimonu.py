@@ -1,14 +1,15 @@
-Four-phase (S.2.2) vs two-phase (Remark S2-1) upstream sets, and the module merge rule.
+# Kinetic experiments, a dated record (2026-09-21 to 2026-11-02)
 
-`measure_phases.py` runs both algorithms seed by seed (concordance module ∪ balanced) on Kimonu's
-topology and checks autonomy, feeding and Lemma S2-4 on the final modules with balanced-only
-linkage classes excluded. `giant_merge.py` reports the largest module under three rules: four-phase
-with overlap merge, two-phase with overlap merge, two-phase with the Proposition S3-4 coupling
-merge (Kimonu's default). Logs are the 2026-09-21 runs over all 33 models.
+Each section names the script, the date and what it showed. `../README.md` maps the paper to its scripts and covers
+the later runs (timing, floating-point comparison, the second evaluation modulo a prime, flux coupling under mass
+action, coverage shares, the uniformly drawn flux). Scripts removed since are listed in `../HISTORY.md`.
 
-Result: the two algorithms return identical upstream sets for every seed on all 33 models; every
-giant difference between Kimonu and the reference is the S3-4 merge, which the reference's R
-kinetic script does not perform.
+## Upstream sets and the module merge (2026-09-21, scripts removed)
+
+The four-phase construction of the upstream sets of Langary et al. (2025) and its two-phase shortcut returned
+identical sets for every seed on all 33 networks. The larger modules Kimonu reported at the time came from merging
+modules through proven couplings, a step the reference's R stage does not take. The reference-equivalent mode
+(`../run_kimonu_refmode.py`) therefore merges upstream sets by overlap only.
 
 ## Two steady states, same rate constants (`two_point.py`, 2026-10-03)
 

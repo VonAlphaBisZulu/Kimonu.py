@@ -1,5 +1,6 @@
-"""Figure 2 from the current vault SVG (Phil's Illustrator file): panels A-G stay as they are, the bottom row becomes the
-certificate of the two routes, exact kernel (H) against SVD kernel (I), both with one element-wise tolerance rule.
+"""Figure 3E, F, drawn into the combined Figure 2 of early November (Phil's Illustrator file): panels A-G stay as they
+are, the bottom row becomes the certificate of the two routes, exact kernel (H) against SVD kernel (I), both with one
+element-wise tolerance rule. split_figure2.py then made H, I the panels E, F of Figure 3 (via C, D and extend_figure3.py).
 
     python figures/make_figure2_bottom.py <vault Figure2_draft.svg> <out.svg>     # from benchmarks/
 

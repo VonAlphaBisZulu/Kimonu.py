@@ -1,4 +1,4 @@
-"""Does Figure 3 need the upstream sets? One round of ker(W), with and without one log closure, against
+"""Does Figure 4 (the reference-equivalent mode) need the upstream sets? One round of ker(W), with and without one log closure, against
 Kimonu's reference-equivalent mode (run_kimonu_refmode.py: concordance, upstream sets merged where they
 overlap, ACR/ACRR by the reference's pairwise rule).
 

@@ -1,4 +1,5 @@
-"""Figure 1, panel G, test variant: W above both routes, u and the feedback rows in the iterated route.
+"""Figure 1, panel G as in the paper (a test variant, made the vault Figure1.svg on 2026-11-11): W above both routes,
+u and the feedback rows in the iterated route.
 
 In the vault figure the definition W = N diag(r*) S^T sits inside the first box of the iterated route, although the
 tangent route (W Y^T h = 0) uses the same matrix, and the unknown u of the iterated route appears only in the

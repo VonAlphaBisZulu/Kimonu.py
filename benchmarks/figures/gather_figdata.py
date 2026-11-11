@@ -1,7 +1,9 @@
-"""Build figdata.json (schema in make_prelim.py) from the benchmark result directories.
+"""Build figdata.json from the benchmark result directories. Every figure of the benchmark and Data S1 read it.
 
-Arms: kimonu from triplicate_psi/ (psi null space, attached uptakes; seconds the median of three replicates),
-kimonu_det from triplicate_psi_detached3/ (detached uptakes, same median), kimonu_up from sweep_shared/ (upstream-set route, compat/upstream.py;
+Arms: kimonu (iterated route, attached uptakes; seconds the median of three seeds) from $KIMONU_ATT_DIR, kimonu_det
+(iterated route, detached uptakes, Kimonu's default) from $KIMONU_DET_DIR, kimonu_ref (reference-equivalent mode,
+run_kimonu_refmode.py) from $KIMONU_REF_DIR, kimonu_up from sweep_shared/ (the upstream-set route of September, kept in
+the file but drawn by no figure of the paper; compat/upstream.py;
 giant_overlap from the sweep_tentative/ logs, S2-10 fields from kinetic_variants/), COCOA from sweep/cocoa_v110 (efficient=false) and sweep/cocoa_eff
 (efficient=true), reference from reference_final/ (exhaustive, fixed algorithm and bridge; retested partitions from
 reference_final/retest/ where present) and reference_final_sampled/. Earlier reference runs are not read: they predate the concordance fixes.
@@ -9,14 +11,24 @@ Free metabolites are those listed before "E_1" in the model's own metabolite lis
 
     python figures/gather_figdata.py [--check]   # --check diffs kimonu/COCOA arms against the committed file
 
-KIMONU_DET_DIR, KIMONU_REF_DIR and KIMONU_ATT_DIR replace triplicate_psi_detached3/, triplicate_refmode/ and triplicate_psi/
-(e.g. a rerun on scratch).
+KIMONU_DET_DIR, KIMONU_ATT_DIR and KIMONU_REF_DIR default to the runs of the paper (timing_exclusive.sbatch, arms det,
+att and ref, on scratch). Point them at the directories of a rerun.
+
+figdata.json schema:
+  models, n_complexes[m]   (complexes without the zero complex)
+  kimonu[m], kimonu_det[m], kimonu_ref[m]: balanced, conc, n_kinetic, giant, acr, acrr, acr_free, acrr_free, seconds,
+      sec_conc, sec_kin, sec_acr
+  cocoa_false[m] / cocoa_true[m]: [{seed, balanced, conc, n_kinetic, giant, acr, acrr, acr_free, acrr_free, seconds}, ...]
+  ref_exh[m]: balanced, conc, seconds, sec_conc (+ n_kinetic, giant, acr, acrr, acr_free, acrr_free where the R stage
+      ran; retest where rejected pairs were retested)
+  ref_sampled[m]: [{seed, balanced, conc, seconds, ...}, ...]
+A network a tool did not finish within 7 days is missing from that arm.
 """
 import csv, glob, json, os, re, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(B)
-DET_DIR = os.environ.get("KIMONU_DET_DIR", "triplicate_psi_detached3")
-REF_DIR = os.environ.get("KIMONU_REF_DIR", "triplicate_refmode")
+DET_DIR = os.environ.get("KIMONU_DET_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/det")
+REF_DIR = os.environ.get("KIMONU_REF_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_timing_final/ref")
 
 def free_set(m):
     mets = json.load(open(f"unblocked/{m}_fixed.crn.json"))["metabolites"]
@@ -27,7 +39,7 @@ def n_free(items, free):
     """items: metabolite names (ACR) or name pairs (ACRR); a pair is free when both members are."""
     return sum(all(x in free for x in (it if isinstance(it, list) else [it])) for it in items)
 
-ATT_DIR = os.environ.get("KIMONU_ATT_DIR", "triplicate_psi")
+ATT_DIR = os.environ.get("KIMONU_ATT_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/att")
 
 def kimonu_rec(m, root=ATT_DIR):
     """psi route; the replicates agree on every count, so only the times vary."""

@@ -6,14 +6,14 @@ both routes and four ways of computing and comparing the nullspace rows.
     svdabs     SVD kernel (orthonormal), element-wise tolerance
     svd        SVD kernel (orthonormal), row-relative Euclidean tolerance
 
-Fig_certificate     Figure 2I draft: per tolerance, what the comparison of the two routes certifies, exact kernel
+Fig_certificate     draft of Figure 3E, F (drawn into the figure by make_figure2_bottom.py): per tolerance, what the comparison of the two routes certifies, exact kernel
                     (exactcmp) against SVD kernel (svdabs), one element-wise rule. Classes: the routes agree and are
                     right (the complete set, certified), the routes differ as they do exactly (the gap models), the
                     routes differ only because of floating point, the routes agree on a wrong answer (a false
                     certificate). The first bar is tolerance 0 (bitwise equal rows); the dashed line is what exact
                     arithmetic certifies. Answers are compared as ACR, ACRR and kinetic modules.
-FigS_certificate    the same for all four ways.
-FigS_float_errors   per route and way: the models whose ACR and ACRR come out right, only made up, only missed, or both.
+FigS_certificate    fig. S5, the same for all four ways.
+FigS_float_errors   fig. S6, per route and way: the models whose ACR and ACRR come out right, only made up, only missed, or both.
 
     python figures/make_float_four.py <out_dir>        # from benchmarks/
 """
