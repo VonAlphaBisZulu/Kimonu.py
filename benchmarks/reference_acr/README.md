@@ -1,4 +1,4 @@
-Reference kinetic-module and ACR/ACRR stage, run with the corrected R code, on the six models whose
+Reference kinetic-module and ACR/ACRR stage, run with the adapted R code, on the six models whose
 concordance is sound or adjudicated. Inputs were the completed exhaustive .mat files with metabolite
 names patched in (patch_mat_names.m) and exact full-coupling matrices from coupling_exact/.
 

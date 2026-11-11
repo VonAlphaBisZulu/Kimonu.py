@@ -3,7 +3,7 @@
 % Loads one of the committed pre-split models, reruns find_balanced_complexes with the GLPK-backed
 % linprog, and compares the resulting balanced set against the B stored in the committed
 % Results/concordant/*.mat for the same model. Also reports the sign-class census, which bounds how
-% much of the network is exposed to the negative-branch defect (see FINDINGS.md).
+% much of the network depends on the negative branch (adjusted in pull request 1 of the fork).
 args = argv();
 model_path = args{1};
 published_path = args{2};

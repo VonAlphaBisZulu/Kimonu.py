@@ -43,4 +43,5 @@ stricter rather than looser:
   both complexes and whether the reference rejected the pair because an LP was infeasible or
   because the bounds genuinely differed.
 
-See `FINDINGS.md` for what these turned up.
+The adaptations these led to are in pull request 1 of the fork
+(https://github.com/ankueken/Upstream_Algorithm/pull/1) and are described in Supplementary Text S3.

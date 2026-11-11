@@ -67,3 +67,10 @@ by `kinetic_variants/test_tangent_one_shot.py`.
   `nullspace_walkthrough.html`, `walkthrough_gen.py` (walkthrough of the Langary et al. example, replaced by
   `figures/supp_walkthrough.py`, Supplementary Text S1)
 - `docs/paper/md_to_science_tex.py` (replaced by `md_to_sciadv.py`)
+
+## Notes and plans (removed in a later commit the same day, also present at `3066b9b`)
+- `../ROADMAP.md` (the plan of August and September 2026)
+- `MANIFEST.md`, `BENCHMARK_DESIGN.md` (the benchmark map of 2026-09-17 and the design of August, replaced by
+  `README.md`)
+- `FINDINGS.md`, `matlab_reference/FINDINGS.md` (dated lab records to 2026-09-24; the adaptations of the reference
+  they led to are in pull request 1 of the fork and in Supplementary Text S3)

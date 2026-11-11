@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Rerun the reference's balanced-complex stage on its own published models and compare against the
 # committed results, while recording the sign-class census. The census bounds how much of each
-# network is exposed to the negative-branch defect: any complex classified N or U can only be
-# tested as a denominator through the branch that is infeasible by construction.
+# network depends on the negative branch: any complex classified N or U can only be tested as a
+# denominator through that branch, whose LP needed adjusting at genome scale (pull request 1 of the fork).
 set -u
 UPSTREAM=${UPSTREAM_ALGORITHM:?set UPSTREAM_ALGORITHM}
 HERE=$(cd "$(dirname "$0")" && pwd)
