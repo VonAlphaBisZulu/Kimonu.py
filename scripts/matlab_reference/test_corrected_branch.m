@@ -18,7 +18,7 @@ if isempty(here), here = pwd(); end
 addpath(fullfile(here, 'compat'));
 upstream = getenv('UPSTREAM_ALGORITHM');
 if isempty(upstream)
-  upstream = fullfile(here, '..', '..', '..', 'Upstream_Algorithm');
+  upstream = fullfile(here, '..', 'reference', 'Upstream_Algorithm');
 end
 addpath(genpath(fullfile(upstream, 'Code')));
 

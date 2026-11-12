@@ -195,3 +195,15 @@ the stage logs of `reference_final*/`, the August and September folders `triplic
 `archive/`, `processed/`, `published/`, `results/`, `reference/`, `seedcheck_psi/` and the logs) were moved to
 `/scratch/sadreyev_lab/pschneider/kimonu_checkout_leftovers_2026-11-12/scripts/`, the first three after being copied
 into the records.
+
+## The reference's code is fetched, not copied (2026-11-12)
+The four copies of the fork's R code, `reference_final/acr/Code/kinetic_modules/` and
+`reference_final_sampled/acr/Code/kinetic_modules/` (`code_kineticModule_analysis.R`,
+`Get_excel_tables_kinetic_modules.R`), were removed. They were identical to the fork
+https://github.com/VonAlphaBisZulu/Upstream_Algorithm at 8a6ed17 (pull request 1 of ankueken/Upstream_Algorithm), and
+`reference/fetch_upstream.sh` clones that commit. The R stage runner moved with its two variants merged:
+`reference_final/acr/run_chain.sh` and `reference_final_sampled/acr/run_chain.sh` are `reference/run_chain.sh`
+(exhaustive or sampled), `reference_final_sampled/acr/run_all.sh` is `reference/run_all_sampled.sh` and
+`reference_final/rerun_chain.sbatch` is `reference/rerun_chain.sbatch`. No change to the reference exists only in this
+repository: the corrected negative branch that `matlab_reference/test_corrected_branch.m` tries and the indexing that
+`test_kinetic_na_indexing.R` patches are fork commits 8cde9eb and 28350a9.

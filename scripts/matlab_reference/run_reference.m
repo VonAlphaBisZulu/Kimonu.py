@@ -30,10 +30,10 @@ end
 addpath(fullfile(here, 'compat'));
 upstream = getenv('UPSTREAM_ALGORITHM');
 if isempty(upstream)
-  upstream = fullfile(here, '..', '..', '..', 'Upstream_Algorithm');
+  upstream = fullfile(here, '..', 'reference', 'Upstream_Algorithm');
 end
 if ~exist(fullfile(upstream, 'Code'), 'dir')
-  error(['reference code not found at ' upstream '; set UPSTREAM_ALGORITHM to a clone of https://github.com/ankueken/Upstream_Algorithm']);
+  error(['reference code not found at ' upstream '; run bash scripts/reference/fetch_upstream.sh or set UPSTREAM_ALGORITHM to a clone of the fork at 8a6ed17']);
 end
 addpath(genpath(fullfile(upstream, 'Code')));
 

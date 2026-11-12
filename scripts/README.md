@@ -129,11 +129,15 @@ paper, so do not change them or their inputs.
 - COCOA.jl v1.1.0. `run_cocoa_acr.jl` with the Julia project `julia_v110/`, run by `cocoa_v110*.sbatch`
   (efficient=false), `cocoa_eff*.sbatch` (efficient=true), `cocoa_gap_*.sbatch` and `cocoa_iaf_false.sbatch`, with
   their cell lists (`*_cells.txt`). Results in `results/cocoa_jl/efficient_false/` and `efficient_true/`.
-- Reference. `matlab_reference/run_reference.m` under Octave with the shims in `matlab_reference/compat/` and the
+- Reference. Its code is not in this repository. `reference/fetch_upstream.sh` clones the fork
+  https://github.com/VonAlphaBisZulu/Upstream_Algorithm at 8a6ed17, the head of pull request 1, into
+  `reference/Upstream_Algorithm/` (git-ignored; code only, `--full` adds the models and published results, about 2 GB,
+  best on scratch), and every script that runs the reference takes the clone from `UPSTREAM_ALGORITHM`, default that
+  folder. `matlab_reference/run_reference.m` runs it under Octave with the shims in `matlab_reference/compat/` and the
   CPLEX bridge `matlab_reference/compat/lp_server.py`, run by `ref_final.sbatch` (exhaustive, `final_models.txt`) and
-  `ref_final_sampled.sbatch` (`final_sampled_cells.txt`). The R stage is `reference_final/acr/run_chain.sh` with the
-  fork's R code in `reference_final*/acr/Code/` (`reference_final/rerun_chain.sbatch` reran it where a coupling matrix
-  was missing). `ref_finish.sbatch` with `matlab_reference/retest_pairs.py` and `retest_rejected.m` retested the
+  `ref_final_sampled.sbatch` (`final_sampled_cells.txt`). The R stage is `reference/run_chain.sh`, which runs the
+  fork's two R files unmodified on `acr/` of the reference's records (`reference/run_all_sampled.sh` for every
+  sampled stem, `reference/rerun_chain.sbatch` reran it where a coupling matrix was missing). `ref_finish.sbatch` with `matlab_reference/retest_pairs.py` and `retest_rejected.m` retested the
   rejected pairs. `ref_fixed_validate.sbatch`, `ref_fixed2_validate.sbatch`, `matlab_reference/test_*.m` and
   `test_kinetic_na_indexing.R` test the adaptations. `patch_mat_names.m` adds metabolite names for the R stage.
 - The settings of the reference that needed adjusting at genome scale are in pull request 1 of the fork

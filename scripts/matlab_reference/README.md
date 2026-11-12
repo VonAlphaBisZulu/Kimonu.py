@@ -5,7 +5,8 @@ The reference implementation for kinetic modules is [ankueken/Upstream_Algorithm
 from the Optimization Toolbox. This directory runs it under **GNU Octave** instead, so the
 reference can be included in the benchmark without a licence.
 
-The reference's own `.m` files are used unmodified. `compat/` supplies only what Octave lacks:
+The reference's own `.m` and `.R` files are used unmodified, from a clone of the fork at 8a6ed17 that
+`scripts/reference/fetch_upstream.sh` makes (no copy of them is kept in this repository). `compat/` supplies only what Octave lacks:
 
 | file | why |
 |---|---|
@@ -16,14 +17,14 @@ The reference's own `.m` files are used unmodified. `compat/` supplies only what
 ## Usage
 
 ```bash
-export UPSTREAM_ALGORITHM=/path/to/Upstream_Algorithm     # defaults to ../../../Upstream_Algorithm
+bash scripts/reference/fetch_upstream.sh                  # the fork at 8a6ed17 into scripts/reference/Upstream_Algorithm
+export UPSTREAM_ALGORITHM=$PWD/scripts/reference/Upstream_Algorithm     # the default
 octave --no-gui scripts/matlab_reference/run_reference.m \
-    scripts/processed/concordance/e_coli_core.crn.json \
-    scripts/results/reference_concordance_i_e_coli_core.json
+    records/networks/unblocked/iIS312_fixed.crn.json /tmp/reference_iIS312.json
 ```
 
-The input is the shared exported network (`scripts/export_crn.jl`), so the reference decides
-concordance on the *same* complex decomposition as Kimonu and COCOA. What is being compared is
+The input is the network every tool received (`networks/unblocked/` of the records, `scripts/records.py`), so the
+reference decides concordance on the *same* complex decomposition as Kimonu and COCOA. What is being compared is
 therefore the decision procedure, not three separate complex enumerations.
 
 Two deliberate differences from the reference's own workflow, both of which make the comparison

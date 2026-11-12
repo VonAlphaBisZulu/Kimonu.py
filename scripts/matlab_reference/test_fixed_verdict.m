@@ -12,7 +12,8 @@ crn_path = args{1};
 here = fileparts(mfilename('fullpath'));
 if isempty(here), here = pwd(); end
 addpath(fullfile(here, 'compat'));
-addpath(genpath(fullfile(getenv('UPSTREAM_ALGORITHM'), 'Code')));
+upstream = getenv('UPSTREAM_ALGORITHM'); if isempty(upstream), upstream = fullfile(here, '..', 'reference', 'Upstream_Algorithm'); end
+addpath(genpath(fullfile(upstream, 'Code')));   % bash scripts/reference/fetch_upstream.sh
 
 crn = jsondecode(fileread(crn_path));
 nc = crn.n_complexes; nr = crn.n_reactions; nm = crn.n_metabolites;

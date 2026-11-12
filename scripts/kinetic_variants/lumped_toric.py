@@ -6,15 +6,16 @@ with monomial rates. Boundary species become the zero complex; blocked reactions
 
     python kinetic_variants/lumped_toric.py <model>
 """
-import sys, xml.etree.ElementTree as ET, numpy as np, scipy.sparse as sp
+import os, sys, xml.etree.ElementTree as ET, numpy as np, scipy.sparse as sp
 from fractions import Fraction
 from scipy.optimize import linprog
-sys.path.insert(0, '/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts')
-sys.path.insert(0, '/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src')
+B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path[:0] = [B, os.path.join(os.path.dirname(B), 'src')]
 from kinetic_variants.toric_check import check
 from kimonu.linalg import exact
 M = sys.argv[1]
-root = ET.parse(f'/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Upstream_Algorithm/Models/original/{M}.xml').getroot()
+U = os.environ.get('UPSTREAM_ALGORITHM', os.path.join(B, 'reference', 'Upstream_Algorithm'))   # bash reference/fetch_upstream.sh --full
+root = ET.parse(f'{U}/Models/original/{M}.xml').getroot()
 ns = {'s': root.tag.split('}')[0].strip('{')}
 rx = []
 for r in root.iter(f"{{{ns['s']}}}reaction"):

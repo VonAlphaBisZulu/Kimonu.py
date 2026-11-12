@@ -19,7 +19,7 @@ mapfile -t CELLS < $BASE/scripts/final_sampled_cells.txt
 spec=${CELLS[$SLURM_ARRAY_TASK_ID]}; m=${spec%%:*}; S=${spec##*:}
 export PATH=$HOME/miniconda3/envs/octave/bin:$PATH OCTAVE_HOME=$HOME/miniconda3/envs/octave
 export LP_SERVER_PYTHON=$HOME/miniconda3/envs/straindesign/bin/python3
-export UPSTREAM_ALGORITHM=$HOME/pipelines/2026-08_Kimonu/Upstream_Algorithm   # fixed concordance -- NOT the pinned worktree
+export UPSTREAM_ALGORITHM=${UPSTREAM_ALGORITHM:-$BASE/scripts/reference/Upstream_Algorithm}   # the fork at 8a6ed17, bash scripts/reference/fetch_upstream.sh
 export REFERENCE_MODE=sampled REFERENCE_SEED=$S
 export REFERENCE_MAT_OUT=$OUT/${m}_seed${S}.mat
 [ -s "$OUT/reference_${m}_seed${S}.json" ] && { echo "have $m $S"; exit 0; }

@@ -16,9 +16,8 @@ NET=$($PY $BASE/scripts/records.py read UNBLOCKED)
 export PATH=$HOME/miniconda3/envs/octave/bin:$PATH
 export OCTAVE_HOME=$HOME/miniconda3/envs/octave
 export LP_SERVER_PYTHON=$HOME/miniconda3/envs/straindesign/bin/python3
-# Pinned to the worktree at 088d827, the code that produced every completed reference run.
-# The main checkout carries the proposed upstream fixes and must not be used for benchmarks.
-export UPSTREAM_ALGORITHM=$HOME/pipelines/2026-08_Kimonu/Upstream_Algorithm
+export UPSTREAM_ALGORITHM=${UPSTREAM_ALGORITHM:-$BASE/scripts/reference/Upstream_Algorithm}   # the fork at 8a6ed17, bash scripts/reference/fetch_upstream.sh
+# The gate runs of September ran earlier commits of the fork's branch (fetch_upstream.sh <commit> <dir>).
 export REFERENCE_MODE=exhaustive
 # no REFERENCE_TIME_BUDGET: run to completion, to widen the correctness ground truth beyond
 # the four small iIS312 variants

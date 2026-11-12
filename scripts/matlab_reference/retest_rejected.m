@@ -7,7 +7,8 @@
 % KIMONU_OUT (records.py; both default to records/ at the top of the repository)
 args = argv(); m = args{1};
 here = fileparts(mfilename('fullpath')); if isempty(here), here = pwd(); end
-addpath(fullfile(here, 'compat')); addpath(genpath(fullfile(getenv('UPSTREAM_ALGORITHM'), 'Code')));
+addpath(fullfile(here, 'compat')); upstream = getenv('UPSTREAM_ALGORITHM'); if isempty(upstream), upstream = fullfile(here, '..', 'reference', 'Upstream_Algorithm'); end
+addpath(genpath(fullfile(upstream, 'Code')));   % bash scripts/reference/fetch_upstream.sh
 rec = getenv('KIMONU_RECORDS'); if isempty(rec), rec = fullfile(here, '..', '..', 'records'); end
 out = getenv('KIMONU_OUT'); if isempty(out), out = rec; end
 exh = fullfile(rec, 'results', 'reference', 'exhaustive');

@@ -1,7 +1,8 @@
 % Run the reference's pair LP twice on a list of pairs and report whether verdicts agree.
 % Usage: octave --no-gui test_determinism.m <crn.json> <pairs.txt>
 args = argv(); here = fileparts(mfilename('fullpath')); if isempty(here), here = pwd(); end
-addpath(fullfile(here, 'compat')); addpath(genpath(fullfile(getenv('UPSTREAM_ALGORITHM'), 'Code')));
+addpath(fullfile(here, 'compat')); upstream = getenv('UPSTREAM_ALGORITHM'); if isempty(upstream), upstream = fullfile(here, '..', 'reference', 'Upstream_Algorithm'); end
+addpath(genpath(fullfile(upstream, 'Code')));   % bash scripts/reference/fetch_upstream.sh
 crn = jsondecode(fileread(args{1}));
 nc = crn.n_complexes; nr = crn.n_reactions; nm = crn.n_metabolites;
 model.A = triplets_to_sparse(crn.A, nc, nr); model.Y = triplets_to_sparse(crn.Y, nm, nc);

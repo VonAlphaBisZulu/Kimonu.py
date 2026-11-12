@@ -239,3 +239,5 @@ octave-workspace
 
 # SLURM logs that land in the submit directory
 slurm-*.out
+# the reference implementation, fetched by scripts/reference/fetch_upstream.sh (not part of this repository)
+scripts/reference/Upstream_Algorithm/

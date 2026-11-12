@@ -1,6 +1,9 @@
 library(R.matlab); library(igraph)
-L <- readLines(file.path(Sys.getenv("HOME"),
-  "pipelines/2026-08_Kimonu/Upstream_Algorithm/Code/kinetic_modules/code_kineticModule_analysis.R"))
+# the R code of the reference: a clone made by scripts/reference/fetch_upstream.sh (UPSTREAM_ALGORITHM). The test patches
+# the original line, so run it on the original code: bash scripts/reference/fetch_upstream.sh d729161 <dir>, then
+# UPSTREAM_ALGORITHM=<dir>; the fork's 8a6ed17 has the fix already (commit 28350a9).
+U <- Sys.getenv("UPSTREAM_ALGORITHM", "scripts/reference/Upstream_Algorithm")
+L <- readLines(file.path(U, "Code/kinetic_modules/code_kineticModule_analysis.R"))
 a <- grep("^autonom <- function", L); b <- grep("^\treturn\\(union\\(phaseIII, phaseIV\\)\\)", L)
 src <- L[a:(b+1)]
 eval(parse(text = paste(src, collapse="\n")))                       # verbatim -> autonom
