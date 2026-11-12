@@ -97,7 +97,7 @@ words(B, 314.1, 215.2, "balanced complexes", 8, INK)
 words(B, 428.4, 201.2, "kinetic module 1", 8, INK)
 words(B, 428.4, 215.2, "kinetic module 2", 8, INK)
 # ---- C to G: the pill of the layer under the panel letter (D's note moves down to make room)
-for t in ("examples of", "steady-state fluxes", "that vectors of the", "nullspace basis"):
+for t in ("examples of", "steady-state fluxes", "that are vectors of the", "nullspace basis"):
     move(by_text(panel["D"], t), 4.5)
 for c in panel["D"]:                                    # the K that ends the note moves with it
     if c.tag == f"{NS}text" and "LMRoman" in (c.get("font-family") or "") + "".join(t.get("font-family") or "" for t in c.iter()):

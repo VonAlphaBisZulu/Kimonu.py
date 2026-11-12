@@ -75,13 +75,17 @@ def draw(ax, W=7.2, H=HCD):
     # nested methods, mass action
     yl, hl = 0.1, 0.66
     names = [("reference-\nequivalent", "upstream sets,\nShinar–Feinberg", GREEN), ("iterated\nroute", "proven,\nevery $k$", GREEN),
-             ("true\nrelations", "polynomial, two-\npoint; MILP sign\ncertificate", GREY), ("tangent\nroute", "complete,\ngeneric $k$", GREEN)]
+             ("true\nrelations", ("two-point", "criterion", "(polynomial) or", "MILP sign", "certificate"), GREY), ("tangent\nroute", "complete,\ngeneric $k$", GREEN)]
     bw, sep = 0.66, 0.15
     xs = [0.05 + k * (bw + sep) for k in range(4)]
     for k, (nm, sub, col) in enumerate(names):                 # reference-equivalent: light green, dashed, as in A and B
         box(xs[k], yl, bw, hl, face=tint(col, 0.85 if k == 0 else 0.88), edge=col, lw=0.8 if k == 0 else 0.7, ls="--" if k == 0 else "-")
         text(xs[k] + bw / 2, yl + hl - 0.15, nm, size=7, weight="bold" if k == 1 else "normal")
-        text(xs[k] + bw / 2, yl + 0.18, sub, size=6, color=INK)
+        if isinstance(sub, tuple):                             # five lines 6 pt apart, the last 1.9 pt above the foot of the box
+            for i, line in enumerate(reversed(sub)):
+                text(xs[k] + bw / 2, yl + (1.9 + 6 * i) / 72, line, size=6, color=INK, va="baseline")
+        else:
+            text(xs[k] + bw / 2, yl + 0.18, sub, size=6, color=INK)
         if k < 3:
             text(xs[k] + bw + sep / 2, yl + hl / 2, "$\\subseteq$", size=9)
     text(0.05, yl + hl + 0.1, "mass action, from what is proven (left) to what is complete (right)", size=6, color=MUTE, ha="left")
