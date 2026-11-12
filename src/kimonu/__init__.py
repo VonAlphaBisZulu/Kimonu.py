@@ -27,8 +27,8 @@ Conventions
         are called groups throughout, as in ``acrr_groups``, ``FluxCouplingResult.groups`` and
         ``RowReadout.groups``.
 
-Paper concept -> function, in the order of the paper (Schneider, Exact nullspaces find and certify
-kinetic modules and other mass-action invariants in metabolic networks).
+Paper concept -> function, in the order of the paper (Schneider Chuzel, Exact nullspaces certify kinetic
+modules and other mass-action invariants in metabolic networks).
 
 Networks and preprocessing (kimonu.network)
     split reversible reactions                     make_irreversible(model)
