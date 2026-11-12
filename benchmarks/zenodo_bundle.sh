@@ -8,10 +8,14 @@
 #   2. runs every data-reading figure and number script there under figures/record_inputs.py (<out>/work/listing),
 #   3. runs make_zenodo_bundle.py, which writes bundle/, upload/, zenodo_metadata.json, description.html, UPLOAD.md,
 #   4. unpacks upload/Kimonu_records.zip into <out>/work/test, checks SHA256SUMS, links the records into the unpacked
-#      snapshot, reruns the scripts there and compares the source data, Data S1, S2, tables S2, S3 and every number
-#      with the archive and with step 2. The comparison ends the log.
-# A rebuild replaces bundle/, upload/ and work/ of <out>. ZENODO_DOI, ARTICLE_DOI, RELEASE_TAG, ARCHIVE_VERSION and
-# RELEASE_DATE, when set, fill the placeholders of README.md, CITATION.cff and the metadata (make_zenodo_bundle.py).
+#      snapshot, reruns the scripts there and compares the source data, Data S1, S2, figs. S1 to S6 and Figure 3 (C, D
+#      redrawn) with the archive (figures/svg_same.py), and tables S2, S3 and every number with step 2. The comparison
+#      ends the log.
+# The published supplementary figures must be named as the scripts write them (FigS1_stage_timing.svg to
+# FigS6_float_errors.svg), or make_zenodo_bundle.py stops. VAULT points at another folder of the same layout.
+# A rebuild replaces bundle/, upload/ and work/ of <out>. ZENODO_DOI, ARTICLE_DOI, ARCHIVE_VERSION and RELEASE_DATE,
+# when set, fill the placeholders of README.md, CITATION.cff and the metadata (make_zenodo_bundle.py). SBATCH_EXCLUDE
+# (read by sbatch) keeps the job off given nodes.
 set -u
 K=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py
 VAULT=${VAULT:-/home/sadreyev_lab/pschneider/pipelines/Obsidian/Phil/Kimonu}      # read only
@@ -67,6 +71,9 @@ same() { cmp -s "$1" "$2" && echo "same bytes  $3" || $SD -c "import json,sys; a
 for f in figdata.json figures/pair_counts.json figures/pair_sets.json figures/seed_spread.json; do same $f $A/figures/source_data/$(basename $f) "$f, rebuilt from the zip, against the archive"; done
 for f in DataS1_values.csv DataS2_uptake_acr.csv; do same $T/out/$f $A/figures/supp/$f "$f, rebuilt from the zip, against the published file"; done
 for f in TableS2.md TableS3.md; do same $T/out/$f $W/out/$f "$f, rebuilt from the zip, against step 2"; done
+for f in supp/FigS1_stage_timing supp/FigS2_reference_agreement out/FigS3_uptakes out/FigS4_seeds out/FigS5_certificate out/FigS6_float_errors out/Figure3; do
+  g=$(basename $f); case $g in Figure3) p=$A/figures/$g.svg ;; *) p=$A/figures/supp/$g.svg ;; esac
+  $BIO figures/svg_same.py $T/$f.svg $p "$g.svg, drawn from the zip, against the published file"; done
 diff <(cut -d'|' -f1-4 $T/out/paper_numbers.stdout) <(cut -d'|' -f1-4 $W/out/paper_numbers.stdout) > $T/paper_numbers.diff \
   && echo "same values paper_numbers.py, $(wc -l < $T/out/paper_numbers.stdout) numbers, rebuilt from the zip, against step 2" \
   || { echo "DIFFERENT   paper_numbers.py"; head -20 $T/paper_numbers.diff; }

@@ -37,6 +37,14 @@ To rerun the Kimonu results (COCOA.jl and the reference are not rerun), in this 
 
 "K" marks a Kimonu run, "F" a frozen COCOA.jl or reference result. Scripts under `figures/` draw, scripts under
 `kinetic_variants/` compute. The vault is Phil's manuscript folder, which holds the final figures.
+Each drawing, table and data script is named by the paper item it makes: `fig<N><panels>_<what>.py` draws (for
+example `fig3AB_hierarchy.py`, `fig4_figS1_S2_benchmark.py`), `fig<N><panels>_update_<what>.py` edits the published
+Illustrator file in place, and `figS<n>_...`, `tableS2_S3.py`, `dataS1_S2.py` and `textS1_walkthrough.py` make the
+Supplement items. Scripts that gather data for several items are named by what they write (`gather_figdata.py` writes
+`figdata.json`, `pair_sets.py` `pair_sets.json` and `pair_counts.json`, `seed_spread.py` `seed_spread.json`,
+`hardware_record.py` `hardware_record.json`, `paper_numbers.py` prints the numbers). `HISTORY.md` lists the old names.
+In the Zenodo archive the same map has the archive folder of every input and the script or SLURM job script that
+produced it (`ZENODO_README.md`, filled in by `make_zenodo_bundle.py`).
 
 | paper item | script | input | output |
 |---|---|---|---|
@@ -53,9 +61,9 @@ To rerun the Kimonu results (COCOA.jl and the reference are not rerun), in this 
 | Figs. 3, 4 in the words of the text | `figures/fig3_fig4_update_terms.py`, in place on both vault SVGs: nullspace for kernel, networks for models, the iIS312 stages as in `figures/names.py` | none | vault `Figure3.svg`, `Figure4.svg` |
 | fig. S1 (K, F) | `figures/fig4_figS1_S2_benchmark.py` | `KIMONU_REF_DIR`, `reference_final/acr/*.log`, COCOA.jl logs | `figures/supp/FigS1_stage_timing.svg` |
 | fig. S2 (K, F) | `figures/fig4_figS1_S2_benchmark.py` (asserts that the reference-equivalent mode equals the exhaustive reference) | `figdata.json` | `figures/supp/FigS2_reference_agreement.svg` |
-| fig. S3 (K) | `figures/figS3_S4_uptakes_seeds.py` | `figdata.json` (arms `kimonu`, `kimonu_det`) | `FigS3_uptakes.svg` |
-| fig. S4 (K, F) | `figures/figS3_S4_uptakes_seeds.py` | `figures/seed_spread.json` from `figures/seed_spread.py`, which reads the COCOA.jl and sampled-reference seeds and the three seeds of Kimonu's timing runs, scratch `kimonu_rerun_1111/timing/det` | `FigS4_seeds.svg` |
-| figs. S5, S6 (K) | `figures/figS5_S6_float.py` | scratch `kimonu_float_four/parts` | `FigS5_certificate.svg`, `FigS6_float_errors.svg` |
+| fig. S3 (K) | `figures/figS3_S4_uptakes_seeds.py` | `figdata.json` (arms `kimonu`, `kimonu_det`) | `figures/supp/FigS3_uptakes.svg` |
+| fig. S4 (K, F) | `figures/figS3_S4_uptakes_seeds.py` | `figures/seed_spread.json` from `figures/seed_spread.py`, which reads the COCOA.jl and sampled-reference seeds and the three seeds of Kimonu's timing runs, scratch `kimonu_rerun_1111/timing/det` | `figures/supp/FigS4_seeds.svg` |
+| figs. S5, S6 (K) | `figures/figS5_S6_float.py` | scratch `kimonu_float_four/parts` | `figures/supp/FigS5_certificate.svg`, `FigS6_float_errors.svg` |
 | Text S1 (K) | `figures/textS1_walkthrough.py` | Kimonu at r* = K·1 | Markdown for the Supplement |
 | Tables S2, S3 | `figures/tableS2_S3.py` | `unblocked/`, `deficiency/deficiency_33.json` (`deficiency_split.py`), `figdata.json`, `kinetic_variants/member_counts/` | Markdown tables |
 | Data S1 (K, F) | `figures/dataS1_S2.py` | `figdata.json`, `figures/pair_counts.json`, Kimonu's pairs and tangent-route rows from `kinetic_variants/uptake_modes/`, `member_counts/` and scratch `kimonu_rerun_1111/timing/{tan,ref}` | `DataS1_values.csv` |
@@ -136,7 +144,8 @@ One-off runs whose result the Supplement states in words. `kinetic_variants/READ
 
 ## Tools and loaders
 
-- `figures/svg_finish.py`, `svg_panels.py` (fonts, size, panel groups of every SVG), `fonts_single_family.py`,
+- `figures/svg_finish.py`, `svg_panels.py` (fonts, size, panel groups of every SVG), `svg_same.py` (two drawings of
+  the same figure compared, text and pixels, for the rebuild check), `fonts_single_family.py`,
   `docs/examples/network/latex_text.py` (formulas as outlines).
 - `figures/record_inputs.py` (records the files a script reads) and `make_zenodo_bundle.py` (the Zenodo archive, with
   `ZENODO_README.md`, `ZENODO_LICENSE` and the upload steps `ZENODO_UPLOAD.md`). The archive checks that it holds every
@@ -167,7 +176,7 @@ One-off runs whose result the Supplement states in words. `kinetic_variants/READ
 | `sweep_shared/`, `sweep_tentative/` | upstream-set route of September (read by `gather_figdata.py` for the same arm) | superseded |
 | `triplicate*/`, `sweep_unblocked/`, `seedcheck_psi/`, `processed/`, `published/`, `results/`, `archive/`, `sweep/cocoa/`, `sweep/cocoa_s5000/`, `sweep/modules/`, `sweep/kimonu_*` (mostly git-ignored) | August and September runs | superseded |
 | `reference/`, `reference_full/`, `reference_sampled/`, `reference_sampled_seeds/`, `reference_acr/`, `reference_glpk_broken/` | reference runs before the adaptations of the fork | superseded, never reported |
-| `figures/main/`, `figures/prelim/` | figure drafts of September and October | superseded |
+| `figures/main/`, `figures/prelim/`, `figures/supp/` | figure drafts of September and October (the default output folders of the drawing scripts; the published figures are in the vault and the Zenodo archive) | superseded |
 
 Kimonu results on scratch (`/scratch/sadreyev_lab/pschneider/`). The paper's runs on the final code are in `kimonu_rerun_1111/` (timing
 arms det, att, ref, tan, tanatt, small; uptake_modes, member_counts, fb_vs_ma, uptake_lists, gap_roots, second_order,

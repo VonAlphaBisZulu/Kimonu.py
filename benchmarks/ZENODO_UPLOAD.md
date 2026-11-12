@@ -53,13 +53,14 @@ the simplest way to let the reviewers open it.
 - Manuscript (`Kimonu.md`, data availability), replace "==(DOI)==" by `(https://doi.org/10.5281/zenodo.NNNNNNN)`, and
   fill in the release tag where the Materials and Methods ask for the version number.
 - Cover letter, the same DOI wherever the archive is mentioned.
-- Optional, before step 15. The README and CITATION.cff inside the zip carry placeholders for the archive DOI, the
-  article DOI, the version, the date and the release tag. To fill them, rebuild after step 4 (about 30 minutes, on the
+- Optional, before step 15. The README inside the zip carries placeholders for the archive DOI and the article DOI,
+  and CITATION.cff also for the version and date of this record. The README names Kimonu by commit and points to the
+  releases of the repository for the latest stable version. To fill them, rebuild after step 4 (about 30 minutes, on the
   cluster), delete the two uploaded files in the draft and upload the new ones from the same place.
 
       cd ~/pipelines/2026-08_Kimonu/Kimonu.py
       KIMONU_REV=@COMMIT@ ZENODO_DOI=10.5281/zenodo.NNNNNNN ARCHIVE_VERSION=1.0 RELEASE_DATE=YYYY-MM-DD \
         bash benchmarks/zenodo_bundle.sh @OUT@
 
-  `RELEASE_TAG=v...` and `ARTICLE_DOI=10.1126/sciadv...` can be added the same way once they exist. The same command
+  `ARTICLE_DOI=10.1126/sciadv...` can be added the same way once it exists. The same command
   without the variables rebuilds the whole package after any change of the figures, Data S1 and S2 or the records.
