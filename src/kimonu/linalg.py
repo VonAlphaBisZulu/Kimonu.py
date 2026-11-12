@@ -1,4 +1,4 @@
-"""Exact linear algebra behind the analyses: reading matrices, null spaces in row form, interior points.
+"""Exact linear algebra behind the analyses: reading matrices, nullspaces in row form, blocked reactions.
 
 straindesign's exact matrices come in three types: a RationalMatrix (what Kimonu builds N as), and from
 sparse_nullspace either a scipy integer matrix (entries fit in int64) or an ExactCOO (they do not).
@@ -9,7 +9,6 @@ kernel at a generic flux that lcm is huge, so every entry becomes a huge integer
 as fractions from the RationalMatrix itself (null_space_rows).
 """
 from fractions import Fraction
-from math import lcm
 
 import numpy as np
 import straindesign as sd
@@ -122,52 +121,3 @@ def blocked_reactions(N, closed=()):
     if lp.status != 0:
         raise ValueError(f"blocked-reaction LP failed: {lp.message}")
     return lp.x[q:] <= 0.5
-
-
-def positive_flux(N, seed=0, scale=None):
-    """An exact vector r in ker(N) with every entry strictly positive.
-
-    An LP point with random lower bounds r >= 1 + U(0, 1) and a random objective is snapped onto the
-    exact kernel through its free coordinates, the rows where the basis has a single entry. The
-    steady-state set is a cone, so no upper bounds are needed. The LP is solved with HiGHS (bundled
-    with scipy): forcing every rate to at least 1 spans rates over about eight orders of magnitude on
-    genome-scale models, and HiGHS solved it on every model and seed tried, where SCIP, GLPK and CPLEX
-    through straindesign often did not. Raises ValueError when no such vector exists, which means the
-    network still has blocked reactions.
-
-    By default the free coordinates keep the LP's binary fractions. With ``scale``, they are rounded to
-    multiples of 1/scale and the common denominator is cleared, so r is an integer vector; this makes the
-    exact null spaces built from r several times faster (the tangent route on iNJ661: 99 s to 13 s).
-    The scale sets how generic r stays: at scale 100 many rates round to the same small integers, and on
-    iHN637 that produced an ACRR pair that a finer r does not have; from 10^4 on the results agree. A
-    scale at which a rate rounds to zero or below is raised tenfold until r is positive.
-    """
-    Nf = to_float(N); m, q = Nf.shape
-    rng = np.random.default_rng(seed)
-    lower = 1 + rng.random(q)
-    lp = linprog(rng.random(q), A_eq=Nf, b_eq=np.zeros(m), bounds=[(lo, None) for lo in lower], method="highs")
-    if lp.status != 0:
-        raise ValueError("no strictly positive steady-state flux; remove blocked reactions first")
-    rows = null_space_rows(N)
-
-    def snap(value):
-        """r = K b, with b read off the free coordinates and value() turning an LP entry into a Fraction"""
-        free = {}
-        for i, row in enumerate(rows):
-            if len(row) == 1:
-                (j, v), = row.items()
-                free.setdefault(j, value(lp.x[i]) / v)
-        return [sum((v * free.get(j, 0) for j, v in row.items()), Fraction(0)) for row in rows]
-
-    if scale is None:
-        flux = snap(lambda x: Fraction(float(x)))
-        if not all(x > 0 for x in flux):
-            raise ValueError("snapped flux is not strictly positive")
-        return flux
-    while scale < 10**12:
-        flux = snap(lambda x: Fraction(round(x * scale)))
-        if all(x > 0 for x in flux):
-            denominator = lcm(*(x.denominator for x in flux))
-            return [x * denominator for x in flux]
-        scale *= 10
-    raise ValueError("rounding did not give a strictly positive flux")

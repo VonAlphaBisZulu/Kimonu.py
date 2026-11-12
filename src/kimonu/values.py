@@ -1,16 +1,16 @@
 """What the fixed log-combinations are fixed at: ACR values, ACRR ratios and module ψ ratios at given k.
 
 The routes decide which combinations vᵀ ln x take the same value at every positive steady state; this
-module computes that value for given rate constants k, exactly. It reruns the iterated route of
-kinetic.py at k itself instead of at a generic flux:
+module computes that value for given rate constants k, exactly. It reruns the iterated route
+(:mod:`kimonu.iterated`) at k itself instead of at a generic flux:
 
-1. Linear: every positive steady state x for k has its complex monomials ψ = ψ(x) in the kernel of
+1. Linear: every positive steady state x for k has its complex concentrations ψ = ψ(x) in the kernel of
 
        W_k = N diag(k) Sᵀ,
 
-   the map of kinetic.py with k in place of r* (steady_state_map). When rows c and d of an exact basis of
-   ker(W_k) are proportional, row c = λ row d, every kernel vector has ψ_c = λ ψ_d, so the ratio of the
-   two monomials is λ, a rational number for rational k. No steady state has to be found.
+   the W of Eq. 3 with k in place of r* (:func:`kimonu.steady_state_map`). When rows c and d of an exact basis
+   of ker(W_k) are proportional, row c = λ row d, every kernel vector has ψ_c = λ ψ_d, so the ratio of the
+   two complex concentrations is λ, a rational number for rational k. No steady state has to be found.
 2. Log: within a coupled set, ln ψ_c - ln ψ_d = (y_c - y_d)ᵀ ln x = ln λ. A fixed combination v found
    by the readout lies in the span of these composition differences, v = Σ_t a_t (y_c_t - y_d_t), so
 
@@ -20,12 +20,12 @@ kinetic.py at k itself instead of at a generic flux:
    metabolite whose value is fixed through 2X is a square root: 0 -> X, 2X -> 0 gives
    x = (k_1 / 2 k_2)^(1/2)). :class:`Value` holds it in that form, exactly.
 3. Feedback: a merge found in log space is the linear fact ψ_c = μ ψ_d with μ the value of
-   y_c - y_d; it goes into W_k as a row, as u_c = u_d does in kinetic.py, and the steps repeat until
+   y_c - y_d; it goes into W_k as a row, as u_c = u_d does in the iterated route, and the steps repeat until
    nothing merges.
 
 What this proves holds at the given k itself, not only for generic k, and for generic k it is what
-kinetic_modules finds. The attached zero complex has ψ_0 = 1, which is how absolute values (ACR) arise:
-a complex coupled to the zero complex has the value of its monomial fixed, not only its ratio. Detached,
+iterated_route finds. The attached zero complex has ψ_∅ = 1, which is how absolute values (ACR) arise:
+a complex coupled to the zero complex has its concentration fixed, not only its ratio. Detached,
 only ratios that hold whatever the uptake rates are reported.
 
 It also tells when k has no positive steady state at all: a complex whose row of ker(W_k) is zero, a
@@ -43,10 +43,10 @@ from collections import namedtuple
 from fractions import Fraction
 from math import floor, lcm, log, exp
 
-from kimonu.acr import free_directions, readout
 from kimonu.io import substrate_complexes, zero_complexes
-from kimonu.kinetic import steady_state_map
 from kimonu.linalg import exact, null_space_rows
+from kimonu.readout import free_directions, readout
+from kimonu.steady_state import steady_state_map
 
 from scipy import sparse
 
@@ -212,7 +212,7 @@ def _ratio_classes(rows, n):
         ratios = {c: f / f0 for c, f in members}      # ψ_c / ψ_first
         if any(x < 0 for x in ratios.values()):
             raise ValueError(f"no positive steady state for these rate constants: complexes {sorted(ratios)} "
-                             "would need monomials of opposite sign")
+                             "would need concentrations of opposite sign")
         out.append(ratios)
     return out
 
@@ -236,10 +236,10 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
     """Exact values of the ACR, ACRR and kinetic-module relations at the rate constants k.
 
     Args:
-        A, Y, N: the network, as for :func:`kimonu.kinetic_modules`.
+        A, Y, N: the network, as for :func:`kimonu.iterated_route`.
         k: one positive rate constant per reaction, in reaction order. Ints and Fractions are exact;
             a float is read as the decimal it prints as.
-        detach_uptakes: as for :func:`kimonu.kinetic_modules`.
+        detach_uptakes: as for :func:`kimonu.iterated_route`.
         metabolite_ids: optional names for ``acr`` and ``acrr``; indices are used when omitted.
 
     Returns a :class:`Values` with every value a :class:`Value`:
@@ -248,7 +248,7 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
         the group's first metabolite;
         ``modules``: one (reference, {complex: ψ_c / ψ_reference}) per kinetic module with two or more
         complexes, the reference being its first complex;
-        ``rounds``: as in :class:`kimonu.KineticResult`.
+        ``rounds``: as in :class:`kimonu.RouteResult`.
 
     Raises ValueError when k admits no positive steady state, as far as the relations show it.
     """
@@ -270,7 +270,7 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
         classes = [{c: x for c, x in g.items() if c not in skip} for g in _ratio_classes(rows, n)]
         classes = [g for g in classes if g]
         # 2) Log: the composition differences within each class, with ln of their ratios, span the fixed
-        #    combinations; the readout of kinetic.py merges the classes they connect
+        #    combinations; the readout merges the classes they connect
         span = _Span()
         for g in classes:
             first = min(g)
@@ -299,7 +299,7 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
     names = metabolite_ids if metabolite_ids is not None else list(range(Y.shape[0]))
     acr = {names[i]: span.value({i: Fraction(1)}) for i in found.acr}
     acrr = [(names[g[0]], {names[j]: span.value({j: Fraction(1), g[0]: Fraction(-1)}) for j in g[1:]})
-            for g in found.acrr]
+            for g in found.acrr_groups]
     modules = []
     for module in sorted(found.modules, key=min):
         if len(module) > 1:
@@ -314,7 +314,7 @@ def rate_constants(A, Y, flux, x=None):
     Args:
         A, Y: the network.
         flux: an interior steady-state flux r (every entry positive, N r = 0), e.g. the ``flux`` of a
-            :class:`kimonu.KineticResult` or :class:`kimonu.TangentResult`.
+            :class:`kimonu.RouteResult`.
         x: positive concentrations, one per metabolite; all ones when omitted, which gives k = r.
 
     At these k every relation the routes find takes its value at x: x_i for an ACR metabolite, x_j / x_i

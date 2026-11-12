@@ -27,18 +27,20 @@ All values (symbolic_formulas). The derivation of relation_values carried out ov
 every relation the iterated route proves, as an expression in k. Exact, and for small networks only.
 
 What neither gives is a formula for a relation the iterated route does not prove. On the kinase of
-tangent.py, X has ACR: with a, b and c the rate constants of 0 -> X, X -> 0 and 2X -> C, the balance of X
-alone is a - b x - 2 c x² = 0, so x = (√(b² + 8ac) - b) / 4c at both steady states. That is the root
-of a quadratic, not a product of powers of rational functions of k, and no linear step can produce it.
+Fig. 2 (:mod:`kimonu.tangent`), X has ACR: with a, b and c the rate constants of 0 -> X, X -> 0 and
+2X -> C, the balance of X alone is a - b x - 2 c x² = 0, so x = (√(b² + 8ac) - b) / 4c at both steady
+states. That is the root of a quadratic, not a product of powers of rational functions of k, and no
+linear step can produce it.
 """
 from collections import namedtuple
 from fractions import Fraction
 
 from scipy import sparse
 
-from kimonu.acr import free_directions, readout
 from kimonu.io import substrate_complexes, zero_complexes
-from kimonu.linalg import entries, null_space_rows, positive_flux
+from kimonu.linalg import entries, null_space_rows
+from kimonu.readout import free_directions, readout
+from kimonu.steady_state import interior_flux
 from kimonu.values import Value, _Span, _difference, relation_values
 
 Formulas = namedtuple("Formulas", ["acr", "acrr", "modules", "constraints"])
@@ -113,14 +115,15 @@ def _assemble(found, formula, names):
     return list(acr.items()), list(acrr.items()), list(modules.items())
 
 
-def binomial_formulas(A, Y, N, detach_uptakes=True, metabolite_ids=None, seed=0):
+def binomial_formulas(A, Y, N, detach_uptakes=True, metabolite_ids=None, seed=0, draw="uniform", bits=64):
     """Monomial formulas in k for the relations that flux coupling fixes, and the constraints it puts on k.
 
     Args:
-        A, Y, N: the network, as for :func:`kimonu.kinetic_modules`.
-        detach_uptakes: as for :func:`kimonu.kinetic_modules`.
+        A, Y, N: the network, as for :func:`kimonu.iterated_route`.
+        detach_uptakes: as for :func:`kimonu.iterated_route`.
         metabolite_ids: optional names for ``acr`` and ``acrr``; indices are used when omitted.
-        seed: seed of the interior flux at which the relations are found (relation_values at k = r*).
+        seed, draw, bits: of the interior flux r* at which the relations are found (relation_values at k = r*,
+            :func:`kimonu.interior_flux`).
 
     Returns a :class:`Formulas` in the layout of :class:`kimonu.Values`, with a :class:`Monomial` for
     every relation that flux coupling fixes and None for the others: ``acr`` {metabolite: formula},
@@ -129,7 +132,7 @@ def binomial_formulas(A, Y, N, detach_uptakes=True, metabolite_ids=None, seed=0)
     that equal one at every k with a positive steady state.
     """
     Ycsc = sparse.csc_matrix(Y)
-    found = relation_values(A, Y, N, positive_flux(N, seed, scale=10**6), detach_uptakes)
+    found = relation_values(A, Y, N, interior_flux(N, seed, draw, bits), detach_uptakes)
     facts = _flux_facts(A, Y, N, detach_uptakes)
 
     def formula(vector):
@@ -270,7 +273,7 @@ def symbolic_formulas(A, Y, N, detach_uptakes=True, metabolite_ids=None, reactio
         return sp.factor(sp.Mul(*(F.to_sympy(b) ** sp.Rational(e.numerator, e.denominator) for b, e in logs.items())))
 
     acr_found = [("acr", i, {i: Fraction(1)}) for i in found.acr]
-    acrr_found = [("acrr", (g[0], j), {j: Fraction(1), g[0]: Fraction(-1)}) for g in found.acrr for j in g[1:]]
+    acrr_found = [("acrr", (g[0], j), {j: Fraction(1), g[0]: Fraction(-1)}) for g in found.acrr_groups for j in g[1:]]
     module_found = [("module", (min(mod), d), _difference(Ycsc, d, min(mod)))
                     for mod in sorted(found.modules, key=min) if len(mod) > 1 for d in sorted(mod - {min(mod)})]
     names = metabolite_ids if metabolite_ids is not None else list(range(Y.shape[0]))

@@ -1,69 +1,61 @@
-"""Kinetic modules and local ACR by the tangent route: one null space at one generic steady state.
+"""The tangent route: one nullspace at one generic steady state, which misses no relation but can add false ones.
 
-The iterated route (kinetic.py) builds the fixed log-combinations up from relations it can prove at
-every steady state. The tangent route reads them all off the linearization at a single steady state.
-With rate constants fixed by an interior flux r* at x* = 1, as in kinetic.py, the steady-state equations
-in log coordinates z = ln x are
+The iterated route (:mod:`kimonu.iterated`) builds the fixed combinations up from relations it can prove. The
+tangent route applies both conditions of Eq. 1 at once, but only to first order around the reference steady state,
+as a tangent line approximates a curve near one point. Pascual-Escudero & Feliu (2022) introduced this
+linearization as a test for local ACR. Kimonu extends it to ACRR and kinetic modules and evaluates it as one exact
+sparse nullspace at a random interior point, which runs at genome scale.
 
-    F(z) = N diag(r*) Sᵀ exp(Yᵀ z) = W u(z) = 0,
+With the rate constants fixed by an interior flux r* at x* = 1, as for the iterated route, let ln x move away from
+ln x* by a small step h. Then ln ψ moves by Yᵀ h, so u = exp(Yᵀ h) ≈ 1 + Yᵀ h. Since W·1 = 0 at the reference,
+staying at steady state requires, to first order,
 
-and since u = exp(Yᵀ z) has derivative Yᵀ at u = 1, the chain rule gives their Jacobian at z* = 0 as
+    W Yᵀ h = 0,    W = N diag(r*) Sᵀ (Eq. 3),
 
-    J = N diag(r*) Sᵀ Yᵀ = W Yᵀ.
+so ker(W Yᵀ) holds the directions in which ln x can move without leaving the steady states, to first order. It is
+read out like B (:func:`kimonu.readout.readout`), without iteration. Equal rows of Yᵀ ker(W Yᵀ) are kinetic
+modules, zero rows of ker(W Yᵀ) are ACR metabolites and equal nonzero rows are ACRR groups.
 
-T = ker(J) is the tangent space of the steady states at x*: the directions in which ln x can move
-without leaving them. A log-combination vᵀ ln x is fixed exactly when v is orthogonal to T, so the
-readout of acr.py with B = T gives the kinetic modules (equal rows of Yᵀ T), the metabolites with ACR
-(zero rows of T) and the ACRR groups (equal nonzero rows). One null space, no iteration.
+Why no relation is missed. A steady state z near z* = 0 (z = ln x) is itself the point z = 0 for the rate constants
+fixed by its own flux r* ∘ exp(Sᵀ Yᵀ z), so the tangent spaces at nearby steady states are the ker(W Yᵀ) of nearby
+interior fluxes. For generic r* the rank of W Yᵀ does not change between nearby interior fluxes, and the
+constant-rank theorem then makes the steady states near x* a manifold with tangent space ker(W Yᵀ). A combination
+that is fixed at every steady state is constant on this manifold, so it is orthogonal to ker(W Yᵀ), and the route
+reports it. ker(W Yᵀ) is therefore contained in B (Eq. 4, right). The argument does not need the steady state to
+be nondegenerate.
 
-Why nothing is missed. A steady state z near z* is itself the point z* = 0 for the rate constants
-fixed by its own flux r* ∘ exp(Sᵀ Yᵀ z), so the tangent spaces at nearby steady states are the T of
-nearby interior fluxes. For generic r* the rank of J does not change between nearby interior fluxes, and
-the constant-rank theorem then makes the steady states near x* a manifold with tangent space T: a
-combination that is constant on them is orthogonal to T, so no locally fixed relation is missed.
-Conversely, each candidate v (e_i, e_i - e_j or y_c - y_d: finitely many, the same for every r*) is
-orthogonal to T exactly when a polynomial condition on r* holds; holding at a generic r*, it holds at
-every interior flux nearby, so v is orthogonal to the tangent space at every steady state near x*, and
-vᵀ ln x is constant there. Neither direction needs the steady state to be nondegenerate.
+False couplings. The route checks only whether a combination changes when the steady state moves a little. Steady
+states that no continuous path of steady states connects to the reference are never compared, and a combination can
+take different values there. The route then reports a relation that does not hold, a false coupling. The
+self-activating kinase of Fig. 2, 0 <-> X, 2X -> C, C + 2P -> 3P, C -> 0, P -> 0, has the two steady states X = 10,
+(C, P) = (1, 4) and (4, 1) for one choice of rate constants. Neither can move without leaving the steady states, so
+ker(W Yᵀ) = {0} at both, and the route reports ACR for X, C and P, C and P falsely. The iterated route claims
+neither C nor P and misses X. Where the two routes agree, the list is correct and complete (:func:`kimonu.certify`).
 
-What is found is local ACR in the sense of Pascual-Escudero & Feliu (2022): constant on the steady
-states near one of them. When the same rate constants admit several separate steady states, a
-relation can hold near each of them with a different value. The cooperative kinase 0 <-> X, 2X -> C,
-C -> 0, C + 2P -> 3P, P -> 0 has the two steady states X = 10, (C, P) = (1, 4) and (4, 1) for one choice
-of rate constants; T = {0} at both, so this route calls X, C and P fixed, while only X is. The
-iterated route claims neither C nor P, and misses X: for generic rate constants,
-iterated ⊆ true ⊆ tangent.
-
-The zero complex has ψ = 1. Detached (default), each uptake reaction gets a source coordinate of its own,
-a free variable in T; only the metabolite rows of T are read, and the zero complex is a module of its own.
-Attached, its uptake reactions run at constant rate and add nothing to J.
+The zero complex has ψ_∅ = 1. Detached (default), each uptake reaction gets a source coordinate of its own, a free
+variable in ker(W Yᵀ). Only the metabolite rows are read, and the zero complex is a module of its own. Attached,
+its uptake reactions run at constant rate and add nothing to W Yᵀ.
 """
-from collections import namedtuple
 from fractions import Fraction
 
-import numpy as np
 from scipy import sparse
 
-from kimonu.acr import readout
 from kimonu.io import zero_complexes
-from kimonu.kinetic import steady_state_map
-from kimonu.linalg import exact, null_space_rows, positive_flux
-
-TangentResult = namedtuple(
-    "TangentResult",
-    ["modules", "module_of", "n_modules", "giant_module", "acr", "acrr", "dimension", "flux"],
-)
+from kimonu.linalg import exact, null_space_rows
+from kimonu.readout import _pairs, _route_result, readout
+from kimonu.steady_state import interior_flux, steady_state_map
 
 
-def tangent_space(A, Y, N, flux, detach_uptakes):
-    """An exact basis of T = ker(W Yᵀ) at the steady state x = 1 for the rate constants k = ``flux``.
+def tangent_space(A, Y, N, flux, detach_uptakes=True):
+    """An exact basis of ker(W Yᵀ) at the steady state x = 1 for the rate constants k = ``flux``.
 
-    One row per coordinate, each a sorted tuple of (basis vector, value): first the m metabolites (ln x),
-    then, with detached uptakes, the sources (ln u) in the order of :func:`kimonu.kinetic.rate_columns`.
+    One row per coordinate, each a sorted tuple of (basis vector, value). First come the m metabolites (ln x), then,
+    with detached uptakes, the sources (ln u) in the order of :func:`kimonu.steady_state.rate_columns`. The first m
+    rows are the B of the tangent route.
     """
     n, m = A.shape[0], Y.shape[0]
-    # J = W Yᵀ: the column of complex c spreads over c's metabolites; a detached source keeps its own
-    # column, after the m metabolites.
+    # W Yᵀ: the column of complex c spreads over c's metabolites. A detached source keeps its own column, after the
+    # m metabolites.
     W, (_, n_columns) = steady_state_map(A, Y, N, flux, detach_uptakes)
     Ycsc = sparse.csc_matrix(Y)
     J = {}
@@ -77,51 +69,34 @@ def tangent_space(A, Y, N, flux, detach_uptakes):
     return [tuple(sorted(r.items())) for r in rows]
 
 
-def tangent_route(A, Y, N, detach_uptakes=True, seed=0, metabolite_ids=None):
-    """Kinetic modules, local ACR and local ACRR from the tangent space of the steady states.
+def tangent_route(A, Y, N, detach_uptakes=True, seed=0, draw="uniform", bits=64, metabolite_ids=None, flux=None):
+    """Kinetic modules, ACR and ACRR by the tangent route, which reports every true relation and possibly false ones.
+
+    Every relation that holds at every positive steady state (for generic rate constants) is reported. A reported
+    relation can be a false coupling, one that differs between steady states that no path of steady states
+    connects (see the module docstring). :func:`kimonu.certify` compares with the iterated route at the same r*.
 
     Args:
-        A: complexes x reactions incidence matrix, one -1 and one +1 per column.
-        Y: metabolites x complexes composition matrix.
-        N: metabolites x reactions stoichiometric matrix, exact (straindesign RationalMatrix) or
-            integer; N = Y A. The network must have no blocked reactions.
-        detach_uptakes: give every reaction out of the zero complex its own source, as in
-            :func:`kimonu.kinetic_modules`.
-        seed: seed of the random interior flux; results hold for generic rate constants.
-        metabolite_ids: optional names for ``acr`` and ``acrr``; indices are returned when omitted.
+        A, Y, N: the network, as for :func:`kimonu.iterated_route`. The network must have no blocked reactions.
+        detach_uptakes: give every reaction out of the zero complex its own source (default), as for
+            :func:`kimonu.iterated_route`.
+        seed, draw, bits: of the reference flux r* (:func:`kimonu.interior_flux`). draw="lp", or fewer bits, give
+            smaller integers and run faster, draw="lp" without the probability bound of the uniform draw.
+        metabolite_ids: optional names for ``acr`` and ``acrr``. Indices are returned when omitted.
+        flux: a reference flux r* to use instead of drawing one.
 
-    Returns a :class:`TangentResult`. ``modules`` partition the complexes like those of
-    :func:`kimonu.kinetic_modules`; ``acr`` are the metabolites with local ACR and ``acrr`` the
-    sorted pairs with local ACRR, both in the sense of Pascual-Escudero & Feliu (2022), so they can
-    claim relations that differ between separate steady states (see the module docstring);
-    ``dimension`` is dim T. ``flux`` is the interior flux r* the route ran at, so the relations are local
-    around the steady state x = 1 for the rate constants k = r* (see :func:`kimonu.rate_constants`).
+    Returns a :class:`kimonu.RouteResult`, with ``dimension`` the dimension of ker(W Yᵀ).
     """
     n, m = A.shape[0], Y.shape[0]
     skip = zero_complexes(Y) if detach_uptakes else set()
-    # 1) Generic rate constants from an interior flux r*, made integral at scale 10^6: the exact null
-    #    space of J is several times faster on integers, and at scale 100 the rounding was coarse
-    #    enough to make r* non-generic (a spurious ACRR pair on iHN637); from 10^4 on the results agree.
-    flux = positive_flux(N, seed, scale=10**6)
-    # 2) T = ker(J), J = W Yᵀ, one row per coordinate; the metabolite rows are B
+    # 1) Generic rate constants from an interior flux r*, as for the iterated route
+    if flux is None:
+        flux = interior_flux(N, seed, draw, bits)
+    # 2) ker(W Yᵀ), one row per coordinate. The metabolite rows are B.
     rows = tangent_space(A, Y, N, flux, detach_uptakes)
-    found = readout(Y, rows[:m], skip)
+    B = rows[:m]
+    found = readout(Y, B, skip)
     # 3) A detached zero complex is coupled to nothing and forms a module of its own.
     modules = found.modules + [{c} for c in sorted(skip)]
-    module_of = np.zeros(n, dtype=np.int64)
-    for idx, group in enumerate(modules, start=1):
-        for i in group:
-            module_of[i] = idx
-
-    names = metabolite_ids if metabolite_ids is not None else list(range(m))
-    acrr = [(names[a], names[b]) for g in found.acrr for k, a in enumerate(g) for b in g[k + 1:]]
-    return TangentResult(
-        modules=modules,
-        module_of=module_of,
-        n_modules=sum(1 for g in modules if len(g) > 1),
-        giant_module=max((len(g) for g in modules), default=0),
-        acr=[names[i] for i in found.acr],
-        acrr=sorted(acrr),
-        dimension=len({j for r in rows for j, _ in r}),
-        flux=flux,
-    )
+    return _route_result("tangent", n, modules, found.acr, _pairs(found.acrr_groups), metabolite_ids, B=B,
+                         dimension=len({j for r in rows for j, _ in r}), flux=flux)

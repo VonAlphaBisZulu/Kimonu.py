@@ -1,33 +1,84 @@
-"""Kimonu — exact, deterministic concordance and kinetic-module analysis of metabolic networks.
+"""Kimonu (KInetic MOdules by NUllspace): exact concordance, kinetic modules, ACR and ACRR of metabolic networks.
 
-Pure Python. Depends on straindesign (exact sparse null space) and cobra.
+Pure Python. Depends on straindesign (exact sparse nullspace), cobra, numpy and scipy. Every nullspace is computed
+in rational arithmetic, so zero, equal and proportional rows are found by exact comparison, without tolerance.
 
-Core idea: concordance is flux coupling lifted one matrix product up. With N = Y·A,
-K = ker(N) (exact, sparse, via straindesign), and M = A·K, concordant complexes are the
-proportional rows of M and balanced complexes are its zero rows — exact linear algebra,
-no LP, no sampling.
+The default mode, one call from a cobra model:
 
-Kinetic modules, ACR and ACRR are fixed log-combinations of the concentrations, read off one exact
-basis by acr.readout. Two routes produce that basis: the iterated route (kinetic_modules, then
-acr_acrr) proves relations at every steady state; the tangent route (tangent_route) reads the tangent
-space of the steady states at one generic point, finds every relation that holds locally, and so
-bounds the iterated route from above. kinetic_flux_coupling lifts either route into flux space: the
-reactions whose rates keep a fixed ratio under mass action, and the rates that are fixed.
-relation_values gives the values those relations take at given rate constants, exactly, and
-rate_constants the rate constants at which they take given values; binomial_formulas and
-symbolic_formulas give the values as formulas in the rate constants.
+    import kimonu
+    crn = kimonu.prepare(model)                 # split, unblocked, N = Y·A
+    res = kimonu.analyze(crn)                   # iterated route, detached uptakes, seed 0
+    res.modules, res.acr, res.acrr              # complex indices into crn.complexes, metabolite ids
+
+Paper concept -> function, in the order of the paper (Schneider, Exact nullspaces find and certify
+kinetic modules and other mass-action invariants in metabolic networks).
+
+Networks and preprocessing
+    split reversible reactions                     irreversible(model)
+    N = Y·A, the zero complex as a complex         build_crn(model) -> CRN (A, Y, N exact, N_float, ids)
+    blocked reactions (one LP), pinned rates       prepare(model) -> CRN
+Flux balance (Fig. 1C, E)
+    K = ker(N), fully coupled reactions            concordance(...).K, kimonu.linalg.proportional_classes
+    M = A·K, balanced and concordant complexes     concordance(model), concordance_from_matrices(A, N)
+Mass action, the basis B (Fig. 1F)
+    ACR, ACRR, kinetic modules from B              readout(Y, B) -> Readout, and RouteResult of every route
+    Yᵀ B                                           kimonu.readout.complex_directions(Y, B)
+Reference steady state (Eq. 3, Fig. 1G)
+    exact interior flux r*, generic k = r*         interior_flux(N, seed, draw="uniform", bits=64)
+    W = N diag(r*) Sᵀ                              steady_state_map(A, Y, N, r*)
+Iterated route (Eq. 4, left)
+    coupled sets of ker(W), YΔ, ker((YΔ)ᵀ), feedback   iterated_route(A, Y, N) -> RouteResult, .B
+    ker((YΔ)ᵀ) of given modules                    free_directions(Y, modules)
+Tangent route (Eq. 4, right)
+    ker(W Yᵀ), false couplings possible            tangent_route(A, Y, N) -> RouteResult, .B
+    the full basis, with source coordinates        tangent_space(A, Y, N, r*)
+Both routes (Eq. 4)
+    agreement certifies the list, open relations   certify(A, Y, N) -> Certificate
+Default mode and alternatives
+    one call from a cobra model                    analyze(model, route="iterated" | "tangent" | "reference" | "both")
+Reference-equivalent mode (Fig. 4E)
+    upstream sets, overlap merge, Shinar–Feinberg rule   reference_route(A, Y, N)
+Flux coupling under mass action
+    Λ = Sᵀ Yᵀ B                                    kinetic_flux_coupling(A, Y, N, route=...)
+Values of the relations
+    exact values at given k                        relation_values(A, Y, N, k)
+    k for given concentrations and fluxes          rate_constants(A, Y, r, x)
+    formulas in k                                  binomial_formulas(A, Y, N), symbolic_formulas(A, Y, N)
+
+The three routes return one result type, :class:`RouteResult`, with the modules, ACR and ACRR (named when
+metabolite_ids is given), the basis B they were read from, the flux r* and the route-specific extras.
 """
-from kimonu.io import build_crn, irreversible
-from kimonu.concordance import concordance, concordance_from_matrices, ConcordanceResult
-from kimonu.kinetic import kinetic_modules, KineticResult
-from kimonu.acr import acr_acrr, AcrResult, readout, Readout
-from kimonu.tangent import tangent_route, TangentResult
-from kimonu.coupling import kinetic_flux_coupling, FluxCouplingResult
-from kimonu.values import relation_values, rate_constants, Values, Value
-from kimonu.formulas import binomial_formulas, symbolic_formulas, Formulas, Monomial
+from kimonu.io import CRN, build_crn, irreversible, prepare
+from kimonu.concordance import ConcordanceResult, concordance, concordance_from_matrices
+from kimonu.readout import Readout, RouteResult, free_directions, readout
+from kimonu.steady_state import interior_flux, steady_state_map
+from kimonu.iterated import iterated_route
+from kimonu.tangent import tangent_route, tangent_space
+from kimonu.reference import reference_route
+from kimonu.coupling import FluxCouplingResult, kinetic_flux_coupling
+from kimonu.values import Value, Values, rate_constants, relation_values
+from kimonu.formulas import Formulas, Monomial, binomial_formulas, symbolic_formulas
 
 __version__ = "0.0.1"
-__all__ = ["build_crn", "irreversible", "concordance", "concordance_from_matrices", "ConcordanceResult",
-           "kinetic_modules", "KineticResult", "acr_acrr", "AcrResult", "readout", "Readout",
-           "tangent_route", "TangentResult", "kinetic_flux_coupling", "FluxCouplingResult", "relation_values", "rate_constants", "Values", "Value",
-           "binomial_formulas", "symbolic_formulas", "Formulas", "Monomial", "__version__"]
+__all__ = [
+    # networks and preprocessing
+    "irreversible", "build_crn", "prepare", "CRN",
+    # flux balance
+    "concordance", "concordance_from_matrices", "ConcordanceResult",
+    # mass action, the basis B and its readout
+    "readout", "Readout", "RouteResult", "free_directions",
+    # reference steady state
+    "interior_flux", "steady_state_map",
+    # iterated route
+    "iterated_route",
+    # tangent route
+    "tangent_route", "tangent_space",
+    # reference-equivalent mode
+    "reference_route",
+    # flux coupling under mass action
+    "kinetic_flux_coupling", "FluxCouplingResult",
+    # values and formulas
+    "relation_values", "rate_constants", "Values", "Value",
+    "binomial_formulas", "symbolic_formulas", "Formulas", "Monomial",
+    "__version__",
+]
