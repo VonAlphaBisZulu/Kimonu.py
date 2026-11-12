@@ -45,10 +45,18 @@ def exact(triples, shape):
 
 
 def matrix_product(A, K):
-    """A·K for an integer matrix A (the complex incidence matrix) and any exact matrix K."""
+    """A·K in row form, one {column: value} dict per row of A, for an integer matrix A (the incidence matrix).
+
+    K is any exact matrix, or a matrix in row form (a list with one {column: value} dict per row).
+    """
     k_rows = {}
-    for i, j, v in entries(K)[0]:
-        k_rows.setdefault(i, []).append((j, v))
+    if isinstance(K, list):
+        for i, row in enumerate(K):
+            if row:
+                k_rows[i] = list(row.items())
+    else:
+        for i, j, v in entries(K)[0]:
+            k_rows.setdefault(i, []).append((j, v))
     A = sparse.csr_matrix(A)
     # the result in row form: one {column: value} dict per row of A, an empty dict for a zero row
     rows = []
