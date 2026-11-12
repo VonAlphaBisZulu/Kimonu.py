@@ -92,7 +92,7 @@ PARTS = [
      "`scripts/kinetic_variants/two_point_gap.py`, run by `scripts/kinetic_variants/two_point.sbatch`"),
     ("results/kimonu/gap_experiments/gap_reduction", "Supplementary Text S6",
      "the iHN637 witness: the network reduced around the tangent-only relation of glyc3p, stage by stage",
-     "`scripts/kinetic_variants/reduce_gap.py`, `reduce_contract.py` and `reduce_stage3.py` in the same folder, each with its `.sbatch`"),
+     "`scripts/kinetic_variants/reduce_gap.py`, `reduce_contract.py` and `reduce_stage3.py` in the same folder, each run by the sbatch file of its name"),
     ("results/kimonu/uniform_flux", "Supplementary Text S8, Materials and Methods",
      "both routes at a uniformly drawn r* (64 bits) against the LP point, 33 networks",
      "`scripts/kinetic_variants/sz_flux.py`, run by `scripts/kinetic_variants/sz_flux33.sbatch`, SLURM job 572120"),
@@ -260,8 +260,9 @@ render("ZENODO_README.md", os.path.join(top, "README.md"))
 def named_paths_exist(md):
     """every backticked path of the README must exist: in the archive, in the repository at REV, or (a bare name or
     pattern) as the name of a file in either"""
-    names = {os.path.basename(f) for f in tracked} | {os.path.basename(a) for a in files} | set(os.listdir(top))
     folders = {os.path.dirname(a) for a in files} | {os.path.dirname(f) for f in tracked}
+    names = ({os.path.basename(f) for f in tracked} | {os.path.basename(a) for a in files} | set(os.listdir(top))
+             | {os.path.basename(d) for d in folders})
     bad = []
     for tok in sorted(set(re.findall(r"`([^`\s$=()]+)`", md))):
         if "/" not in tok and not re.search(r"\.(py|sbatch|sh|jl|m|R|txt|json|svg|csv|log|zip)$", tok):

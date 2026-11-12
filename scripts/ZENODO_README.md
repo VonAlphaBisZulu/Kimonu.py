@@ -70,10 +70,10 @@ tree and version, Python), and each timing arm `hardware_*.txt` (hostname, lscpu
 ## How the scripts read the archive
 
 Every script of `scripts/` finds its inputs through `scripts/records.py`, in this layout, under the folder that the
-environment variable `KIMONU_RECORDS` names (default `records/` at the top of the checkout), and writes its results
-under `KIMONU_OUT` (default `KIMONU_RECORDS`), in the same layout. To read this archive and keep it as it is, set
-`KIMONU_RECORDS` to the unpacked `Kimonu_records/` and `KIMONU_OUT` to a new folder. Figure drafts go to `drafts/` of
-`KIMONU_OUT`, and runs that no paper item reads to `experiments/`, both outside the archive.
+environment variable `KIMONU_RECORDS` names (default the folder records at the top of the checkout), and writes its
+results under `KIMONU_OUT` (default `KIMONU_RECORDS`), in the same layout. To read this archive and keep it as it is,
+set `KIMONU_RECORDS` to the unpacked folder Kimonu_records and `KIMONU_OUT` to a new folder. Figure drafts go to the
+folder drafts of `KIMONU_OUT`, and runs that no paper item reads to its folder experiments, both outside the archive.
 
 ## Software and hardware
 
