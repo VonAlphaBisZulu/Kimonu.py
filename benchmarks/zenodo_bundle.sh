@@ -19,14 +19,14 @@ OUT=${1:-${OUT:-/scratch/sadreyev_lab/pschneider/kimonu_zenodo_2026-11}}
 W=$OUT/work
 export KIMONU_REV=$(git -C $K rev-parse --short=7 "${KIMONU_REV:-HEAD}")
 
-if [ -z "${SLURM_JOB_ID:-}" ]; then
+if [ -z "${KZ_BUNDLE_JOB:-}" ]; then          # not SLURM_JOB_ID, which an interactive allocation sets too
   rm -rf "$OUT/bundle" "$OUT/upload" "$W"; mkdir -p "$W/figures/supp" "$W/logs"
   cp -p "$VAULT"/figures/*.svg "$W/figures/" && cp -p "$VAULT"/figures/supp/*.svg "$VAULT"/figures/supp/*.csv "$W/figures/supp/"
   cp -p "$VAULT/Kimonu.md" "$W/manuscript.md"
   cp -p "$0" "$W/zenodo_bundle.sh"
   echo "staged $(ls "$W/figures" "$W/figures/supp" | grep -c '\.') figure files; commit $KIMONU_REV"
   exec sbatch -J kz_bundle -p sadreyevlab -c 2 --mem=8G -t 06:00:00 -o "$W/logs/bundle_%j.log" \
-       --export=ALL,KIMONU_REV=$KIMONU_REV "$W/zenodo_bundle.sh" "$OUT"
+       --export=ALL,KZ_BUNDLE_JOB=1,KIMONU_REV=$KIMONU_REV "$W/zenodo_bundle.sh" "$OUT"
 fi
 
 SD=$HOME/miniconda3/envs/straindesign/bin/python          # Python 3.12, the environment of the runs
