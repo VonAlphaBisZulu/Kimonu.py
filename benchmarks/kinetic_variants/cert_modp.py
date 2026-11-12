@@ -5,7 +5,7 @@ generic rate constants unless r* lies on the zero set of one of finitely many po
 W(r) or J(r) = W(r) Y^T that decide its rank and whether a candidate vector (e_i, e_i - e_j, y_c - y_d) lies in
 its row space. Their entries are linear in r, so these polynomials have degree at most rank + 1. The recorded
 run used the LP point snapped exactly onto ker N (now draw="lp"), which is not a random draw, so no probability
-bound applies to it. The default uniform draw has a bound of its own.
+bound applies to it. The opt-in uniform draw has a bound of its own.
 
 Here the readout is computed once more at r' = K b, with b uniform over GF(p)^d, in arithmetic modulo p.
 A polynomial that is nonzero over Q (and not identically zero mod p) vanishes at r' with probability at most

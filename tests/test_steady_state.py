@@ -28,25 +28,26 @@ def test_the_uniform_draw_reaches_beyond_the_lp_point():
     """The uniform draw adds integers up to 2^64 to the free coordinates, so its entries are far larger, and it
     depends on the seed."""
     A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
-    lp, uniform = kimonu.interior_flux(N, draw="lp"), kimonu.interior_flux(N)
+    lp, uniform = kimonu.interior_flux(N, draw="lp"), kimonu.interior_flux(N, draw="uniform")
     assert max(uniform) > 2**64 > max(lp)
-    assert kimonu.interior_flux(N, seed=1) != uniform
-    assert kimonu.interior_flux(N) == uniform
+    assert kimonu.interior_flux(N, seed=1, draw="uniform") != uniform
+    assert kimonu.interior_flux(N, draw="uniform") == uniform
+    assert kimonu.interior_flux(N) == lp
 
 
 def test_bits_set_the_size_of_the_uniform_draw():
     """r* = K (T c + s) with s below 2^bits and T = ceil(2 · 2^bits · reach / min r_c), so r* has at most about bits
-    more bits than the LP point r_c (T is 1 while 2^bits is small against min r_c). bits=64 is the default, and the
-    LP point ignores bits."""
+    more bits than the LP point r_c (T is 1 while 2^bits is small against min r_c). bits=64 is the default of the
+    uniform draw, and the LP point (the default draw) ignores bits."""
     A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
     lp_flux = kimonu.interior_flux(N, draw="lp")
     lp = max(lp_flux).numerator.bit_length()
     for bits in (8, 20, 64):
-        flux = kimonu.interior_flux(N, bits=bits)
+        flux = kimonu.interior_flux(N, draw="uniform", bits=bits)
         assert all(x > 0 and x.denominator == 1 for x in flux) and _steady(N, flux) and flux != lp_flux
         assert max(flux).numerator.bit_length() <= lp + bits + 12
-    assert max(kimonu.interior_flux(N, bits=64)).numerator.bit_length() > lp + 40
-    assert kimonu.interior_flux(N, bits=64) == kimonu.interior_flux(N)
+    assert max(kimonu.interior_flux(N, draw="uniform", bits=64)).numerator.bit_length() > lp + 40
+    assert kimonu.interior_flux(N, draw="uniform", bits=64) == kimonu.interior_flux(N, draw="uniform")
     assert kimonu.interior_flux(N, draw="lp", bits=8) == kimonu.interior_flux(N, draw="lp")
     with pytest.raises(ValueError):
         kimonu.interior_flux(N, bits=0)

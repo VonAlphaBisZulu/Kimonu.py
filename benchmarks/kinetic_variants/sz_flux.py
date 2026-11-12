@@ -2,7 +2,7 @@
 
 kimonu.interior_flux draws r* in two ways. draw="lp" is an LP point snapped exactly onto ker(N), its free coordinates
 rounded at scale 10^6. An LP optimum is not a uniform random draw, so no probability bound applies to it.
-draw="uniform", the default since 2026-11-11, is r* = K b with b = T c + s. c holds the free coordinates of the LP
+draw="uniform", opt-in (the LP point is the default), is r* = K b with b = T c + s. c holds the free coordinates of the LP
 point, s is uniform over the integers [0, 2^bits) in every free coordinate (bits = 64 by default), and T is large
 enough that r* stays strictly positive whatever s is. A fixed shift keeps the degree of a polynomial, so a nonzero
 polynomial of degree D in b vanishes at r* with probability at most D / 2^bits (Schwartz-Zippel). The script runs both routes at both draws and
