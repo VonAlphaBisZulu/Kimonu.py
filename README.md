@@ -25,9 +25,11 @@ for every supply, as in the published tools. Attached uptakes, which fix the med
 Python 3.10 or later.
 
 ```
-pip install "straindesign>=1.19.2"
-pip install .
+pip install git+https://github.com/VonAlphaBisZulu/Kimonu.py
 ```
+
+This installs Kimonu from GitHub together with StrainDesign, COBRApy, NumPy and SciPy. From a clone of the
+repository, `pip install .` does the same.
 
 ## Try it
 
@@ -38,17 +40,34 @@ gives. The Binder badge opens it in the browser, with nothing to install.
 
 ## Use
 
+The example runs every step on `e_coli_core`, which ships with COBRApy under the name `textbook`, so nothing has to
+be downloaded.
+
 ```python
-import kimonu
+import cobra, kimonu
+model = cobra.io.load_model("textbook")     # e_coli_core, or cobra.io.read_sbml_model("network.xml")
+crn = kimonu.prepare(model)          # reversible reactions split, blocked ones removed, exact N = Y·A
+conc = kimonu.concordance(crn)       # K, M, balanced complexes and concordance modules
+it = kimonu.iterated_route(crn)      # proven kinetic modules, ACR and ACRR
+tan = kimonu.tangent_route(crn)      # every true relation, false couplings possible
+cert = kimonu.certify(crn)           # both routes at one r*: certified, proven lists, open relations
+k = kimonu.rate_constants(crn, it.flux)     # rate constants at which x = 1 is a steady state, or your own
+vals = kimonu.relation_values(crn, k)       # exact values of the relations at these rate constants
 
-crn = kimonu.prepare(model)          # a cobra model: split reversible reactions, remove blocked ones, N = Y·A
-res = kimonu.analyze(crn)            # the default, the iterated route with detached uptakes
-res.modules                          # kinetic modules, as indices into crn.complexes
-res.acr, res.acrr                    # ACR metabolites and ACRR pairs, as metabolite ids
-
-cert = kimonu.analyze(crn, route="both")    # both routes at one reference flux
-cert.certified, cert.open_acr               # whether the list is complete, and what stays open
+modules = [m for m in cert.modules if len(m) > 1]                           # a kinetic module has two or more complexes
+gap = len(cert.open_pairs) + len(cert.open_acr) + len(cert.open_acrr)       # relations only the tangent route reports
+share = sum(len(m) for m in modules) / len(crn.complexes)                   # the zero complex counts as a complex
+print(f"certified {cert.certified}, {len(modules)} kinetic modules, gap {gap}, "
+      f"{share:.1%} of {len(crn.complexes)} complexes in kinetic modules")
 ```
+
+```
+certified True, 4 kinetic modules, gap 0, 5.5% of 145 complexes in kinetic modules
+```
+
+A gap of 0 means that both routes report the same relations, so the list is complete. `kimonu.analyze(model)` is the
+default in one call, the iterated route with detached uptakes, and `kimonu.analyze(model, route="both")` returns the
+same certificate as `certify`.
 
 For a network that already comes as matrices, `crn = kimonu.crn_from_matrices(A, Y)` builds the same `CRN`, with
 N = Y·A computed exactly. Every function that reads a network takes the `CRN` first, `kimonu.iterated_route(crn)`,
