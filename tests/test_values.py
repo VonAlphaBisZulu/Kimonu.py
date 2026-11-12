@@ -1,10 +1,12 @@
-"""Value tests: the exact values of the relations at given rate constants, and the rate constants at given
-values.
+"""Value tests: the exact values of the relations at given rate constants, the rate constants at given values, and the
+monomial formulas in k from flux coupling.
 
 Closed forms pin the open network (rational values) and 0 -> X, 2X -> 0 (a square root). The round trip
 checks every relation on the toy networks: at k = r* / ψ(x) the steady state is x, so each ACR value
 must come out as x_i, each ACRR ratio as x_j / x_i and each module ratio as ψ_d(x) / ψ_c(x), exactly.
-EnvZ-OmpR, whose Yp value needs the feedback, is also checked against a simulation.
+EnvZ-OmpR, whose Yp value needs the feedback, is also checked against a simulation. The open network has one
+binomial value (b = k_0 / k_3) and one that is not (a), and two uptakes with coupled fluxes constrain k when attached.
+Every monomial, evaluated at k = r* / ψ(x), must give the exact value relation_values gives there.
 """
 from fractions import Fraction
 import random
@@ -97,3 +99,42 @@ def test_wrong_k_is_rejected():
         kimonu.relation_values(crn, [1, 2, 3])
     with pytest.raises(ValueError):
         kimonu.relation_values(crn, [1, 2, 0, 4])
+
+
+COUPLED = [("0", "A"), ("0", "B"), ("A+B", "C"), ("C", "0")]
+
+
+def test_binomial_formulas_of_the_open_network():
+    crn, _ = network(OPEN, ["a", "b"])
+    b = kimonu.binomial_formulas(crn, detach_uptakes=False)
+    assert b.acr["a"] is None and b.acr["b"].exponents == {0: 1, 3: -1} and b.acr["b"].constant == 1
+    assert b.acr["b"].format(["up", "ab", "ba", "out"]) == "k_up·k_out^-1"
+
+
+def test_coupled_uptakes_constrain_k():
+    """Attached, both uptakes run at k0 and k1 with equal fluxes: k0 = k1. Detached, nothing is constrained."""
+    crn, _ = network(COUPLED, ["A", "B", "C"])
+    b = kimonu.binomial_formulas(crn, detach_uptakes=False)
+    assert [c.exponents for c in b.constraints] in ([{0: 1, 1: -1}], [{0: -1, 1: 1}])
+    assert kimonu.binomial_formulas(crn, detach_uptakes=True).constraints == []
+
+
+@pytest.mark.parametrize("name", sorted(TOYS))
+@pytest.mark.parametrize("detach", [False, True])
+def test_monomials_give_the_exact_values(name, detach):
+    reactions, species = TOYS[name]
+    crn, _ = network(reactions, species, names=False)
+    flux = kimonu.iterated_route(crn, detach_uptakes=detach).flux
+    rng = random.Random(1)
+    k = kimonu.rate_constants(crn, flux, [Fraction(rng.randint(1, 9), rng.randint(1, 9)) for _ in species])
+    v = kimonu.relation_values(crn, k, detach_uptakes=detach)
+    b = kimonu.binomial_formulas(crn, detach_uptakes=detach)
+    assert all(c(k) == 1 for c in b.constraints)
+    assert v.acr.keys() == b.acr.keys() and dict(v.acrr).keys() == dict(b.acrr).keys()
+    assert dict(v.modules).keys() == dict(b.modules).keys()
+    pairs = [(v.acr[i], b.acr[i]) for i in v.acr]
+    for values, monomials in ((v.acrr, dict(b.acrr)), (v.modules, dict(b.modules))):
+        pairs += [(x, monomials[r][j]) for r, ratios in values for j, x in ratios.items()]
+    for exact, monomial in pairs:
+        if monomial is not None:
+            assert monomial(k) == exact
