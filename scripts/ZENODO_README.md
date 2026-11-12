@@ -1,4 +1,4 @@
-# Run records and figure data for "Exact nullspaces find and certify kinetic modules and other mass-action invariants in metabolic networks"
+# Run records and figure data for "@PAPER@"
 
 @AUTHOR@, @AFFILIATION@ (ORCID @ORCID@).
 Article DOI @ARTICLE_DOI@, archive DOI @ZENODO_DOI@.

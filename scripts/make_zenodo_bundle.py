@@ -30,8 +30,10 @@ import records
 
 CODE = (".py", ".pyc", ".sbatch", ".sh", ".R", ".m", ".jl")
 RUN_COMMIT = "451a748"          # Kimonu commit of the final runs (provenance_*.txt); later src gives the same results
-# The author, the one place to change it: README.md, CITATION.cff, the Zenodo metadata and UPLOAD.md take it from here.
+# The author, the one place to change it: README.md, CITATION.cff, the Zenodo metadata and UPLOAD.md take it from here,
+# as they take the title of the article.
 AUTHOR = dict(family="Schneider Chuzel", given="Philipp C.", orcid="0000-0001-8858-428X")
+PAPER = "Exact nullspaces certify kinetic modules and other mass-action invariants in metabolic networks"   # the title of the article
 AFFILIATION = "Department of Molecular Biology, Massachusetts General Hospital Research Institute, Massachusetts General Hospital, Boston, MA 02114, USA"
 LEFT_OUT = (records.DRAFTS, records.EXPERIMENTS)
 
@@ -239,7 +241,7 @@ layout = "| archive folder | content | feeds | produced by | files |\n|---|---|-
 layout += "".join(f"| `{d}/` | {what} | {items} | {made} | {tally(d)} |\n" for d, items, what, made in PARTS)
 layout += "".join(f"| `figures/{f}` | the published file | {item} | {made} | 1 |\n" for f, (item, made) in PUBLISHED.items())
 NAME = f"{AUTHOR['given']} {AUTHOR['family']}"                 # as a byline; "family, given" for Zenodo
-fill = {"@AUTHOR@": NAME, "@AUTHOR_FAMILY@": AUTHOR["family"], "@AUTHOR_GIVEN@": AUTHOR["given"], "@ORCID@": AUTHOR["orcid"],
+fill = {"@PAPER@": PAPER, "@AUTHOR@": NAME, "@AUTHOR_FAMILY@": AUTHOR["family"], "@AUTHOR_GIVEN@": AUTHOR["given"], "@ORCID@": AUTHOR["orcid"],
         "@AFFILIATION@": AFFILIATION, "@COMMIT@": commit, "@COMMIT_FULL@": commit_full, "@RUN_COMMIT@": RUN_COMMIT, "@DATE@": datetime.date.today().isoformat(),
         "@LAYOUT@": layout.rstrip(), "@SNAPSHOT@": snapshot, "@YEAR@": meta["RELEASE_DATE"][:4]}
 fill.update({f"@{k}@": v for k, v in meta.items()})
@@ -282,7 +284,7 @@ render("ZENODO_LICENSE", os.path.join(top, "LICENSE"))
 render(None, os.path.join(top, "CITATION.cff"), f"""cff-version: 1.2.0
 message: "If you use these records, please cite the article and this archive."
 type: dataset
-title: 'Run records and figure data for "Exact nullspaces find and certify kinetic modules and other mass-action invariants in metabolic networks"'
+title: 'Run records and figure data for "@PAPER@"'
 authors:
   - family-names: "@AUTHOR_FAMILY@"
     given-names: "@AUTHOR_GIVEN@"
@@ -302,7 +304,7 @@ keywords:
   - constraint-based modeling
 preferred-citation:
   type: article
-  title: "Exact nullspaces find and certify kinetic modules and other mass-action invariants in metabolic networks"
+  title: "@PAPER@"
   authors:
     - family-names: "@AUTHOR_FAMILY@"
       given-names: "@AUTHOR_GIVEN@"
@@ -348,6 +350,7 @@ if not MS:
 ms = open(MS, encoding="utf-8").read()
 abstract = ms[ms.index("# Abstract"):].split("\n")[2].strip()
 paper = re.search(r"\*\*Title:\*\* (.+)", ms).group(1).strip()
+assert paper == PAPER, f"the manuscript's title differs from PAPER of make_zenodo_bundle.py: {paper}"
 assert len(abstract.split()) <= 150 and not re.search(r"~~|\*\*|==", abstract + paper), "title or abstract with markup, or too long"
 REPO = "https://github.com/VonAlphaBisZulu/Kimonu.py"
 TITLE = f'Run records and figure data for "{paper}"'

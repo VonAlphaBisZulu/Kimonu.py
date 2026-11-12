@@ -1,7 +1,7 @@
 # Scripts behind the paper
 
-This folder holds every script that produced a figure, table or number of the paper "Exact nullspaces find and
-certify kinetic modules and other mass-action invariants in metabolic networks", and the frozen harness that ran
+This folder holds every script that produced a figure, table or number of the paper "Exact nullspaces certify
+kinetic modules and other mass-action invariants in metabolic networks", and the frozen harness that ran
 COCOA.jl and the reference implementation of Langary et al. (2025). The Kimonu package itself is in `../src/kimonu`.
 No results are kept in git: they are in the records folder, which is uploaded to Zenodo as it is (`ZENODO_README.md`).
 Removed and renamed files are listed in `HISTORY.md`.
@@ -16,7 +16,8 @@ it, and every script reads and writes through it. Two environment variables plac
   results. Default `records/` at the top of the checkout (ignored by git). The unpacked Zenodo archive
   (`Kimonu_records/`) is such a folder. On the cluster `records` is a link to
   `/scratch/sadreyev_lab/pschneider/kimonu_records/`, filled on 2026-11-12 from the frozen results (copies, the
-  sources left in place) and identical to the archive of build 572517.
+  sources left in place). Its files are identical to the archive of build 572517, except the figures, which
+  `zenodo_bundle.sh` copies from the vault at every build.
 - `KIMONU_OUT`, where the scripts write, in the same layout. Default `KIMONU_RECORDS`. Set it to a new folder to rerun
   a script without overwriting the records. A script reads from `KIMONU_RECORDS` only, so to feed new results into
   later scripts, point `KIMONU_RECORDS` at a folder that holds them.
