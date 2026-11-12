@@ -13,8 +13,8 @@ The default mode, one call from a cobra model:
 Conventions
     The network.  A network is a :class:`CRN`, from :func:`prepare` for a cobra model or from
         :func:`crn_from_matrices` for a network given as A and Y. Every function that reads a network takes the CRN
-        as its first argument and nothing else of it, ``iterated_route(crn)``, ``concordance(crn)``,
-        ``readout(crn, B)``. :func:`analyze` and :func:`concordance` also take a cobra model and prepare it first.
+        as its first argument, never its matrices one by one, as in ``iterated_route(crn)``, ``concordance(crn)``
+        and ``readout(crn, B)``. :func:`analyze` and :func:`concordance` also take a cobra model and prepare it.
     Matrices.  Every matrix Kimonu computes, K, M, W, Yᵀ, (YΔ)ᵀ, B and Yᵀ B, is in the row form of
         :mod:`kimonu.linalg`, a list with one row per matrix row, each row a sorted tuple of (column, value) pairs
         with exact values. Equal rows are equal tuples, so every readout groups rows in a dictionary. A is a scipy

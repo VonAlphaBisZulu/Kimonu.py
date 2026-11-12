@@ -33,8 +33,8 @@ pip install .
 
 [`examples/kimonu_examples.ipynb`](examples/kimonu_examples.ipynb) runs every call on the networks of Figures 1
 and 2 of the paper: concordance, kinetic modules, ACR and ACRR by both routes, their exact values at given rate
-constants, the rate constants for given values, and the values as formulas in the rate constants. The Binder badge
-opens it in the browser, with nothing to install.
+constants, the rate constants for given values, and the monomial formulas in the rate constants that flux coupling
+gives. The Binder badge opens it in the browser, with nothing to install.
 
 ## Use
 
@@ -50,7 +50,10 @@ cert = kimonu.analyze(crn, route="both")    # both routes at one reference flux
 cert.certified, cert.open_acr               # whether the list is complete, and what stays open
 ```
 
-For networks that already come as matrices, every function also takes A, Y and N directly.
+For a network that already comes as matrices, `crn = kimonu.crn_from_matrices(A, Y)` builds the same `CRN`, with
+N = Y·A computed exactly. Every function that reads a network takes the `CRN` first, `kimonu.iterated_route(crn)`,
+`kimonu.concordance(crn)`, `kimonu.readout(crn, B)`. Every matrix Kimonu computes (K, M, W, B and Yᵀ B) is a list of
+exact sparse rows, documented in `kimonu.linalg`.
 
 ## API
 
@@ -61,21 +64,22 @@ computes.
 |---|---|---|
 | reversible reactions split, N = Y·A with the zero complex | `irreversible`, `build_crn` (returns a `CRN`) | `io` |
 | blocked reactions (one LP), pinned rates | `prepare` | `io` |
-| K = ker(N), M = A·K, balanced and concordant complexes (Fig. 1C, E) | `concordance`, `concordance_from_matrices` | `concordance` |
+| a network given as A and Y | `crn_from_matrices` | `io` |
+| K = ker(N), M = A·K, balanced and concordant complexes (Fig. 1C, E) | `concordance` | `concordance` |
 | ACR, ACRR and kinetic modules as zero and equal rows of B (Fig. 1F) | `readout`, `RouteResult` | `readout` |
 | exact interior reference flux r* | `interior_flux` (an LP point by default, or draw "uniform" from 2^bits integers) | `steady_state` |
 | W = N diag(r*) Sᵀ (Eq. 3) | `steady_state_map` | `steady_state` |
-| iterated route, ker((YΔ)ᵀ) (Eq. 4, left) | `iterated_route`, `free_directions` | `iterated`, `readout` |
+| iterated route, ker((YΔ)ᵀ) (Eq. 4, left) | `iterated_route`, `composition_differences`, `free_directions` | `iterated`, `readout` |
 | tangent route, ker(W Yᵀ) (Eq. 4, right) | `tangent_route`, `tangent_space` | `tangent` |
 | both routes, certified or open relations | `certify` (returns a `Certificate`) | `certify` |
 | default mode from a cobra model | `analyze` (route "iterated", "tangent", "reference" or "both") | `analysis` |
 | reference-equivalent mode (upstream sets, Shinar–Feinberg rule) | `reference_route` | `reference` |
 | flux coupling under mass action, Λ = Sᵀ Yᵀ B | `kinetic_flux_coupling` | `coupling` |
-| values at given rate constants, and rate constants for given values | `relation_values`, `rate_constants` | `values` |
-| values as formulas in the rate constants | `binomial_formulas`, `symbolic_formulas` | `formulas` |
+| beyond the main text: values at given rate constants, rate constants for given values, monomial formulas | `relation_values`, `rate_constants`, `binomial_formulas` | `values` |
 
 The three routes return one `RouteResult` with the modules, ACR, ACRR, the basis B they were read from, the
-reference flux r* and the number of rounds. `kimonu.linalg` holds the exact linear algebra they share.
+reference flux r* and the number of rounds. With detached uptakes the zero complex is a module of its own, listed
+last, so the modules partition the complexes. `kimonu.linalg` holds the exact linear algebra they share.
 
 ## Tests
 
