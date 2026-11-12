@@ -16,6 +16,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+from matplotlib.transforms import blended_transform_factory
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import svg_finish, svg_panels
 
@@ -79,10 +80,12 @@ def seeds(out):
     ARMS = [("cocoa_false", "COCOA.jl, efficient=false", RED, True), ("cocoa_true", "COCOA.jl, efficient=true", RED, False),
             ("ref_sampled", "Reference, sampled (Langary et al., 2025)", BLUE, False), ("kimonu_det", "Kimonu (iterated route)", GREEN, True)]
     H = 3.9; fig = plt.figure(figsize=(W, H)); hA, gap, top = 1.15, 0.4, 0.35
+    L = 0.65                                                 # left edge of the axes: room for the "1 000 000" ticks and "count"
+    axs = []
     for k, (key, title) in enumerate([("pairs", "coupled complex pairs that change with the seed"),
                                       ("fixed_ratios", "ACR metabolites plus ACRR ratios (free) that change with the seed")]):
         y0 = H - top - (k + 1) * hA - k * gap
-        ax = fig.add_axes([0.55 / W, y0 / H, (W - 0.65) / W, hA / H])
+        ax = fig.add_axes([L / W, y0 / H, (W - 0.1 - L) / W, hA / H]); axs.append(ax)
         for j, (arm, lab, col, filled) in enumerate(ARMS):
             for i, m in enumerate(MODELS):
                 r = S.get(arm, {}).get(m)
@@ -96,6 +99,10 @@ def seeds(out):
         ax.set_yticks(ticks); ax.set_yticklabels([f"{t:,}".replace(",", " ") for t in ticks])
         strip(ax, "count", title, names=k == 1)
         fig.text(0.0, (y0 + hA + 0.3) / H, "AB"[k], **LETTER)
+    fig.canvas.draw()                                        # one x for both "count" labels, that of A (the wider ticks)
+    xA = fig.transFigure.inverted().transform((axs[0].yaxis.label.get_position()[0], 0))[0]
+    for ax in axs:
+        ax.yaxis.set_label_coords(xA, 0.5, transform=blended_transform_factory(fig.transFigure, ax.transAxes))
     hd = [Line2D([], [], ls="", marker="o" if a.startswith("kimonu") else "^" if a.startswith("cocoa") else "s", ms=4,
                  mfc=c if f else "white", mec="white" if f else c, mew=0.5 if f else 0.8, label=l) for a, l, c, f in ARMS]
     fig.legend(handles=hd, loc="upper right", bbox_to_anchor=(1.0, 1.0), frameon=False, ncol=4, handletextpad=0.2, columnspacing=1.0)
