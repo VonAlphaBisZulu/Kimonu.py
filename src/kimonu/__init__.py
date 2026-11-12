@@ -54,6 +54,8 @@ from kimonu.readout import Readout, RouteResult, free_directions, readout
 from kimonu.steady_state import interior_flux, steady_state_map
 from kimonu.iterated import iterated_route
 from kimonu.tangent import tangent_route, tangent_space
+from kimonu.certify import Certificate, certify
+from kimonu.analysis import analyze
 from kimonu.reference import reference_route
 from kimonu.coupling import FluxCouplingResult, kinetic_flux_coupling
 from kimonu.values import Value, Values, rate_constants, relation_values
@@ -73,6 +75,10 @@ __all__ = [
     "iterated_route",
     # tangent route
     "tangent_route", "tangent_space",
+    # both routes
+    "certify", "Certificate",
+    # default mode and alternatives
+    "analyze",
     # reference-equivalent mode
     "reference_route",
     # flux coupling under mass action
