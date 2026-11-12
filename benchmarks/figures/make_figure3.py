@@ -6,7 +6,7 @@ B  the tangent route at scale: the published symbolic local-ACR criterion agains
    networks and the size ladder (symbolic and exact) and the 33 models (exact, detached uptakes). Symbolic times from
    kinetic_variants/local_acr_symbolic.py ($KIMONU_LACR), exact times from kinetic_variants/timing_exclusive.sbatch
    ($KIMONU_TIMING, median of the replicates).
-C  coupled complex pairs, D ACR metabolites plus ACRR pairs among free metabolites, per arm on the eleven
+C  coupled complex pairs, D independent ACR and ACRR relations (k - 1 per ACRR group) among free metabolites, per arm on the eleven
    models where the exhaustive reference finished (bars: value or median over seeds, whiskers: seed range);
    centred titles, "count" on each y axis and one legend below both, as Figure 3A, B.
 E, F  the map of relations and methods, and what each tool computes on iLJ478 (make_fig3_methods.py).
@@ -42,7 +42,7 @@ D = json.load(open("figdata.json")); nC = D["n_complexes"]
 REF = sorted(D["ref_exh"], key=lambda m: nC[m])
 
 # the agreement the figure claims, checked on every quantity the reference reports (free and all metabolites)
-KEYS = ["balanced", "conc", "n_kinetic", "giant", "acr_free", "acrr_free", "acr", "acrr"]
+KEYS = ["balanced", "conc", "n_kinetic", "giant", "acr_free", "acrr_free", "acr", "acrr", "acrr_ratios_free", "acrr_ratios"]
 for m in REF:
     for k in KEYS:
         assert D["kimonu_ref"][m][k] == D["ref_exh"][m][k], (m, k, D["kimonu_ref"][m][k], D["ref_exh"][m][k])
@@ -65,7 +65,7 @@ ARMS = {"kimonu_det":  ("Kimonu (iterated route)",           GREEN, "o", True, "
 SHORT = {"iIS312_Trypomastigote": "iIS312 Trypomastigote", "iIS312_Amastigote": "iIS312 Amastigote",
          "iIS312_Epimastigote": "iIS312 Epimastigote", "Saha2011iRS1597": "iRS1597"}
 COLS = [("nC", "Complexes"), ("balanced", "Balanced\ncomplexes"), ("conc", "Concordance\nmodules"),
-        ("n_kinetic", "Kinetic\nmodules"), ("giant", "Largest\nmodule"), ("acr_free", "ACR\nspecies"), ("acrr_free", "ACRR\npairs")]
+        ("n_kinetic", "Kinetic\nmodules"), ("giant", "Largest\nmodule"), ("acr_free", "ACR\nspecies"), ("acrr_ratios_free", "ACRR\nratios")]
 T = {1: "1 s", 60: "1 min", 3600: "1 h", 86400: "1 day"}
 
 def seconds(arm, m):

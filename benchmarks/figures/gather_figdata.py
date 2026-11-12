@@ -16,12 +16,16 @@ att and ref, on scratch). Point them at the directories of a rerun.
 
 figdata.json schema:
   models, n_complexes[m]   (complexes without the zero complex)
-  kimonu[m], kimonu_det[m], kimonu_ref[m]: balanced, conc, n_kinetic, giant, acr, acrr, acr_free, acrr_free, seconds,
-      sec_conc, sec_kin, sec_acr
-  cocoa_false[m] / cocoa_true[m]: [{seed, balanced, conc, n_kinetic, giant, acr, acrr, acr_free, acrr_free, seconds}, ...]
-  ref_exh[m]: balanced, conc, seconds, sec_conc (+ n_kinetic, giant, acr, acrr, acr_free, acrr_free where the R stage
-      ran; retest where rejected pairs were retested)
+  kimonu[m], kimonu_det[m], kimonu_ref[m]: balanced, conc, n_kinetic, giant, acr, acrr, acr_free, acrr_free,
+      acrr_ratios, acrr_ratios_free, seconds, sec_conc, sec_kin, sec_acr
+  cocoa_false[m] / cocoa_true[m]: [{seed, balanced, conc, n_kinetic, giant, acr, acrr, acr_free, acrr_free, acrr_ratios,
+      acrr_ratios_free, seconds}, ...]
+  ref_exh[m]: balanced, conc, seconds, sec_conc (+ n_kinetic, giant, acr, acrr, acr_free, acrr_free, acrr_ratios,
+      acrr_ratios_free where the R stage ran; retest where rejected pairs were retested)
   ref_sampled[m]: [{seed, balanced, conc, seconds, ...}, ...]
+acrr and acrr_free count the ACRR pairs as each tool lists them. acrr_ratios and acrr_ratios_free count independent
+ratios, k - 1 per ACRR group of k metabolites (free: k free metabolites of a group), with the groups joined from the
+listed pairs, so they do not depend on how a tool lists its pairs. The paper counts ACRR this way.
 A network a tool did not finish within 7 days is missing from that arm.
 """
 import csv, glob, json, os, re, sys
@@ -39,6 +43,22 @@ def n_free(items, free):
     """items: metabolite names (ACR) or name pairs (ACRR); a pair is free when both members are."""
     return sum(all(x in free for x in (it if isinstance(it, list) else [it])) for it in items)
 
+def ratios(pairs, free=None):
+    """Independent ACRR ratios, k - 1 per group of k metabolites, the groups joined from the listed pairs. With free,
+    each group counts only its free metabolites (k free metabolites of a group give k - 1 free ratios)."""
+    parent = {}
+    def find(a):
+        while parent.setdefault(a, a) != a:
+            a = parent[a]
+        return a
+    for p in pairs:
+        a, b = list(p)
+        parent[find(a)] = find(b)
+    groups = {}
+    for a in list(parent):
+        groups.setdefault(find(a), set()).add(a)
+    return sum(max(len(g if free is None else g & free) - 1, 0) for g in groups.values())
+
 ATT_DIR = os.environ.get("KIMONU_ATT_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/att")
 
 def kimonu_rec(m, root=ATT_DIR):
@@ -48,17 +68,28 @@ def kimonu_rec(m, root=ATT_DIR):
     med = lambda k: sorted(r[k] for r in reps)[len(reps) // 2]
     return dict(balanced=d["n_balanced"], conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
                 acr_free=n_free(d["acr_free"], free), acrr_free=n_free(d["acrr_free"], free),
-                acr=len(d["acr"]), acrr=len(d["acrr"]), seconds=med("seconds"), sec_conc=med("seconds_concordance"),
+                acr=len(d["acr"]), acrr=len(d["acrr"]), acrr_ratios=ratios(d["acrr"]), acrr_ratios_free=ratios(d["acrr"], free),
+                seconds=med("seconds"), sec_conc=med("seconds_concordance"),
                 sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"), n_kinetic=d["n_kinetic_modules"]), d["n_complexes"]
 
 
 def kimonu_ref_rec(m):
-    """reference-equivalent mode (run_kimonu_refmode.py): the reference's definitions from null spaces"""
+    """reference-equivalent mode (run_kimonu_refmode.py): the reference's definitions from null spaces. Its records
+    hold counts and modules, so the ACRR pairs for the ratios come from the Shinar-Feinberg rule on those modules."""
     reps = [json.load(open(f)) for f in sorted(glob.glob(f"{REF_DIR}/kimonu_{m}_rep*.json"))]
     if not reps: return None
     d = reps[0]; med = lambda k: sorted(r[k] for r in reps)[len(reps) // 2]
+    sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+    from kimonu.reference import shinar_feinberg
+    from run_kimonu_crn import triplets_to_sparse
+    crn = json.load(open(f"unblocked/{m}_fixed.crn.json"))
+    mets = crn["metabolites"]; free = free_set(m)
+    acr, acrr = shinar_feinberg(triplets_to_sparse(crn["Y"], crn["n_metabolites"], crn["n_complexes"]), d["modules"])
+    pairs = [(mets[i], mets[j]) for i, j in acrr]
+    assert (len(acr), len(pairs), n_free(list(map(list, pairs)), free)) == (d["acr"], d["acrr"], d["acrr_free"]), m
     return dict(balanced=d["balanced"], conc=d["conc"], n_kinetic=d["n_kinetic"], giant=d["giant"],
                 acr=d["acr"], acrr=d["acrr"], acr_free=d["acr_free"], acrr_free=d["acrr_free"],
+                acrr_ratios=ratios(pairs), acrr_ratios_free=ratios(pairs, free),
                 seconds=med("seconds"), sec_conc=med("seconds_concordance"), sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"))
 
 def kimonu_up_rec(m):
@@ -98,7 +129,8 @@ def cocoa_recs(m, sub, tag):
         out.append(dict(seed=d["seed"], balanced=balanced, conc=sum(1 for v in sizes.values() if v > 1),
                         n_kinetic=sum(1 for v in ksizes.values() if v > 1),
                         giant=d["giant_module"], acr=len(d["acr"]), acrr=len(d["acrr"]),
-                        acr_free=n_free(d["acr"], free), acrr_free=n_free(d["acrr"], free), seconds=d["seconds"]))
+                        acr_free=n_free(d["acr"], free), acrr_free=n_free(d["acrr"], free),
+                        acrr_ratios=ratios(d["acrr"]), acrr_ratios_free=ratios(d["acrr"], free), seconds=d["seconds"]))
     return out
 
 def ref_counts(d):
@@ -140,7 +172,8 @@ def r_stage(rec, m, root, stem):
     mj = f"{root}/Results/modules_{stem}.json"
     if os.path.isfile(mj):
         rec["n_kinetic"] = sum(1 for x in json.load(open(mj))["modules"] if len(x) > 1)
-    rec.update(giant=int(v[6]), acr=int(v[14]), acrr=int(v[15]), acr_free=n_free(single, free), acrr_free=n_free(double, free))
+    rec.update(giant=int(v[6]), acr=int(v[14]), acrr=int(v[15]), acr_free=n_free(single, free), acrr_free=n_free(double, free),
+               acrr_ratios=ratios(double), acrr_ratios_free=ratios(double, free))
     assert len(single) == rec["acr"] and len(double) == rec["acrr"], (m, stem, len(single), len(double), rec)
     return rec
 

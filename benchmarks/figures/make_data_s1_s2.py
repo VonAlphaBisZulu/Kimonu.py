@@ -4,6 +4,8 @@ Data S1 (DataS1_values.csv) has one row per network, tool and mode, and for the 
 The values are those of figdata.json (gather_figdata.py). The coupled complex pairs come from figures/pair_counts.json
 (pair_sets.py), which has them for Kimonu's default and reference-equivalent mode and for the exhaustive reference on
 the 11 networks that it finished. A tool that did not finish within 7 days gets "not finished in 7 days".
+ACRR is counted as independent ratios, k - 1 per group of k metabolites (acrr_ratios, and acrr_ratios_free for k free
+metabolites of a group), as in the paper. The last two columns keep the ACRR pairs as each tool lists them.
 
 Data S2 (DataS2_uptake_acr.csv) lists every free metabolite with ACR under attached uptakes, with its compartment and
 what becomes of it under detached uptakes (ACR in both, in an ACRR group, or free). It reads the lists that
@@ -26,7 +28,8 @@ ARMS = [("kimonu_det", "Kimonu, iterated route, detached uptakes"),
         ("ref_sampled", "Reference, sampled (Langary et al., 2025)"),
         ("cocoa_false", "COCOA.jl v1.1.0, efficient=false"),
         ("cocoa_true", "COCOA.jl v1.1.0, efficient=true")]
-KEYS = ["balanced", "conc", "n_kinetic", "giant", "acr", "acrr", "acr_free", "acrr_free", "seconds"]
+KEYS = ["balanced", "conc", "n_kinetic", "giant", "acr", "acrr_ratios", "acr_free", "acrr_ratios_free", "seconds"]
+LISTED = [("acrr", "acrr_pairs_as_listed"), ("acrr_free", "acrr_pairs_as_listed_free")]
 NOT_FINISHED = "not finished in 7 days"
 
 
@@ -36,18 +39,18 @@ def data_s1(path):
     nC, n = D["n_complexes"], 0
     with open(path, "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["model", "complexes", "arm", "seed"] + KEYS + ["coupled_complex_pairs"])
+        w.writerow(["model", "complexes", "arm", "seed"] + KEYS + ["coupled_complex_pairs"] + [h for _, h in LISTED])
         for m in sorted(nC, key=lambda m: nC[m]):
             for arm, label in ARMS:
                 v = D[arm].get(m)
                 if v is None:      # only the reference and COCOA.jl have networks they did not finish
-                    w.writerow([m, nC[m], label, ""] + [NOT_FINISHED if arm.startswith(("ref", "cocoa")) else ""] * len(KEYS) + [""])
+                    w.writerow([m, nC[m], label, ""] + [NOT_FINISHED if arm.startswith(("ref", "cocoa")) else ""] * len(KEYS) + [""] * (1 + len(LISTED)))
                     n += 1
                     continue
                 pc = PC.get(m, {}).get(arm)
                 pairs = pc.get("pairs", "") if isinstance(pc, dict) else ""     # per-seed pair counts are not listed
                 for r in (v if isinstance(v, list) else [dict(v, seed="")]):
-                    w.writerow([m, nC[m], label, r.get("seed", "")] + [r.get(k, "") for k in KEYS] + [pairs])
+                    w.writerow([m, nC[m], label, r.get("seed", "")] + [r.get(k, "") for k in KEYS] + [pairs] + [r.get(k, "") for k, _ in LISTED])
                     n += 1
     return n
 

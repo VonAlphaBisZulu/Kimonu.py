@@ -1,10 +1,11 @@
 """Supplementary figures not drawn by make_figure3.py, in the figure conventions of the paper (svg_finish, svg_panels).
 
 fig. S3 (FigS_uptakes) attached against detached uptakes, per network (Kimonu, iterated route): kinetic modules (A), ACR
-                metabolites (B) and ACRR pairs (C) among free metabolites. figdata.json, arms "kimonu" (attached,
+                metabolites (B) and independent ACRR ratios (C, k - 1 per group of k) among free metabolites. figdata.json, arms "kimonu" (attached,
                 $KIMONU_ATT_DIR) and "kimonu_det" (detached, $KIMONU_DET_DIR).
 fig. S4 (FigS_seeds) relations that change with the random seed, per network and arm: coupled complex pairs (A) and ACR
-                metabolites plus ACRR pairs among free metabolites (B) found by some seeds but not by all three.
+                metabolites plus independent ACRR ratios among free metabolites (B) that differ between the seeds (the
+                rank of what some seed finds minus the rank of what all seeds share, seed_spread.py).
                 figures/seed_spread.json (seed_spread.py); Kimonu's r* seeds 0, 1, 2 change nothing.
 
     python figures/make_supp_figures.py <out_dir>        # from benchmarks/
@@ -52,7 +53,7 @@ def strip(ax, ylabel, title, names=True):
 def uptakes(out):
     H = 5.3; fig = plt.figure(figsize=(W, H))
     keys = [("n_kinetic", "kinetic modules", (1, 3000)), ("acr_free", "ACR metabolites (free)", (0.5, 300)),
-            ("acrr_free", "ACRR pairs (free)", (0.5, 3000))]
+            ("acrr_ratios_free", "ACRR ratios (free)", (0.5, 3000))]
     hA, gap, top = 1.15, 0.4, 0.35
     for k, (key, title, ylim) in enumerate(keys):
         y0 = H - top - (k + 1) * hA - k * gap
@@ -80,7 +81,7 @@ def seeds(out):
             ("ref_sampled", "Reference, sampled (Langary et al., 2025)", BLUE, False), ("kimonu_det", "Kimonu (iterated route)", GREEN, True)]
     H = 3.9; fig = plt.figure(figsize=(W, H)); hA, gap, top = 1.15, 0.4, 0.35
     for k, (key, title) in enumerate([("pairs", "coupled complex pairs that change with the seed"),
-                                      ("fixed", "ACR metabolites plus ACRR pairs (free) that change with the seed")]):
+                                      ("fixed_ratios", "ACR metabolites plus ACRR ratios (free) that change with the seed")]):
         y0 = H - top - (k + 1) * hA - k * gap
         ax = fig.add_axes([0.55 / W, y0 / H, (W - 0.65) / W, hA / H])
         for j, (arm, lab, col, filled) in enumerate(ARMS):

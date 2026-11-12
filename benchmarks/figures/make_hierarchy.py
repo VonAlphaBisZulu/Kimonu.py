@@ -4,7 +4,8 @@ Per model (ordered by number of complexes) an interval from the iterated route's
 proven for all rate constants) to the tangent route's count (upper bound, complete but with possible false
 couplings); the true count lies in between. Where both coincide the model is decided and
 gets one marker. Left: pairs of complexes with a fixed concentration ratio (kinetic coupling). Right:
-fixed metabolite relations, ACR metabolites plus ACRR pairs, free metabolites as in Figure 4. Detached
+fixed metabolite relations, ACR metabolites plus independent ACRR ratios (k - 1 per group of k free metabolites),
+free metabolites as in Figure 4. Detached
 uptakes. Data: HIERARCHY_DIR, default kinetic_variants/hierarchy_detached/<model>.json (hierarchy_detached.py from
 uptake_modes.py), the input of Figure 3A, B. HIERARCHY_DIR=kinetic_variants/hierarchy draws the attached panels of
 October (hierarchy_data.py, removed, see HISTORY.md).
@@ -38,7 +39,7 @@ assert not bad, f"iterated relations missing from the tangent route: {bad}"
 
 fig, axs = plt.subplots(1, 2, figsize=(17.5 / 2.54, HEIGHT_IN), sharex=True)
 panels = [("pairs", "coupled complex pairs", "A"),
-          (lambda r: r["acr_free"] + r["acrr_pairs_free"], "ACR metabolites + ACRR pairs (free)", "B")]
+          (lambda r: r["acr_free"] + r["acrr_ratios_free"], "ACR metabolites + ACRR ratios (free)", "B")]
 for ax, (key, ylabel, letter) in zip(axs, panels):
     get = (lambda r: r[key]) if isinstance(key, str) else key
     for x, d in enumerate(D):

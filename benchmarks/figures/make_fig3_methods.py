@@ -57,7 +57,7 @@ def draw(ax, W=7.2, H=HCD):
     text(0.27, rows[0] + ch / 2, "flux\nbalance\n$\\mathbf{N}\\mathbf{r}=\\mathbf{0}$", size=6, color=MUTE)
     text(0.27, rows[1] + ch / 2, "mass\naction\npolynomial", size=6, color=MUTE)
     cells = {(0, 0): ("flux coupling", "$\\mathbf{K}=\\ker\\mathbf{N}$"), (0, 1): ("balanced, concordance", "$\\mathbf{M}=\\mathbf{A}\\mathbf{K}$"),
-             (1, 0): ("ACR, ACRR", "$\\mathbf{B}$"), (1, 1): ("kinetic modules, ACCR", "$\\mathbf{Y}^\\top\\mathbf{B}$")}
+             (1, 0): ("ACR, ACRR", "$\\mathbf{B}$"), (1, 1): ("kinetic modules, ACRR", "$\\mathbf{Y}^\\top\\mathbf{B}$")}
     for (i, j), (a, b) in cells.items():
         box(cols[j], rows[i], cw, ch, face="white", edge="#9aa3ad")
         text(cols[j] + cw / 2, rows[i] + ch * 0.66, a, size=7)
