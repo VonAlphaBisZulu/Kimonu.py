@@ -15,8 +15,7 @@ from scipy import sparse
 from scipy.integrate import solve_ivp
 
 import kimonu
-from test_kinetic import _crn, ENVZ, ENVZ_SPECIES, OPEN
-from test_tangent import FIG1, KINASE, KINASE_SPECIES
+from networks import ENVZ, ENVZ_SPECIES, FIG1, KINASE, KINASE_SPECIES, OPEN, matrices
 
 SQRT = [("0", "X"), ("X+X", "0")]
 TOYS = {"envz": (ENVZ, ENVZ_SPECIES), "open": (OPEN, ["a", "b"]), "kinase": (KINASE, KINASE_SPECIES),
@@ -33,7 +32,7 @@ def _psi(Y, c, x):
 
 def test_open_network_closed_form():
     """0 -> a, a <-> b, b -> 0: b = k1 / k4 and a = k1 (k3 + k4) / (k2 k4); detached only a / b is left."""
-    A, Y, N, _ = _crn(OPEN, ["a", "b"])
+    A, Y, N, _ = matrices(OPEN, ["a", "b"])
     k = [2, 3, 5, 7]
     v = kimonu.relation_values(A, Y, N, k, metabolite_ids=["a", "b"], detach_uptakes=False)
     assert v.acr == {"a": Fraction(2 * 12, 3 * 7), "b": Fraction(2, 7)}
@@ -43,7 +42,7 @@ def test_open_network_closed_form():
 
 def test_square_root_value():
     """dx/dt = k1 - 2 k2 x^2: x = (k1 / 2 k2)^(1/2), irrational for k = (3, 5) and exact as a Value."""
-    A, Y, N, _ = _crn(SQRT, ["X"])
+    A, Y, N, _ = matrices(SQRT, ["X"])
     x = kimonu.relation_values(A, Y, N, [3, 5], metabolite_ids=["X"], detach_uptakes=False).acr["X"]
     assert x.rational is None and (x.r, x.b, x.q) == (1, Fraction(3, 10), 2)
     assert float(x) == pytest.approx((3 / 10) ** 0.5, rel=1e-15)
@@ -55,13 +54,13 @@ def test_square_root_value():
 def test_round_trip(name, detach):
     """At k = r* / ψ(x) every value is the one x gives it, and the relations are those of the iterated route."""
     reactions, species = TOYS[name]
-    A, Y, N, _ = _crn(reactions, species)
-    kin = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach)
+    A, Y, N, _ = matrices(reactions, species)
+    kin = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
     rng = random.Random(0)
     x = [Fraction(rng.randint(1, 9), rng.randint(1, 9)) for _ in species]
     k = kimonu.rate_constants(A, Y, kin.flux, x)
     v = kimonu.relation_values(A, Y, N, k, detach_uptakes=detach)
-    assert sorted(v.acr) == kin.known_acr
+    assert sorted(v.acr) == kin.acr
     assert v.acr == {i: x[i] for i in v.acr}
     for ref, ratios in v.acrr:
         assert ratios == {j: x[j] / x[ref] for j in ratios}
@@ -72,7 +71,7 @@ def test_round_trip(name, detach):
 
 def test_envz_yp_matches_a_simulation():
     """Yp from the exact value and from integrating the ODE to steady state, for two different totals."""
-    A, Y, N, _ = _crn(ENVZ, ENVZ_SPECIES)
+    A, Y, N, _ = matrices(ENVZ, ENVZ_SPECIES)
     k = [3, 2, 5, 2, 8, 8, 8, 7, 4, 2, 8, 1, 7, 7]
     v = kimonu.relation_values(A, Y, N, k, metabolite_ids=ENVZ_SPECIES)
     assert v.rounds == 2 and list(v.acr) == ["Yp"]
@@ -89,13 +88,13 @@ def test_envz_yp_matches_a_simulation():
 
 
 def test_rate_constants_default_to_the_flux():
-    A, Y, N, _ = _crn(OPEN, ["a", "b"])
-    flux = kimonu.kinetic_modules(A, Y, N).flux
+    A, Y, N, _ = matrices(OPEN, ["a", "b"])
+    flux = kimonu.iterated_route(A, Y, N).flux
     assert kimonu.rate_constants(A, Y, flux) == flux
 
 
 def test_wrong_k_is_rejected():
-    A, Y, N, _ = _crn(OPEN, ["a", "b"])
+    A, Y, N, _ = matrices(OPEN, ["a", "b"])
     with pytest.raises(ValueError):
         kimonu.relation_values(A, Y, N, [1, 2, 3])
     with pytest.raises(ValueError):

@@ -2,13 +2,15 @@
 a substrate and a product complex. Without that row, mass action loses the uptake rates (W u = 0 is
 then not the steady-state condition) and kinetic modules couple complexes that are not coupled."""
 import os
+from fractions import Fraction
 
 import numpy as np
 import pytest
 import cobra
 
 import kimonu
-from kimonu.io import build_crn, irreversible, zero_complexes
+from kimonu.io import build_crn, exact_matrix, irreversible, substrate_complexes, zero_complexes
+from kimonu.linalg import entries
 
 SHARED = os.environ.get(
     "KIMONU_SHARED_MODELS",
@@ -31,15 +33,16 @@ def test_zero_complex_has_its_own_row():
     A = crn.A.toarray()
     assert len(zero_complexes(crn.Y)) == 1
     assert all(sorted(A[:, j][A[:, j] != 0]) == [-1, 1] for j in range(A.shape[1]))
-    assert np.array_equal((crn.Y @ crn.A).toarray(), crn.N.toarray())
+    assert np.array_equal((crn.Y @ crn.A).toarray(), crn.N_float.toarray())
+    assert np.array_equal(crn.N.to_numpy().astype(float), crn.N_float.toarray())
+    assert isinstance(crn, kimonu.CRN) and crn.pins == {}
 
 
 def test_attached_uptake_fixes_its_product():
     """psi_0 = 1: with a constant inflow, a's steady state is fixed, as in the matrix-built test."""
     crn = build_crn(_toy())
-    kin = kimonu.kinetic_modules(crn.A, crn.Y, crn.N_exact, detach_uptakes=False)
-    acr = kimonu.acr_acrr(crn.Y, kin.modules, metabolite_ids=crn.metabolite_ids, known_acr=kin.known_acr)
-    assert "a" in acr.acr
+    it = kimonu.iterated_route(crn.A, crn.Y, crn.N, detach_uptakes=False, metabolite_ids=crn.metabolite_ids)
+    assert "a" in it.acr
 
 
 def _e_coli_core():
@@ -64,9 +67,8 @@ def test_e_coli_core_has_no_coupling_from_dropped_uptakes():
     """With the uptake rates missing from W, 2pg and 3pg came out as an ACRR pair; an exact second
     steady state with the same rate constants refutes it."""
     crn = build_crn(_e_coli_core())
-    kin = kimonu.kinetic_modules(crn.A, crn.Y, crn.N_exact, detach_uptakes=True)
-    acr = kimonu.acr_acrr(crn.Y, kin.modules, metabolite_ids=crn.metabolite_ids, known_acr=kin.known_acr)
-    assert {"2pg_c", "3pg_c"} not in [set(p) for p in acr.acrr]
+    it = kimonu.iterated_route(crn.A, crn.Y, crn.N, detach_uptakes=True, metabolite_ids=crn.metabolite_ids)
+    assert {"2pg_c", "3pg_c"} not in [set(p) for p in it.acrr]
 
 
 def _bounded(**bounds):
@@ -107,12 +109,12 @@ def test_build_crn_gives_a_reversible_reaction_two_directions_between_the_same_c
     assert crn.A.shape[0] == 3                                               # zero complex, x, y
 
 
-def test_the_kinetic_route_runs_on_a_model_with_reversible_reactions():
+def test_the_iterated_route_runs_on_a_model_with_reversible_reactions():
     """Written as one reaction, r would have to run forwards at every steady state of mass action."""
     m = _bounded(lb=-1000, ub=1000)
     crn = build_crn(m)
-    kin = kimonu.kinetic_modules(crn.A, crn.Y, crn.N_exact, detach_uptakes=True)
-    assert kin.flux and all(x > 0 for x in kin.flux)
+    it = kimonu.iterated_route(crn.A, crn.Y, crn.N, detach_uptakes=True)
+    assert it.flux and all(x > 0 for x in it.flux)
 
 
 def test_the_split_of_build_crn_is_the_split_by_hand():
@@ -131,3 +133,31 @@ def test_concordance_does_not_change_with_the_split():
         return r.n_balanced, sorted(len(g) for g in r.modules)
     m = _bounded(lb=-1000, ub=1000)
     assert sizes(kimonu.concordance(m)) == sizes(kimonu.concordance(irreversible(m)))
+
+
+def test_exact_matrix_keeps_the_declared_decimals():
+    """-7.73333333333333e-08 has a denominator of 10**22, which int64 cannot clear; Fractions stay as they are."""
+    M = exact_matrix([(0, 0, -7.73333333333333e-08), (0, 1, Fraction(1, 3))], (1, 2))
+    assert sorted(entries(M)[0]) == [(0, 0, Fraction("-7.73333333333333e-08")), (0, 1, Fraction(1, 3))]
+
+
+def test_substrate_complexes_of_the_toy():
+    """up: 0 -> a, ab: a -> b, ba: b -> a, out: b -> 0, with the complexes 0, a, b in order of first use"""
+    crn = build_crn(_toy())
+    assert crn.complexes[0] == () and substrate_complexes(crn.A) == {0: 0, 1: 1, 2: 2, 3: 2}
+
+
+def test_prepare_removes_blocked_reactions_and_leaves_the_model_alone():
+    """A dead end y -> z (nothing feeds y) is blocked, and its metabolites go with it."""
+    m = _toy()
+    y, z = cobra.Metabolite("y"), cobra.Metabolite("z")
+    dead = cobra.Reaction("dead", lower_bound=0, upper_bound=1000)
+    m.add_reactions([dead]); dead.add_metabolites({y: -1, z: 1})
+    crn = kimonu.prepare(m)
+    assert crn.reaction_ids == ["up", "ab", "ba", "out"] and crn.metabolite_ids == ["a", "b"] and crn.pins == {}
+    assert "dead" in m.reactions
+
+
+def test_prepare_splits_reversible_reactions():
+    crn = kimonu.prepare(_bounded(lb=-1000, ub=1000))
+    assert crn.reaction_ids == ["up", "r", "out", "r_rev"]

@@ -54,8 +54,8 @@ def test_fractional_coefficients_are_exact():
     assert any(float(c) != int(c) for comp in crn.complexes for _, c in comp), \
         "test model has no fractional coefficients — it cannot catch the rounding it is here to catch"
 
-    # N_exact holds the coefficients themselves, so it must reproduce S entry for entry.
-    assert np.allclose(np.asarray(crn.N_exact.to_numpy(), dtype=float), S)
+    # N holds the coefficients themselves, so it must reproduce S entry for entry.
+    assert np.allclose(np.asarray(crn.N.to_numpy(), dtype=float), S)
 
 
 def test_partition_is_internally_consistent():
@@ -110,13 +110,10 @@ TWO_FEEDS = {"k": {"U": 1}, "l": {"W": 1}, "x": {"U": 1, "W": 1}, "i": {"U": -1}
 
 
 def _coupled(model):
-    """Reaction ids grouped by proportional rows of the kernel that concordance() computes."""
-    import straindesign as sd
-    from kimonu.concordance import _pins, _with_pins
-    from kimonu.linalg import null_space_rows, proportional_classes
-    crn = build_crn(model)
-    rows = null_space_rows(_with_pins(crn.N_exact, crn.reaction_ids, _pins(model, sd.fva(model))))
-    return {frozenset(crn.reaction_ids[i] for i in c) for c in proportional_classes(rows)[1] if len(c) > 1}
+    """Reaction ids grouped by proportional rows of the kernel K that concordance() computes, with the pins."""
+    from kimonu.linalg import proportional_classes
+    res = kimonu.concordance(model)
+    return {frozenset(res.reaction_ids[i] for i in c) for c in proportional_classes(res.K)[1] if len(c) > 1}
 
 
 def test_two_equal_pins_couple_reactions_that_still_vary():
@@ -157,10 +154,15 @@ def _random_irreversible(rng):
     return m
 
 
+def _blocked(model):
+    """Reaction ids that prepare() removes, and the pins it finds"""
+    crn = kimonu.prepare(model)
+    return set(model.reactions.list_attr("id")) - set(crn.reaction_ids), crn.pins
+
+
 def test_one_lp_finds_the_blocked_reactions_of_fva():
     import cobra
     import straindesign as sd
-    from kimonu.concordance import _preprocess
     cobra.Configuration().solver = "glpk"
     rng = np.random.default_rng(0)
     seen = 0
@@ -168,28 +170,54 @@ def test_one_lp_finds_the_blocked_reactions_of_fva():
         m = _random_irreversible(rng)
         ranges = sd.fva(m, solver="glpk")
         fva = {r for r in ranges.index if abs(ranges.at[r, "maximum"]) <= 1e-9}
-        blocked, pins = _preprocess(m)
-        assert set(blocked) == fva and pins == {}
+        if fva == set(m.reactions.list_attr("id")):
+            continue                                      # nothing left to build
+        blocked, pins = _blocked(m)
+        assert blocked == fva and pins == {}
         seen += 0 < len(fva) < len(m.reactions)
     assert seen >= 10
 
 
 def test_one_lp_keeps_both_branches_that_compete_for_flux():
     """r_u = r_a + r_b: maximizing the sum of the rates under bounds can stop with r_b = 0."""
-    import cobra
-    from kimonu.concordance import _preprocess
     m = _toy({"u": {"X": 1}, "a": {"X": -1}, "b": {"X": -1}, "dead": {"Y": 1}})
-    assert _preprocess(m)[0] == ["dead"]
+    assert _blocked(m)[0] == {"dead"}
 
 
 def test_one_lp_respects_closed_reactions():
-    from kimonu.concordance import _preprocess
-    m = _toy({"u": {"X": 1}, "a": {"X": -1}})
+    m = _toy({"u": {"X": 1}, "a": {"X": -1}, "v": {"Z": 1}, "w": {"Z": -1}})
     m.reactions.get_by_id("a").upper_bound = 0
-    assert set(_preprocess(m)[0]) == {"u", "a"}
+    assert _blocked(m)[0] == {"u", "a"}
 
 
 def test_forced_flux_goes_through_fva_and_finds_pins():
-    from kimonu.concordance import _preprocess
-    blocked, pins = _preprocess(_toy(TWO_FEEDS, {"k": 5, "l": 5}))
-    assert blocked == [] and pins == {"k": Fraction(5), "l": Fraction(5)}
+    blocked, pins = _blocked(_toy(TWO_FEEDS, {"k": 5, "l": 5}))
+    assert blocked == set() and pins == {"k": Fraction(5), "l": Fraction(5)}
+
+
+def test_concordance_from_matrices_on_envz_ompr():
+    """Five balanced complexes and a seven-dimensional kernel. K is a basis of ker(N), M = A·K, and the modules are
+    the classes of proportional nonzero rows of M."""
+    from kimonu.linalg import proportional_classes
+    from networks import ENVZ, ENVZ_SPECIES, matrices
+    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
+    res = kimonu.concordance_from_matrices(A, N, complexes=cx)
+    assert res.n_balanced == 5 and res.nullity == 7 and len(res.K) == A.shape[1] and res.complexes == cx
+    Nd, Ad = N.toarray(), A.toarray()
+    for col in range(res.nullity):
+        k = [row.get(col, 0) for row in res.K]
+        assert all(sum(int(Nd[i, j]) * k[j] for j in range(len(k))) == 0 for i in range(Nd.shape[0]))
+        m = [row.get(col, 0) for row in res.M]
+        assert [sum(int(Ad[c, j]) * k[j] for j in range(len(k))) for c in range(len(cx))] == m
+    balanced, classes = proportional_classes(res.M)
+    assert balanced == res.balanced and classes == res.modules
+
+
+def test_pins_enter_concordance_from_matrices():
+    """Passing the pins of prepare() to concordance_from_matrices gives what concordance() gives."""
+    net = {"k": {"X": 1}, "y": {"Y": 1}, "m": {"X": -1, "Y": -1},
+           "l": {"W": 1}, "v": {"V": 1}, "n": {"W": -1, "V": -1}}
+    crn = kimonu.prepare(_toy(net, {"k": 2, "l": 7}))
+    with_pins = kimonu.concordance_from_matrices(crn.A, crn.N, reaction_ids=crn.reaction_ids, pins=crn.pins)
+    assert sorted(len(g) for g in with_pins.modules) == [7]
+    assert sorted(len(g) for g in kimonu.concordance_from_matrices(crn.A, crn.N).modules) == [1, 3, 3]

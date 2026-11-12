@@ -2,7 +2,7 @@
 
 Shinar & Feinberg (2010) give two biochemical networks with ACR for every choice of rate constants, by their
 deficiency-one criterion (two non-terminal complexes that differ in one species). EnvZ-OmpR, here in their form with
-seven species (test_kinetic.py has the form with ADP-bound EnvZ of Figure 1), has ACR in the phosphorylated response
+seven species (networks.py has the form with ADP-bound EnvZ of Figure 1), has ACR in the phosphorylated response
 regulator Yp. The IDHKP-IDH core, with the bifunctional kinase-phosphatase E (X1), phosphorylated IDH (X2) and IDH (X4),
 has ACR in X4. Networks 11 and 12 are the concordant network and the EnvZ-OmpR variant that the injectivity test of
 benchmarks/kinetic_variants/test_tangent_one_shot.py uses. Network 12 has ACR in F by the same criterion (B and B+F),
@@ -13,7 +13,7 @@ On all four both routes agree, so the lists are exact, and the tests also pin th
 import pytest
 
 import kimonu
-from test_kinetic import _crn
+from networks import matrices
 
 
 def _rev(a, b):
@@ -51,12 +51,11 @@ def _pairs(groups):
 def test_both_routes_give_the_known_answer(name, detach):
     reactions, species = NETWORKS[name]
     acr, acrr_groups, modules = EXPECTED[name]
-    A, Y, N, cx = _crn(reactions, species)
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach)
-    res = kimonu.acr_acrr(Y, it.modules, metabolite_ids=species, known_acr=it.known_acr)
+    A, Y, N, cx = matrices(reactions, species)
+    it = kimonu.iterated_route(A, Y, N, metabolite_ids=species, detach_uptakes=detach)
     tan = kimonu.tangent_route(A, Y, N, metabolite_ids=species, detach_uptakes=detach)
     named = lambda mods: sorted(sorted(cx[i] for i in m) for m in mods if len(m) > 1)
-    assert sorted(res.acr) == acr and sorted(tan.acr) == acr, name
-    assert sorted(tuple(sorted(p)) for p in res.acrr) == _pairs(acrr_groups), name
+    assert sorted(it.acr) == acr and sorted(tan.acr) == acr, name
+    assert sorted(tuple(sorted(p)) for p in it.acrr) == _pairs(acrr_groups), name
     assert sorted(tuple(sorted(p)) for p in tan.acrr) == _pairs(acrr_groups), name
     assert named(it.modules) == named(tan.modules) == sorted(sorted(m) for m in modules), name

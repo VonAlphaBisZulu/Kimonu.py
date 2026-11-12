@@ -12,8 +12,7 @@ import pytest
 
 import kimonu
 from kimonu.linalg import null_space_rows, proportional_classes
-from test_kinetic import _crn, ENVZ, ENVZ_SPECIES, OPEN
-from test_tangent import K, KINASE, KINASE_SPECIES, TOYS
+from networks import ENVZ, ENVZ_SPECIES, K, KINASE, KINASE_SPECIES, OPEN, TOYS, matrices
 
 
 def _pairs(groups):
@@ -42,7 +41,7 @@ def test_open_network_by_hand():
     the steady state fixes x_a / x_b = (k3 + k4) / k2, so a and b form a module and all four rates are
     coupled. Detached, the supply is free and no rate is fixed; attached, a and b have ACR and every rate
     is fixed."""
-    A, Y, N, cx = _crn(OPEN, ["a", "b"])
+    A, Y, N, cx = matrices(OPEN, ["a", "b"])
     assert _pairs(_flux_balance(N)) == {(0, 3)}
     for route in ("iterated", "tangent"):
         detached = kimonu.kinetic_flux_coupling(A, Y, N, route=route)
@@ -55,7 +54,7 @@ def test_open_network_by_hand():
 def test_envz_every_rate_in_one_class():
     """All substrate complexes of EnvZ-OmpR lie in one kinetic module, so every rate keeps a fixed ratio to
     every other, while flux balance couples only XD <-> X and XT -> Xp with XpY -> X + Yp."""
-    A, Y, N, cx = _crn(ENVZ, ENVZ_SPECIES)
+    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
     assert sorted(sorted(g) for g in _flux_balance(N) if len(g) > 1) == [[0, 1], [4, 7]]
     for route in ("iterated", "tangent"):
         found = kimonu.kinetic_flux_coupling(A, Y, N, route=route)
@@ -67,7 +66,7 @@ def test_flux_balance_and_both_routes_nest():
     """flux balance ⊆ iterated ⊆ tangent for the coupled pairs, iterated ⊆ tangent for the fixed rates,
     and a fixed rate fixes its whole class, on every toy network in both uptake modes."""
     for name, (R, S) in TOYS.items():
-        A, Y, N, cx = _crn(R, S)
+        A, Y, N, cx = matrices(R, S)
         fb = _pairs(_flux_balance(N))
         for detach in (True, False):
             it = kimonu.kinetic_flux_coupling(A, Y, N, detach_uptakes=detach)
@@ -82,11 +81,11 @@ def test_flux_balance_and_both_routes_nest():
 
 def test_classes_lift_the_kinetic_modules():
     """Two reactions whose substrate complexes share a kinetic module share a class, and two reactions that
-    leave complexes (not detached sources) share a class only when their complexes share a module."""
+    consume complexes (not detached sources) share a class only when their complexes share a module."""
     for name, (R, S) in TOYS.items():
-        A, Y, N, cx = _crn(R, S)
+        A, Y, N, cx = matrices(R, S)
         for detach in (True, False):
-            for route, modules in (("iterated", kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach).modules),
+            for route, modules in (("iterated", kimonu.iterated_route(A, Y, N, detach_uptakes=detach).modules),
                                    ("tangent", kimonu.tangent_route(A, Y, N, detach_uptakes=detach).modules)):
                 found = kimonu.kinetic_flux_coupling(A, Y, N, detach_uptakes=detach, route=route)
                 module_of = {c: k for k, g in enumerate(modules) for c in g}
@@ -102,7 +101,7 @@ def test_kinase_two_steady_states():
     iterated route couples r3 and r5 and fixes the uptake, and both hold at both states. The tangent route
     calls every rate fixed, which holds near each state but not across them: r3, r4 and r5 differ. The true
     fixed rates are r0, r1 and r2, since X has ACR."""
-    A, Y, N, cx = _crn(KINASE, KINASE_SPECIES)
+    A, Y, N, cx = matrices(KINASE, KINASE_SPECIES)
     r1, r2 = (_rates({"X": 10, "C": c, "P": p}) for c, p in ((1, 4), (4, 1)))
     it = kimonu.kinetic_flux_coupling(A, Y, N, detach_uptakes=False)
     assert [sorted(g) for g in it.classes if len(g) > 1] == [[3, 5]] and it.fixed_rate == [0]
@@ -116,7 +115,7 @@ def test_kinase_two_steady_states():
 def test_ratio_is_the_ratio_at_the_reference_flux():
     """For the rate constants k = r*, the open network detached has the steady states x = t·1 with source
     u = t, and every rate is t·r*_j, so coupled rates keep the ratio r*_i / r*_j."""
-    A, Y, N, cx = _crn(OPEN, ["a", "b"])
+    A, Y, N, cx = matrices(OPEN, ["a", "b"])
     found = kimonu.kinetic_flux_coupling(A, Y, N)
     r = found.flux
     for t in (Fraction(1, 3), Fraction(7, 2)):
@@ -130,6 +129,6 @@ def test_ratio_is_the_ratio_at_the_reference_flux():
 
 
 def test_unknown_route():
-    A, Y, N, cx = _crn(OPEN, ["a", "b"])
+    A, Y, N, cx = matrices(OPEN, ["a", "b"])
     with pytest.raises(ValueError):
         kimonu.kinetic_flux_coupling(A, Y, N, route="sampling")
