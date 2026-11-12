@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=kimonu_time
-#SBATCH --partition=defq
-#SBATCH --exclude=node[06-09,16]
+#SBATCH --partition=sadreyevlab
 #SBATCH --nodes=1
 #SBATCH --exclusive
 #SBATCH --cpus-per-task=1
@@ -12,7 +11,8 @@
 # Arms ($@): det (iterated route, detached), att (attached), ref (reference-equivalent mode), tan and tanatt (tangent
 # route, detached and attached), small (tangent route on the small networks and the ladder). Three runs per network, with
 # seeds 0, 1, 2 of the interior flux r*; the reference-equivalent mode has no r* and repeats one computation. A cell whose
-# output exists is skipped, so a rerun picks up where a job stopped.
+# output exists is skipped, so a rerun picks up where a job stopped. Each arm's directory gets the job's provenance and
+# the node's hardware (kinetic_variants/provenance.sh). The nodes of partition sadreyevlab are Xeon Silver 4314.
 #   sbatch [--mem=2G] timing_exclusive.sbatch det att ref
 cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
 SD=${SD_TREE:-$HOME/sd-kernel-nonzeros}
@@ -22,6 +22,7 @@ PY=$HOME/miniconda3/envs/straindesign/bin/python
 CORE=$($PY -c "import os; print(min(os.sched_getaffinity(0)))")
 echo "$(hostname) core $CORE of $(nproc) | kimonu $(git -C .. rev-parse --short HEAD) | straindesign $(git -C $SD rev-parse --short HEAD) | $(date -Is)"
 squeue -h -w "$(hostname)" -o "%i %u %j" | head -5
+for arm in "$@"; do bash kinetic_variants/provenance.sh "$OUT/$arm" hw; done
 models() { for c in unblocked/*_fixed.crn.json; do basename "$c" _fixed.crn.json; done; }
 cell() {  # dest, command...
   local dest=$1; shift

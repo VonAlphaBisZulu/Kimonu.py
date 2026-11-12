@@ -11,6 +11,8 @@ and, on the gap models, the 31/6/14 relations and 21/3/7 directions; that is the
 
     python kinetic_variants/uptake_modes.py <model>            -> kinetic_variants/uptake_modes/<model>.json
     python kinetic_variants/uptake_modes.py <model> detached   -> kinetic_variants/uptake_modes/<model>.detached.json
+
+UM_OUT replaces the output directory kinetic_variants/uptake_modes (a rerun).
 """
 import json, os, sys, time
 import numpy as np
@@ -99,5 +101,6 @@ if __name__ == "__main__":
             continue
         out[name] = mode(crn, A, Y, N, det, free)
         print(M, name, json.dumps({k: v for k, v in out[name].items() if k != "relations"}), flush=True)
-    os.makedirs(f"{B}/kinetic_variants/uptake_modes", exist_ok=True)
-    json.dump(out, open(f"{B}/kinetic_variants/uptake_modes/{M}{''.join('.' + o for o in only)}.json", "w"), indent=1)
+    D = os.environ.get("UM_OUT", f"{B}/kinetic_variants/uptake_modes")
+    os.makedirs(D, exist_ok=True)
+    json.dump(out, open(f"{D}/{M}{''.join('.' + o for o in only)}.json", "w"), indent=1)

@@ -32,6 +32,8 @@ to a fixed complex (field fixed_rate_src). The tangent route runs on every model
 sources need it) and, with attached uptakes, only where that record reports a gap.
 
     python kinetic_variants/fb_vs_ma.py <model> [attached]   -> kinetic_variants/fb_vs_ma/<model>.json
+
+UM_DIR replaces the record checked against (kinetic_variants/uptake_modes) and FB_OUT the output directory.
 """
 import json, os, sys, time
 from collections import Counter
@@ -185,7 +187,7 @@ if __name__ == "__main__":
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
-    f = f"{B}/kinetic_variants/uptake_modes/{M}.json"; one = f.replace(".json", f".{name}.json")
+    f = f"{os.environ.get('UM_DIR', B + '/kinetic_variants/uptake_modes')}/{M}.json"; one = f.replace(".json", f".{name}.json")
     stored = json.load(open(one if os.path.exists(one) else f))[name]
     substrate, zero = substrate_complexes(A), zero_complexes(Y)
     column, sources = {}, {}                      # the column of W that carries each reaction, as in steady_state_map
@@ -234,6 +236,7 @@ if __name__ == "__main__":
     else:
         assert all(stored["it"][k] == stored["tan"][k] for k in ("modules", "giant", "pairs")), M
         out["rates_routes_agree"] = True          # no sources and equal modules: equal rate classes
-    os.makedirs(f"{B}/kinetic_variants/fb_vs_ma", exist_ok=True)
-    json.dump(out, open(f"{B}/kinetic_variants/fb_vs_ma/{M}{'' if detach else '.attached'}.json", "w"), indent=1)
+    D = os.environ.get("FB_OUT", f"{B}/kinetic_variants/fb_vs_ma")
+    os.makedirs(D, exist_ok=True)
+    json.dump(out, open(f"{D}/{M}{'' if detach else '.attached'}.json", "w"), indent=1)
     print(M, name, json.dumps(out), flush=True)

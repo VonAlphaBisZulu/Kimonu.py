@@ -12,6 +12,8 @@ counts of this run must reproduce the record of uptake_modes.py (modules, giant,
 two free counts); that is the check of this script.
 
     python kinetic_variants/member_counts.py <model> [attached]   -> kinetic_variants/member_counts/<model>.json
+
+UM_DIR replaces the record checked against (kinetic_variants/uptake_modes) and MC_OUT the output directory.
 """
 import json, os, sys, time
 import numpy as np
@@ -50,7 +52,7 @@ if __name__ == "__main__":
     N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
     mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
     free = set(range(mets.index("E_1") if "E_1" in mets else nm))
-    f = f"{B}/kinetic_variants/uptake_modes/{M}.json"; one = f.replace(".json", f".{name}.json")
+    f = f"{os.environ.get('UM_DIR', B + '/kinetic_variants/uptake_modes')}/{M}.json"; one = f.replace(".json", f".{name}.json")
     stored = json.load(open(one if os.path.exists(one) else f))[name]
     out = dict(model=M, uptakes=name, n_complexes=nc, n_metabolites=nm, n_free=len(free), gap=stored["gap"])
     t0 = time.time()
@@ -67,7 +69,8 @@ if __name__ == "__main__":
         out["seconds_tangent"] = time.time() - t0
     else:
         assert all(stored["it"][k] == stored["tan"][k] for k in KEYS), M
-    os.makedirs(f"{B}/kinetic_variants/member_counts", exist_ok=True)
-    json.dump(out, open(f"{B}/kinetic_variants/member_counts/{M}{'' if detach else '.attached'}.json", "w"), indent=1)
+    D = os.environ.get("MC_OUT", f"{B}/kinetic_variants/member_counts")
+    os.makedirs(D, exist_ok=True)
+    json.dump(out, open(f"{D}/{M}{'' if detach else '.attached'}.json", "w"), indent=1)
     print(M, name, json.dumps({k: v for k, v in out.items() if k not in ("it", "tan")}),
           {k: v for k, v in out["it"].items() if "sizes" not in k}, flush=True)

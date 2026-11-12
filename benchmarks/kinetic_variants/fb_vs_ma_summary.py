@@ -4,7 +4,7 @@
 """
 import csv, json, os, statistics, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-D = f"{B}/kinetic_variants/fb_vs_ma"
+D = os.environ.get("FB_OUT", f"{B}/kinetic_variants/fb_vs_ma")   # FB_OUT: a rerun
 models = [l.strip() for l in open(f"{B}/kinetic_variants/models33.txt") if l.strip()]
 
 

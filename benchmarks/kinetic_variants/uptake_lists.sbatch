@@ -6,8 +6,12 @@
 #SBATCH --time=0-02:00:00
 #SBATCH --array=1-33
 #SBATCH --output=/scratch/sadreyev_lab/pschneider/kimonu_uptake_modes/logs/ul_%A_%a.log
-# one model per task: iterated ACR / ACRR lists, attached and detached uptakes
+# one model per task: iterated ACR / ACRR lists, attached and detached uptakes. UL_OUT replaces the output directory.
 cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
-export PYTHONPATH=$HOME/sd-scip-pricing OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4
+SD=${SD_TREE:-$HOME/sd-kernel-nonzeros}
+export PYTHONPATH=$PWD:$SD OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1} OPENBLAS_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1} MKL_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1}
+OUT=${UL_OUT:-/scratch/sadreyev_lab/pschneider/kimonu_uptake_modes/lists}
 M=$(sed -n "${SLURM_ARRAY_TASK_ID}p" kinetic_variants/models33.txt)
-$HOME/miniconda3/envs/straindesign/bin/python -u kinetic_variants/uptake_lists.py "$M" /scratch/sadreyev_lab/pschneider/kimonu_uptake_modes/lists
+echo "$(hostname) | $M | kimonu $(git -C .. rev-parse --short HEAD) | straindesign $(git -C $SD describe --tags --always) | $(date -Is)"
+bash kinetic_variants/provenance.sh "$OUT"
+$HOME/miniconda3/envs/straindesign/bin/python -u kinetic_variants/uptake_lists.py "$M" "$OUT"
