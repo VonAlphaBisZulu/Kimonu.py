@@ -12,7 +12,8 @@ led to the iterated and tangent routes, earlier figure drafts and September note
 them, and no result in the paper depends on them. Every path is present at commit `3066b9b` (and up to `7fafd4a`).
 To look at or restore one, run `git show 3066b9b:benchmarks/<path>` or `git checkout 3066b9b -- benchmarks/<path>` (then `git mv` it into
 `scripts/`).
-The result folders these scripts wrote stay in place and are listed in `README.md` under "Data folders".
+The result folders these scripts wrote are in the records folder or, superseded, at the commit named in "Results out
+of git" below.
 
 Four superseded modules stay because live scripts import them. `compare.py` is imported by
 `matlab_reference/retest_pairs.py`, `kinetic_variants/tangent_fast.py` and `tangent_one_shot.py` by the
@@ -154,3 +155,43 @@ of the records.
 | `CM_OUT`, `BF_OUT`, `RV_OUT`, `SEED_OUT`, `SR_OUT`, `ZM_OUT`, `REFMOD_OUT` | `experiments/<script>/` (runs no paper item reads) |
 
 `link_records.sh` of the archive is gone as well, since the scripts read the unpacked archive directly.
+
+## Results out of git (2026-11-12)
+Git keeps code, documentation and the small inputs the scripts need (cell and model lists, the Julia project, the
+compat shims, hand-made figure inputs). Every result file it tracked was removed from the working tree on 2026-11-12,
+1,361 files and 312 MB. Each is present at commit `509f968` (`git show 509f968:scripts/<path>`). The 891 files that the
+paper reads, or that back a Supplement statement, are in the records folder (and the Zenodo archive), byte-identical,
+at these places.
+
+| in git until 509f968 (under `scripts/`) | folder of the records |
+|---|---|
+| `unblocked/*_fixed.crn.json` | `networks/unblocked/` |
+| `sweep/*_fixed.crn.json` | `networks/with_blocked_reactions/` |
+| `coupling_exact/*.mat` | `networks/reference_coupling_matrices/` |
+| `deficiency/deficiency_33.json`, `deficiency_kuken12.json` | `networks/deficiency/` |
+| `kinetic_variants/uptake_modes/`, `hierarchy_detached/`, `member_counts/` | `results/kimonu/` (same names) |
+| `kinetic_variants/fb_vs_ma/` | `results/kimonu/flux_balance_vs_mass_action/` |
+| `kinetic_variants/second_order_results/` | `results/kimonu/second_order/` |
+| `kinetic_variants/injectivity_results/`, `descartes_*.json`, `autonomous_blocks_33.jsonl` | `results/kimonu/gap_experiments/` (`injectivity/`, `descartes/`, `autonomous_blocks/`) |
+| `kinetic_variants/two_point_*.json`, `witness_*.json` | `results/kimonu/gap_experiments/two_point/`, `gap_reduction/` |
+| `kinetic_variants/one_lp_results.log` | `results/kimonu/one_lp_vs_fva/` |
+| `sweep_shared/`, `sweep_tentative/`, `kinetic_variants/s210_*.json` | `results/kimonu/upstream_set_route_2026-09/` (`kimonu_runs/`, `overlap_merge_logs/`, `shinar_feinberg_rule/`) |
+| `reference_final/`, `reference_final_sampled/` | `results/reference/exhaustive/`, `sampled/` |
+| `reference_fixed/`, `reference_fixed2/` | `results/reference/fork_gate_runs/fixed/`, `fixed2/` |
+| `cocoa_loop/comparison_7models.json`, `matlab_reference/cocoa_isolation/iCN900_kimonu_partition.json` | `results/cocoa_jl/kinetic_stage_on_kimonu_partition/` |
+| `hardware_record.json` | `results/hardware/` |
+| `figdata.json`, `figures/pair_counts.json`, `pair_sets.json`, `seed_spread.json`, `reference_rstage_end.json` | `figures/source_data/` |
+
+The other 470 files were superseded, and no script reads them. These are `kinetic_variants/hierarchy/` (attached
+uptakes, October), `local_acr_results/`, `tangent_float_results/`, `closure_*`, `fast_*`, `psi_*` and `tangent_*`
+JSON files (September and October experiments), `natural_example_hits.json` and `terminal_join_33.jsonl` (one-off
+checks), `sweep/kimonu_*_fixed.json` and `sweep/sweep.json` (August), `reference/`, `reference_full/`,
+`reference_sampled/`, `reference_sampled_seeds/` and `reference_acr/` (reference runs before the adaptations of the
+fork, never reported), the figure drafts `figures/main/`, `figures/prelim/` and `figures/supp/` (the published figures
+are in the vault and the archive), and the drafts and pages of `docs/examples/` (`Figure1_draft.*`,
+`Figure2_toy_draft.*`, `figure1_top_draft.svg`, `figure1_phil_2026-10-14.svg`, `langary_network_*.svg`,
+`net_fork.svg`, `walkthrough.css`). The git-ignored results of the checkout (`sweep/cocoa_v110/`, `sweep/cocoa_eff/`,
+the stage logs of `reference_final*/`, the August and September folders `triplicate*/`, `sweep_unblocked/`,
+`archive/`, `processed/`, `published/`, `results/`, `reference/`, `seedcheck_psi/` and the logs) were moved to
+`/scratch/sadreyev_lab/pschneider/kimonu_checkout_leftovers_2026-11-12/scripts/`, the first three after being copied
+into the records.

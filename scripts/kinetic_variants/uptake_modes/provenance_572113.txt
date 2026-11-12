@@ -1,8 +1,0 @@
-date 2026-11-11T20:51:28-05:00
-host node07
-job 572113
-kimonu 611736653e4881f60e0acb1581d30e2f6a517c1c
-kimonu_uncommitted_files 0
-straindesign_tree /home/sadreyev_lab/pschneider/sd-kernel-nonzeros
-straindesign v1.19.2 71439045c2d83d94e6609cc9262f1c39253f0f0f
-python Python 3.12.12

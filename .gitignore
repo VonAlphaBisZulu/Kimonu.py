@@ -216,24 +216,26 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-scripts/processed/
-scripts/results/
-scripts/*.log
-scripts/julia/Manifest.toml
-scripts/published/
 
-# benchmark outputs: large, regenerable, and archived separately by archive_results.sh
-scripts/sweep/
-scripts/sweep_unblocked/
-scripts/triplicate*/
-scripts/reference/
-scripts/archive/
-scripts/unblocked/*.log
+# Results are never committed. Every script writes them to the records folder (scripts/records.py, KIMONU_OUT), which
+# goes to Zenodo. These rules keep results that land in the checkout out of git.
+/records
+scripts/**/*.json
+scripts/**/*.jsonl
+scripts/**/*.mat
+scripts/**/*.RData
+scripts/**/*.csv
+scripts/**/*.npz
+scripts/**/*.pkl
+scripts/**/*.png
+scripts/**/*.pdf
+scripts/**/*.log
+scripts/**/provenance_*.txt
+scripts/**/hardware_*.txt
+scripts/figures/**/*.svg
+scripts/kinetic_variants/**/*.svg
+scripts/julia_v110/Manifest.toml.*
 octave-workspace
-scripts/seedcheck_psi/
 
 # SLURM logs that land in the submit directory
 slurm-*.out
-
-# the records folder (scripts/records.py, KIMONU_RECORDS): results go to Zenodo, never into git
-/records
