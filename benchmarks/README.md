@@ -136,7 +136,11 @@ One-off runs whose result the Supplement states in words. `kinetic_variants/READ
 
 - `figures/svg_finish.py`, `svg_panels.py` (fonts, size, panel groups of every SVG), `fonts_single_family.py`,
   `docs/examples/network/latex_text.py` (formulas as outlines).
-- `figures/record_inputs.py` (records the files a script reads) and `make_zenodo_bundle.py` (the Zenodo archive).
+- `figures/record_inputs.py` (records the files a script reads) and `make_zenodo_bundle.py` (the Zenodo archive, with
+  `ZENODO_README.md`, `ZENODO_LICENSE` and the upload steps `ZENODO_UPLOAD.md`). The archive checks that it holds every
+  file the recorded scripts read, and `link_records.sh` in it links the records into a checkout. `zenodo_bundle.sh`
+  runs it all in one command (`bash benchmarks/zenodo_bundle.sh`, on the login node), from copying the vault figures
+  to rebuilding the figures, tables and numbers from the finished zip.
 - `docs/paper/` (`make_bib.py`, `kimonu.bib`, `md_to_sciadv.py`, `md_to_kimonu_tex.py`, the manuscript in LaTeX).
 
 ## Tests
@@ -169,4 +173,4 @@ sz_flux_33, genericity_bound, scale_check; STATUS.md). Earlier: `kimonu_timing_s
 fva), `kimonu_timing_final/ref`, `kimonu_uptake_modes/lists`, `kimonu_float_four/parts`, `kimonu_cert_modp`,
 `kimonu_gaproots`, `kimonu_seeds`, `kimonu_trip_2026-11-02/refmode_modules`, `kimonu_second_order`, `kimonu_local_acr`,
 `kimonu_sz_flux`, `kimonu_sz_flux_33`, `kimonu_fb_vs_ma`, `kimonu_member_counts`. The Zenodo bundle of 2026-11-06 is in
-`kimonu_zenodo`.
+`kimonu_zenodo`, that of the rerun in `kimonu_zenodo_2026-11`.
