@@ -59,7 +59,7 @@ produced it (`ZENODO_README.md`, filled in by `make_zenodo_bundle.py`).
 | Fig. 4E, F (F) | `figures/fig4EF_methods_iLJ478.py`, called by `fig4_figS1_S2_benchmark.py` | `figdata.json`, `reference_final/reference_iLJ478.json`, `sweep/cocoa_eff/cell_iLJ478_seed1234.log` | same |
 | Fig. 4 on new results (K) | `figures/fig4ABF_update.py`, in place on the vault SVG, which carries Phil's Illustrator edits: moves the markers, fit lines and slopes of A, the exact-nullspace markers of B and Kimonu's times and the size of iLJ478 in F | `figdata.json` (new) and that of commit 451a748 (old), the timing arms small and tan of the rerun and of `kimonu_timing_seeds` | vault `Figure4.svg` |
 | Figs. 3, 4 in the words of the text | `figures/fig3_fig4_update_terms.py`, in place on both vault SVGs: nullspace for kernel, networks for models, the iIS312 stages as in `figures/names.py` | none | vault `Figure3.svg`, `Figure4.svg` |
-| fig. S1 (K, F) | `figures/fig4_figS1_S2_benchmark.py` | `KIMONU_REF_DIR`, `reference_final/acr/*.log`, COCOA.jl logs | `figures/supp/FigS1_stage_timing.svg` |
+| fig. S1 (K, F) | `figures/fig4_figS1_S2_benchmark.py` | `KIMONU_REF_DIR`, `reference_final/acr/*.log`, `figures/reference_rstage_end.json` (the modification times of the ACR logs, from `figures/reference_rstage_end.py`), COCOA.jl logs | `figures/supp/FigS1_stage_timing.svg` |
 | fig. S2 (K, F) | `figures/fig4_figS1_S2_benchmark.py` (asserts that the reference-equivalent mode equals the exhaustive reference) | `figdata.json` | `figures/supp/FigS2_reference_agreement.svg` |
 | fig. S3 (K) | `figures/figS3_S4_uptakes_seeds.py` | `figdata.json` (arms `kimonu`, `kimonu_det`) | `figures/supp/FigS3_uptakes.svg` |
 | fig. S4 (K, F) | `figures/figS3_S4_uptakes_seeds.py` | `figures/seed_spread.json` from `figures/seed_spread.py`, which reads the COCOA.jl and sampled-reference seeds and the three seeds of Kimonu's timing runs, scratch `kimonu_rerun_1111/timing/det` | `figures/supp/FigS4_seeds.svg` |
@@ -165,7 +165,7 @@ One-off runs whose result the Supplement states in words. `kinetic_variants/READ
 | folder | content | status |
 |---|---|---|
 | `unblocked/`, `sweep/*_fixed.crn.json`, `coupling_exact/` | the 33 networks and the coupling matrices the reference read | input, frozen |
-| `figdata.json`, `figures/pair_counts.json`, `pair_sets.json`, `seed_spread.json` | the values the figures show | paper (K, F) |
+| `figdata.json`, `figures/pair_counts.json`, `pair_sets.json`, `seed_spread.json`, `reference_rstage_end.json` | the values the figures show | paper (K, F) |
 | `kinetic_variants/uptake_modes/`, `hierarchy_detached/`, `member_counts/`, `fb_vs_ma/`, `second_order_results/`, `one_lp_results.log` | Kimonu results small enough for git | paper (K) |
 | `deficiency/deficiency_33.json` | deficiency of the 33 networks | paper (Table S2) |
 | `reference_final/`, `reference_final_sampled/` | the reference, exhaustive and sampled (stage logs git-ignored) | paper (F) |

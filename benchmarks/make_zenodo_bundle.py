@@ -143,6 +143,9 @@ PARTS = [
      "`benchmarks/figures/pair_sets.py`, as above"),
     ("figures/source_data", "figures/seed_spread.json", (PLACED, "figures"), "fig. S4", "relations that change with the seed",
      "`benchmarks/figures/seed_spread.py`, from `results/kimonu/timing/det`, `results/cocoa_jl/`, `results/reference/sampled/`"),
+    ("figures/source_data", "figures/reference_rstage_end.json", (PLACED, "figures"), "fig. S1",
+     "the end of each R stage of the exhaustive reference, the modification time of its ACR log (a zip keeps file times "
+     "to 2 s only)", "`benchmarks/figures/reference_rstage_end.py`, from `results/reference/exhaustive/acr/*.acr.log`"),
 ]
 # the published figures, Data S1 and S2 as <figures dir> must hold them, each with the script that draws or writes it
 PUBLISHED = {

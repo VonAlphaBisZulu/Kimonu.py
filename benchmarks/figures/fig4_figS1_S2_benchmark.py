@@ -19,7 +19,8 @@ fig. S1 (figures/supp/FigS1_stage_timing): where the time goes on those eleven m
    modules, ACR/ACRR), per tool, as the range over the models with the median marked. Measured vs derived:
    Kimonu's stage times are measured (median of three replicates); the reference's concordance stage is its
    own measured time, and its R stage the wall time between the chain log's start stamp and the end of its
-   ACR log (the R stage reads the stoichiometric coupling from a file, whose computation is not included);
+   ACR log (its modification time, recorded in figures/reference_rstage_end.json; the R stage reads the stoichiometric
+   coupling from a file, whose computation is not included);
    COCOA's concordance stage is its own logged "Elapsed time", which ends before kinetic_analysis is called,
    and the rest is the measured total minus that.
 
@@ -74,6 +75,8 @@ def seconds(arm, m):
     if v is None: return None
     return float(np.median([r["seconds"] for r in v])) if isinstance(v, list) else v["seconds"]
 
+RSTAGE_END = json.load(open("figures/reference_rstage_end.json"))   # end of each R stage of the reference (a zip rounds file times)
+
 def stages(arm, m):
     """(concordance stage, everything after it) in seconds for one model, or None; see the docstring for
     which part is measured and which derived."""
@@ -88,7 +91,7 @@ def stages(arm, m):
         for f in ("reference_final/acr/chain.log", "reference_final/acr/chain2.log", "reference_final/chain_553338.log",
                   "reference_final/acr/chain_retest_iIT341b.log"):
             start.update({n: dt.datetime.fromisoformat(t) for n, t in re.findall(r"^== kinetic (\S+) (\S+)$", open(f).read(), re.M)})
-        end = dt.datetime.fromtimestamp(os.path.getmtime(f"reference_final/acr/{stem}.acr.log")).astimezone()
+        end = dt.datetime.fromtimestamp(RSTAGE_END[stem]).astimezone()      # mtime of the ACR log, figures/reference_rstage_end.py
         return r["seconds"], (end - start[stem]).total_seconds()
     d, pre = {"cocoa_true": ("cocoa_eff", "cocoa_eff"), "cocoa_false": ("cocoa_v110", "cocoa_v110")}[arm]
     conc, rest = [], []
