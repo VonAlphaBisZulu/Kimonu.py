@@ -150,8 +150,8 @@ def test_two_point_envz_and_detached_uptakes():
 
 def test_injectivity_certificate_matches_the_jacobian_criterion():
     """The sign MILP (injectivity for every k on every class) against Feliu & Wiuf's determinant test, on
-    networks that are injective (dimer, heterodimer, Shinar-Feinberg's concordant network 11) and that are not
-    (the cubic, the completeness example, Shinar-Feinberg's EnvZ-OmpR network 12); every witness found is
+    networks that are injective (dimer, heterodimer, the concordant network of tests/test_shinar_feinberg.py) and that are not
+    (the cubic, the completeness example, EnvZ-OmpR); every witness found is
     rebuilt into explicit x != x' in one class and k > 0 with f_k(x) = f_k(x')"""
     from kinetic_variants.injectivity import certify_injective, realise_witness, jacobian_sign_test
     nets = {
