@@ -31,8 +31,7 @@ INK, MUTE, RULE = "#1b2430", "#6b7480", "#d5d9de"
 GREY, DARK = "#6b7480", "#3a4250"              # no colours: the two bounds differ by marker shape only
 HIERARCHY_DIR = os.environ.get("HIERARCHY_DIR", "kinetic_variants/hierarchy_detached")
 D = sorted((json.load(open(f)) for f in glob.glob(f"{HIERARCHY_DIR}/*.json")), key=lambda d: d["n_complexes"])
-SHORT = {"Chlorella_variabilis_iAJ526": "iAJ526", "Saha2011iRS1597": "iRS1597", "ArabidopsisCoreModel": "AraCore",
-         "iIS312_Trypomastigote": "iIS312 T", "iIS312_Amastigote": "iIS312 A", "iIS312_Epimastigote": "iIS312 E"}
+from names import NAME as SHORT                    # one display name per network (figures/names.py)
 LABEL_BELOW = {("A", "iCN718")}
 bad = [d["model"] for d in D if any(d["violations"].values())]
 assert not bad, f"iterated relations missing from the tangent route: {bad}"

@@ -25,8 +25,7 @@ import svg_finish, svg_panels
 src, dest = sys.argv[1], sys.argv[2]
 PAIRS = "--pairs" in sys.argv[3:]
 HIERARCHY_DIR = os.environ.get("HIERARCHY_DIR", "kinetic_variants/hierarchy_detached")
-SHORT = {"Chlorella_variabilis_iAJ526": "iAJ526", "Saha2011iRS1597": "iRS1597", "ArabidopsisCoreModel": "AraCore",
-         "iIS312_Trypomastigote": "iIS312 T", "iIS312_Amastigote": "iIS312 A", "iIS312_Epimastigote": "iIS312 E"}
+from names import NAME as SHORT                    # the tick labels of the vault file (figures/names.py)
 OLD_TITLE, NEW_TITLE = "ACR metabolites + ACRR pairs (free)", "ACR metabolites + ACRR ratios (free)"
 GREY, DARK = "#6b7480", "#3a4250"
 NS = {"s": svg_finish.SVG}

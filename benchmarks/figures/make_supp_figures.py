@@ -28,8 +28,7 @@ LETTER = dict(fontsize=18, fontweight="bold", family="Arial", color=INK, va="top
 W = 7.2
 D = json.load(open("figdata.json")); nC = D["n_complexes"]
 MODELS = sorted(D["kimonu_det"], key=lambda m: nC[m])
-SHORT = lambda m: (m.replace("Saha2011", "").replace("_Trypomastigote", " T").replace("_Amastigote", " A")
-                   .replace("_Epimastigote", " E").replace("ArabidopsisCoreModel", "AraCore").replace("Chlorella_variabilis_", ""))
+from names import network as SHORT                 # one display name per network (figures/names.py)
 
 
 def save(fig, stem, panels):

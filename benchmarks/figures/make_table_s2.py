@@ -19,9 +19,8 @@ that of Fig. 3D. Gap networks are marked with a dagger. The deficiency is given 
 import json, os, sys
 
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SHORT = {"iIS312_Trypomastigote": "iIS312 Trypomastigote", "iIS312_Amastigote": "iIS312 Amastigote",
-         "iIS312_Epimastigote": "iIS312 Epimastigote", "Saha2011iRS1597": "iRS1597",
-         "ArabidopsisCoreModel": "Arabidopsis core model", "Chlorella_variabilis_iAJ526": "iAJ526"}
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from names import NAME as SHORT                    # one display name per network (figures/names.py)
 D = json.load(open(f"{B}/figdata.json"))
 nC, det = D["n_complexes"], D["kimonu_det"]
 F = {r["model"]: r for r in json.load(open(f"{B}/deficiency/deficiency_33.json"))}

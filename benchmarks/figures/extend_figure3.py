@@ -44,7 +44,7 @@ H = H_OLD if REPLACE else round(H_OLD + ROW, 1)
 XA, XB, WAX = 48.29, 299.77, 209.95                       # the axes of A and B, which the new panels line up with
 AX_TOP, AX_H = Y0 + 19.0, 68.0
 INK, MUTE, RULE, GREY, DARK = "#1b2430", "#6b7480", "#d5d9de", "#6b7480", "#3a4250"
-SHORT = {"Chlorella_variabilis_iAJ526": "iAJ526", "Saha2011iRS1597": "iRS1597", "ArabidopsisCoreModel": "AraCore"}
+from names import NAME as SHORT                    # one display name per network (figures/names.py)
 
 plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6, "ytick.labelsize": 6,
                      "axes.linewidth": 0.6, "xtick.major.width": 0.6, "ytick.major.width": 0.6, "svg.fonttype": "none",
