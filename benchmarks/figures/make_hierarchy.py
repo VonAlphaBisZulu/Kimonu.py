@@ -68,8 +68,8 @@ axs[0].set_xlabel(""); axs[1].set_xlabel("")
 if not LEGEND_BOTTOM:
     fig.text(0.5, 0.005, "models, by number of complexes", ha="center", va="bottom", color=INK)
 bar = axs[0].errorbar([np.nan], [np.nan], yerr=[[np.nan], [np.nan]], fmt="none", ecolor=DARK, elinewidth=0.9, capsize=2.2,
-                      capthick=0.9, label="undecided: from iterated route (proven, bottom) to tangent route (local ACR, top); +n open")
-handles = [Line2D([], [], marker="o", ls="", color=GREY, ms=3.5, label="decided: iterated = tangent"), bar]
+                      capthick=0.9, label="undecided, from iterated route (proven, bottom) to tangent route (complete, top)       +n candidates that require solving polynomials")
+handles = [Line2D([], [], marker="o", ls="", color=GREY, ms=3.5, label="decided, iterated = tangent"), bar]
 if LEGEND_BOTTOM:
     fig.legend(handles=handles, loc="lower center", ncol=2, frameon=False, bbox_to_anchor=(0.5, 0.0))
     fig.tight_layout(rect=(0, 0.07, 1, 0.95))

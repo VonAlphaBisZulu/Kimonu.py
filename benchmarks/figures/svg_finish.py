@@ -323,6 +323,27 @@ def _plain_runs(root):
                 text.insert(k, n); k += 1
 
 
+def _text_fill(root):
+    """Every text carries its colour as a fill attribute, as Illustrator writes it and as the vault figures have it: a fill
+    in the style moves to the attribute, and a text without either gets the fill it inherits (black if none)."""
+    parent = {c: p for p in root.iter() for c in p}
+    for text in root.iter(f"{{{SVG}}}text"):
+        st = [kv.strip() for kv in (text.get("style") or "").split(";") if kv.strip()]
+        fills = [kv.split(":", 1)[1].strip() for kv in st if kv.split(":", 1)[0].strip() == "fill"]
+        rest = [kv for kv in st if kv.split(":", 1)[0].strip() != "fill"]
+        if rest:
+            text.set("style", "; ".join(rest))
+        elif "style" in text.attrib:
+            del text.attrib["style"]
+        if text.get("fill") is None:
+            fill, p = (fills[-1] if fills else None), parent.get(text)
+            while fill is None and p is not None:
+                fill = p.get("fill") or next((kv.split(":", 1)[1].strip() for kv in (p.get("style") or "").split(";")
+                                              if kv.split(":", 1)[0].strip() == "fill"), None)
+                p = parent.get(p)
+            text.set("fill", fill or "#000000")
+
+
 def _missing(face, chars):
     cmap = TTFont(FACES[face][0]).getBestCmap()
     return sorted(c for c in chars if ord(c) not in cmap and c.strip())
@@ -352,6 +373,7 @@ def finish(svg_text):
             el.set("font-size", f"{__import__('math').ceil(float(fs) * 2) / 2:g}")
     _math_as_text_fonts(root)
     _plain_runs(root)
+    _text_fill(root)
     used = _fix_fonts(root)
     for face, chars in used.items():
         miss = _missing(face, chars)

@@ -8,7 +8,7 @@ D  Rows: flux balance (N r = 0, linear) and mass action (polynomial in x); colum
    differ in one or two metabolites) to ACR/ACRR. The readout is zero rows (fixed) and proportional (flux
    balance) or equal (mass action, log space) rows (coupled). Below, the mass-action methods nested by what they
    report; the reference-equivalent mode is light green with a dashed edge, as in A and B.
-E  The computations per tool and stage on iLJ478 (3439 complexes), each cell in the same slots: concordance
+E  The computations per tool and stage on iLJ478 (3440 complexes), each cell in the same slots: concordance
    (test, count, pairs skipped, time) and kinetic modules with ACR/ACRR (test, input, count, ACR rule, time).
    Sources: reference_final/reference_iLJ478.json (pairs tested, concordance time); the reference R stages
    timed on scratch (ref_rstage_timing_2026-11-03, median of three); sweep/cocoa_eff/cell_iLJ478_seed1234.log
@@ -93,19 +93,20 @@ def draw(ax, W=7.2, H=HCD):
     yh = H - 0.42                              # header baseline
     text(xd + wl + wc1 / 2, yh + 0.12, "concordance", size=7, weight="bold")
     text(xd + wl + wc1 + gut + wc2 / 2, yh + 0.12, "kinetic modules, ACR, ACRR", size=7, weight="bold")
-    text(xd + wl + (wc1 + gut + wc2) / 2, H - 0.12, "iLJ478: 3439 complexes, 5.9 M complex pairs", size=6, color=MUTE)
+    n = fd["n_complexes"]["iLJ478"]                         # with the zero complex, as table S2
+    text(xd + wl + (wc1 + gut + wc2) / 2, H - 0.12, f"iLJ478, {n} complexes, {n * (n - 1) / 2e6:.1f} M complex pairs", size=6, color=MUTE)
     rh = 0.74; gap = 0.06; step, lane = 0.112, 0.185      # slot spacing; lane height above the cell bottom
-    SF = "ACR, ACRR: Shinar–Feinberg rule"
+    SF = "ACR, ACRR by Shinar–Feinberg rule"
     ROWS = [("Reference", "(Langary et\nal., 2025)", BLUE,
-             ["LPs per pair, float", "LPs on 3.54 M pairs", "skipped: 2.37 M balanced", "", "5.1 d"],
+             ["LPs per pair, float", "LPs on 3.54 M pairs", "2.37 M balanced pairs skipped", "", "5.1 d"],
              ["upstream sets, merged by overlap", "reuses concordance modules, no LP", "1 graph search per module, 1 round", SF, REF_KIN]),
             ("COCOA.jl", "", RED,
-             ["LPs per pair, float, after sampling", "LPs on 90 k pairs", "skipped: 5.82 M by three filters", "", "3.1 h"],
+             ["LPs per pair, float, after sampling", "LPs on 90 k pairs", "5.82 M skipped by three filters", "", "3.1 h"],
              ["upstream sets, merged by overlap", "reuses concordance modules, no LP", "1 graph search per module, 2 rounds", SF, "4.5 s"]),
             ("Kimonu", "", GREEN,
-             ["proportional rows of $\\mathbf{A}\\mathbf{K}$, exact", "1 nullspace: $\\ker\\mathbf{N}$", "skipped: all, one readout", "", f"{KD['sec_conc']:.1f} s"],
+             ["proportional rows of $\\mathbf{A}\\mathbf{K}$, exact", "1 nullspace, $\\ker\\mathbf{N}$", "no pair tested, one readout", "", f"{KD['sec_conc']:.1f} s"],
              ["equal rows of $\\ker\\mathbf{W}$, $\\mathbf{Y}^\\top\\ker((\\mathbf{Y}\\Delta)^\\top)$", "all of $\\ker\\mathbf{N}$ at one flux $\\mathbf{r}^{*}$, 1 LP",
-              "2 nullspaces per round, 2 rounds", "ACR, ACRR: zero and equal rows", f"{KD['sec_kin'] + KD['sec_acr']:.1f} s"])]
+              "2 nullspaces per round, 2 rounds", "ACR, ACRR from zero and equal rows", f"{KD['sec_kin'] + KD['sec_acr']:.1f} s"])]
     cell_y = []
     for k, (lab, cite, col, c1, c2) in enumerate(ROWS):
         y = yh - 0.06 - (k + 1) * rh - k * gap; cell_y.append(y)

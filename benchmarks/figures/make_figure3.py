@@ -28,7 +28,7 @@ supplementary table columns are sized from their measured text, so its axes are 
 
     python figures/make_figure3.py [out_dir]    # run from benchmarks/ after gather_figdata.py and pair_sets.py; default figures/main
 
-KIMONU_TIMING (default the paper's run, /scratch/sadreyev_lab/pschneider/kimonu_timing_seeds) holds the tangent-route
+KIMONU_TIMING (default the paper's run, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing) holds the tangent-route
 times of B, KIMONU_LACR the symbolic baselines, KIMONU_REF_DIR the runs of the reference-equivalent mode for fig. S1.
 """
 import datetime as dt, glob, json, os, re, sys, numpy as np, matplotlib
@@ -77,7 +77,7 @@ def stages(arm, m):
     """(concordance stage, everything after it) in seconds for one model, or None; see the docstring for
     which part is measured and which derived."""
     if arm == "kimonu_ref":
-        R = [json.load(open(f)) for f in sorted(glob.glob(f"{os.environ.get('KIMONU_REF_DIR', 'triplicate_refmode')}/kimonu_{m}_rep*.json"))]
+        R = [json.load(open(f)) for f in sorted(glob.glob(f"{os.environ.get('KIMONU_REF_DIR', '/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing/ref')}/kimonu_{m}_rep*.json"))]
         return (float(np.median([r["seconds_concordance"] for r in R])),
                 float(np.median([r["seconds_kinetic"] + r["seconds_acr"] for r in R]))) if R else None
     if arm == "ref_exh":
@@ -165,7 +165,7 @@ fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.06 / W, (yS - 0.
 
 # --- B: the tangent route at scale, symbolic criterion against one exact nullspace
 LACR = os.environ.get("KIMONU_LACR", "/scratch/sadreyev_lab/pschneider/kimonu_local_acr")
-TIMING = os.environ.get("KIMONU_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds")
+TIMING = os.environ.get("KIMONU_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing")
 LIMIT = 3600
 PURPLE, ORANGE = "#984EA3", "#FF7F00"
 def med_times(arm, stem=""):
@@ -178,7 +178,7 @@ rows = json.load(open(f"{LACR}/small.json")) + [json.load(open(f)) for f in sort
 axB = fig.add_axes([xB / W, yS / H, wB / W, hS / H])
 for y, lab in ((1, "1 s"), (60, "1 min")):
     axB.axhline(y, color=RULE, lw=0.5, zorder=1); axB.text(1.5, y * 1.25, lab, fontsize=6, color=MUTE, ha="left", va="bottom")
-axB.axhline(LIMIT, color=RULE, lw=0.5, zorder=1); axB.text(1.5, LIMIT * 1.25, "1 h limit (open: not finished)", fontsize=6, color=MUTE, ha="left", va="bottom")
+axB.axhline(LIMIT, color=RULE, lw=0.5, zorder=1); axB.text(1.5, LIMIT * 1.25, "1 h limit (open markers did not finish)", fontsize=6, color=MUTE, ha="left", va="bottom")
 b_handles = []
 for key, col, mk, lab in (("minors", PURPLE, "s", "Symbolic minors (Pascual-Escudero & Feliu, 2022)"),
                           ("rref", ORANGE, "^", "Symbolic elimination (same rank condition, this work)")):
@@ -190,7 +190,7 @@ for key, col, mk, lab in (("minors", PURPLE, "s", "Symbolic minors (Pascual-Escu
     b_handles.append(Line2D([], [], ls="", marker=mk, ms=4, color=col, mew=0, label=lab))
 exact = [small[r["network"]] for r in rows if r["network"] in small] + list(genome.values())
 x, y = zip(*exact); axB.scatter(x, np.maximum(y, 1e-3), s=14, color=GREEN, marker="o", edgecolor="white", linewidths=0.3, zorder=4)
-b_handles.append(Line2D([], [], ls="", marker="o", ms=4, color=GREEN, mew=0, label=f"One exact nullspace (Kimonu, tangent route)\nslowest of {len(genome)} models: {max(t for _, t in genome.values()):.0f} s, one core"))
+b_handles.append(Line2D([], [], ls="", marker="o", ms=4, color=GREEN, mew=0, label=f"One exact nullspace (Kimonu, tangent route)\nat most {max(t for _, t in genome.values()):.0f} s on {len(genome)} models, one core"))
 axB.set_xscale("log"); axB.set_yscale("log"); axB.set_xlim(1.4, 2.7e4); axB.set_ylim(6e-4, LIMIT * 6); axB.minorticks_off()
 axB.set_xticks([10, 100, 1000, 10000]); axB.set_xticklabels(["10", r"$10^2$", r"$10^3$", r"$10^4$"])
 axB.set_yticks([1e-3, 1e-2, 0.1, 1, 10, 100, 1e3]); axB.set_yticklabels(["0.001", "0.01", "0.1", "1", "10", r"$10^2$", r"$10^3$"])
