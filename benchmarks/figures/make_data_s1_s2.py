@@ -14,12 +14,14 @@ Free metabolites are those before "E_1" in that list. The script prints the tota
 
     python figures/make_data_s1_s2.py <out_dir>        # from benchmarks/
 
-UPTAKE_LISTS replaces /scratch/sadreyev_lab/pschneider/kimonu_uptake_modes/lists (e.g. a rerun).
+UPTAKE_LISTS replaces the lists of the paper, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/uptake_lists (e.g. a rerun).
+Complexes are counted as in table S2 (with the zero complex, without the complexes of no reaction), and so are the
+balanced complexes of every tool (figdata.json, gather_figdata.py).
 """
 import csv, glob, json, os, sys
 
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LISTS = os.environ.get("UPTAKE_LISTS", "/scratch/sadreyev_lab/pschneider/kimonu_uptake_modes/lists")
+LISTS = os.environ.get("UPTAKE_LISTS", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/uptake_lists")
 
 ARMS = [("kimonu_det", "Kimonu, iterated route, detached uptakes"),
         ("kimonu", "Kimonu, iterated route, attached uptakes"),
@@ -70,7 +72,7 @@ def data_s2(path):
         tot["gained"] += len(det - set(att))
         for i in att:
             comp = mets[i].rsplit("[", 1)[-1].rstrip("]") if "[" in mets[i] else mets[i].rsplit("_", 1)[-1]
-            fate = "ACR in both" if i in det else ("detached: in an ACRR group" if i in grp else "detached: free")
+            fate = "ACR in both" if i in det else ("in an ACRR group" if i in grp else "free")
             rows.append((m, mets[i], comp, fate))
             tot["attached"] += 1
             if i in det:

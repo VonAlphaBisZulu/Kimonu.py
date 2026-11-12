@@ -11,11 +11,17 @@ Free metabolites are those listed before "E_1" in the model's own metabolite lis
 
     python figures/gather_figdata.py [--check]   # --check diffs kimonu/COCOA arms against the committed file
 
-KIMONU_DET_DIR, KIMONU_ATT_DIR and KIMONU_REF_DIR default to the runs of the paper (timing_exclusive.sbatch, arms det,
-att and ref, on scratch). Point them at the directories of a rerun.
+KIMONU_DET_DIR, KIMONU_ATT_DIR and KIMONU_REF_DIR default to the runs of the paper, the arms det, att and ref of the
+rerun of 2026-11-11 (timing_exclusive.sbatch, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing). Point them at
+the directories of a rerun.
+
+Complexes are counted as in the deficiency, the zero complex included and the complexes that occur in no reaction left
+out. The crn.json lists 51 such complexes for iJB785 and 29 for iSynCJ816. Kimonu and the reference count them as
+balanced, COCOA.jl leaves them out (and the zero complex as well), so every balanced count here leaves them out, checked
+against the per-complex records of each tool.
 
 figdata.json schema:
-  models, n_complexes[m]   (complexes without the zero complex)
+  models, n_complexes[m]   (complexes as above), complexes_in_no_reaction[m]   (left out of n_complexes and balanced)
   kimonu[m], kimonu_det[m], kimonu_ref[m]: balanced, conc, n_kinetic, giant, acr, acrr, acr_free, acrr_free,
       acrr_ratios, acrr_ratios_free, seconds, sec_conc, sec_kin, sec_acr
   cocoa_false[m] / cocoa_true[m]: [{seed, balanced, conc, n_kinetic, giant, acr, acrr, acr_free, acrr_free, acrr_ratios,
@@ -31,8 +37,19 @@ A network a tool did not finish within 7 days is missing from that arm.
 import csv, glob, json, os, re, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(B)
-DET_DIR = os.environ.get("KIMONU_DET_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/det")
-REF_DIR = os.environ.get("KIMONU_REF_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_timing_final/ref")
+TIMING = "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing"
+DET_DIR = os.environ.get("KIMONU_DET_DIR", f"{TIMING}/det")
+REF_DIR = os.environ.get("KIMONU_REF_DIR", f"{TIMING}/ref")
+NO_REACTION = {}
+
+
+def complexes(m):
+    """The number of complexes as the paper counts them (the zero complex included, the complexes that occur in no
+    reaction left out) and the ids of those left out, complex_<row of A, from 1> as every tool's record names them."""
+    crn = json.load(open(f"unblocked/{m}_fixed.crn.json"))
+    used = {i for i, _, _ in crn["A"]}
+    NO_REACTION[m] = {f"complex_{c}" for c in range(1, crn["n_complexes"] + 1) if c not in used}
+    return len(used), crn["n_complexes"]
 
 def free_set(m):
     mets = json.load(open(f"unblocked/{m}_fixed.crn.json"))["metabolites"]
@@ -59,18 +76,21 @@ def ratios(pairs, free=None):
         groups.setdefault(find(a), set()).add(a)
     return sum(max(len(g if free is None else g & free) - 1, 0) for g in groups.values())
 
-ATT_DIR = os.environ.get("KIMONU_ATT_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/att")
+ATT_DIR = os.environ.get("KIMONU_ATT_DIR", f"{TIMING}/att")
 
 def kimonu_rec(m, root=ATT_DIR):
     """psi route; the replicates agree on every count, so only the times vary."""
     reps = [json.load(open(f)) for f in sorted(glob.glob(f"{root}/kimonu_{m}_rep*.json"))]
     d, free = reps[0], free_set(m)
     med = lambda k: sorted(r[k] for r in reps)[len(reps) // 2]
-    return dict(balanced=d["n_balanced"], conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
+    n, n_crn = complexes(m)
+    assert d["n_complexes"] == len(d["complexes"]) == n_crn - 1, m          # Kimonu lists all but the zero complex
+    assert all(c["module"] == 0 for c in d["complexes"] if c["id"] in NO_REACTION[m]), m   # and calls these balanced
+    return dict(balanced=d["n_balanced"] - len(NO_REACTION[m]), conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
                 acr_free=n_free(d["acr_free"], free), acrr_free=n_free(d["acrr_free"], free),
                 acr=len(d["acr"]), acrr=len(d["acrr"]), acrr_ratios=ratios(d["acrr"]), acrr_ratios_free=ratios(d["acrr"], free),
                 seconds=med("seconds"), sec_conc=med("seconds_concordance"),
-                sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"), n_kinetic=d["n_kinetic_modules"]), d["n_complexes"]
+                sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"), n_kinetic=d["n_kinetic_modules"]), n
 
 
 def kimonu_ref_rec(m):
@@ -90,18 +110,19 @@ def kimonu_ref_rec(m):
     acr, acrr = shinar_feinberg(net, d["modules"])
     pairs = [(mets[i], mets[j]) for i, j in acrr]
     assert (len(acr), len(pairs), n_free(list(map(list, pairs)), free)) == (d["acr"], d["acrr"], d["acrr_free"]), m
-    return dict(balanced=d["balanced"], conc=d["conc"], n_kinetic=d["n_kinetic"], giant=d["giant"],
+    return dict(balanced=d["balanced"] - len(NO_REACTION[m]), conc=d["conc"], n_kinetic=d["n_kinetic"], giant=d["giant"],
                 acr=d["acr"], acrr=d["acrr"], acr_free=d["acr_free"], acrr_free=d["acrr_free"],
                 acrr_ratios=ratios(pairs), acrr_ratios_free=ratios(pairs, free),
                 seconds=med("seconds"), sec_conc=med("seconds_concordance"), sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"))
 
 def kimonu_up_rec(m):
     d = json.load(open(f"sweep_shared/kimonu_{m}.json")); free = free_set(m)
-    return dict(balanced=d["n_balanced"], conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
+    assert all(c["module"] == 0 for c in d["complexes"] if c["id"] in NO_REACTION[m]), m
+    return dict(balanced=d["n_balanced"] - len(NO_REACTION[m]), conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
                 acr_free=n_free(d["acr_free"], free), acrr_free=n_free(d["acrr_free"], free),
                 acr=len(d["acr"]), acrr=len(d["acrr"]), seconds=d["seconds"], sec_conc=d["seconds_concordance"],
                 sec_kin=d["seconds_kinetic"], sec_acr=d["seconds_acr"], giant_overlap=giant_overlap(m),
-                n_kinetic=d["n_kinetic_modules"], **s210(m)), d["n_complexes"]
+                n_kinetic=d["n_kinetic_modules"], **s210(m))
 
 def s210(m):
     """ACR/ACRR by the reference's pairwise rule on the September modules, from the records of the removed
@@ -122,6 +143,7 @@ def cocoa_recs(m, sub, tag):
     out = []
     for f in sorted(glob.glob(f"sweep/{sub}/{tag}_{m}_HiGHS_p64_seed*.json")):
         d = json.load(open(f)); free = free_set(m)
+        assert d["n_complexes"] == len(d["complex_ids"]) == complexes(m)[0] - 1, m   # neither the zero complex nor those of no reaction
         cm = d["concordance_module"]; balanced = sum(1 for x in cm if x == 0)
         sizes = {}
         for x in cm:
@@ -136,11 +158,14 @@ def cocoa_recs(m, sub, tag):
                         acrr_ratios=ratios(d["acrr"]), acrr_ratios_free=ratios(d["acrr"], free), seconds=d["seconds"]))
     return out
 
-def ref_counts(d):
+def ref_counts(d, m):
+    """balanced complexes and concordance modules of two or more; the reference lists every complex of the crn.json,
+    the zero complex (module -1) and those of no reaction (module 0, balanced) included"""
+    assert len(d["complexes"]) == complexes(m)[1], m
     mods = {}
     for c in d["complexes"]:
         if c["module"] > 0: mods[c["module"]] = mods.get(c["module"], 0) + 1
-    return sum(1 for c in d["complexes"] if c["module"] == 0), sum(1 for v in mods.values() if v > 1)
+    return sum(1 for c in d["complexes"] if c["module"] == 0 and c["id"] not in NO_REACTION[m]), sum(1 for v in mods.values() if v > 1)
 
 def read_pairs(path):
     rows = list(csv.reader(open(path), delimiter=" "))[1:]
@@ -160,7 +185,7 @@ def ref_exh(m):
         f, stem = rt, f"{m}_concordant_fixed_retest"
         w = open(f"reference_final/retest/retest_{m}.txt").readline().split()
         rec["retest"] = dict(retested=int(w[1]), accepted=int(w[3]), residual=int(w[5]))
-    d = json.load(open(f)); b, c = ref_counts(d)
+    d = json.load(open(f)); b, c = ref_counts(d, m)
     rec.update(balanced=b, conc=c, seconds=d["seconds"], sec_conc=d["seconds_concordant"])
     return r_stage(rec, m, "reference_final/acr", stem)
 
@@ -183,18 +208,20 @@ def r_stage(rec, m, root, stem):
 def ref_sampled(m):
     out = []
     for f in sorted(glob.glob(f"reference_final_sampled/reference_{m}_seed*.json")):
-        d = json.load(open(f)); b, c = ref_counts(d); seed = int(re.search(r"seed(\d+)", f).group(1))
+        d = json.load(open(f)); b, c = ref_counts(d, m); seed = int(re.search(r"seed(\d+)", f).group(1))
         out.append(r_stage(dict(seed=seed, balanced=b, conc=c, seconds=d["seconds"]), m, "reference_final_sampled/acr", f"{m}_seed{seed}"))
     return out
 
 if __name__ == "__main__":
     old = json.load(open("figdata.json"))
     models = old["models"]
-    D = dict(models=models, n_complexes={}, kimonu={}, kimonu_det={}, kimonu_up={}, kimonu_ref={}, cocoa_false={}, cocoa_true={}, ref_exh={}, ref_sampled={})
+    D = dict(models=models, n_complexes={}, complexes_in_no_reaction={}, kimonu={}, kimonu_det={}, kimonu_up={}, kimonu_ref={},
+             cocoa_false={}, cocoa_true={}, ref_exh={}, ref_sampled={})
     for m in models:
         D["kimonu"][m], D["n_complexes"][m] = kimonu_rec(m)
+        D["complexes_in_no_reaction"][m] = len(NO_REACTION[m])
         D["kimonu_det"][m] = kimonu_rec(m, DET_DIR)[0]
-        D["kimonu_up"][m] = kimonu_up_rec(m)[0]
+        D["kimonu_up"][m] = kimonu_up_rec(m)
         r = kimonu_ref_rec(m)
         if r: D["kimonu_ref"][m] = r
         cf, ct = cocoa_recs(m, "cocoa_v110", "cocoa_v110"), cocoa_recs(m, "cocoa_eff", "cocoa_eff")
