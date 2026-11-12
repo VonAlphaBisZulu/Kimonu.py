@@ -27,7 +27,7 @@ plt.rcParams.update({"font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6, 
                      "ytick.major.size": 2.5, **svg_finish.mathtext_rc()})
 INK, MUTE, RULE = "#1b2430", "#6b7480", "#d5d9de"
 GREEN, BLUE, RED = "#4DAF4A", "#377EB8", "#E41A1C"
-LETTER = dict(fontsize=18, fontweight="bold", family="Arial", color=INK, va="top", ha="left")
+LETTER = dict(fontsize=10, fontweight="bold", family="Arial", color=INK, va="top", ha="left")   # panel letters 10 pt bold (Science)
 W = 7.2
 D = json.load(open(records.read(records.SOURCE_DATA, "figdata.json"))); nC = D["n_complexes"]
 MODELS = sorted(D["kimonu_det"], key=lambda m: nC[m])

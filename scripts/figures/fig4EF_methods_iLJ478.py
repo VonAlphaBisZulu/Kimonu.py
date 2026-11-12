@@ -138,7 +138,7 @@ def draw(ax, W=7.2, H=HCD):
     text(xe + 0.03, yR + 0.01, f"{KR['seconds']:.1f} s", size=6, ha="left", va="top")
 
     for L, x in (("E", 0.0), ("F", xd - 0.05)):
-        ax.text(x, H - 0.02, L, fontsize=18, fontweight="bold", family="Arial", va="top", ha="left", color=INK)
+        ax.text(x, H - 0.02, L, fontsize=10, fontweight="bold", family="Arial", va="top", ha="left", color=INK)   # panel letter, 10 pt bold
     return [t for t in ax.texts if "$" in t.get_text()]
 
 if __name__ == "__main__":

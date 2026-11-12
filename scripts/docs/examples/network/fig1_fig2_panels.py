@@ -2,7 +2,7 @@
 live Latin Modern text, then svg_finish (fonts embedded, no clipping).
 
 Size scale, shared with Figure 3 (figures/fig4_figS1_S2_benchmark.py):
-    18 bold   panel letters
+    10 bold   panel letters (Science: part labels 10 pt bold; 18 pt before 2026-11-12)
     14 bold   network nodes; 11 bold for the small copies in Figure 2D
     8 or 9    panel titles, diagram and table labels
     7         axis labels, point labels

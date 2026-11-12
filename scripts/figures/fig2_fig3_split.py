@@ -41,7 +41,7 @@ def part(panels, height, shift, relabel, fig_id):
     missing = fig.assign(panels)
     assert not missing, [svg_panels.ET.tostring(m.el)[:100] for m in missing]
     for lf in fig.leaves:                                   # panel letters
-        if lf.tag() == "text" and (lf.el.get("font-size") == "18"):
+        if lf.tag() == "text" and lf.el.get("font-size") in ("18", "10"):     # 18 pt before 2026-11-12, then 10 pt
             for e in lf.el.iter():
                 if e.text and e.text.strip() in relabel:
                     e.text = relabel[e.text.strip()]

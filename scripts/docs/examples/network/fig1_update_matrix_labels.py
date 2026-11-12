@@ -57,7 +57,7 @@ for k, letter in (("C", "C"), ("E", "E")):
     for el in panel[k].iter():
         tag = el.tag.replace(NS, "")
         txt = "".join(el.itertext()).strip() if tag == "text" else ""
-        if tag == "text" and ((el.get("font-size") == "18" and txt == letter) or (el.get("fill") == "#fff" and txt == "flux balance")):
+        if tag == "text" and ((el.get("font-size") in ("18", "10") and txt == letter) or (el.get("fill") == "#fff" and txt == "flux balance")):
             shift(el, 0, UP)
         elif tag == "path" and el.get("fill") == FB:
             shift(el, 0, UP)

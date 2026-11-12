@@ -56,7 +56,7 @@ fig.text(LEG_X / Wpt, ay(622), f"Exact rows at tolerance 0 settle\n{x['at_zero']
          f"the gap. Float rows are never\nexactly equal, so both routes find\nnothing and agree. No tolerance\n"
          f"repairs this. The SVD nullspace\ncertifies at most {max(s['certified'])} of {sum(s['exact'])}.",
          fontsize=6, color=ff.INK, va="top", ha="left", linespacing=1.25)
-LET = dict(fontsize=18, fontweight="bold", family="Arial", color=ff.INK, va="top", ha="left")
+LET = dict(fontsize=10, fontweight="bold", family="Arial", color=ff.INK, va="top", ha="left")   # panel letters 10 pt bold (Science)
 fig.text(0.0, ay(TOP + 1), "H", **LET)
 fig.text((XI - 22) / Wpt, ay(TOP + 1), "I", **LET)
 buf = io.StringIO()

@@ -61,7 +61,7 @@ plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7
                      "xtick.major.width": 0.6, "ytick.major.width": 0.6, "xtick.major.size": 2.5, "ytick.major.size": 2.5,
                      **svg_finish.mathtext_rc()})               # words Arial, formulas Latin Modern (LaTeX), both live text
 CITE = {"ref_exh": "Langary et al., 2025", "ref_sampled": "Langary et al., 2025"}   # the publication behind each reference arm
-LETTER = dict(fontsize=18, fontweight="bold", family="Arial")                 # panel letters as in Figures 1 and 2 (18 pt bold)
+LETTER = dict(fontsize=10, fontweight="bold", family="Arial")                 # panel letters 10 pt bold (Science), top left as at 18 pt (va="top")
 INK, MUTE, RULE, STRIPE = "#1b2430", "#6b7480", "#d5d9de", "#f1f3f5"
 GREEN, BLUE, RED = "#4DAF4A", "#377EB8", "#E41A1C"          # Set1, as in the earlier drafts; shapes carry identity too
 # arm: label, colour, marker, filled, fit line style

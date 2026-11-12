@@ -55,7 +55,9 @@ def t(x, y, s, size=8, fill=INK, bold=False, anchor=None):
     if anchor == "end": x -= width(s, size, BLD if bold else REG)
     return f'<text transform="translate({x:.2f} {y:.2f})" {BOLD if bold else FONT} font-size="{size}" fill="{fill}"><tspan x="0" y="0">{s}</tspan></text>'
 def letter(x, y, L):
-    return f'<text transform="translate({x} {y})" fill="{INK}" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">{L}</tspan></text>'
+    """Panel letter, 10 pt bold (Science). y is the baseline of the 18 pt letter of the draft; the top of the cap height
+    stays there (Arial Bold cap height 0.716 em)."""
+    return f'<text transform="translate({x} {y - (18 - 10) * 0.716:.3f})" fill="{INK}" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="700"><tspan x="0" y="0">{L}</tspan></text>'
 def rect(x, y, w, h, fill, rx=2, stroke=None, sw=0.8, dash=None):
     st = f' stroke="{stroke}" stroke-width="{sw}"' if stroke else ""
     st += f' stroke-dasharray="{dash}"' if dash else ""

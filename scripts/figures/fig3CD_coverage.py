@@ -105,7 +105,8 @@ for (get, title, xlabel, ylabel, xlim, xticks, ylim, yticks, names), x0, letter,
     for s in ("left", "bottom"): ax.spines[s].set_color(MUTE)
     ax.grid(axis="y", color=RULE, lw=0.4); ax.set_axisbelow(True)
     fig.text(tx / W, ay(Y0 + 12.99), title, fontsize=8, fontweight="bold", color=INK, ha="left", va="baseline")
-    fig.text(lx / W, ay(Y0 + 16.87), letter, fontsize=18, fontweight="bold", color=INK, ha="left", va="baseline")
+    # panel letter 10 pt bold (Science); the top of its cap height stays where the 18 pt letter had it (Arial Bold cap height 0.716 em)
+    fig.text(lx / W, ay(Y0 + 16.87 - (18 - 10) * 0.716), letter, fontsize=10, fontweight="bold", color=INK, ha="left", va="baseline")
     exact = sorted(v[2] for v in vals if v[2] == v[3])
     summary[title] = dict(n_exact=len(exact), min=round(exact[0], 1), median=round(float(np.median(exact)), 1), max=round(exact[-1], 1),
                           gap={m: (round(lo, 1), round(hi, 1)) for m, _, lo, hi in vals if lo != hi})
@@ -128,7 +129,7 @@ for lf in old.leaves if not REPLACE else []:
     b = lf.bbox()
     if b is not None and (b[1] + b[3]) / 2 > Y0:
         lf.M = T @ lf.M
-        if lf.tag() == "text" and lf.el.get("font-size") == "18":
+        if lf.tag() == "text" and lf.el.get("font-size") in ("18", "10"):     # panel letters, 18 pt before 2026-11-12
             for e in lf.el.iter():
                 if e.text and e.text.strip() in ("C", "D"):
                     e.text = {"C": "E", "D": "F"}[e.text.strip()]; relabelled += 1

@@ -3,7 +3,7 @@
 C: K = ker(N), with three of its columns drawn on thumbnails of the metabolic panel
 D: complex activities M = A K
 E: tangent space T = ker(N diag(r*) S^T Y^T) and its complex signatures Y^T T
-Units are points on the 7.2 x 9 in artboard; text 8 pt Arial, panel letters as in the draft.
+Units are points on the 7.2 x 9 in artboard; text 8 pt Arial, panel letters 10 pt bold with their tops as in the draft.
 
     python fig1CDE_matrices.py <Figure1_draft.svg> <met_network_reversible.svg> <out.svg>
 """
@@ -50,7 +50,9 @@ def rect(x, y, w, h, fill, rx=2, stroke=None):
     st = f' stroke="{stroke}" stroke-width="0.6"' if stroke else ""
     return f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" rx="{rx}" fill="{fill}"{st}/>'
 def letter(x, y, L):
-    return f'<text transform="translate({x} {y})" fill="{INK}" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="700"><tspan x="0" y="0">{L}</tspan></text>'
+    """Panel letter, 10 pt bold (Science). y is the baseline of the 18 pt letter of the draft; the top of the cap height
+    stays there (Arial Bold cap height 0.716 em)."""
+    return f'<text transform="translate({x} {y - (18 - 10) * 0.716:.3f})" fill="{INK}" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="700"><tspan x="0" y="0">{L}</tspan></text>'
 
 def matrix(x0, y0, rows, colnames, data, rh=10, cw=13, lw=26, chip=None, band=None, zero=MUTE, fmt=str):
     """row labels (optionally on coloured chips), column header, numbers; zeros muted.
