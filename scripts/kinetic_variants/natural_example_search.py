@@ -20,6 +20,7 @@ import numpy as np, scipy.sparse as sp
 
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src"), os.path.join(os.path.dirname(B), "tests")]
+import records                                         # paths of the records (KIMONU_OUT)
 import kimonu
 from networks import matrices
 from kinetic_variants.tangent_one_shot import one_shot_exact
@@ -119,7 +120,7 @@ def screen():
 
 if __name__ == "__main__":
     hits, sec = screen()
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "natural_example_hits.json")
+    out = records.write(records.EXPERIMENTS, "natural_example_search", "natural_example_hits.json")
     json.dump(dict(seconds=sec, hits=hits), open(out, "w"), indent=1)
     print(f"{len(hits)} networks with both failure modes ({sec:.0f} s); first ten:")
     for h in hits[:10]:

@@ -11,19 +11,20 @@ reports wall time and whether kinetic modules, ACR and ACRR agree (detached upta
 Records written before 2026-11-11 call the LP arm "default", and their iterated route ran at the LP point without
 rounding. figures/paper_numbers.py reads both.
 
-    python sz_flux.py <model> [bits]   -> $SZ_OUT/<model>.json
+    python sz_flux.py <model> [bits]   -> results/kimonu/uniform_flux/<model>.json of KIMONU_OUT (records.py)
 """
 import json, os, sys, time
 from fractions import Fraction
 import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from run_kimonu_crn import triplets_to_sparse
 
-OUT = os.environ.get("SZ_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_sz_flux")
+OUT = records.write(records.UNIFORM_FLUX, folder=True)
 M = sys.argv[1]; BITS = int(sys.argv[2]) if len(sys.argv) > 2 else 64
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json

@@ -6,11 +6,10 @@ couplings); the true count lies in between. Where both coincide the model is dec
 gets one marker. Left: pairs of complexes with a fixed concentration ratio (kinetic coupling). Right:
 fixed metabolite relations, ACR metabolites plus independent ACRR ratios (k - 1 per group of k free metabolites),
 free metabolites as in Figure 4. Detached
-uptakes. Data: HIERARCHY_DIR, default kinetic_variants/hierarchy_detached/<model>.json (hierarchy_detached.py from
-uptake_modes.py), the input of Figure 3A, B. HIERARCHY_DIR=kinetic_variants/hierarchy draws the attached panels of
-October (hierarchy_data.py, removed, see HISTORY.md).
+uptakes. Data: results/kimonu/hierarchy_detached/<model>.json of the records (records.py; hierarchy_detached.py from
+uptake_modes.py), the input of Figure 3A, B.
 
-    python figures/fig3AB_hierarchy.py [out_dir]   # from scripts/; default figures/main
+    python figures/fig3AB_hierarchy.py [out_dir]   # from scripts/; default drafts/main of KIMONU_OUT
 
 Writes <out_dir>/Figure3AB_draft.svg. The published Figure 3 carries hand edits and was updated in place by
 fig3B_update_ratios.py, fig3AB_update_legend.py, fig3CD_coverage.py and fig3_fig4_update_terms.py.
@@ -21,8 +20,10 @@ import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records
 
-out = sys.argv[1] if len(sys.argv) > 1 else "figures/main"
+out = sys.argv[1] if len(sys.argv) > 1 else records.write(records.DRAFTS, "main", folder=True)
 # the combined Figure 2 of October used FIG_HEIGHT_IN=2.3 FIG_LETTERS=0 FIG_LEGEND_BOTTOM=1 (make_figure2.py, see HISTORY.md)
 HEIGHT_IN = float(os.environ.get("FIG_HEIGHT_IN", 2.9)); LETTERS = os.environ.get("FIG_LETTERS", "1") == "1"
 NAME = os.environ.get("FIG_NAME", "Figure3AB_draft")
@@ -32,8 +33,7 @@ plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7
                      "svg.fonttype": "none", "pdf.fonttype": 42})
 INK, MUTE, RULE = "#1b2430", "#6b7480", "#d5d9de"
 GREY, DARK = "#6b7480", "#3a4250"              # no colours: the two bounds differ by marker shape only
-HIERARCHY_DIR = os.environ.get("HIERARCHY_DIR", "kinetic_variants/hierarchy_detached")
-D = sorted((json.load(open(f)) for f in glob.glob(f"{HIERARCHY_DIR}/*.json")), key=lambda d: d["n_complexes"])
+D = sorted((json.load(open(f)) for f in glob.glob(records.read(records.HIERARCHY_DETACHED, "*.json"))), key=lambda d: d["n_complexes"])
 from names import NAME as SHORT                    # one display name per network (figures/names.py)
 LABEL_BELOW = {("A", "iCN718")}
 bad = [d["model"] for d in D if any(d["violations"].values())]

@@ -2,15 +2,18 @@
 % commit after 28350a9), then rebuild the classes and write a retested .mat and .json.
 %
 %   octave --no-gui retest_rejected.m <model> [<pairs.txt>]
-% reads  reference_final/<model>_concordant_fixed.mat and reference_final/retest/pairs_<model>.txt
-% writes reference_final/retest/<model>_concordant_fixed_retest.mat and reference_<model>_retest.json
+% reads  results/reference/exhaustive/<model>_concordant_fixed.mat and its retest/pairs_<model>.txt from KIMONU_RECORDS
+% writes retest/<model>_concordant_fixed_retest.mat and reference_<model>_retest.json to results/reference/exhaustive/ of
+% KIMONU_OUT (records.py; both default to records/ at the top of the repository)
 args = argv(); m = args{1};
 here = fileparts(mfilename('fullpath')); if isempty(here), here = pwd(); end
 addpath(fullfile(here, 'compat')); addpath(genpath(fullfile(getenv('UPSTREAM_ALGORITHM'), 'Code')));
-bench = fullfile(here, '..');
-load(fullfile(bench, 'reference_final', [m '_concordant_fixed.mat']));    % Results_balanced, class_with_balanced, B, CC, group
+rec = getenv('KIMONU_RECORDS'); if isempty(rec), rec = fullfile(here, '..', '..', 'records'); end
+out = getenv('KIMONU_OUT'); if isempty(out), out = rec; end
+exh = fullfile(rec, 'results', 'reference', 'exhaustive');
+load(fullfile(exh, [m '_concordant_fixed.mat']));    % Results_balanced, class_with_balanced, B, CC, group
 model = Results_balanced.MODEL_r{1}; nc = numel(model.complexes);
-pairs_path = fullfile(bench, 'reference_final', 'retest', ['pairs_' m '.txt']);
+pairs_path = fullfile(exh, 'retest', ['pairs_' m '.txt']);
 if numel(args) > 1, pairs_path = args{2}; end
 At = dlmread(pairs_path);
 printf('%s: %d rejected pairs to re-test\n', m, size(At,1)); fflush(stdout);
@@ -36,10 +39,10 @@ module_of(B) = 0;
 class_with_balanced = {};
 if ~isempty(B), class_with_balanced{end+1} = B(:); end
 for q = 1:next_module, class_with_balanced{end+1} = find(module_of == q)(:); end
-outdir = fullfile(bench, 'reference_final', 'retest');
+outdir = fullfile(out, 'results', 'reference', 'exhaustive', 'retest'); if ~exist(outdir, 'dir'), mkdir(outdir); end
 save('-v7', fullfile(outdir, [m '_concordant_fixed_retest.mat']), 'Results_balanced', 'class_with_balanced', 'B', 'CC', 'group');
-crn = jsondecode(fileread(fullfile(bench, 'unblocked', [m '_fixed.crn.json'])));
-orig = jsondecode(fileread(fullfile(bench, 'reference_final', ['reference_' m '.json'])));
+crn = jsondecode(fileread(fullfile(rec, 'networks', 'unblocked', [m '_fixed.crn.json'])));
+orig = jsondecode(fileread(fullfile(exh, ['reference_' m '.json'])));
 write_results_json(fullfile(outdir, ['reference_' m '_retest.json']), crn, model, module_of, orig.seconds + t_retest, ...
                    orig.seconds_balanced, orig.seconds_concordant + t_retest, orig.candidate_pairs, 'exhaustive+retest', ...
                    orig.pairs_tested, true, 0, linprog('nonoptimal'));

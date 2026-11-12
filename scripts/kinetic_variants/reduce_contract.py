@@ -18,13 +18,14 @@ import numpy as np, scipy.sparse as sp
 from scipy.optimize import linprog
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.linalg import exact
 from run_kimonu_crn import crn_of, triplets_to_sparse
 from kinetic_variants.tangent_one_shot import one_shot_exact
 
 M, target, start, out = sys.argv[1:5]
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
+crn = json.load(open(records.network(M))); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A0 = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64).tocsc(); Y0 = triplets_to_sparse(crn["Y"], nm, nc).tocsc(); mets = crn["metabolites"]
 
 def comp(c):

@@ -18,7 +18,9 @@ FigS6_float_errors   fig. S6, per route and way: the models whose ACR and ACRR c
 Figs. S5 and S6 have the colour key in one row below the plots, so the plots take the full page width, and one SVG group
 per plot (panel_A, panel_B, ... row by row) plus panel_legend.
 
-    python figures/figS5_S6_float.py <out_dir>        # from scripts/
+    python figures/figS5_S6_float.py [<out_dir>]      # from scripts/; default drafts/supp of KIMONU_OUT
+
+The parts are read from results/kimonu/float_comparison/parts/ of the records (records.py, KIMONU_RECORDS).
 """
 import glob, json, os, sys
 from collections import defaultdict
@@ -26,11 +28,12 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path[:0] = [os.path.dirname(os.path.abspath(__file__)), os.path.dirname(os.path.dirname(os.path.abspath(__file__)))]
 import io, tempfile
 import svg_finish, svg_panels
+import records
 
-KF = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
+KF = records.read(records.FLOAT_PARTS)
 plt.rcParams.update({"font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6, "ytick.labelsize": 6, "font.family": "Arial",
                      "axes.linewidth": 0.6, "xtick.major.width": 0.6, "ytick.major.width": 0.6, "svg.fonttype": "none",
                      "text.color": "#1b2430", "axes.labelcolor": "#1b2430", **svg_finish.mathtext_rc()})   # INK, as the labels set it
@@ -44,7 +47,7 @@ FILL_UNFINISHED = bool(os.environ.get("KF_FILL_UNFINISHED"))   # draft of the fi
 
 # ---- merge the parts per model
 runs = defaultdict(dict)
-for f in sorted(glob.glob(f"{KF}/parts/*.json")):
+for f in sorted(glob.glob(f"{KF}/*.json")):
     d = json.load(open(f))
     r = runs[d["model"]]
     r.setdefault("taus", d["taus"])
@@ -253,7 +256,7 @@ def errors(ways, name):
 
 
 if __name__ == "__main__":
-    OUT = sys.argv[1]; os.makedirs(OUT, exist_ok=True)
+    OUT = sys.argv[1] if len(sys.argv) > 1 else records.write(records.DRAFTS, "supp", folder=True); os.makedirs(OUT, exist_ok=True)
     summary = {}
     avail = [w for w in WAYS if any(f"iterated_{w}" in runs[m] for m in runs)]
     if {"exactcmp", "svdabs"} <= set(avail):

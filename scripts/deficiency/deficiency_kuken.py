@@ -13,8 +13,10 @@ from scipy.sparse.csgraph import connected_components
 import straindesign as sd
 from kimonu.linalg import exact, matrix_product
 from kimonu.readout import row_readout
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records                                         # output to networks/deficiency/ of KIMONU_OUT
 
-D = '/scratch/sadreyev_lab/pschneider/concordant_complexes/Results_concordant_original_irreversibility_considered'
+D = '/scratch/sadreyev_lab/pschneider/concordant_complexes/Results_concordant_original_irreversibility_considered'   # Küken et al. 2022, their result files
 rows = []
 for f in sorted(glob.glob(f'{D}/*.mat')):
     name = os.path.basename(f)[:-4]
@@ -60,4 +62,4 @@ for f in sorted(glob.glob(f'{D}/*.mat')):
              index_all_classes=1 - (len(classes) + (1 if zero else 0)) / n, floor_index=1 - (n - int(ell) - rankN) / n,
              sec=round(time.time() - t, 1))
     rows.append(r); print(json.dumps(r), flush=True)
-json.dump(rows, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'deficiency_kuken12_unblocked.json'), 'w'), indent=1)
+json.dump(rows, open(records.write(records.DEFICIENCY, 'deficiency_kuken12_unblocked.json'), 'w'), indent=1)

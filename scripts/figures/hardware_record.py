@@ -1,25 +1,31 @@
 """Hardware, memory, thread and software record of the benchmark runs, for the Methods ("Benchmark tools, hardware and
-software", "Floating-point comparison"). Writes scripts/hardware_record.json from SLURM accounting (sacct), the job
-logs and the result files, so that every such number in the text has a source.
+software", "Floating-point comparison"). Writes results/hardware/hardware_record.json (records.py, KIMONU_OUT) from
+SLURM accounting (sacct), the job logs and the result files, so that every such number in the text has a source. It
+runs on the cluster only, because sacct and the SLURM logs of the jobs (CLUSTER below) are not part of the archive.
 
     python figures/hardware_record.py            # run in scripts/
 
-Sources
-  COCOA.jl   sweep/cocoa_v110, sweep/cocoa_eff: the 183 records gather_figdata.py reads; each is matched to the job log
-             (v110_<job>_<task>.log) with the same model and seed whose end time is closest to the file time of the
-             record, and the wall time of that log must agree with the "seconds" of the record.
-  reference  job ids from the log names in reference_final/ and reference_final_sampled/
-  Kimonu     /scratch/.../kimonu_rerun_1111/timing (hardware_*.txt, provenance_*.txt) and its logs (/usr/bin/time -v)
-  node speed kimonu_timing (job 570234, node16) against kimonu_timing_4314 (job 570464, node08), same commit 323fe40
-  threads    kimonu_float_four/logs and parts: the job that wrote each part and its allocated CPUs
+Sources (records of KIMONU_RECORDS unless named otherwise)
+  COCOA.jl   results/cocoa_jl/efficient_false and efficient_true: the 183 records gather_figdata.py reads; each is
+             matched to the job log (v110_<job>_<task>.log) with the same model and seed whose end time is closest to
+             the file time of the record, and the wall time of that log must agree with the "seconds" of the record.
+  reference  job ids from the log names in results/reference/exhaustive/ and sampled/
+  Kimonu     results/kimonu/timing (hardware_*.txt, provenance_*.txt) and the SLURM logs of its jobs (CLUSTER
+             kimonu_rerun_1111/logs, lines of /usr/bin/time -v)
+  node speed CLUSTER kimonu_timing (job 570234, node16) against kimonu_timing_4314 (job 570464, node08), same commit 323fe40
+  threads    CLUSTER kimonu_float_four/logs and results/kimonu/float_comparison/parts: the job that wrote each part and
+             its allocated CPUs
 A job that sacct no longer holds is recorded with "sacct": null. MaxRSS of sacct is in units of 1024 bytes and is reported in GB as SLURM counts them (2^30 bytes); it is
 sampled every 30 s and is missing (a few hundred KiB) for many batch steps, which the record counts.
 CPU models were read from /proc/cpuinfo of every node on 2026-11-12 (CPU_MODEL below); --probe reads them again by ssh.
 """
 import collections, datetime, glob, json, os, re, statistics, subprocess, sys
 
-SCRATCH = "/scratch/sadreyev_lab/pschneider"
-RERUN = f"{SCRATCH}/kimonu_rerun_1111"
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records
+CLUSTER = "/scratch/sadreyev_lab/pschneider"                    # SLURM logs and runs outside the archive
+COCOA = {"cocoa_v110": records.read(records.COCOA_FALSE), "cocoa_eff": records.read(records.COCOA_TRUE)}
+REF = {"reference_final": records.read(records.REF_EXHAUSTIVE), "reference_final_sampled": records.read(records.REF_SAMPLED)}
 CPU_MODEL = {f"node{i:02d}": ("Xeon Silver 4314" if i <= 8 else "Xeon Silver 4514Y") for i in range(1, 17)}
 FIELDS = "JobID,JobName,NodeList,ReqMem,ReqCPUS,AllocCPUS,MaxRSS,Elapsed,Start,End,State"
 
@@ -51,19 +57,19 @@ def job_row(S, jid):
                 alloc_cpus=int(a["AllocCPUS"]), max_rss_gib=gib(b["MaxRSS"]) if b else None, elapsed=a["Elapsed"], state=a["State"].split()[0])
 
 def cocoa():
-    jobs = {re.match(r"v110_(\d+)_", os.path.basename(f)).group(1) for sub in ("cocoa_v110", "cocoa_eff") for f in glob.glob(f"sweep/{sub}/v110_*_*.log")}
+    jobs = {re.match(r"v110_(\d+)_", os.path.basename(f)).group(1) for sub in ("cocoa_v110", "cocoa_eff") for f in glob.glob(f"{COCOA[sub]}/v110_*_*.log")}
     S = sacct(jobs)
     runs = []
     for sub, eff in (("cocoa_v110", False), ("cocoa_eff", True)):
         logs = collections.defaultdict(list)
-        for f in glob.glob(f"sweep/{sub}/v110_*_*.log"):
+        for f in glob.glob(f"{COCOA[sub]}/v110_*_*.log"):
             for blk in open(f).read().split("=== ")[1:]:
                 h = re.match(r"(\S+) seed (\d+) \|.*\| (\d+) workers \| (\S+)\n", blk)
                 el, rss, dn = re.search(r"Elapsed.*: (\S+)", blk), re.search(r"Maximum resident set size \(kbytes\): (\d+)", blk), re.search(r"done (\S+) ---", blk)
                 if h and el and dn:
                     logs[h.group(1), h.group(2)].append(dict(job=os.path.basename(f)[5:-4], workers=int(h.group(3)), wall=hms(el.group(1)),
                                                              done=datetime.datetime.fromisoformat(dn.group(1)).timestamp(), main_rss_gib=round(int(rss.group(1)) * 2**-20, 2)))
-        for j in sorted(glob.glob(f"sweep/{sub}/{sub}_*_HiGHS_p64_seed*.json")):
+        for j in sorted(glob.glob(f"{COCOA[sub]}/{sub}_*_HiGHS_p64_seed*.json")):
             m, seed = re.match(rf"{sub}_(.+)_HiGHS_p64_seed(\d+)\.json", os.path.basename(j)).groups()
             sec, mt = json.load(open(j))["seconds"], os.path.getmtime(j)
             x = min(logs[m, seed], key=lambda x: abs(x["done"] - mt))
@@ -91,7 +97,7 @@ def cocoa():
 def reference():
     out = {}
     for d in ("reference_final", "reference_final_sampled"):
-        jobs = {m.group(1) for f in glob.glob(f"{d}/*.log") for m in [re.search(r"_(\d{6})(?:_\d+)?\.log$", f)] if m}
+        jobs = {m.group(1) for f in glob.glob(f"{REF[d]}/*.log") for m in [re.search(r"_(\d{6})(?:_\d+)?\.log$", f)] if m}
         S = sacct(jobs)
         rows = [job_row(S, k) for k in sorted(S) if "." not in k]
         missing = sorted(j for j in jobs if not any(k.split("_")[0] == j for k in S))
@@ -104,13 +110,14 @@ def reference():
 
 def kimonu():
     out = {}
-    S = sacct({os.path.basename(f)[9:-4] for f in glob.glob(f"{RERUN}/timing/*/hardware_*.txt")})
-    for f in sorted(glob.glob(f"{RERUN}/timing/*/hardware_*.txt")):
+    T = records.read(records.TIMING)
+    S = sacct({os.path.basename(f)[9:-4] for f in glob.glob(f"{T}/*/hardware_*.txt")})
+    for f in sorted(glob.glob(f"{T}/*/hardware_*.txt")):
         arm, jid = f.split("/")[-2], os.path.basename(f)[9:-4]
         txt = open(f).read()
         prov = dict(l.split(" ", 1) for l in open(f.replace("hardware_", "provenance_")).read().splitlines() if " " in l)
         peak = 0
-        for lg in glob.glob(f"{RERUN}/logs/*_{jid}.log"):                       # lines "<time> rc=0 <wall> <max RSS in KiB> <file>" of /usr/bin/time
+        for lg in glob.glob(f"{CLUSTER}/kimonu_rerun_1111/logs/*_{jid}.log"):                       # lines "<time> rc=0 <wall> <max RSS in KiB> <file>" of /usr/bin/time
             for l in open(lg):
                 p = l.split()
                 if len(p) >= 5 and p[1].startswith("rc=") and p[3].isdigit(): peak = max(peak, int(p[3]))
@@ -123,7 +130,7 @@ def node_speed():
     out = dict(jobs={k: job_row(sacct(["570234", "570236", "570464", "570492"]), k) for k in ("570234", "570236", "570464", "570492")})
     for sub in ("det", "att", "ref", "tanatt"):
         r = []
-        for f in sorted(glob.glob(f"{SCRATCH}/kimonu_timing_4314/{sub}/*.json")):
+        for f in sorted(glob.glob(f"{CLUSTER}/kimonu_timing_4314/{sub}/*.json")):
             g = f.replace("kimonu_timing_4314", "kimonu_timing")
             if os.path.exists(g): r.append(json.load(open(f))["seconds"] / json.load(open(g))["seconds"])
         if r:
@@ -134,7 +141,7 @@ def node_speed():
 
 def float_threads():
     """threads = allocated CPUs of the job that wrote each part (OMP, OPENBLAS and MKL threads are set to SLURM_CPUS_PER_TASK)"""
-    L = f"{SCRATCH}/kimonu_float_four"
+    L = f"{CLUSTER}/kimonu_float_four"
     wrote = collections.defaultdict(list)
     for f in glob.glob(f"{L}/logs/k[fx]_*.log"):
         for l in open(f, errors="ignore"):
@@ -142,7 +149,7 @@ def float_threads():
             if m: wrote[os.path.basename(m.group(1))].append((os.path.getmtime(f), os.path.basename(f)[3:-4]))
     S = sacct({j.split("_")[0] for v in wrote.values() for _, j in v})
     arms, models = collections.defaultdict(collections.Counter), collections.defaultdict(lambda: collections.defaultdict(set))
-    for p in sorted(os.path.basename(x) for x in glob.glob(f"{L}/parts/*.json")):
+    for p in sorted(os.path.basename(x) for x in glob.glob(records.read(records.FLOAT_PARTS, "*.json"))):
         model, arm = p[:-5].split("__"); arm = re.sub(r"_t?\d+$", "", arm)
         jid = max(wrote[p])[1] if p in wrote else None
         c = S[jid]["AllocCPUS"] if jid in S else "unknown"
@@ -170,7 +177,7 @@ if __name__ == "__main__":
             CPU_MODEL[n] = r.stdout.split(":")[-1].strip() or CPU_MODEL[n]
     D = dict(generated=datetime.datetime.now().isoformat(timespec="seconds"), cpu_model=CPU_MODEL, cocoa=cocoa(), reference=reference(), kimonu_timing=kimonu(),
              node_speed_4314_over_4514Y=node_speed(), float_threads=float_threads(), versions=versions())
-    json.dump(D, open("hardware_record.json", "w"), indent=1)
+    json.dump(D, open(records.write(records.HARDWARE, "hardware_record.json"), "w"), indent=1)
     c = D["cocoa"]
     print(f"COCOA.jl {c['n_runs']} runs, {c['n_on_4514Y']} on 4514Y {c['n_on_4514Y_by_efficient']}, ReqMem {c['req_mem']}, CPUs {c['alloc_cpus']}, "
           f"peak of the 183 {c['peak_max_rss_gib_of_the_183']} GB ({c['n_with_max_rss']} with MaxRSS), all jobs {c['peak_max_rss_gib_all_sweep_jobs']}")

@@ -3,15 +3,15 @@ schema of hierarchy/<model>.json, with the ACRR counted as independent ratios (k
 acrr_ratios and acrr_ratios_free) from the group sizes of member_counts/<model>.json. The pair counts stay as
 acrr_pairs and acrr_pairs_free, and the group sizes are checked against them.
 
-    python kinetic_variants/hierarchy_detached.py   -> kinetic_variants/hierarchy_detached/<model>.json
+    python kinetic_variants/hierarchy_detached.py   -> results/kimonu/hierarchy_detached/<model>.json
 
-UM_DIR and MC_DIR replace the input directories kinetic_variants/uptake_modes and member_counts, HD_OUT the output
-directory (a rerun).
+Inputs results/kimonu/uptake_modes/ and member_counts/ of KIMONU_RECORDS, output to KIMONU_OUT (records.py).
 """
-import glob, json, os
-B = os.path.dirname(os.path.abspath(__file__))
-UM = os.environ.get("UM_DIR", f"{B}/uptake_modes"); OUT = os.environ.get("HD_OUT", f"{B}/hierarchy_detached")
-MC = os.environ.get("MC_DIR", f"{B}/member_counts")
+import glob, json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records
+UM, OUT = records.read(records.UPTAKE_MODES), records.write(records.HIERARCHY_DETACHED, folder=True)
+MC = records.read(records.MEMBER_COUNTS)
 
 
 def with_ratios(rec, members):

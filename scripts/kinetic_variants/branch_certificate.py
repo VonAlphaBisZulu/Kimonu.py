@@ -69,6 +69,7 @@ def certify(N, G, c, time_limit=3600, threads=2):
 if __name__ == "__main__":
     B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src")); sys.path.insert(0, os.path.join(os.path.dirname(B), "tests"))
+    import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
     from run_kimonu_crn import triplets_to_sparse
     name, targets = sys.argv[1], sys.argv[2:]
     if name in ("cubic", "envz"):
@@ -76,7 +77,7 @@ if __name__ == "__main__":
         R, mets = ([("0", "A"), ("A", "0"), ("A+A", "A+A+A"), ("A+A+A", "A+A")], ["A"]) if name == "cubic" else (ENVZ, ENVZ_SPECIES)
         A, Y, N, cx = matrices(R, mets); A, Y, N = sp.csr_matrix(A), sp.csr_matrix(Y, dtype=float), sp.csr_matrix(N, dtype=float)
     else:
-        crn = json.load(open(f"{B}/unblocked/{name}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
+        crn = json.load(open(records.network(name))); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
         A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc); N = triplets_to_sparse(crn["S"], nm, nr)
         mets = crn["metabolites"]
     G = ((A < 0).astype(float).T @ Y.T).tocsr()

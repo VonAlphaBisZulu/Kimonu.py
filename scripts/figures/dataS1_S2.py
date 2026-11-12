@@ -3,13 +3,13 @@
 Data S1 (DataS1_values.csv) has one row per network, tool and mode, and for the stochastic tools one row per seed.
 Every file has the model file id (model) and the name the paper uses (network, figures/names.py).
 The values are those of figdata.json (gather_figdata.py). Kimonu's coupled complex pairs are given on all 33 networks:
-the iterated route's from kinetic_variants/uptake_modes/ (it.pairs, detached and attached), those of the
-reference-equivalent mode from the modules of its runs ($KIMONU_REF_DIR). Those of the other tools come from
-figures/pair_counts.json (pair_sets.py), which has them for the exhaustive reference on the 11 networks that it
+the iterated route's from results/kimonu/uptake_modes/ (it.pairs, detached and attached), those of the
+reference-equivalent mode from the modules of its runs (results/kimonu/timing/ref). Those of the other tools come from
+pair_counts.json (pair_sets.py), which has them for the exhaustive reference on the 11 networks that it
 finished, and must agree with the above where it has Kimonu's. The tangent route (detached uptakes, Kimonu's default)
 has its own rows. Its kinetic modules, ACR, ACRR and pairs are those of uptake_modes/ (tan) and
-kinetic_variants/member_counts/ (the ACRR group sizes, tan, or it where the routes agree), checked against the timed
-runs in $KIMONU_TIMING/tan, and its wall time is the median of those three runs (seeds 0, 1, 2, which agree on every
+member_counts/ (the ACRR group sizes, tan, or it where the routes agree), checked against the timed runs in
+results/kimonu/timing/tan, and its wall time is the median of those three runs (seeds 0, 1, 2, which agree on every
 count). That route computes no balanced complexes or concordance modules, so these two cells stay empty.
 A tool that did not finish within 7 days gets "not finished in 7 days".
 ACRR is counted as independent ratios, k - 1 per group of k metabolites (acrr_ratios, and acrr_ratios_free for k free
@@ -17,13 +17,13 @@ metabolites of a group), as in the paper. The last two columns keep the ACRR pai
 
 Data S2 (DataS2_uptake_acr.csv) lists every free metabolite with ACR under attached uptakes, with its compartment and
 what becomes of it under detached uptakes (ACR in both, in an ACRR group, or free). It reads the lists that
-uptake_lists.py wrote (iterated route, both uptake modes, metabolites as indices into the network's own list).
+uptake_lists.py wrote (results/kimonu/acr_lists_by_uptake_mode/, iterated route, both uptake modes, metabolites
+as indices into the network's own list).
 Free metabolites are those before "E_1" in that list. The script prints the totals that Supplementary Text S5 quotes.
 
-    python figures/dataS1_S2.py <out_dir>        # from scripts/
+    python figures/dataS1_S2.py [<out_dir>]      # from scripts/; default figures/supp/ of KIMONU_OUT
 
-UPTAKE_LISTS replaces the lists of the paper, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/uptake_lists (e.g. a rerun),
-KIMONU_TIMING and KIMONU_REF_DIR the timing runs (default the rerun of 2026-11-11, timing/ and timing/ref).
+Every input is read from the records (records.py, KIMONU_RECORDS).
 Complexes are counted as in table S2 (with the zero complex, without the complexes of no reaction), and so are the
 balanced complexes of every tool (figdata.json, gather_figdata.py).
 """
@@ -32,9 +32,11 @@ import csv, glob, json, os, statistics, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from names import network
-LISTS = os.environ.get("UPTAKE_LISTS", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/uptake_lists")
-TIMING = os.environ.get("KIMONU_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing")
-REF_DIR = os.environ.get("KIMONU_REF_DIR", f"{TIMING}/ref")
+sys.path.insert(0, B)
+import records
+LISTS = records.read(records.UPTAKE_LISTS)
+TIMING = records.read(records.TIMING)
+REF_DIR = f"{TIMING}/ref"
 
 ARMS = [("kimonu_det", "Kimonu, iterated route, detached uptakes"),
         ("kimonu_tan", "Kimonu, tangent route, detached uptakes"),
@@ -55,8 +57,8 @@ ratios = lambda sizes: sum(k - 1 for k in sizes)                 # k - 1 indepen
 
 def kimonu_rows(m, D, PC):
     """Kimonu's arms of network m with the coupled complex pairs on every network, and the tangent route (see above)"""
-    um = json.load(open(f"{B}/kinetic_variants/uptake_modes/{m}.json"))
-    mc = json.load(open(f"{B}/kinetic_variants/member_counts/{m}.json"))
+    um = json.load(open(records.read(records.UPTAKE_MODES, f"{m}.json")))
+    mc = json.load(open(records.read(records.MEMBER_COUNTS, f"{m}.json")))
     out = {}
     for arm, mode in (("kimonu_det", "detached"), ("kimonu", "attached")):
         it, v = um[mode]["it"], D[arm][m]
@@ -64,7 +66,7 @@ def kimonu_rows(m, D, PC):
             (it["modules"], it["giant"], it["acr"], it["acrr_pairs"], it["acr_free"], it["acrr_pairs_free"]), (m, arm)
         out[arm] = dict(v, pairs=it["pairs"])
     assert out["kimonu_det"]["pairs"] == pairs_of(mc["it"]["module_sizes"]), m
-    crn = json.load(open(f"{B}/unblocked/{m}_fixed.crn.json"))
+    crn = json.load(open(records.network(m)))
     zero = set(range(crn["n_complexes"])) - {j - 1 for _, j, _ in crn["Y"]}          # the zero complex (Y triplets from 1)
     ref = json.load(open(sorted(glob.glob(f"{REF_DIR}/kimonu_{m}_rep*.json"))[0]))  # the mode has no random point
     assert not zero & {c for s in ref["modules"] for c in s} and len(ref["modules"]) == D["kimonu_ref"][m]["n_kinetic"], m
@@ -90,8 +92,8 @@ def kimonu_rows(m, D, PC):
 
 
 def data_s1(path):
-    D = json.load(open(f"{B}/figdata.json"))
-    PC = json.load(open(f"{B}/figures/pair_counts.json"))
+    D = json.load(open(records.read(records.SOURCE_DATA, "figdata.json")))
+    PC = json.load(open(records.read(records.SOURCE_DATA, "pair_counts.json")))
     nC, n = D["n_complexes"], 0
     with open(path, "w", newline="") as f:
         w = csv.writer(f)
@@ -119,7 +121,7 @@ def data_s2(path):
     for f in files:
         d = json.load(open(f))
         m = d["model"]
-        mets = [x if isinstance(x, str) else x.get("id") for x in json.load(open(f"{B}/unblocked/{m}_fixed.crn.json"))["metabolites"]]
+        mets = [x if isinstance(x, str) else x.get("id") for x in json.load(open(records.network(m)))["metabolites"]]
         nfree = mets.index("E_1") if "E_1" in mets else len(mets)
         att = [i for i in d["attached"]["acr"] if i < nfree]
         det = {i for i in d["detached"]["acr"] if i < nfree}
@@ -145,7 +147,7 @@ def data_s2(path):
 
 
 if __name__ == "__main__":
-    out = sys.argv[1]
+    out = sys.argv[1] if len(sys.argv) > 1 else records.write(records.FIGURES, "supp", folder=True)
     os.makedirs(out, exist_ok=True)
     print("Data S1 rows", data_s1(f"{out}/DataS1_values.csv"))
     n, tot = data_s2(f"{out}/DataS2_uptake_acr.csv")

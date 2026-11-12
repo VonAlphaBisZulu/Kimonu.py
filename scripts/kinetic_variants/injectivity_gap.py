@@ -16,23 +16,28 @@ tangent-only relation vectors matters: g_rel = the dimension they add to C_iter.
 
 quotient: one two-point sign MILP for all tangent-only ACR/ACRR relations at once (their disjunction), with the
 iterated equalities; infeasible proves all of them for generic k, a sign pattern is inconclusive.
+
+Results go to results/kimonu/gap_experiments/injectivity/ of KIMONU_OUT; the relations of two_point_gap.py prepare are
+read from results/kimonu/gap_experiments/two_point/ of KIMONU_RECORDS (records.py).
 """
 import json, os, sys, time
 from fractions import Fraction
 import numpy as np, scipy.sparse as sp
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import straindesign as sd
 from run_kimonu_crn import crn_of, triplets_to_sparse, to_exact
 from kimonu.linalg import entries, exact
 from kinetic_variants.two_point import substrate_composition, iterated_constraints, realise
 from kinetic_variants.tangent_fast import integer_positive_flux
 
-OUT = os.environ.get("INJ_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_injectivity")
+OUT = os.path.join(records.OUT, records.INJECTIVITY)          # results/kimonu/gap_experiments/injectivity of KIMONU_OUT
+TWO_POINT = os.path.join(records.RECORDS, records.TWO_POINT)  # the relations of two_point_gap.py prepare
 
 
 def load(M):
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+    crn = json.load(open(records.network(M)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     Nf = triplets_to_sparse(crn["S"], nm, nr)
@@ -161,7 +166,7 @@ def tangent_sum(M, max_seeds=20, primes=(4611686018427387847, 230584300921369395
     import kimonu
     it = kimonu.iterated_route(crn_of(A, Y, N), detach_uptakes=False)
     _, Vrows = exact_V(crn["Y"], m, it.modules, it.acr)
-    relf = f"/scratch/sadreyev_lab/pschneider/kimonu_twopoint/{M}_relations.json"
+    relf = f"{TWO_POINT}/{M}_relations.json"
     C = [{mets.index(k): Fraction(v) for k, v in r["c"].items()} for r in json.load(open(relf))["relations"]]
     dKV = kernel_dim([Vrows], m); ceiling = kernel_dim([Vrows, C], m)
     print(f"[{M}] dim ker V {dKV}, ceiling dim ker [V; relations] {ceiling}", flush=True)
@@ -182,13 +187,14 @@ def tangent_sum(M, max_seeds=20, primes=(4611686018427387847, 230584300921369395
             break
     out = dict(model=M, m=m, dim_kerV=dKV, ceiling=ceiling, g_rel=dKV - ceiling, tsum_ranks=ranks,
                g_star_upper=dKV - ranks[-1], g_star_exact=ranks[-1] == ceiling, seconds=time.time() - t0)
+    os.makedirs(OUT, exist_ok=True)
     json.dump(out, open(f"{OUT}/{M}_tsum.json", "w"))
     print(json.dumps(out), flush=True)
 
 
 def dims(M):
     crn, A, Y, Nf = load(M); N = to_exact(Nf)
-    relf = f"/scratch/sadreyev_lab/pschneider/kimonu_twopoint/{M}_relations.json"
+    relf = f"{TWO_POINT}/{M}_relations.json"
     rel = json.load(open(relf))["relations"] if os.path.exists(relf) else []
     out, Vrows, it = gap_dims(crn, A, Y, N, Nf, relations=rel, log=lambda s: print(f"[{M}] {s}", flush=True))
     out["model"] = M
@@ -220,7 +226,7 @@ def quotient(M, tl=10800, threads=8, eps=1e-3, big=1e4):
     tried as a counterexample along its ray."""
     import cplex
     crn, A, Y, Nf = load(M); G = substrate_composition(A, Y); mets = crn["metabolites"]
-    rel = json.load(open(f"/scratch/sadreyev_lab/pschneider/kimonu_twopoint/{M}_relations.json"))
+    rel = json.load(open(f"{TWO_POINT}/{M}_relations.json"))
     classes = rel["classes"]; C = [{mets.index(k): float(v) for k, v in r["c"].items()} for r in rel["relations"]]
     V = sp.load_npz(f"{OUT}/{M}_V.npz")
     N = sp.csr_matrix(Nf, dtype=float); m, q = N.shape; g = len(C)

@@ -6,8 +6,8 @@ updated in place by fig4ABF_update.py and fig3_fig4_update_terms.py; figs. S1 an
 A  wall time vs network size on all 33 models for every arm, with a log-log least-squares line per arm.
 B  the tangent route at scale: the published symbolic local-ACR criterion against one exact nullspace, on the small
    networks and the size ladder (symbolic and exact) and the 33 models (exact, detached uptakes). Symbolic times from
-   kinetic_variants/local_acr_symbolic.py ($KIMONU_LACR), exact times from kinetic_variants/timing_exclusive.sbatch
-   ($KIMONU_TIMING, median of the replicates).
+   kinetic_variants/local_acr_symbolic.py (results/kimonu/symbolic_local_acr/), exact times from kinetic_variants/timing_exclusive.sbatch
+   (results/kimonu/timing/, median of the replicates).
 C  coupled complex pairs, D independent ACR and ACRR relations (k - 1 per ACRR group) among free metabolites, per arm on the eleven
    models where the exhaustive reference finished (bars: value or median over seeds, whiskers: seed range);
    centred titles, "count" on each y axis and one legend below both, as Figure 3A, B.
@@ -24,24 +24,30 @@ fig. S1 (figures/supp/FigS1_stage_timing): where the time goes on those eleven m
    COCOA's concordance stage is its own logged "Elapsed time", which ends before kinetic_analysis is called,
    and the rest is the measured total minus that.
 
-Kimonu here is run_kimonu_refmode.py ($KIMONU_REF_DIR through figdata.json, the median of three runs), which follows the
+Kimonu here is run_kimonu_refmode.py (results/kimonu/timing/ref through figdata.json, the median of three runs), which follows the
 reference's definitions: concordance from ker(N), upstream sets merged by overlap only, ACR/ACRR by the
 reference's pairwise rule (the Shinar-Feinberg criterion within kinetic modules). Stochastic arms show the median over three seeds. Layout is in inches at 7.2 in (518.4 pt) width; the
 supplementary table columns are sized from their measured text, so its axes are placed by hand.
 
-    python figures/fig4_figS1_S2_benchmark.py [out_dir]    # run from scripts/ after gather_figdata.py and pair_sets.py; default figures/main
+    python figures/fig4_figS1_S2_benchmark.py [out_dir]    # run from scripts/ after gather_figdata.py and pair_sets.py
 
-KIMONU_TIMING (default the paper's run, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing) holds the tangent-route
-times of B, KIMONU_LACR the symbolic baselines, KIMONU_REF_DIR the runs of the reference-equivalent mode for fig. S1.
+Default out_dir: drafts/main of KIMONU_OUT (records.py); figs. S1 and S2 go to supp/ next to out_dir. Every input comes
+from the records (KIMONU_RECORDS): figures/source_data/, the tangent-route times of B and the runs of the
+reference-equivalent mode for fig. S1 (results/kimonu/timing/), the symbolic baselines (results/kimonu/symbolic_local_acr/)
+and the logs of COCOA.jl and the reference (results/cocoa_jl/, results/reference/exhaustive/).
 """
 import datetime as dt, glob, json, os, re, sys, numpy as np, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path[:0] = [os.path.dirname(os.path.abspath(__file__)), os.path.dirname(os.path.dirname(os.path.abspath(__file__)))]
 import svg_finish, svg_panels                             # live text, embedded fonts, no clipping; one group per panel
+import records
 
-out = sys.argv[1] if len(sys.argv) > 1 else "figures/main"
-D = json.load(open("figdata.json")); nC = D["n_complexes"]
+out = sys.argv[1] if len(sys.argv) > 1 else records.write(records.DRAFTS, "main", folder=True)
+SRC = records.read(records.SOURCE_DATA)
+REF_EXH = records.read(records.REF_EXHAUSTIVE)
+COCOA = {"cocoa_v110": records.read(records.COCOA_FALSE), "cocoa_eff": records.read(records.COCOA_TRUE)}
+D = json.load(open(f"{SRC}/figdata.json")); nC = D["n_complexes"]
 REF = sorted(D["ref_exh"], key=lambda m: nC[m])
 
 # the agreement the figure claims, checked on every quantity the reference reports (free and all metabolites)
@@ -75,28 +81,28 @@ def seconds(arm, m):
     if v is None: return None
     return float(np.median([r["seconds"] for r in v])) if isinstance(v, list) else v["seconds"]
 
-RSTAGE_END = json.load(open("figures/reference_rstage_end.json"))   # end of each R stage of the reference (a zip rounds file times)
+RSTAGE_END = json.load(open(f"{SRC}/reference_rstage_end.json"))   # end of each R stage of the reference (a zip rounds file times)
 
 def stages(arm, m):
     """(concordance stage, everything after it) in seconds for one model, or None; see the docstring for
     which part is measured and which derived."""
     if arm == "kimonu_ref":
-        R = [json.load(open(f)) for f in sorted(glob.glob(f"{os.environ.get('KIMONU_REF_DIR', '/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing/ref')}/kimonu_{m}_rep*.json"))]
+        R = [json.load(open(f)) for f in sorted(glob.glob(records.read(records.TIMING, "ref", f"kimonu_{m}_rep*.json")))]
         return (float(np.median([r["seconds_concordance"] for r in R])),
                 float(np.median([r["seconds_kinetic"] + r["seconds_acr"] for r in R]))) if R else None
     if arm == "ref_exh":
         r = D["ref_exh"][m]
-        stem = f"{m}_concordant_fixed_retest" if "retest" in r else m if os.path.isfile(f"reference_final/acr/{m}.acr.log") else f"{m}_concordant_fixed"
+        stem = f"{m}_concordant_fixed_retest" if "retest" in r else m if os.path.isfile(f"{REF_EXH}/acr/{m}.acr.log") else f"{m}_concordant_fixed"
         start = {}
-        for f in ("reference_final/acr/chain.log", "reference_final/acr/chain2.log", "reference_final/chain_553338.log",
-                  "reference_final/acr/chain_retest_iIT341b.log"):
+        for f in (f"{REF_EXH}/acr/chain.log", f"{REF_EXH}/acr/chain2.log", f"{REF_EXH}/chain_553338.log",
+                  f"{REF_EXH}/acr/chain_retest_iIT341b.log"):
             start.update({n: dt.datetime.fromisoformat(t) for n, t in re.findall(r"^== kinetic (\S+) (\S+)$", open(f).read(), re.M)})
         end = dt.datetime.fromtimestamp(RSTAGE_END[stem]).astimezone()      # mtime of the ACR log, figures/reference_rstage_end.py
         return r["seconds"], (end - start[stem]).total_seconds()
     d, pre = {"cocoa_true": ("cocoa_eff", "cocoa_eff"), "cocoa_false": ("cocoa_v110", "cocoa_v110")}[arm]
     conc, rest = [], []
     for seed in (1234, 2026, 31337):
-        j, lg = f"sweep/{d}/{pre}_{m}_HiGHS_p64_seed{seed}.json", f"sweep/{d}/cell_{m}_seed{seed}.log"
+        j, lg = f"{COCOA[d]}/{pre}_{m}_HiGHS_p64_seed{seed}.json", f"{COCOA[d]}/cell_{m}_seed{seed}.log"
         if not (os.path.isfile(j) and os.path.isfile(lg)): continue
         el = re.findall(r"Elapsed time: (\d+):(\d+):([\d.]+)", open(lg).read())
         if not el: continue
@@ -168,8 +174,8 @@ fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.06 / W, (yS - 0.
            labelspacing=0.45, columnspacing=0.55, borderaxespad=0, handletextpad=0.4)
 
 # --- B: the tangent route at scale, symbolic criterion against one exact nullspace
-LACR = os.environ.get("KIMONU_LACR", "/scratch/sadreyev_lab/pschneider/kimonu_local_acr")
-TIMING = os.environ.get("KIMONU_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing")
+LACR = records.read(records.LOCAL_ACR)
+TIMING = records.read(records.TIMING)
 LIMIT = 3600
 PURPLE, ORANGE = "#984EA3", "#FF7F00"
 def med_times(arm, stem=""):
@@ -205,7 +211,7 @@ fig.legend(handles=b_handles, loc="upper left", bbox_to_anchor=((xB - 0.2) / W, 
 
 # --- C, D: what each method reports, on the eleven models where the exhaustive reference finished
 BARS = ["cocoa_false", "cocoa_true", "kimonu_det", "kimonu_ref", "ref_exh", "ref_sampled"]   # reference-equivalent next to the reference it matches
-PC = json.load(open("figures/pair_counts.json"))          # figures/pair_sets.py
+PC = json.load(open(f"{SRC}/pair_counts.json"))          # figures/pair_sets.py
 def counts(arm, m, k):
     """(bar, low, high): the value, or for stochastic arms the median and range over seeds"""
     v = PC[m].get(arm)

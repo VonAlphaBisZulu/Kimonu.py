@@ -5,11 +5,14 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=16G
 #SBATCH --partition=sadreyevlab
-#SBATCH --output=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts/reference_fixed/full_%j.log
+#SBATCH --output=/scratch/sadreyev_lab/pschneider/kimonu_records/results/reference/fork_gate_runs/fixed/full_%j.log
+# Frozen harness of the paper (the reference of Langary et al. 2025). Outputs go to results/reference/fork_gate_runs/fixed/ of KIMONU_OUT (records.py);
+# the log line names the records folder of the cluster, so with another KIMONU_OUT submit with -o <that folder>/full_%j.log.
 set -u
 BASE=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py
-OUT=$BASE/scripts/reference_fixed
-mkdir -p $OUT
+PY=$HOME/miniconda3/envs/straindesign/bin/python
+OUT=$($PY $BASE/scripts/records.py write REF_GATE fixed)
+NET=$($PY $BASE/scripts/records.py read UNBLOCKED)
 export PATH=$HOME/miniconda3/envs/octave/bin:$PATH
 export OCTAVE_HOME=$HOME/miniconda3/envs/octave
 export LP_SERVER_PYTHON=$HOME/miniconda3/envs/straindesign/bin/python3
@@ -22,5 +25,5 @@ export REFERENCE_MODE=exhaustive
 export REFERENCE_MAT_OUT=$OUT/${MODEL}_concordant_fixed.mat
 [ -s "$OUT/reference_${MODEL}.json" ] && { echo "have $MODEL"; exit 0; }
 stdbuf -oL -eL octave --no-gui $BASE/scripts/matlab_reference/run_reference.m \
-  $BASE/scripts/unblocked/${MODEL}_fixed.crn.json $OUT/reference_${MODEL}.json
+  $NET/${MODEL}_fixed.crn.json $OUT/reference_${MODEL}.json
 echo "done $MODEL rc=$?"

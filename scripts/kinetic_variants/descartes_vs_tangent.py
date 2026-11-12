@@ -1,11 +1,13 @@
 """The iterated route with the Descartes step against the tangent space, per model and uptake mode.
 
-    python kinetic_variants/descartes_vs_tangent.py <model> [...]   -> kinetic_variants/descartes_<model>.json
+    python kinetic_variants/descartes_vs_tangent.py <model> [...]   -> descartes_<model>.json in
+results/kimonu/gap_experiments/descartes/ of KIMONU_OUT (records.py)
 """
 import json, os, sys, time
 import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from run_kimonu_crn import triplets_to_sparse, to_exact
 from kinetic_variants.tangent_one_shot import one_shot_exact
@@ -13,7 +15,7 @@ from kinetic_variants.descartes import kinetic_modules_descartes
 
 def pairs(groups): return {frozenset((a, b)) for g in groups for a in g for b in g if a < b}
 for M in sys.argv[1:]:
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
+    crn = json.load(open(records.network(M))); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc); S = to_exact(triplets_to_sparse(crn["S"], nm, nr))
     zero = {c for c in range(nc) if Y.tocsc()[:, c].nnz == 0}; mets = crn["metabolites"]
     out = dict(model=M)
@@ -28,4 +30,4 @@ for M in sys.argv[1:]:
         o = out[mode]
         print(f"{M:12s} {mode:8s} firings {len(fire):3d} | local-only now: couplings {o['local_only_couplings']:5d} ACR {o['local_only_acr']} ACRR pairs {o['local_only_acrr_pairs']:5d} | "
               f"not in tangent (must be 0): {o['descartes_not_in_tangent']} | {t_d:.0f}s vs {t_t:.0f}s", flush=True)
-    json.dump(out, open(f"{B}/kinetic_variants/descartes_{M}.json", "w"), indent=1)
+    json.dump(out, open(records.write(records.DESCARTES, f"descartes_{M}.json"), "w"), indent=1)

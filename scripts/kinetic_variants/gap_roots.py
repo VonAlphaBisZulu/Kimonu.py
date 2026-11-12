@@ -21,15 +21,16 @@ import numpy as np, scipy.sparse as sp
 from scipy.optimize import linprog
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.linalg import exact
 from run_kimonu_crn import crn_of
 
 M = sys.argv[1]
 DETACH = os.environ.get("DETACH") == "1"
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
-rel = json.load(open(f"/scratch/sadreyev_lab/pschneider/kimonu_twopoint/{M}_relations.json"))["relations"]
+rel = json.load(open(records.read(records.TWO_POINT, f"{M}_relations.json")))["relations"]   # two_point_gap.py prepare
 roots = sys.argv[2:] or [next(iter(r["c"])) for r in rel if r["kind"] == "ACR"]
 
 # structured reactions (substrate, product) from the composition of each reaction's two complexes

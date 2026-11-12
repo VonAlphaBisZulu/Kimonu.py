@@ -1,19 +1,24 @@
 """S8 addendum: both routes at the LP point rounded at scale 10^4 and 10^5, against the record of scale_check.py at 10^6.
 
-    python kinetic_variants/scale_check_1e4.py iHN637 <dir>/iHN637_1e4.json     # <dir> holds scale_check.py's iHN637.json
+    python kinetic_variants/scale_check_1e4.py iHN637 [<out.json>]
+
+It reads scale_check.py's iHN637.json from results/kimonu/lp_point_rounding/ of KIMONU_RECORDS and writes
+iHN637_1e4.json to the same folder of KIMONU_OUT, or to <out.json> (records.py).
 """
 import json, os, sys, time
 import numpy as np
-B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts"
+B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu import steady_state
 from run_kimonu_crn import triplets_to_sparse
-M, dest = sys.argv[1], sys.argv[2]
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+M = sys.argv[1]
+dest = sys.argv[2] if len(sys.argv) > 2 else records.write(records.LP_ROUNDING, f"{M}_1e4.json")
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 net = kimonu.crn_from_matrices(triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64), triplets_to_sparse(crn["Y"], nm, nc))
-rec = json.load(open(f"{os.path.dirname(dest)}/{M}.json"))
+rec = json.load(open(records.read(records.LP_ROUNDING, f"{M}.json")))
 out = dict(model=M)
 for scale in (10**4, 10**5):
     steady_state._LP_SCALE = scale

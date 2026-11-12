@@ -5,11 +5,12 @@ two kinetic routes start from the same exact partition and only the loop differs
 composition (sorted metabolite:coefficient pairs), which is how the two tools are matched; the zero complex
 has no composition and is left out, as COCOA leaves it out of every result.
 
-    python kimonu_side.py <model> <out.json> [crn.json]   (default: scripts/unblocked/<model>_fixed.crn.json)
+    python kimonu_side.py <model> <out.json> [crn.json]   (default: networks/unblocked/<model>_fixed.crn.json of the records)
 """
 import json, os, sys, time
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS)
 import numpy as np
 import kimonu
 from kimonu.network import substrate_complexes
@@ -21,7 +22,7 @@ def key(comp):
 
 
 def main(M, out, crn_path=None):
-    crn = json.load(open(crn_path or f"{B}/unblocked/{M}_fixed.crn.json"))
+    crn = json.load(open(crn_path or records.network(M)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     mets = crn["metabolites"]

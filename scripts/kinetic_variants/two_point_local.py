@@ -17,7 +17,8 @@ left, and when the solution touches nothing new, R grows by the neighbours of th
 loop stops after 8 rounds or when R exceeds 1500 rows.
 
     python kinetic_variants/two_point_local.py <model> <relation index> [time limit per round, s]
-        -> $TWO_POINT_LOCAL_OUT/<model>_rel<i>.json    (relations, V and classes from two_point_gap.py prepare)
+        -> local/<model>_rel<i>.json in results/kimonu/gap_experiments/two_point/ of KIMONU_OUT
+           (relations, V and classes from two_point_gap.py prepare, in the same folder of KIMONU_RECORDS)
     python kinetic_variants/two_point_local.py toys     soundness check on networks with a known answer
 """
 import json, os, sys, time
@@ -26,8 +27,8 @@ from scipy.optimize import linprog
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 
-PREP = os.environ.get("TWO_POINT_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_twopoint")
-OUT = os.environ.get("TWO_POINT_LOCAL_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_twopoint_local")
+PREP = os.path.join(records.RECORDS, records.TWO_POINT)
+OUT = os.path.join(records.OUT, records.TWO_POINT, "local")
 HUBS, MAX_ROUNDS, MAX_ROWS = 20, 8, 1500
 
 

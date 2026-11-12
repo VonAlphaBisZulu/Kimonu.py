@@ -21,7 +21,8 @@ basis differs (RREF for the exact kernel, orthonormal for the SVD).
 
     python float_exactcmp.py <model> <part>    part: "tangent", "iterated:k" (k-th of four tolerance chunks) or "iterated:tN" (tolerance N alone),
                                                 "svd_tangent" or "svd_iterated:k"
-                                                -> $KF_OUT/parts/<model>__<arm>.json, merged by figS5_S6_float.py
+                                                -> <model>__<arm>.json in results/kimonu/float_comparison/parts/
+                                                   of KIMONU_OUT (records.py), merged by figS5_S6_float.py
 """
 import hashlib, json, os, sys, time
 from fractions import Fraction
@@ -30,6 +31,7 @@ from scipy.sparse.csgraph import connected_components
 from concurrent.futures import ThreadPoolExecutor
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.readout import free_directions, readout
 from kimonu.network import uptake_columns, zero_complexes
@@ -37,7 +39,7 @@ from kimonu.linalg import entries, exact, matrix_product, nullspace
 from kimonu.steady_state import interior_flux
 from run_kimonu_crn import triplets_to_sparse
 
-OUT = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
+PARTS = os.path.join(records.OUT, records.FLOAT_PARTS)
 TAUS = [float(10.0 ** e) for e in np.arange(-14, -0.5 + 1e-9, 0.5)]
 TAU2 = [Fraction(10) ** int(round(2 * e)) for e in np.arange(-14, -0.5 + 1e-9, 0.5)]     # tau^2, exact
 EXACT_TAU, NCHUNK, MEMO = 1e-200, 4, int(os.environ.get("KF_MEMO", 8))
@@ -250,7 +252,7 @@ def pair_matrix(m, groups):
     return E
 
 
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
@@ -412,7 +414,7 @@ else:
     arm["seconds"] = time.time() - t0
     out[f"iterated_{ARM}"] = arm
 
-dest = f"{OUT}/parts/{M}__{f'tangent_{ARM}' if PART == 'tangent' else f'iterated_{ARM}_' + PART.split(':')[1]}.json"
+dest = f"{PARTS}/{M}__{f'tangent_{ARM}' if PART == 'tangent' else f'iterated_{ARM}_' + PART.split(':')[1]}.json"
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 json.dump(out, open(dest, "w"))
 log("wrote", dest, round(time.time() - t0, 1), "s")

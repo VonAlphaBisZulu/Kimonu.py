@@ -10,6 +10,7 @@ Usage:
 import argparse
 import json
 import os
+import sys
 
 import h5py
 import numpy as np
@@ -45,8 +46,9 @@ def main():
         "reactions": rxns, "metabolites": mets, "lb": lb, "ub": ub,
         "A": triplets(A), "Y": triplets(Y), "S": triplets(S),
     }
-    dest = args.out or os.path.join(os.path.dirname(os.path.abspath(__file__)), "published",
-                                    f"{args.model}_{args.variant}.crn.json")
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import records                                     # default: networks/with_blocked_reactions/ of KIMONU_OUT
+    dest = args.out or records.write(records.WITH_BLOCKED, f"{args.model}_{args.variant}.crn.json")
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     with open(dest, "w") as fh:
         json.dump(out, fh)

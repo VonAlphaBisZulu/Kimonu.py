@@ -10,7 +10,8 @@ Per model and uptake mode (attached, detached):
    factors completely over those primes; two permutations giving the same exponent per reaction confirm
    it. Every other value is a rational function of k that is no monomial (or a root of one).
 
-    python relation_values.py <model>   -> $RV_OUT/<model>.json
+    python relation_values.py <model>   -> experiments/relation_values/<model>.json of KIMONU_OUT
+(records.py; a run no paper item reads, kept out of the archive)
 """
 import json, os, random, sys, time
 from fractions import Fraction
@@ -18,21 +19,22 @@ import numpy as np
 from scipy import sparse
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.network import substrate_complexes
 from kimonu import interior_flux
 from run_kimonu_crn import triplets_to_sparse
 
-OUT = os.environ.get("RV_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_values")
+OUT = os.path.join(records.OUT, records.EXPERIMENTS, "relation_values")   # earlier runs: /scratch/sadreyev_lab/pschneider/kimonu_values
 M = sys.argv[1]
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
 Ycsc = sparse.csc_matrix(Y)
-ref = json.load(open(f"{B}/kinetic_variants/uptake_modes/{M}.json"))
-if os.path.exists(f"{B}/kinetic_variants/uptake_modes/{M}.detached.json"):
-    ref["detached"] = json.load(open(f"{B}/kinetic_variants/uptake_modes/{M}.detached.json"))["detached"]
+ref = json.load(open(records.read(records.UPTAKE_MODES, f"{M}.json")))
+if os.path.exists(records.read(records.UPTAKE_MODES, f"{M}.detached.json")):
+    ref["detached"] = json.load(open(records.read(records.UPTAKE_MODES, f"{M}.detached.json")))["detached"]
 
 
 def column(c):

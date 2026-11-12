@@ -127,3 +127,30 @@ The figure files the scripts write were renamed with them: `FigS_stage_timing`, 
 `FigS6_float_errors`, `Figure3_draft` (Figure 4) is `Figure4_draft`, `Figure3CD_draft` (Figure 4E, F) is
 `Figure4EF_draft`, `Fig_certificate` (Figure 3E, F) is `Figure3EF_draft` and `hierarchy` (Figure 3A, B) is
 `Figure3AB_draft`.
+
+## One records folder for every result (2026-11-12)
+Every script now reads its inputs from the records folder (`KIMONU_RECORDS`) and writes its results to `KIMONU_OUT`, in
+the layout of the Zenodo archive (`records.py`). These variables of earlier scripts are gone, each replaced by a folder
+of the records.
+
+| variable | folder of the records |
+|---|---|
+| `KIMONU_TIMING`, `TIMING_OUT`, `KIMONU_DET_DIR`, `KIMONU_ATT_DIR`, `KIMONU_REF_DIR` | `results/kimonu/timing/` (arms det, att, ref, ...) |
+| `UM_OUT`, `UM_DIR` | `results/kimonu/uptake_modes/` |
+| `MC_OUT`, `MC_DIR` | `results/kimonu/member_counts/` |
+| `HD_OUT`, `HIERARCHY_DIR` | `results/kimonu/hierarchy_detached/` |
+| `FB_OUT` | `results/kimonu/flux_balance_vs_mass_action/` |
+| `UPTAKE_LISTS`, `UL_OUT` | `results/kimonu/acr_lists_by_uptake_mode/` |
+| `GAP_OUT` | `results/kimonu/gap_roots/` |
+| `SO_OUT` | `results/kimonu/second_order/` |
+| `INJ_OUT` | `results/kimonu/gap_experiments/injectivity/` |
+| `TWO_POINT_OUT`, `TWO_POINT_LOCAL_OUT` | `results/kimonu/gap_experiments/two_point/` (and its `local/`) |
+| `SZ_OUT`, `SZ_DIR` | `results/kimonu/uniform_flux/` |
+| `GB_OUT` | `results/kimonu/genericity_bound/` |
+| `SCALE_DIR` | `results/kimonu/lp_point_rounding/` |
+| `KF_OUT` | `results/kimonu/float_comparison/parts/` |
+| `KIMONU_LACR`, `LACR_OUT` | `results/kimonu/symbolic_local_acr/` |
+| `FVA_OUT` | `results/kimonu/preprocessing_time/` (`experiments/fva_time/` for the FVA networks) |
+| `CM_OUT`, `BF_OUT`, `RV_OUT`, `SEED_OUT`, `SR_OUT`, `ZM_OUT`, `REFMOD_OUT` | `experiments/<script>/` (runs no paper item reads) |
+
+`link_records.sh` of the archive is gone as well, since the scripts read the unpacked archive directly.

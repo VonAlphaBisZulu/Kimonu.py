@@ -16,7 +16,7 @@ export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 echo "$(hostname) | A $(git -C "$SRC_A" rev-parse --short HEAD) $SRC_A | B $(git -C "$SRC_B" rev-parse --short HEAD) $SRC_B" \
      "| straindesign $(git -C "$SD" rev-parse --short HEAD) | $(date -Is)"
 mkdir -p "$OUT/A" "$OUT/B"
-models=$(for f in $(ls -S unblocked/*_fixed.crn.json); do
+models=$(for f in $(ls -S "$($PY records.py read UNBLOCKED)"/*_fixed.crn.json); do
            m=$(basename "$f" _fixed.crn.json); grep -qx "$m" kinetic_variants/models33.txt && echo "$m"; done)
 for m in $models; do echo "A $m"; echo "B $m"; done |
   xargs -P 8 -L 1 bash -c 'src=SRC_$0; PYTHONPATH=${!src}:$SD $PY -u kinetic_variants/refactor_equivalence.py dump "$1" "$OUT/$0/$1.pkl"' ||

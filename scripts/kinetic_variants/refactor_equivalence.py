@@ -3,7 +3,7 @@
     PYTHONPATH=<src of one commit> python kinetic_variants/refactor_equivalence.py dump <model> <out.pkl>
     python kinetic_variants/refactor_equivalence.py compare <dir A> <dir B> [models.txt]
 
-dump builds the unblocked network as uptake_modes.py does (kimonu.crn_from_matrices on unblocked/<model>_fixed.crn.json,
+dump builds the unblocked network as uptake_modes.py does (kimonu.crn_from_matrices on networks/unblocked/<model>_fixed.crn.json of the records,
 metabolites by index) and runs concordance, then with detached and with attached uptakes (seed 0) the iterated route,
 the tangent route, certify, and kinetic flux coupling by both routes. Every field of every result is pickled: modules,
 ACR, ACRR, the counts, K and M, B, the dimension, the flux r*, the rounds, the certificate's open relations and the
@@ -28,6 +28,8 @@ import numpy as np
 from scipy import sparse
 
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(1, B)                                  # after the src of PYTHONPATH
+import records                                         # paths of the records (KIMONU_RECORDS)
 RENAMED = {"largest_module": "giant_module", "groups": "classes", "group_of": "class_of", "n_groups": "n_classes",
            "largest_group": "largest_class"}
 NEW_ONLY = {"acrr_groups", "activity_ratio"}
@@ -36,7 +38,7 @@ NEW_ONLY = {"acrr_groups", "activity_ratio"}
 def network(model):
     """The unblocked network of ``model`` as uptake_modes.py builds it."""
     import kimonu
-    crn = json.load(open(f"{B}/unblocked/{model}_fixed.crn.json"))
+    crn = json.load(open(records.network(model)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 
     def matrix(t, rows, cols, dtype):

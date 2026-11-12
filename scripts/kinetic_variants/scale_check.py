@@ -1,10 +1,10 @@
 """S8 check: the tangent route (and the iterated route) at the LP point rounded at scale 10^6 (the package default),
 at scale 100, and unrounded (the LP point's float64 values as exact binary fractions, as before 2026-09-30).
 
-    python kinetic_variants/scale_check.py <model> <out.json>     # from scripts/, PYTHONPATH with StrainDesign 1.19.2
+    python kinetic_variants/scale_check.py <model> [<out.json>]   # from scripts/, PYTHONPATH with StrainDesign 1.19.2
 
-Run on 2026-11-11 for iNJ661 and iHN637 (sadreyevlab, 2 cores, not exclusive) into
-/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/scale_check/<model>.json, read by figures/paper_numbers.py (S8).
+<out.json> defaults to results/kimonu/lp_point_rounding/<model>.json of KIMONU_OUT (records.py). Run on 2026-11-11
+for iNJ661 and iHN637 (sadreyevlab, 2 cores, not exclusive), read by figures/paper_numbers.py (S8).
 iNJ661 was timed again on an exclusive node, one core, three runs (kinetic_variants/scale_check_exclusive.sbatch,
 job 572320) into scale_check/exclusive/iNJ661_rep{1,2,3}.json; the paper's S8 times are their medians.
 """
@@ -13,15 +13,17 @@ from fractions import Fraction
 from math import lcm
 import numpy as np
 from scipy.optimize import linprog
-B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts"
+B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu import steady_state
 from kimonu.linalg import nullspace, to_float
 from run_kimonu_crn import triplets_to_sparse
 
-M, dest = sys.argv[1], sys.argv[2]
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+M = sys.argv[1]
+dest = sys.argv[2] if len(sys.argv) > 2 else records.write(records.LP_ROUNDING, f"{M}.json")
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 net = kimonu.crn_from_matrices(triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64), triplets_to_sparse(crn["Y"], nm, nc))
 

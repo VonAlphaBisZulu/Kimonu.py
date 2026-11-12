@@ -1,10 +1,13 @@
 """Totals and per-model table of fb_vs_ma.py over the 33 networks, for both uptake modes.
 
-    python kinetic_variants/fb_vs_ma_summary.py [csv]   -> prints; with "csv" also writes fb_vs_ma/summary.csv
+    python kinetic_variants/fb_vs_ma_summary.py [csv]   -> prints; with "csv" also writes summary.csv to
+results/kimonu/flux_balance_vs_mass_action/ of KIMONU_OUT (records.py), from the same folder of KIMONU_RECORDS
 """
 import csv, json, os, statistics, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-D = os.environ.get("FB_OUT", f"{B}/kinetic_variants/fb_vs_ma")   # FB_OUT: a rerun
+sys.path.insert(0, B)
+import records
+D = records.read(records.FB_VS_MA)
 models = [l.strip() for l in open(f"{B}/kinetic_variants/models33.txt") if l.strip()]
 
 

@@ -8,7 +8,7 @@ D  share of the free metabolites with ACR or in an ACRR group, against the numbe
 
 The old C, D and their legend move down and become E, F. Marks as in A, B: one dot where the two routes agree, so the
 share is exact, and a bar from the iterated route (proven) to the tangent route (complete) on the networks with a
-gap. Data: kinetic_variants/member_counts/<model>.json (member_counts.py, detached uptakes). Complexes are counted as
+gap. Data: results/kimonu/member_counts/<model>.json of the records (records.py; member_counts.py, detached uptakes). Complexes are counted as
 in table S2, the zero complex included and the complexes that occur in no reaction (51 in iJB785, 29 in iSynCJ816)
 left out.
 
@@ -27,8 +27,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from PIL import Image
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path[:0] = [os.path.dirname(os.path.abspath(__file__)), os.path.dirname(os.path.dirname(os.path.abspath(__file__)))]
 import svg_finish, svg_panels
+import records
 
 src, dest = sys.argv[1], sys.argv[2]
 SHARE_OF = os.environ.get("SHARE_OF", "free")
@@ -50,13 +51,13 @@ plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7
                      "axes.linewidth": 0.6, "xtick.major.width": 0.6, "ytick.major.width": 0.6, "svg.fonttype": "none",
                      **svg_finish.mathtext_rc()})
 
-D = [json.load(open(f)) for f in sorted(glob.glob("kinetic_variants/member_counts/*.json")) if not f.endswith(".attached.json")]
+D = [json.load(open(f)) for f in sorted(glob.glob(records.read(records.MEMBER_COUNTS, "*.json"))) if not f.endswith(".attached.json")]
 assert len(D) == 33 and all(d["uptakes"] == "detached" for d in D), len(D)
 assert sorted(d["model"] for d in D if d["gap"]) == ["iCN718", "iHN637", "iNJ661"]
 
 def n_complexes(m):
     """complexes of the network with the zero complex, without those that occur in no reaction (the rows of A in use)"""
-    return len({i for i, _, _ in json.load(open(f"unblocked/{m}_fixed.crn.json"))["A"]})
+    return len({i for i, _, _ in json.load(open(records.network(m)))["A"]})
 def complexes(d, r):
     n = d["n_complexes"] if ALL_ROWS else n_complexes(d["model"])
     return n, 100 * r["complexes_in_modules"] / n

@@ -5,7 +5,8 @@ Per model and uptake mode: k = r* / ψ(x) as in relation_values.py, the exact va
 Value. Reported: how many ACR values, ACRR ratios and module ratios have a monomial formula, the largest
 number of rate constants in one, and the constraints on k.
 
-    python binomial_formulas.py <model>   -> $BF_OUT/<model>.json
+    python binomial_formulas.py <model>   -> experiments/binomial_formulas/<model>.json of KIMONU_OUT
+(records.py; a run no paper item reads, kept out of the archive)
 """
 import json, os, random, sys, time
 from fractions import Fraction
@@ -13,14 +14,15 @@ import numpy as np
 from scipy import sparse
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.network import substrate_complexes
 from kimonu import interior_flux
 from run_kimonu_crn import triplets_to_sparse
 
-OUT = os.environ.get("BF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_binomial")
+OUT = os.path.join(records.OUT, records.EXPERIMENTS, "binomial_formulas")   # earlier runs: /scratch/sadreyev_lab/pschneider/kimonu_binomial
 M = sys.argv[1]
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json

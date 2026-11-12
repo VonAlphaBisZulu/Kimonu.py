@@ -13,6 +13,7 @@ from fractions import Fraction
 import numpy as np, scipy.sparse as sp, straindesign as sd
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src")); sys.path.insert(0, os.path.join(os.path.dirname(B), "tests"))
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu import free_directions, interior_flux, row_readout
 from kimonu.linalg import entries, matrix_product, nullspace
@@ -60,7 +61,7 @@ if __name__ == "__main__":
         if name in TOY:
             A, Y, N, _ = matrices(*TOY[name])
         else:
-            crn = json.load(open(f"{B}/unblocked/{name}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
+            crn = json.load(open(records.network(name))); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
             A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc); N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
         rounds = check(A, Y, N)
         first, last = rounds[0], rounds[-1]

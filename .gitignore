@@ -234,3 +234,6 @@ scripts/seedcheck_psi/
 
 # SLURM logs that land in the submit directory
 slurm-*.out
+
+# the records folder (scripts/records.py, KIMONU_RECORDS): results go to Zenodo, never into git
+/records

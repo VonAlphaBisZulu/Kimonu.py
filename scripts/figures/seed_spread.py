@@ -8,16 +8,19 @@ does not depend on how a tool lists its pairs. Each seed's ACR and ACRR (all met
 imply, as in pair_sets.py, and restricted to the free metabolites, which gives a partition of the free metabolites and
 a block of fixed ones. The independent relations of a partition are its rank, and fixed_ratios is the rank of what
 some seed finds (the join of the partitions) minus the rank of what every seed finds (their meet).
-Kimonu: the three runs of the timing arm det (seeds 0, 1, 2 of r*, KIMONU_DET_DIR) must give identical modules, ACR
-and ACRR on every model, which is checked here, so its spread is zero. Output: figures/seed_spread.json.
+Kimonu: the three runs of the timing arm det (seeds 0, 1, 2 of r*, results/kimonu/timing/det) must give identical
+modules, ACR and ACRR on every model, which is checked here, so its spread is zero. Output: seed_spread.json in
+figures/source_data/ of KIMONU_OUT (records.py).
 
     python figures/seed_spread.py     # from scripts/
 """
 import collections, glob, itertools, json, os, re, sys
-B = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(B); sys.path.insert(0, "figures")
+B = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path[:0] = [os.path.join(B, "figures"), B]
 from gather_figdata import free_set, read_pairs
-D = json.load(open("figdata.json"))
-DET = os.environ.get("KIMONU_DET_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing/det")
+import records
+D = json.load(open(records.read(records.SOURCE_DATA, "figdata.json")))
+DET = records.read(records.TIMING, "det")
+COCOA = {"cocoa_v110": records.read(records.COCOA_FALSE), "cocoa_eff": records.read(records.COCOA_TRUE)}
 FIXED = ("fixed",)
 
 def P(l):
@@ -58,13 +61,13 @@ def ratio_spread(runs, free):
 out = {"cocoa_false": {}, "cocoa_true": {}, "ref_sampled": {}, "kimonu_det": {}}
 for arm, sub in (("cocoa_false", "cocoa_v110"), ("cocoa_true", "cocoa_eff")):
     for m in D["models"]:
-        fs = sorted(glob.glob(f"sweep/{sub}/{sub}_{m}_HiGHS_p64_seed*.json"))
+        fs = sorted(glob.glob(f"{COCOA[sub]}/{sub}_{m}_HiGHS_p64_seed*.json"))
         if len(fs) < 2: continue
         js = [json.load(open(f)) for f in fs]; free = free_set(m)
         labs = [[x if x >= 0 else None for x in j["kinetic_module"]] for j in js]
         out[arm][m] = dict(seeds=len(js), pairs=pair_spread(labs), fixed=set_spread([rel(j["acr"], j["acrr"], free) for j in js]),
                            fixed_ratios=ratio_spread([(j["acr"], j["acrr"]) for j in js], free))
-root = "reference_final_sampled/acr/Results"
+root = records.read(records.REF_SAMPLED, "acr", "Results")
 for m in D["ref_sampled"]:
     labs, sets, runs, free = [], [], [], free_set(m)
     for rec in D["ref_sampled"][m]:
@@ -90,7 +93,7 @@ for m in D["models"]:
     runs = [kimonu_run(f) for f in fs]
     assert len(runs) == 3 and all(r == runs[0] for r in runs), (m, DET, len(runs))
     out["kimonu_det"][m] = dict(seeds=len(runs), pairs=(0, None), fixed=(0, None), fixed_ratios=(0, None))
-json.dump(out, open("figures/seed_spread.json", "w"), indent=1)
+json.dump(out, open(records.write(records.SOURCE_DATA, "seed_spread.json"), "w"), indent=1)
 for arm, v in out.items():
     nz_p = sum(x["pairs"][0] > 0 for x in v.values()); nz_f = sum(x["fixed"][0] > 0 for x in v.values())
     nz_r = sum(x["fixed_ratios"][0] > 0 for x in v.values())

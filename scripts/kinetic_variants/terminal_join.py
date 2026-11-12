@@ -19,6 +19,7 @@ import json, os, sys, time
 
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from compat.upstream import coupling_signatures
 from kimonu.network import substrate_complexes, zero_complexes
@@ -55,7 +56,7 @@ if __name__ == "__main__":
     import numpy as np
     from run_kimonu_crn import triplets_to_sparse
     M = sys.argv[1]; detach = "--detach" in sys.argv
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))      # blocked reactions already removed
+    crn = json.load(open(records.network(M)))      # blocked reactions already removed
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json

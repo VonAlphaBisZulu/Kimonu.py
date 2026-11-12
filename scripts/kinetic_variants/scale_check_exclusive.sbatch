@@ -11,7 +11,7 @@
 cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 export PYTHONPATH=$PWD:$HOME/sd-kernel-nonzeros OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 PY=$HOME/miniconda3/envs/straindesign/bin/python
-OUT=/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/scale_check/exclusive
+OUT=$($PY records.py write LP_ROUNDING exclusive)   # records.py
 CORE=$($PY -c "import os; print(min(os.sched_getaffinity(0)))")
 echo "$(hostname) core $CORE | kimonu $(git -C .. rev-parse --short HEAD) | $(date -Is)"
 bash kinetic_variants/provenance.sh $OUT hw

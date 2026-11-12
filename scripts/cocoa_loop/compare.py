@@ -9,6 +9,8 @@ split); ACRR pairs between two ACR metabolites are dropped on both sides, as Kim
     python compare.py <dir with kimonu_*.json and cocoa_*.json> <models.txt> <out.json>
 """
 import json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records                                         # paths of the records (KIMONU_RECORDS)
 
 
 def relation(P, Q, universe):
@@ -42,7 +44,7 @@ def main(d, models, out):
         if not (os.path.exists(kf) and os.path.exists(cf)):
             rows.append({"model": M, "status": "missing"}); continue
         K, C = json.load(open(kf)), json.load(open(cf))
-        crn = json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), f"unblocked/{M}_fixed.crn.json")))
+        crn = json.load(open(records.network(M)))
         mets = crn["metabolites"]; free = set(mets[:mets.index("E_1")] if "E_1" in mets else mets)
         universe = set(K["balanced"]) | {c for g in K["concordance_modules"] for c in g}
         subs = set(K["substrate"])

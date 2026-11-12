@@ -22,7 +22,8 @@ scored against its own exact route: ACR metabolites and ACRR pairs, missed (fals
 Distances between nearly equal rows are taken directly, not from the Gram matrix: |a|^2 + |b|^2 - 2 a.b loses
 everything below about 1e-8 relative, which would count truly equal rows as different at tight tolerances.
 
-    python float_four.py <model> [part]   -> $KF_OUT/<model>.json, or $KF_OUT/parts/<model>__<part>.json
+    python float_four.py <model> [part]   -> <model>.json in results/kimonu/float_comparison/, or <model>__<part>.json in its
+                                             parts/, of KIMONU_OUT (records.py)
 
 part: "tangent" (both tangent arms), or "iterated_exact:k" / "iterated_svd:k" for the k-th of four contiguous
 chunks of the tolerance grid; without it, everything. figures/figS5_S6_float.py merges the parts.
@@ -33,6 +34,7 @@ import numpy as np, scipy.sparse as sp, scipy.linalg as sl
 from scipy.sparse.csgraph import minimum_spanning_tree
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.readout import free_directions, readout
 from kimonu.network import uptake_columns, zero_complexes
@@ -40,7 +42,7 @@ from kimonu.linalg import entries, exact, matrix_product, nullspace
 from kimonu.steady_state import interior_flux
 from run_kimonu_crn import triplets_to_sparse
 
-OUT = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
+PARTS = os.path.join(records.OUT, records.FLOAT_PARTS)
 TAUS = [float(10.0 ** e) for e in np.arange(-14, -0.5 + 1e-9, 0.5)]
 EXACT_TAU = 1e-200          # only exact equality passes: the check that the exact arms reproduce kimonu
 REFINE = 1e-6               # pairs closer than this (from the Gram matrix) get their distance taken directly
@@ -219,7 +221,7 @@ NCHUNK = 4
 DO_TANGENT = PART in ("all", "tangent")
 ITER = [("exact", None), ("svd", None)] if PART == "all" else \
        [(PART.split(":")[0].split("_")[1], int(PART.split(":")[1]))] if PART.startswith("iterated") else []
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
@@ -407,7 +409,7 @@ if ITER:
         out[arm]["seconds"] = time.time() - t0
 
 out["svd_fallbacks"] = FALLBACKS
-dest = f"{OUT}/{M}.json" if PART == "all" else f"{OUT}/parts/{M}__{PART.replace(':', '_')}.json"
+dest = f"{os.path.dirname(PARTS)}/{M}.json" if PART == "all" else f"{PARTS}/{M}__{PART.replace(':', '_')}.json"
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 json.dump(out, open(dest, "w"))
 log("wrote", dest)

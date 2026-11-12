@@ -16,6 +16,7 @@ import numpy as np, scipy.sparse as sp
 import flint
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src"), os.path.join(B, "kinetic_variants")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu import interior_flux, readout, tangent_space
 from run_kimonu_crn import triplets_to_sparse
@@ -26,7 +27,7 @@ fq = lambda x: flint.fmpq(x.numerator, x.denominator)
 tofrac = lambda q: Fraction(int(q.p), int(q.q))
 
 for M in sys.argv[1:]:
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+    crn = json.load(open(records.network(M)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json

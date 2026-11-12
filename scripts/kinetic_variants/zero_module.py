@@ -6,21 +6,23 @@ module (psi_0 = 1); detached, the zero complex is left out of the readout and th
 Reports both counts per mode (they must agree attached), the fixed complexes by composition and the
 single-metabolite ones among them, which are ACR metabolites.
 
-    python kinetic_variants/zero_module.py <model>   -> $ZM_OUT/<model>.json
+    python kinetic_variants/zero_module.py <model>   -> experiments/zero_module/<model>.json of KIMONU_OUT
+(records.py; a run no paper item reads, kept out of the archive)
 """
 import json, os, sys
 import numpy as np
 from scipy import sparse
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.linalg import matrix_product
 from kimonu.readout import free_directions
 from run_kimonu_crn import triplets_to_sparse
 
-OUT = os.environ.get("ZM_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_accr")
+OUT = os.path.join(records.OUT, records.EXPERIMENTS, "zero_module")   # earlier runs: /scratch/sadreyev_lab/pschneider/kimonu_accr
 M = sys.argv[1]
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json

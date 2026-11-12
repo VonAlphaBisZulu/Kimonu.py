@@ -14,10 +14,11 @@
 #   sbatch kinetic_variants/preprocess_time.sbatch        # from scripts/
 cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 export PYTHONPATH=$HOME/sd-kernel-nonzeros:../src OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
-PY=$HOME/miniconda3/envs/straindesign/bin/python; O=${FVA_OUT:-/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/fva}
-mkdir -p $O
+PY=$HOME/miniconda3/envs/straindesign/bin/python; O=$($PY records.py write EXPERIMENTS preprocess_sbml); W=$($PY records.py read WITH_BLOCKED)
+L=$($PY records.py write PREPROCESSING)
+exec > >(tee "$L/preprocess_${SLURM_JOB_ID:-local}.log") 2>&1     # the record of results/kimonu/preprocessing_time/
 CORE=$($PY -c "import os; print(min(os.sched_getaffinity(0)))"); hostname
 for m in iAF1260b iS_1188; do
-  [ -s $O/$m.xml ] || $PY kinetic_variants/crn_to_sbml.py sweep/${m}_fixed.crn.json $O/$m.xml 2>&1 | tail -1
+  [ -s $O/$m.xml ] || $PY kinetic_variants/crn_to_sbml.py $W/${m}_fixed.crn.json $O/$m.xml 2>&1 | tail -1
   for r in 1 2 3; do /usr/bin/time -f "peak %M kB, wall %e s" taskset -c $CORE $PY kinetic_variants/preprocess_time.py $O/$m.xml 2>&1 | grep -v -i "warn\|^$" | tail -2 | cut -c1-260; done
 done

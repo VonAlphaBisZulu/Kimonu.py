@@ -139,10 +139,11 @@ def jacobian_sign_test(A, Y, N):
 if __name__ == "__main__":
     B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+    import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
     from run_kimonu_crn import triplets_to_sparse
     from kinetic_variants.two_point import substrate_composition
     M = sys.argv[1]; tl = float(sys.argv[2]) if len(sys.argv) > 2 else 3600; th = int(sys.argv[3]) if len(sys.argv) > 3 else 8
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+    crn = json.load(open(records.network(M)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     Nf = triplets_to_sparse(crn["S"], nm, nr)

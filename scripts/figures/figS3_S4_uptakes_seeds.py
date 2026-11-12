@@ -2,13 +2,14 @@
 
 fig. S3 (FigS3_uptakes) attached against detached uptakes, per network (Kimonu, iterated route): kinetic modules (A), ACR
                 metabolites (B) and independent ACRR ratios (C, k - 1 per group of k) among free metabolites. figdata.json, arms "kimonu" (attached,
-                $KIMONU_ATT_DIR) and "kimonu_det" (detached, $KIMONU_DET_DIR).
+                timing arm att) and "kimonu_det" (detached, timing arm det).
 fig. S4 (FigS4_seeds) relations that change with the random seed, per network and arm: coupled complex pairs (A) and ACR
                 metabolites plus independent ACRR ratios among free metabolites (B) that differ between the seeds (the
                 rank of what some seed finds minus the rank of what all seeds share, seed_spread.py).
-                figures/seed_spread.json (seed_spread.py); Kimonu's r* seeds 0, 1, 2 change nothing.
+                seed_spread.json (seed_spread.py); Kimonu's r* seeds 0, 1, 2 change nothing.
+Both JSON files are read from figures/source_data/ of the records (records.py).
 
-    python figures/figS3_S4_uptakes_seeds.py <out_dir>        # from scripts/
+    python figures/figS3_S4_uptakes_seeds.py [<out_dir>]      # from scripts/; default drafts/supp of KIMONU_OUT
 """
 import io, json, os, sys, tempfile
 import numpy as np
@@ -17,8 +18,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.transforms import blended_transform_factory
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path[:0] = [os.path.dirname(os.path.abspath(__file__)), os.path.dirname(os.path.dirname(os.path.abspath(__file__)))]
 import svg_finish, svg_panels
+import records
 
 plt.rcParams.update({"font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6, "ytick.labelsize": 6, "legend.fontsize": 6,
                      "axes.linewidth": 0.6, "xtick.major.width": 0.6, "ytick.major.width": 0.6, "xtick.major.size": 2.5,
@@ -27,7 +29,7 @@ INK, MUTE, RULE = "#1b2430", "#6b7480", "#d5d9de"
 GREEN, BLUE, RED = "#4DAF4A", "#377EB8", "#E41A1C"
 LETTER = dict(fontsize=18, fontweight="bold", family="Arial", color=INK, va="top", ha="left")
 W = 7.2
-D = json.load(open("figdata.json")); nC = D["n_complexes"]
+D = json.load(open(records.read(records.SOURCE_DATA, "figdata.json"))); nC = D["n_complexes"]
 MODELS = sorted(D["kimonu_det"], key=lambda m: nC[m])
 from names import network as SHORT                 # one display name per network (figures/names.py)
 
@@ -76,7 +78,7 @@ def uptakes(out):
 
 
 def seeds(out):
-    S = json.load(open("figures/seed_spread.json"))
+    S = json.load(open(records.read(records.SOURCE_DATA, "seed_spread.json")))
     ARMS = [("cocoa_false", "COCOA.jl, efficient=false", RED, True), ("cocoa_true", "COCOA.jl, efficient=true", RED, False),
             ("ref_sampled", "Reference, sampled (Langary et al., 2025)", BLUE, False), ("kimonu_det", "Kimonu (iterated route)", GREEN, True)]
     H = 3.9; fig = plt.figure(figsize=(W, H)); hA, gap, top = 1.15, 0.4, 0.35
@@ -111,5 +113,5 @@ def seeds(out):
 
 
 if __name__ == "__main__":
-    out = sys.argv[1]; os.makedirs(out, exist_ok=True)
+    out = sys.argv[1] if len(sys.argv) > 1 else records.write(records.DRAFTS, "supp", folder=True); os.makedirs(out, exist_ok=True)
     uptakes(out); seeds(out)

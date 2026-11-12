@@ -14,8 +14,7 @@
 cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 SD=${SD_TREE:-$HOME/sd-kernel-nonzeros}
 export PYTHONPATH=$SD OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1} OPENBLAS_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1} MKL_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1}
-OUT=${GAP_OUT:-/scratch/sadreyev_lab/pschneider/kimonu_gaproots}
-mkdir -p $OUT
+OUT=$($HOME/miniconda3/envs/straindesign/bin/python records.py write GAP_ROOTS)   # records.py
 echo "$(hostname) | kimonu $(git -C .. describe --always --dirty) | straindesign $(git -C $SD rev-parse --short HEAD) | $(date -Is)" >&2
 bash kinetic_variants/provenance.sh "$OUT"
 read -r D M ROOTS <<< "$(sed -n "${SLURM_ARRAY_TASK_ID}p" kinetic_variants/gap_roots_cases.txt)"

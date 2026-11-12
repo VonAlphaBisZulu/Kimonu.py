@@ -33,6 +33,7 @@ import scipy.sparse as sp
 
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 
 
 def dependencies(Nf, G, detach_uptakes=False):
@@ -148,14 +149,14 @@ if __name__ == "__main__":
     ap.add_argument("model"); ap.add_argument("--detach", action="store_true")
     ap.add_argument("--max-block", type=int, default=60); ap.add_argument("--time-limit", type=float, default=600)
     a = ap.parse_args()
-    crn = json.load(open(f"{B}/unblocked/{a.model}_fixed.crn.json"))
+    crn = json.load(open(records.network(a.model)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     Nf = triplets_to_sparse(crn["S"], nm, nr); mets = crn["metabolites"]
     t = time.time()
     out = run(A, Y, to_exact(Nf), Nf, a.detach, a.max_block, a.time_limit, log=lambda s: print(f"[{a.model}] {s}", file=sys.stderr, flush=True))
     gained = sorted(set(out["acr"]) - set(out["iterated_acr"]))
-    relf = f"/scratch/sadreyev_lab/pschneider/kimonu_twopoint/{a.model}_relations.json"
+    relf = records.read(records.TWO_POINT, f"{a.model}_relations.json")       # two_point_gap.py prepare
     rel_status = None
     if os.path.exists(relf):
         idx = {mm: i for i, mm in enumerate(mets)}

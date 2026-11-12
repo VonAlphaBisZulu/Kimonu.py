@@ -1,19 +1,18 @@
 """Build figdata.json from the benchmark result directories. Every figure of the benchmark and Data S1 read it.
 
-Arms: kimonu (iterated route, attached uptakes; seconds the median of three seeds) from $KIMONU_ATT_DIR, kimonu_det
-(iterated route, detached uptakes, Kimonu's default) from $KIMONU_DET_DIR, kimonu_ref (reference-equivalent mode,
-run_kimonu_refmode.py) from $KIMONU_REF_DIR, kimonu_up from sweep_shared/ (the upstream-set route of September, kept in
-the file but drawn by no figure of the paper; compat/upstream.py;
-giant_overlap from the sweep_tentative/ logs, the pairwise-rule fields *_s210 from kinetic_variants/s210_*.json), COCOA from sweep/cocoa_v110 (efficient=false) and sweep/cocoa_eff
-(efficient=true), reference from reference_final/ (exhaustive, fixed algorithm and bridge; retested partitions from
-reference_final/retest/ where present) and reference_final_sampled/. Earlier reference runs are not read: they predate the concordance fixes.
-Free metabolites are those listed before "E_1" in the model's own metabolite list.
+All paths are paths of the records (records.py): read from KIMONU_RECORDS, figdata.json written to
+KIMONU_OUT/figures/source_data/. Arms: kimonu (iterated route, attached uptakes; seconds the median of three seeds),
+kimonu_det (iterated route, detached uptakes, Kimonu's default) and kimonu_ref (reference-equivalent mode,
+run_kimonu_refmode.py) from the timing arms att, det and ref (results/kimonu/timing/, the rerun of 2026-11-11 by
+timing_exclusive.sbatch), kimonu_up from results/kimonu/upstream_set_route_2026-09/kimonu_runs/ (the upstream-set
+route of September, kept in the file but drawn by no figure of the paper; compat/upstream.py; giant_overlap from its
+overlap_merge_logs/, the pairwise-rule fields *_s210 from its shinar_feinberg_rule/), COCOA from
+results/cocoa_jl/efficient_false and efficient_true, reference from results/reference/exhaustive/ (fixed algorithm and
+bridge; retested partitions from its retest/ where present) and results/reference/sampled/. Earlier reference runs are
+not read: they predate the concordance fixes. Free metabolites are those listed before "E_1" in the model's own
+metabolite list.
 
-    python figures/gather_figdata.py [--check]   # --check diffs kimonu/COCOA arms against the committed file
-
-KIMONU_DET_DIR, KIMONU_ATT_DIR and KIMONU_REF_DIR default to the runs of the paper, the arms det, att and ref of the
-rerun of 2026-11-11 (timing_exclusive.sbatch, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing). Point them at
-the directories of a rerun.
+    python figures/gather_figdata.py [--check]   # --check diffs kimonu/COCOA arms against the figdata.json of the records
 
 Complexes are counted as in the deficiency, the zero complex included and the complexes that occur in no reaction left
 out. The crn.json lists 51 such complexes for iJB785 and 29 for iSynCJ816. Kimonu and the reference count them as
@@ -36,23 +35,26 @@ A network a tool did not finish within 7 days is missing from that arm.
 """
 import csv, glob, json, os, re, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(B)
-TIMING = "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing"
-DET_DIR = os.environ.get("KIMONU_DET_DIR", f"{TIMING}/det")
-REF_DIR = os.environ.get("KIMONU_REF_DIR", f"{TIMING}/ref")
+sys.path.insert(0, B)
+import records
+TIMING = records.read(records.TIMING)
+DET_DIR, REF_DIR, ATT_DIR = f"{TIMING}/det", f"{TIMING}/ref", f"{TIMING}/att"
+UP = records.read(records.UPSTREAM_ROUTE)
+COCOA = {"cocoa_v110": records.read(records.COCOA_FALSE), "cocoa_eff": records.read(records.COCOA_TRUE)}
+REF_EXH, REF_SAMPLED = records.read(records.REF_EXHAUSTIVE), records.read(records.REF_SAMPLED)
 NO_REACTION = {}
 
 
 def complexes(m):
     """The number of complexes as the paper counts them (the zero complex included, the complexes that occur in no
     reaction left out) and the ids of those left out, complex_<row of A, from 1> as every tool's record names them."""
-    crn = json.load(open(f"unblocked/{m}_fixed.crn.json"))
+    crn = json.load(open(records.network(m)))
     used = {i for i, _, _ in crn["A"]}
     NO_REACTION[m] = {f"complex_{c}" for c in range(1, crn["n_complexes"] + 1) if c not in used}
     return len(used), crn["n_complexes"]
 
 def free_set(m):
-    mets = json.load(open(f"unblocked/{m}_fixed.crn.json"))["metabolites"]
+    mets = json.load(open(records.network(m)))["metabolites"]
     cut = mets.index("E_1") if "E_1" in mets else len(mets)
     return set(mets[:cut])
 
@@ -75,8 +77,6 @@ def ratios(pairs, free=None):
     for a in list(parent):
         groups.setdefault(find(a), set()).add(a)
     return sum(max(len(g if free is None else g & free) - 1, 0) for g in groups.values())
-
-ATT_DIR = os.environ.get("KIMONU_ATT_DIR", f"{TIMING}/att")
 
 def kimonu_rec(m, root=ATT_DIR):
     """psi route; the replicates agree on every count, so only the times vary."""
@@ -103,7 +103,7 @@ def kimonu_ref_rec(m):
     import kimonu
     from kimonu.reference import shinar_feinberg
     from run_kimonu_crn import triplets_to_sparse
-    crn = json.load(open(f"unblocked/{m}_fixed.crn.json"))
+    crn = json.load(open(records.network(m)))
     mets = crn["metabolites"]; free = free_set(m)
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     net = kimonu.crn_from_matrices(triplets_to_sparse(crn["A"], nc, nr, dtype=int), triplets_to_sparse(crn["Y"], nm, nc))
@@ -116,7 +116,7 @@ def kimonu_ref_rec(m):
                 seconds=med("seconds"), sec_conc=med("seconds_concordance"), sec_kin=med("seconds_kinetic"), sec_acr=med("seconds_acr"))
 
 def kimonu_up_rec(m):
-    d = json.load(open(f"sweep_shared/kimonu_{m}.json")); free = free_set(m)
+    d = json.load(open(f"{UP}/kimonu_runs/kimonu_{m}.json")); free = free_set(m)
     assert all(c["module"] == 0 for c in d["complexes"] if c["id"] in NO_REACTION[m]), m
     return dict(balanced=d["n_balanced"] - len(NO_REACTION[m]), conc=d["n_concordance_modules"], giant=d["giant_kinetic_module"],
                 acr_free=n_free(d["acr_free"], free), acrr_free=n_free(d["acrr_free"], free),
@@ -127,21 +127,21 @@ def kimonu_up_rec(m):
 def s210(m):
     """ACR/ACRR by the reference's pairwise rule on the September modules, from the records of the removed
     kinetic_variants/s210_criterion.py (HISTORY.md); the rule is now kimonu.reference.shinar_feinberg."""
-    f = f"kinetic_variants/s210_{m}.json"
+    f = f"{UP}/shinar_feinberg_rule/s210_{m}.json"
     if not os.path.isfile(f): return {}
     d = json.load(open(f))
     return dict(acr_s210=len(d["acr"]), acrr_s210=len(d["acrr"]), acr_s210_free=d["acr_free"], acrr_s210_free=d["acrr_free"])
 
 def giant_overlap(m):
-    """Largest module under overlap-only merging (the reference's rule), from the sweep_tentative/ logs; the four-phase and two-phase upstream sets are identical, see kinetic_variants/."""
-    for line in open(f"sweep_tentative/{m}.log"):
+    """Largest module under overlap-only merging (the reference's rule), from the overlap_merge_logs/; the four-phase and two-phase upstream sets are identical, see kinetic_variants/."""
+    for line in open(f"{UP}/overlap_merge_logs/{m}.log"):
         if "after overlap merge" in line:
             return int(re.search(r"largest\s+(\d+)", line).group(1))
     raise ValueError(m)
 
 def cocoa_recs(m, sub, tag):
     out = []
-    for f in sorted(glob.glob(f"sweep/{sub}/{tag}_{m}_HiGHS_p64_seed*.json")):
+    for f in sorted(glob.glob(f"{COCOA[sub]}/{tag}_{m}_HiGHS_p64_seed*.json")):
         d = json.load(open(f)); free = free_set(m)
         assert d["n_complexes"] == len(d["complex_ids"]) == complexes(m)[0] - 1, m   # neither the zero complex nor those of no reaction
         cm = d["concordance_module"]; balanced = sum(1 for x in cm if x == 0)
@@ -176,18 +176,18 @@ def read_pairs(path):
 
 def ref_exh(m):
     """Exhaustive reference; where the rejected pairs were re-tested with the scaling-bound fix
-    (reference_final/retest/), the retested partition and its R stage are used and `retest` says so."""
-    f = f"reference_final/reference_{m}.json"
+    (retest/), the retested partition and its R stage are used and `retest` says so."""
+    f = f"{REF_EXH}/reference_{m}.json"
     if not os.path.isfile(f): return None
     stem, rec = f"{m}_concordant_fixed", {}
-    rt = f"reference_final/retest/reference_{m}_retest.json"
+    rt = f"{REF_EXH}/retest/reference_{m}_retest.json"
     if os.path.isfile(rt):
         f, stem = rt, f"{m}_concordant_fixed_retest"
-        w = open(f"reference_final/retest/retest_{m}.txt").readline().split()
+        w = open(f"{REF_EXH}/retest/retest_{m}.txt").readline().split()
         rec["retest"] = dict(retested=int(w[1]), accepted=int(w[3]), residual=int(w[5]))
     d = json.load(open(f)); b, c = ref_counts(d, m)
     rec.update(balanced=b, conc=c, seconds=d["seconds"], sec_conc=d["seconds_concordant"])
-    return r_stage(rec, m, "reference_final/acr", stem)
+    return r_stage(rec, m, f"{REF_EXH}/acr", stem)
 
 def r_stage(rec, m, root, stem):
     """Add giant, kinetic-module count and ACR/ACRR from a reference R-stage run when present."""
@@ -207,13 +207,13 @@ def r_stage(rec, m, root, stem):
 
 def ref_sampled(m):
     out = []
-    for f in sorted(glob.glob(f"reference_final_sampled/reference_{m}_seed*.json")):
+    for f in sorted(glob.glob(f"{REF_SAMPLED}/reference_{m}_seed*.json")):
         d = json.load(open(f)); b, c = ref_counts(d, m); seed = int(re.search(r"seed(\d+)", f).group(1))
-        out.append(r_stage(dict(seed=seed, balanced=b, conc=c, seconds=d["seconds"]), m, "reference_final_sampled/acr", f"{m}_seed{seed}"))
+        out.append(r_stage(dict(seed=seed, balanced=b, conc=c, seconds=d["seconds"]), m, f"{REF_SAMPLED}/acr", f"{m}_seed{seed}"))
     return out
 
 if __name__ == "__main__":
-    old = json.load(open("figdata.json"))
+    old = json.load(open(records.read(records.SOURCE_DATA, "figdata.json")))
     models = old["models"]
     D = dict(models=models, n_complexes={}, complexes_in_no_reaction={}, kimonu={}, kimonu_det={}, kimonu_up={}, kimonu_ref={},
              cocoa_false={}, cocoa_true={}, ref_exh={}, ref_sampled={})
@@ -240,5 +240,5 @@ if __name__ == "__main__":
                 if a != b: print("DIFF", arm, m, "\n  old", a, "\n  new", b)
         print("check done")
     else:
-        json.dump(D, open("figdata.json", "w"), indent=1)
+        json.dump(D, open(records.write(records.SOURCE_DATA, "figdata.json"), "w"), indent=1)
         print({k: len(v) for k, v in D.items() if isinstance(v, dict)})

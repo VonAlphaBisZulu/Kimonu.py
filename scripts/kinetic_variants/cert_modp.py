@@ -18,7 +18,8 @@ with one test per candidate relation (m ACR, m(m-1)/2 ACRR, n(n-1)/2 complex pai
 The iterated route computes ker W in modular arithmetic and its log-space closure exactly (that part does not
 depend on r), round by round as kimonu.iterated_route. Detached uptakes.
 
-    python cert_modp.py <model> [seed]   -> $CM_OUT/<model>.json
+    python cert_modp.py <model> [seed]   -> experiments/cert_modp/<model>.json of KIMONU_OUT
+(records.py; a run no paper item reads, kept out of the archive)
 """
 import json, os, sys, time
 from fractions import Fraction
@@ -26,13 +27,14 @@ import numpy as np
 import flint
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu import free_directions, readout, steady_state_map
 from kimonu.network import zero_complexes
 from kimonu.linalg import nullspace
 from run_kimonu_crn import triplets_to_sparse
 
-OUT = os.environ.get("CM_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_cert_modp")
+OUT = os.path.join(records.OUT, records.EXPERIMENTS, "cert_modp")   # earlier runs: /scratch/sadreyev_lab/pschneider/kimonu_cert_modp
 P = 2**61 - 1
 M = sys.argv[1]; SEED = int(sys.argv[2]) if len(sys.argv) > 2 else 0
 log = lambda *a: print(f"[{time.strftime('%H:%M:%S')}] {M}:", *a, flush=True)
@@ -44,7 +46,7 @@ def mod(x):
     return x.numerator % P * pow(x.denominator, -1, P) % P
 
 
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json

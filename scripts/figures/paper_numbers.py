@@ -2,27 +2,16 @@
 its source.
 
 One line per number, in the order of the text: the section, a short key, what the number is, the value, and the file
-or directory it comes from. After a rerun, point the variables below at the new result directories, run this script
-and update the text where a value changed. Numbers that no result file holds (software versions, SLURM settings of the
-other tools) are listed at the end with where they come from.
+or directory it comes from, a path of the records (records.py, KIMONU_RECORDS). After a rerun, point KIMONU_RECORDS
+at a folder with the new results, run this script and update the text where a value changed. Numbers that no result
+file holds (software versions, SLURM settings of the other tools) are listed at the end with where they come from.
 
     python figures/paper_numbers.py        # from scripts/
 
-Result directories (environment variable, default; RERUN = /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111, the
-runs of the paper on the final code):
-    KIMONU_TIMING                     RERUN/timing   (det, att, ref, tan, tanatt, small; hardware_*.txt, slurm_jobs.txt)
-    KIMONU_DET_DIR, KIMONU_REF_DIR    KIMONU_TIMING/det, KIMONU_TIMING/ref
-    KIMONU_LACR                       /scratch/sadreyev_lab/pschneider/kimonu_local_acr   (symbolic baselines)
-    KF_OUT                            /scratch/sadreyev_lab/pschneider/kimonu_float_four   (Fig. 3E, F, figs. S5, S6)
-    GB_OUT                            RERUN/genericity_bound
-    GAP_OUT                           RERUN/gap_roots
-    SZ_DIR                            RERUN/sz_flux_33
-    SCALE_DIR                         RERUN/scale_check   (S8, the rounding of the LP point)
-    FVA_OUT                           /scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/fva   (preprocessing time)
-    UPTAKE_LISTS                      RERUN/uptake_lists
-Repository files: figdata.json, figures/pair_counts.json, figures/pair_sets.json, figures/seed_spread.json,
-kinetic_variants/uptake_modes/, member_counts/, fb_vs_ma/, second_order_results/, injectivity_results/,
-descartes_*.json, one_lp_results.log, deficiency/deficiency_33.json, unblocked/, reference_final/, sweep/.
+It reads results/kimonu/ (timing arms det, att, ref, tan, tanatt, small with hardware_*.txt and slurm_jobs.txt,
+uptake_modes, member_counts, flux_balance_vs_mass_action, gap_roots, second_order, gap_experiments, uniform_flux,
+genericity_bound, lp_point_rounding, symbolic_local_acr, preprocessing_time, one_lp_vs_fva), figures/source_data/,
+networks/, results/reference/exhaustive/, results/cocoa_jl/efficient_true/ and results/hardware/.
 
 Complexes are counted with the zero complex and without the complexes that occur in no reaction (figdata.json
 n_complexes, table S2). ACRR is counted as independent ratios, k - 1 per group of k metabolites (k free metabolites for
@@ -31,20 +20,20 @@ the free counts), from the group sizes of kinetic_variants/member_counts/. Coupl
 import glob, json, os, re, statistics, sys
 
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(B)
-sys.path.insert(0, os.path.join(B, "figures"))
-SCR = "/scratch/sadreyev_lab/pschneider"
-RERUN = f"{SCR}/kimonu_rerun_1111"
-env = lambda k, d: os.environ.get(k, d)
-TIMING = env("KIMONU_TIMING", f"{RERUN}/timing")
-REF_DIR = env("KIMONU_REF_DIR", f"{TIMING}/ref")
-DET_DIR = env("KIMONU_DET_DIR", f"{TIMING}/det")
-LACR = env("KIMONU_LACR", f"{SCR}/kimonu_local_acr")
-GB = env("GB_OUT", f"{RERUN}/genericity_bound")
-GAP = env("GAP_OUT", f"{RERUN}/gap_roots")
-SZ = env("SZ_DIR", f"{RERUN}/sz_flux_33")
-SCALE = env("SCALE_DIR", f"{RERUN}/scale_check")
-FVA = env("FVA_OUT", f"{SCR}/kimonu_timing_seeds/fva")
+os.chdir(B)                                                    # for kinetic_variants/ (code and the list of networks)
+sys.path[:0] = [os.path.join(B, "figures"), B]
+import records
+rp = records.read                                              # every path below is a path of the records
+TIMING = records.TIMING
+REF_DIR = f"{TIMING}/ref"
+DET_DIR = f"{TIMING}/det"
+LACR = records.LOCAL_ACR
+GB = records.GENERICITY_BOUND
+GAP = records.GAP_ROOTS
+SZ = records.UNIFORM_FLUX
+SCALE = records.LP_ROUNDING
+FVA = records.PREPROCESSING
+UM_, MC_, FB_, SD_ = records.UPTAKE_MODES, records.MEMBER_COUNTS, records.FB_VS_MA, records.SOURCE_DATA
 MODELS = [l.strip() for l in open("kinetic_variants/models33.txt") if l.strip()]
 GAP_ORDER = ["iCN718", "iNJ661", "iHN637"]                     # the order of the text
 med = statistics.median
@@ -68,7 +57,7 @@ def maxrss_gib(paths):
 def times(arm):
     """{network: [seconds of each replicate]} of a timing arm"""
     t = {}
-    for f in glob.glob(f"{TIMING}/{arm}/*_rep*.json"):
+    for f in glob.glob(rp(f"{TIMING}/{arm}/*_rep*.json")):
         r = json.load(open(f)); t.setdefault(r.get("network") or r.get("model") or re.sub(r"^(kimonu|tangent)_|_rep\d+\.json$", "", os.path.basename(f)), []).append(r["seconds"])
     return t
 
@@ -77,10 +66,10 @@ ratios = lambda sizes: sum(k - 1 for k in sizes)               # k - 1 independe
 pairs_of = lambda sizes: sum(k * (k - 1) // 2 for k in sizes)
 
 # ---- inputs shared by several numbers
-D = json.load(open("figdata.json"))
+D = json.load(open(rp(SD_, "figdata.json")))
 nC = D["n_complexes"]
 UM = {}
-for f in sorted(glob.glob("kinetic_variants/uptake_modes/*.json")):
+for f in sorted(glob.glob(rp(UM_, "*.json"))):
     d = json.load(open(f))
     if "detached" in d:
         UM.setdefault(d["model"], d)
@@ -89,8 +78,8 @@ det = {m: UM[m]["detached"] for m in MODELS}
 att = {m: UM[m]["attached"] for m in MODELS}
 it = {m: det[m]["it"] for m in MODELS}
 gap = sorted(m for m in MODELS if det[m]["gap"])
-MCd = {d["model"]: d for d in (json.load(open(f"kinetic_variants/member_counts/{m}.json")) for m in MODELS)}
-MCa = {m: json.load(open(f"kinetic_variants/member_counts/{m}.attached.json")) for m in MODELS}
+MCd = {d["model"]: d for d in (json.load(open(rp(MC_, f"{m}.json"))) for m in MODELS)}
+MCa = {m: json.load(open(rp(MC_, f"{m}.attached.json"))) for m in MODELS}
 for m in MODELS:                                                 # the group sizes reproduce the pair counts
     assert pairs_of(MCd[m]["it"]["acrr_group_sizes"]) == it[m]["acrr_pairs"], m
     assert pairs_of(MCd[m]["it"]["acrr_free_group_sizes"]) == it[m]["acrr_pairs_free"], m
@@ -127,22 +116,22 @@ out(R, "R11", f"complexes in a kinetic module, {len(ex)} exact networks (of the 
 out(R, "R12", f"free metabolites with ACR or in an ACRR group, {len(ex)} exact networks", f"{fr[0]:.1f} to {fr[-1]:.1f}%, median {med(fr):.1f}%",
     "member_counts/ it.fixed_members_free")
 
-FM = [json.load(open(f"kinetic_variants/fb_vs_ma/{m}.json")) for m in MODELS]
+FM = [json.load(open(rp(FB_, f"{m}.json"))) for m in MODELS]
 S = lambda get: sum(get(d) for d in FM)
 nr = S(lambda d: d["n_reactions"])
 fb, sub = S(lambda d: d["flux_coupling"]["members"]), S(lambda d: d["flux_coupling_and_shared_substrate"]["members"])
 ma, ma_t = S(lambda d: d["rates_iterated"]["members"]), S(lambda d: (d["rates_tangent"] or d["rates_iterated"])["members"])
-out(R, "R13", "reactions fully coupled under flux balance", pct(fb, nr), "fb_vs_ma/ flux_coupling.members")
-out(R, "R14", "reactions in a rate class under mass action", pct(ma, nr), "fb_vs_ma/ rates_iterated.members")
+out(R, "R13", "reactions fully coupled under flux balance", pct(fb, nr), "flux_balance_vs_mass_action/ flux_coupling.members")
+out(R, "R14", "reactions in a rate class under mass action", pct(ma, nr), "flux_balance_vs_mass_action/ rates_iterated.members")
 out(R, "R15", "of these, points from flux balance, from a shared substrate complex, from kinetic modules",
-    f"{100 * fb / nr:.1f}, {100 * (sub - fb) / nr:.1f}, {100 * (ma - sub) / nr:.1f}", "fb_vs_ma/ flux_coupling_and_shared_substrate.members")
-out(R, "R15b", "tangent route, reactions in a rate class (not in the text)", pct(ma_t, nr), "fb_vs_ma/ rates_tangent.members")
+    f"{100 * fb / nr:.1f}, {100 * (sub - fb) / nr:.1f}, {100 * (ma - sub) / nr:.1f}", "flux_balance_vs_mass_action/ flux_coupling_and_shared_substrate.members")
+out(R, "R15b", "tangent route, reactions in a rate class (not in the text)", pct(ma_t, nr), "flux_balance_vs_mass_action/ rates_tangent.members")
 
 import dataS1_S2
 n2, tot = dataS1_S2.data_s2(os.devnull)
-out(R, "R16", "more free ACR metabolites with attached uptakes", tot["lost"], "UPTAKE_LISTS (uptake_lists.py), as Data S2")
+out(R, "R16", "more free ACR metabolites with attached uptakes", tot["lost"], "acr_lists_by_uptake_mode/ (uptake_lists.py), as Data S2")
 out(R, "R17", "of these extracellular or periplasmic", f"{tot['extracellular'] + tot['periplasmic']} = {pct(tot['extracellular'] + tot['periplasmic'], tot['lost'])}",
-    "UPTAKE_LISTS")
+    "acr_lists_by_uptake_mode/")
 
 pairs = [det[m]["tan"]["pairs"] - det[m]["it"]["pairs"] for m in GAP_ORDER]
 fixed_free = lambda r: r["acr_free"] + ratios(r["acrr_free_group_sizes"])
@@ -151,7 +140,7 @@ rel_pairs = [det[m]["tan"]["acr_free"] + det[m]["tan"]["acrr_pairs_free"] - det[
 out(R, "R18", f"tangent-only coupled complex pairs on {', '.join(GAP_ORDER)}", ", ".join(f"{x:,}" for x in pairs), "uptake_modes/ detached tan - it")
 out(R, "R19", "tangent-only free ACR and ACRR relations (ACRR as k - 1 ratios), same networks", ", ".join(map(str, rel)) +
     f" (as pairs {', '.join(map(str, rel_pairs))})", "member_counts/ tan - it")
-cases = [json.load(open(f)) for f in sorted(glob.glob(f"{GAP}/case_*.json"))]
+cases = [json.load(open(f)) for f in sorted(glob.glob(rp(f"{GAP}/case_*.json")))]
 roots = []
 for m in GAP_ORDER:
     ok = [len(c["roots"]) for c in cases if c["model"] == m and c["detached"] and c["roots"] != ["none"] and c["closed"] == c["n_relations"]]
@@ -174,7 +163,7 @@ out(R, "R22", "exact nullspace, most networks certified at a tolerance above 0",
 out(R, "R23", "SVD nullspace, most networks certified at any tolerance", max(s["certified"] + [s["at_zero"][0]]), f"{ff.KF}/parts")
 out(R, "R24", "SVD nullspace at tolerance 0: false certificates", f"{s['at_zero'][3]} of {len(s['models'])}", f"{ff.KF}/parts")
 
-G = json.load(open(f"{GB}/summary.json"))
+G = json.load(open(rp(f"{GB}/summary.json")))
 for key, name in (("bound_tangent", "tangent route"), ("bound_iterated", "iterated route")):
     out(R, "R25", f"Schwartz-Zippel bound of the uniform r* (bits {G['bits']}), {name}, over {G['networks']} networks",
         f"min {G[key]['min']:.2g}, median {G[key]['median']:.2g}, max {G[key]['max']:.2g} ({G[key]['argmax']})", f"{GB}/summary.json")
@@ -192,15 +181,15 @@ tan, tanatt, dett = times("tan"), times("tanatt"), times("det")
 m_tan = max(tan, key=lambda m: med(tan[m]))
 out(R, "R28", "tangent route, longest run (median of three, detached)", f"{med(tan[m_tan]) / 60:.1f} min ({m_tan}, {med(tan[m_tan]):.0f} s)", f"{TIMING}/tan")
 
-PS = json.load(open("figures/pair_sets.json"))
+PS = json.load(open(rp(SD_, "pair_sets.json")))
 keys = ["balanced", "conc", "n_kinetic", "giant", "acr", "acrr", "acr_free", "acrr_free"]
 same = sum(D["kimonu_ref"][m][k] == D["ref_exh"][m][k] for m in D["ref_exh"] for k in keys)
 out(R, "R29", "reference-equivalent mode equals the exhaustive reference", f"{same} of {len(keys) * len(D['ref_exh'])} values on {len(D['ref_exh'])} networks",
     "figdata.json kimonu_ref, ref_exh")
 r0 = {m: PS[m]["ref_exh"][0] for m in PS}
-out(R, "R30", "reference pairs not in Kimonu's default", sum(r["pairs_not_in_kimonu"] for r in r0.values()), "figures/pair_sets.json ref_exh")
+out(R, "R30", "reference pairs not in Kimonu's default", sum(r["pairs_not_in_kimonu"] for r in r0.values()), "pair_sets.json ref_exh")
 miss = {m: len(r["acr_not_in_kimonu"]) + len(r["acrr_not_in_kimonu"]) for m, r in r0.items()}
-out(R, "R31", "reference ACR and ACRR relations not in Kimonu's default", ", ".join(f"{m} {k}" for m, k in miss.items() if k) or "none", "figures/pair_sets.json")
+out(R, "R31", "reference ACR and ACRR relations not in Kimonu's default", ", ".join(f"{m} {k}" for m, k in miss.items() if k) or "none", "pair_sets.json")
 out(R, "R32", "networks of the exhaustive reference on which the routes agree", f"{sum(1 for m in D['ref_exh'] if not det[m]['gap'])} of {len(D['ref_exh'])}",
     "uptake_modes/ detached gap")
 
@@ -215,7 +204,7 @@ def partition(f):
 
 same = 0
 for m in MODELS:
-    reps = [partition(f) for f in sorted(glob.glob(f"{DET_DIR}/kimonu_{m}_rep*.json"))]
+    reps = [partition(f) for f in sorted(glob.glob(rp(f"{DET_DIR}/kimonu_{m}_rep*.json")))]
     same += len(reps) == 3 and all(r == reps[0] for r in reps)
 out(R, "R33", "networks with identical modules, ACR and ACRR under three seeds of r* (timing runs, seeds 0, 1, 2)", f"{same} of {len(MODELS)}", DET_DIR)
 n = nC["iLJ478"]
@@ -223,17 +212,17 @@ out(R, "R34", "Fig. 4F, iLJ478 complexes and complex pairs", f"{n:,} complexes, 
 
 # ======================================================================================== Materials and Methods
 M = "Methods"
-LP = [json.loads(l) for l in open("kinetic_variants/one_lp_results.log") if l.startswith("{")]
+LP = [json.loads(l) for l in open(rp(records.ONE_LP, "one_lp_results.log")) if l.startswith("{")]
 out(M, "M1", "one LP finds exactly the blocked reactions of FVA", f"{sum(r['lp_wrong'] == 0 and r['lp_blocked'] == r['fva_blocked'] for r in LP)} of {len(LP)}",
-    "kinetic_variants/one_lp_results.log")
-out(M, "M2", "time of the one LP", f"{min(r['lp_seconds'] for r in LP):.3f} to {max(r['lp_seconds'] for r in LP):.3f} s", "kinetic_variants/one_lp_results.log")
+    "one_lp_vs_fva/one_lp_results.log")
+out(M, "M2", "time of the one LP", f"{min(r['lp_seconds'] for r in LP):.3f} to {max(r['lp_seconds'] for r in LP):.3f} s", "one_lp_vs_fva/one_lp_results.log")
 lb, ub = set(), set()
 for m in MODELS:
-    c = json.load(open(f"unblocked/{m}_fixed.crn.json")); lb |= set(c["lb"]); ub |= set(c["ub"])
-out(M, "M3", "bounds on every reaction", f"lower {sorted(lb)}, upper {sorted(ub)}", "unblocked/*.crn.json")
-w = [float(x) for x in re.findall(r"iAF1260b.*\n.*wall ([\d.]+) s", open(sorted(glob.glob(f"{FVA}/preprocess_*.log"))[-1]).read())]
+    c = json.load(open(records.network(m))); lb |= set(c["lb"]); ub |= set(c["ub"])
+out(M, "M3", "bounds on every reaction", f"lower {sorted(lb)}, upper {sorted(ub)}", "networks/unblocked/*.crn.json")
+w = [float(x) for x in re.findall(r"iAF1260b.*\n.*wall ([\d.]+) s", open(sorted(glob.glob(rp(f"{FVA}/preprocess_*.log")))[-1]).read())]
 out(M, "M4", "preprocessing iAF1260b, load to factorization", f"{med(w):.1f} s (runs {', '.join(f'{x:.1f}' for x in w)})", f"{FVA}/preprocess_*.log")
-Z = [json.load(open(f)) for f in sorted(glob.glob(f"{SZ}/*.json"))]
+Z = [json.load(open(f)) for f in sorted(glob.glob(rp(f"{SZ}/*.json")))]
 lp = lambda z: z["lp"] if "lp" in z else z["default"]         # records before 2026-11-11 call the LP arm "default"
 ri = [z["uniform"]["iterated"]["seconds"] / lp(z)["iterated"]["seconds"] for z in Z]
 rt = [z["uniform"]["tangent"]["seconds"] / lp(z)["tangent"]["seconds"] for z in Z]
@@ -242,7 +231,7 @@ out(M, "M5", f"uniform 2^64 flux against the LP point, runtime ratio ({len(Z)} n
     f"{sum(z['iterated_agree'] and z['tangent_agree'] for z in Z)} of {len(Z)}", SZ)
 for key, name in (("bound_tangent", "tangent"), ("bound_iterated", "iterated")):
     out(M, "M6", f"Schwartz-Zippel bound per network, uniform r*, {name} route (largest)", f"{G[key]['max']:.2g} ({G[key]['argmax']})", f"{GB}/summary.json")
-rows = [json.load(open(f)) for f in sorted(glob.glob(f"{GB}/*.json")) if not f.endswith("summary.json")]
+rows = [json.load(open(f)) for f in sorted(glob.glob(rp(f"{GB}/*.json"))) if not f.endswith("summary.json")]
 out(M, "M6b", "rounds of the iterated route at the uniform r*, tests per network", f"rounds {sorted({r['rounds'] for r in rows})}, tests "
     f"{min(r['tests'] for r in rows):.2g} to {max(r['tests'] for r in rows):.2g}", f"{GB}/<model>.json")
 for f in ("kinetic_variants/float_exactcmp.py", "kinetic_variants/float_four.py"):
@@ -252,20 +241,20 @@ for arm in ("cocoa_false", "cocoa_true", "ref_sampled"):
     out(M, "M8", f"seeds of {arm}", sorted({len(v) for v in D[arm].values()}), "figdata.json")
 for m in ("iSB619", "iNF517"):
     out(M, "M9", f"exhaustive reference run time, {m}", f"{D['ref_exh'][m]['seconds'] / 86400:.1f} days", "figdata.json ref_exh")
-hw = sorted(glob.glob(f"{TIMING}/*/hardware_*.txt"))
+hw = sorted(glob.glob(rp(f"{TIMING}/*/hardware_*.txt")))
 cpus = {re.search(r"Model name:\s*(.+)", open(f).read()).group(1).strip() for f in hw}
 hosts = {open(f).readline().strip() for f in hw}
 mem = {re.search(r"Mem:\s+(\d+)", open(f).read()).group(1) for f in hw}
 cores = {re.search(r"^CPU\(s\):\s+(\d+)", open(f).read(), re.M).group(1) for f in hw}
 out(M, "M10", "hardware of the timed Kimonu runs", f"{', '.join(sorted(cpus))}; {', '.join(sorted(cores))} logical cores; nodes {', '.join(sorted(hosts))}; "
     f"{', '.join(sorted(mem))} GB (free -g)", f"{TIMING}/*/hardware_*.txt")
-req = sorted({x for f in glob.glob(f"{TIMING}/*/provenance_*.txt") for x in re.findall(r"^kimonu (\w+)", open(f).read(), re.M)})
+req = sorted({x for f in glob.glob(rp(f"{TIMING}/*/provenance_*.txt")) for x in re.findall(r"^kimonu (\w+)", open(f).read(), re.M)})
 out(M, "M11", "commit of the timed runs", ", ".join(c[:7] for c in req), f"{TIMING}/*/provenance_*.txt")
-jobs = f"{TIMING}/slurm_jobs.txt"                              # sacct of the timing jobs, written when they finished
+jobs = rp(f"{TIMING}/slurm_jobs.txt")                              # sacct of the timing jobs, written when they finished
 if os.path.exists(jobs):
     J = [l.split("|") for l in open(jobs) if l.strip() and not l.startswith("JobID")]
     out(M, "M12", "memory reserved for the timed jobs, cores per run", "; ".join(f"{j[1]} {j[2]}" for j in J) + "; one process pinned to one core", jobs)
-logs = lambda arms: [p for a in arms for p in glob.glob(f"{TIMING}/{a}/*.log")]
+logs = lambda arms: [p for a in arms for p in glob.glob(rp(f"{TIMING}/{a}/*.log"))]
 out(M, "M13", "peak memory, iterated route and reference-equivalent mode", f"{maxrss_gib(logs(['det', 'att', 'ref'])):.2f} GB", f"{TIMING}/{{det,att,ref}}/*.log (/usr/bin/time -v)")
 out(M, "M14", "peak memory, tangent route", f"{maxrss_gib(logs(['tan', 'tanatt'])):.2f} GB", f"{TIMING}/{{tan,tanatt}}/*.log")
 import numpy as np
@@ -279,7 +268,7 @@ pw = [fits[a][0] for a in ("ref_exh", "ref_sampled", "cocoa_false", "cocoa_true"
 out(M, "M16", "exponents of the pairwise tests; networks per fit", f"{min(pw):.1f} to {max(pw):.1f}; {min(v[1] for v in fits.values())} to "
     f"{max(v[1] for v in fits.values())}", "figdata.json")
 out(M, "M17", "tangent route, longest run", f"{med(tan[m_tan]) / 60:.1f} min on {m_tan}", f"{TIMING}/tan")
-LR = json.load(open(f"{LACR}/small.json")) + [json.load(open(f)) for f in sorted(glob.glob(f"{LACR}/ladder_*.json"))]
+LR = json.load(open(rp(f"{LACR}/small.json"))) + [json.load(open(f)) for f in sorted(glob.glob(rp(f"{LACR}/ladder_*.json")))]
 copies = sorted(int(r["network"][4:]) for r in LR if re.fullmatch(r"envz\d+", r["network"]))
 small_ = [r["network"] for r in LR if not r["network"].startswith(("envz", "e_coli"))]
 out(M, "M18", "symbolic baselines: small networks, EnvZ-OmpR copies, total", f"{len(small_)}, copies {copies}, total {len(LR)}", LACR)
@@ -296,15 +285,15 @@ out(M, "M21", "reference-equivalent mode, longest run; default mode on the same 
 # ======================================================================================== Supplementary Text
 X = "Supp"
 # S3. Making the tools comparable
-ref = json.load(open("reference_final/reference_iLJ478.json"))
-log = open("sweep/cocoa_eff/cell_iLJ478_seed1234.log").read()
+ref = json.load(open(rp(records.REF_EXHAUSTIVE, "reference_iLJ478.json")))
+log = open(rp(records.COCOA_TRUE, "cell_iLJ478_seed1234.log")).read()
 total = int(re.search(r"total_possible_pairs = (\d+)", log).group(1))
 cand, trans = map(int, re.search(r"Processing: (\d+) candidates, (\d+) filtered by transitivity", log).groups())
 skip_bal = total - ref["candidate_pairs"]
 out(X, "S3a", "iLJ478: pairs the reference tests, of all complex pairs (the 3439 complexes the LP tools test, without the zero complex)",
-    f"{ref['candidate_pairs'] / 1e6:.2f} M of {total / 1e6:.2f} M", "reference_final/reference_iLJ478.json, sweep/cocoa_eff/cell_iLJ478_seed1234.log")
+    f"{ref['candidate_pairs'] / 1e6:.2f} M of {total / 1e6:.2f} M", "results/reference/exhaustive/reference_iLJ478.json, results/cocoa_jl/efficient_true/cell_iLJ478_seed1234.log")
 out(X, "S3b", "iLJ478: COCOA.jl pairs left for LPs; skipped as balanced, by the spread, by transitivity (efficient=true, seed 1234)",
-    f"{cand / 1e3:.0f} k; {skip_bal / 1e6:.2f} M, {(total - skip_bal - cand - trans) / 1e6:.2f} M, {trans / 1e6:.2f} M", "sweep/cocoa_eff/cell_iLJ478_seed1234.log")
+    f"{cand / 1e3:.0f} k; {skip_bal / 1e6:.2f} M, {(total - skip_bal - cand - trans) / 1e6:.2f} M, {trans / 1e6:.2f} M", "results/cocoa_jl/efficient_true/cell_iLJ478_seed1234.log")
 k = D["kimonu_det"]["iLJ478"]
 out(X, "S3c", "iLJ478 kinetic stage, Kimonu (iterated route, kinetic and ACR stages)", f"{k['sec_kin'] + k['sec_acr']:.1f} s", "figdata.json kimonu_det sec_kin + sec_acr")
 out(X, "S3d", "iLJ478, reference-equivalent mode in all", f"{D['kimonu_ref']['iLJ478']['seconds']:.1f} s", "figdata.json kimonu_ref")
@@ -314,12 +303,12 @@ for arm in ("cocoa_false", "cocoa_true"):
         "figdata.json")
 sub = {arm: sum(all(r["pairs_not_in_kimonu"] == 0 and not r["acr_not_in_kimonu"] and not r["acrr_not_in_kimonu"] for r in PS[m][arm]) for m in PS)
        for arm in ("ref_exh", "cocoa_false", "cocoa_true")}
-out(X, "S3f", "networks on which a tool's relations are a subset of Kimonu's default (of 11)", ", ".join(f"{a} {v}" for a, v in sub.items()), "figures/pair_sets.json")
-SS = json.load(open("figures/seed_spread.json"))
+out(X, "S3f", "networks on which a tool's relations are a subset of Kimonu's default (of 11)", ", ".join(f"{a} {v}" for a, v in sub.items()), "pair_sets.json")
+SS = json.load(open(rp(SD_, "seed_spread.json")))
 for arm in ("cocoa_false", "cocoa_true", "ref_sampled", "kimonu_det"):
     v = SS[arm]
     out(X, "S3g", f"networks on which the coupled pairs change with the seed, {arm}", f"{sum(1 for x in v.values() if x['pairs'][0])} of {len(v)}",
-        "figures/seed_spread.json pairs[0]")
+        "seed_spread.json pairs[0]")
 # S4. Run records
 it_max = max(dett, key=lambda m: med(dett[m]))
 out(X, "S4a", "tangent route, longest (median of three, detached; attached in brackets)", f"{med(tan[m_tan]) / 60:.1f} min ({m_tan}); attached "
@@ -328,13 +317,13 @@ out(X, "S4b", "iterated route, longest (median of three, detached)", f"{med(dett
 ratio = sorted(med(tan[m]) / med(dett[m]) for m in tan if m in dett)
 out(X, "S4c", "tangent route over iterated route, per network (medians)", f"{ratio[0]:.1f} to {ratio[-1]:.0f}-fold, median {med(ratio):.0f}", f"{TIMING}/tan, det")
 # S5. Attached and detached uptakes
-out(X, "S5a", "free ACR metabolites attached, detached", f"{tot['attached']}, {tot['both'] + tot['gained']}", "UPTAKE_LISTS (dataS1_S2.data_s2)")
+out(X, "S5a", "free ACR metabolites attached, detached", f"{tot['attached']}, {tot['both'] + tot['gained']}", "acr_lists_by_uptake_mode/ (dataS1_S2.data_s2)")
 out(X, "S5b", "attached only; extracellular, periplasmic; in a detached ACRR group; gained by detaching",
-    f"{tot['lost']}; {tot['extracellular']}, {tot['periplasmic']}; {tot['lost_in_acrr']}; {tot['gained']}", "UPTAKE_LISTS")
-FA = [json.load(open(f"kinetic_variants/fb_vs_ma/{m}.attached.json")) for m in MODELS]
+    f"{tot['lost']}; {tot['extracellular']}, {tot['periplasmic']}; {tot['lost_in_acrr']}; {tot['gained']}", "acr_lists_by_uptake_mode/")
+FA = [json.load(open(rp(FB_, f"{m}.attached.json"))) for m in MODELS]
 out(X, "S5c", "networks with complexes of fixed concentration, detached, attached (attached, the zero complex is fixed and not counted)",
     f"{sum(1 for d in FM if d['fixed_complexes_iterated'])} and {sum(1 for d in FA if d['fixed_complexes_iterated'] > 1)} of {len(MODELS)}",
-    "fb_vs_ma/<model>[.attached].json fixed_complexes_iterated")
+    "flux_balance_vs_mass_action/<model>[.attached].json fixed_complexes_iterated")
 out(X, "S5d", "gap networks attached", ", ".join(sorted(m for m in MODELS if att[m]["gap"])), "uptake_modes/ attached gap")
 # S6. The gap between the routes
 out(X, "S6a", "open relations (tangent route only) on iCN718, iNJ661, iHN637, detached; attached",
@@ -349,43 +338,43 @@ for c in cases:
 out(X, "S6e", "open relations in all, root questions", f"{sum(det[m]['n_relations'] for m in GAP_ORDER)}, {sum(r for r in roots if isinstance(r, int))}",
     "uptake_modes/, gap_roots/")
 for m in GAP_ORDER:
-    d = json.load(open(f"kinetic_variants/descartes_{m}.json"))
+    d = json.load(open(rp(records.DESCARTES, f"descartes_{m}.json")))
     out(X, "S6f", f"Descartes step, {m}: settled relations, seconds (detached; attached)",
-        f"{len(d['detached']['firings'])}, {d['detached']['seconds_descartes']:.0f} s; {d['attached']['seconds_descartes']:.0f} s", f"kinetic_variants/descartes_{m}.json")
+        f"{len(d['detached']['firings'])}, {d['detached']['seconds_descartes']:.0f} s; {d['attached']['seconds_descartes']:.0f} s", f"{records.DESCARTES}/descartes_{m}.json")
 for m in GAP_ORDER:
-    i, q = (json.load(open(f"kinetic_variants/injectivity_results/{m}_{x}.json")) for x in ("inject", "quotient"))
+    i, q = (json.load(open(rp(records.INJECTIVITY, f"{m}_{x}.json"))) for x in ("inject", "quotient"))
     out(X, "S6g", f"injectivity test and sign program for all relations, {m}", f"{i['status']} after {i['seconds'] / 3600:.1f} h; {q['status']} after "
-        f"{q['seconds'] / 3600:.1f} h", "kinetic_variants/injectivity_results/")
-AB = [json.loads(l) for l in open("kinetic_variants/autonomous_blocks_33.jsonl")]
+        f"{q['seconds'] / 3600:.1f} h", "gap_experiments/injectivity/")
+AB = [json.loads(l) for l in open(rp(records.AUTONOMOUS_BLOCKS, "autonomous_blocks_33.jsonl"))]
 out(X, "S6h", "autonomous blocks: relations proven on the gap networks", ", ".join(f"{r['model']} {'detached' if r['detach'] else 'attached'} "
-    f"{r['tangent_only_relations_proven']}" for r in AB if r["model"] in GAP_ORDER), "kinetic_variants/autonomous_blocks_33.jsonl")
+    f"{r['tangent_only_relations_proven']}" for r in AB if r["model"] in GAP_ORDER), "gap_experiments/autonomous_blocks/autonomous_blocks_33.jsonl")
 # S7. Nondegeneracy
 for m in GAP_ORDER:
-    d = json.load(open(f"kinetic_variants/injectivity_results/{m}_dims.json"))
+    d = json.load(open(rp(records.INJECTIVITY, f"{m}_dims.json")))
     out(X, "S7a", f"tangent dimension at four interior fluxes, and of the sum of two, {m} (attached)", f"{d['dims_T']}, {d['dim_T0_plus_Tk']}",
-        "kinetic_variants/injectivity_results/<model>_dims.json")
+        "gap_experiments/injectivity/<model>_dims.json")
 # S8. Genericity
-for f in sorted(f for f in glob.glob(f"{SCALE}/*.json") if not f.endswith("_1e4.json")):
+for f in sorted(f for f in glob.glob(rp(f"{SCALE}/*.json")) if not f.endswith("_1e4.json")):
     d = json.load(open(f))
     for route in ("tangent", "iterated"):
         a, b, c = (d[f"{route}_{x}"] for x in ("scale_1e6", "scale_100", "unrounded"))
         out(X, "S8a", f"{d['model']}, {route} route, LP point at scale 10^6, at scale 100, unrounded (seconds, largest bits; same results as at 10^6)",
             f"{a['seconds']:.1f} s ({a['max_bits']} bits), {b['seconds']:.1f} s ({b['max_bits']} bits, same {b['same_as_1e6']}), "
             f"{c['seconds']:.1f} s ({c['max_bits']} bits, same {c['same_as_1e6']})", f"{f} (one run each, not exclusive)")
-for m in sorted({os.path.basename(f).split("_rep")[0] for f in glob.glob(f"{SCALE}/exclusive/*_rep*.json")}):
-    reps = [json.load(open(f)) for f in sorted(glob.glob(f"{SCALE}/exclusive/{m}_rep*.json"))]
+for m in sorted({os.path.basename(f).split("_rep")[0] for f in glob.glob(rp(f"{SCALE}/exclusive/*_rep*.json"))}):
+    reps = [json.load(open(f)) for f in sorted(glob.glob(rp(f"{SCALE}/exclusive/{m}_rep*.json")))]
     med_rep = lambda key: statistics.median(r[key]["seconds"] for r in reps)
     out(X, "S8a", f"{m}, tangent route, LP point at scale 10^6 against unrounded, median of {len(reps)} (exclusive node, 1 core)",
         f"{med_rep('tangent_scale_1e6'):.1f} s against {med_rep('tangent_unrounded'):.1f} s (iterated {med_rep('iterated_scale_1e6'):.1f} s against "
         f"{med_rep('iterated_unrounded'):.1f} s); same results {all(r['tangent_unrounded']['same_as_1e6'] for r in reps)}",
         f"{SCALE}/exclusive/{m}_rep*.json (job 572320)")
-for f in sorted(glob.glob(f"{SCALE}/*_1e4.json")):
+for f in sorted(glob.glob(rp(f"{SCALE}/*_1e4.json"))):
     d = json.load(open(f))
     out(X, "S8b", f"{d['model']}, same results as at scale 10^6 at scales 10^4 and 10^5 (tangent, iterated)",
         ", ".join(f"{k.split('_')[0]} {k.split('_')[-1]}: {v['same_as_1e6']}" for k, v in d.items() if k != "model"), f)
 # S10. Deficiency
-F = json.load(open("deficiency/deficiency_33.json"))
-out(X, "S10a", "deficiency", f"{min(r['delta'] for r in F)} to {max(r['delta'] for r in F)}", "deficiency/deficiency_33.json")
+F = json.load(open(rp(records.DEFICIENCY, "deficiency_33.json")))
+out(X, "S10a", "deficiency", f"{min(r['delta'] for r in F)} to {max(r['delta'] for r in F)}", "networks/deficiency/deficiency_33.json")
 # S11. Symbolic and floating-point baselines
 env_ = [r for r in LR if re.fullmatch(r"envz\d+", r["network"])]
 eco = [r for r in LR if r["network"].startswith("e_coli")][0]
@@ -405,36 +394,36 @@ out(X, "S11e", f"exact nullspace, routes differ at tolerance {ff.TAUS[k12]:g}", 
 out(X, "S11f", "tolerance 0, exact rows: certified, gap", f"{e['at_zero'][0]}, {e['at_zero'][1]}", f"{ff.KF}/parts")
 # S12. The exact second-order test
 for m in ("iCN718", "iHN637", "iNJ661"):
-    d = json.load(open(f"kinetic_variants/second_order_results/{m}_modp.json"))
+    d = json.load(open(rp(records.SECOND_ORDER, f"{m}_modp.json")))
     c = d["candidates"]
     ma_ = MCa[m]
     acrr_k1 = ratios(ma_["tan"]["acrr_group_sizes"]) - ratios(ma_["it"]["acrr_group_sizes"])
     out(X, "S12a", f"{m}: tested ACR, ACRR pairs, complex pairs (attached); nonzero", f"{c['acr']['n']}, {c['acrr']['n']} (as k - 1 ratios {acrr_k1}), "
         f"{c['complex_pairs']['n']}; nonzero {c['acr']['nonzero'] + c['acrr']['nonzero'] + c['complex_pairs']['nonzero']}",
-        "kinetic_variants/second_order_results/, member_counts/<model>.attached.json")
+        "second_order/, member_counts/<model>.attached.json")
     out(X, "S12b", f"{m}: controls (proven relations nonzero; random row-space vectors nonzero), consistent, ranks N, W, J",
         f"{d['control_proven']['nonzero']} of {d['control_proven']['n']}; {d['control_random_rowspace']['nonzero']} of {d['control_random_rowspace']['n']}; "
-        f"{d['second_order_consistent']}; {d['rank_N']}, {d['rank_W']}, {d['rank_J']}", "kinetic_variants/second_order_results/")
+        f"{d['second_order_consistent']}; {d['rank_N']}, {d['rank_W']}, {d['rank_J']}", "second_order/")
 
 # ---- numbers that no result file holds
 N = "not here"
-HW = json.load(open("hardware_record.json"))      # figures/hardware_record.py, from sacct, job logs and result files
+HW = json.load(open(rp(records.HARDWARE, "hardware_record.json")))      # figures/hardware_record.py, from sacct, job logs and result files
 C, RF = HW["cocoa"], [HW["reference"][k] for k in ("reference_final", "reference_final_sampled")]
 ref_mem = sorted({k.split()[0] for r in RF for k in r["req_mem_by_state"]}, key=lambda m: float(re.sub(r"[^0-9.]", "", m)))
 out(M, "N1", "COCOA.jl runs on the 4514Y nodes; workers, memory reserved, peak MaxRSS of the runs with a record; reference "
     "cores, memory reserved, peak", f"{C['n_on_4514Y']} of {C['n_runs']}; {C['workers']}; {C['req_mem']}; "
     f"{C['peak_max_rss_gib_of_the_183']} GB ({C['n_with_max_rss']} of {C['n_runs']} with a record); reference "
     f"{sorted({c for r in RF for c in r['alloc_cpus']})} cores, {ref_mem[0]} to {ref_mem[-1]}, peak "
-    f"{max(r['peak_max_rss_gib'] for r in RF)} GB", "hardware_record.json (cocoa, reference)")
+    f"{max(r['peak_max_rss_gib'] for r in RF)} GB", "results/hardware/hardware_record.json (cocoa, reference)")
 sp = HW["node_speed_4314_over_4514Y"]
 out(M, "N1.3", "single-core Kimonu, 4314 time over 4514Y time (median, min to max)", "; ".join(
     f"{k} {sp[k]['median']} ({sp[k]['min']} to {sp[k]['max']}, n = {sp[k]['n']})" for k in ("det", "att", "ref", "tanatt")),
-    "hardware_record.json (node_speed_4314_over_4514Y)")
+    "results/hardware/hardware_record.json (node_speed_4314_over_4514Y)")
 ft = HW["float_threads"]
 out(M, "N2", "SVD threads, networks with all parts on 2 threads per arm; networks with more", f"{ft['n_models_all_parts_on_2_threads']}; "
-    f"{ {k: len(v) for k, v in ft['models_with_more_than_2_threads'].items()} }", "hardware_record.json (float_threads)")
+    f"{ {k: len(v) for k, v in ft['models_with_more_than_2_threads'].items()} }", "results/hardware/hardware_record.json (float_threads)")
 out(M, "N3", "software versions (environment as it is now; provenance records Python, Kimonu, StrainDesign)",
     ", ".join(f"{k} {v}" for k, v in HW["versions"]["straindesign_env"].items()) + f", Julia {HW['versions']['julia_manifest']}",
-    "hardware_record.json (versions), timing/*/provenance_*.txt")
+    "results/hardware/hardware_record.json (versions), timing/*/provenance_*.txt")
 out(N, "N4", "kinetic stage on iLJ478, COCOA.jl 4.5 s and reference 3.5 min", "-", "constants of figures/fig4EF_methods_iLJ478.py, from "
     "scratch cocoa_kin_timing_2026-11-03 and ref_rstage_timing_2026-11-03")

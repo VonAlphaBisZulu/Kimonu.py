@@ -10,19 +10,21 @@ E  Rows: flux balance (N r = 0, linear) and mass action (polynomial in x); colum
    report; the reference-equivalent mode is light green with a dashed edge, as in A and B.
 F  The computations per tool and stage on iLJ478 (3440 complexes), each cell in the same slots: concordance
    (test, count, pairs skipped, time) and kinetic modules with ACR/ACRR (test, input, count, ACR rule, time).
-   Sources: reference_final/reference_iLJ478.json (pairs tested, concordance time); the reference R stages
-   timed on scratch (ref_rstage_timing_2026-11-03, median of three); sweep/cocoa_eff/cell_iLJ478_seed1234.log
-   (COCOA.jl efficient=true pair funnel and concordance time); COCOA's kinetic stage rerun alone from the
-   saved concordance labels (cocoa_kin_timing_2026-11-03: 2 rounds, warm median of three, same ACR, ACRR and
+   Sources (records, records.py): results/reference/exhaustive/reference_iLJ478.json (pairs tested, concordance
+   time); the reference R stages timed alone (results/reference/kinetic_stage_iLJ478/, median of three);
+   results/cocoa_jl/efficient_true/cell_iLJ478_seed1234.log (COCOA.jl efficient=true pair funnel and concordance
+   time); COCOA's kinetic stage rerun alone from the saved concordance labels (results/cocoa_jl/kinetic_stage_iLJ478/: 2 rounds, warm median of three, same ACR, ACRR and
    giant module as the full run); Kimonu from figdata.json (timing_exclusive.sbatch: iterated route 2 rounds, median
    stage times; reference-equivalent mode in all; read from figdata.json). Kimonu's kinetic cell names what the iterated route
    computes: equal rows of ker W and of Y^T ker((Y Delta)^T), which contains B, not B itself.
    The dashed green line marks Kimonu's reference-equivalent mode: Kimonu's concordance, then the reference's
    kinetic stage, labelled on the right. It runs in a lane above the wall time of each cell.
 
-    python figures/fig4EF_methods_iLJ478.py <out_dir>     # from scripts/; fig4_figS1_S2_benchmark.py imports draw()
+    python figures/fig4EF_methods_iLJ478.py [<out_dir>]   # from scripts/ (default drafts/ of KIMONU_OUT); fig4_figS1_S2_benchmark.py imports draw()
 """
 import json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -36,7 +38,7 @@ HCD = 2.95                                # height of the C, D block in inches
 REF_KIN = "3.5 min"                       # reference R stages, kinetic 209 s (incl. 3.4 s load) + ACR 2.5 s, median of three
 
 def draw(ax, W=7.2, H=HCD):
-    fd = json.load(open("figdata.json")); KD, KR = fd["kimonu_det"]["iLJ478"], fd["kimonu_ref"]["iLJ478"]   # Kimonu's times on iLJ478
+    fd = json.load(open(records.read(records.SOURCE_DATA, "figdata.json"))); KD, KR = fd["kimonu_det"]["iLJ478"], fd["kimonu_ref"]["iLJ478"]   # Kimonu's times on iLJ478
     """Draw C and D on ax, whose data coordinates are inches (0..W, 0..H); returns the texts that carry math."""
     def box(x, y, w, h, face="white", edge=RULE, lw=0.6, r=0.04, z=1, ls="-"):
         ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0,rounding_size={r}", fc=face, ec=edge, lw=lw, ls=ls, zorder=z))
@@ -145,6 +147,6 @@ if __name__ == "__main__":
     fig = plt.figure(figsize=(7.2, HCD))
     ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, 7.2); ax.set_ylim(0, HCD); ax.axis("off")
     draw(ax)
-    out = sys.argv[1]; os.makedirs(out, exist_ok=True)
+    out = sys.argv[1] if len(sys.argv) > 1 else records.write(records.DRAFTS, folder=True); os.makedirs(out, exist_ok=True)
     for ext in ("svg", "png"):
         fig.savefig(os.path.join(out, f"Figure4EF_draft.{ext}"), dpi=300)

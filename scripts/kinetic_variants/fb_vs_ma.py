@@ -31,15 +31,16 @@ reproduces the classes of both routes. Its fixed rates also count detached uptak
 to a fixed complex (field fixed_rate_src). The tangent route runs on every model with detached uptakes (the
 sources need it) and, with attached uptakes, only where that record reports a gap.
 
-    python kinetic_variants/fb_vs_ma.py <model> [attached]   -> kinetic_variants/fb_vs_ma/<model>.json
+    python kinetic_variants/fb_vs_ma.py <model> [attached]   -> results/kimonu/flux_balance_vs_mass_action/<model>.json
 
-UM_DIR replaces the record checked against (kinetic_variants/uptake_modes) and FB_OUT the output directory.
+The record checked against is results/kimonu/uptake_modes/ of KIMONU_RECORDS, the output goes to KIMONU_OUT (records.py).
 """
 import json, os, sys, time
 from collections import Counter
 import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.readout import free_directions, readout, row_readout
 from kimonu.network import substrate_complexes, zero_complexes
@@ -168,11 +169,11 @@ def complexes(conc, balanced_too, modules, n):
 
 if __name__ == "__main__":
     M = sys.argv[1]; name = "attached" if "attached" in sys.argv[2:] else "detached"; detach = name == "detached"
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+    crn = json.load(open(records.network(M)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
-    f = f"{os.environ.get('UM_DIR', B + '/kinetic_variants/uptake_modes')}/{M}.json"; one = f.replace(".json", f".{name}.json")
+    f = records.read(records.UPTAKE_MODES, f"{M}.json"); one = f.replace(".json", f".{name}.json")
     stored = json.load(open(one if os.path.exists(one) else f))[name]
     substrate, zero = substrate_complexes(net), zero_complexes(net)
     column, sources = {}, {}                      # the column of W that carries each reaction, as in steady_state_map
@@ -221,7 +222,7 @@ if __name__ == "__main__":
     else:
         assert all(stored["it"][k] == stored["tan"][k] for k in ("modules", "giant", "pairs")), M
         out["rates_routes_agree"] = True          # no sources and equal modules: equal rate classes
-    D = os.environ.get("FB_OUT", f"{B}/kinetic_variants/fb_vs_ma")
+    D = records.write(records.FB_VS_MA, folder=True)
     os.makedirs(D, exist_ok=True)
     json.dump(out, open(f"{D}/{M}{'' if detach else '.attached'}.json", "w"), indent=1)
     print(M, name, json.dumps(out), flush=True)

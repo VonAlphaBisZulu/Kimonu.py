@@ -22,6 +22,9 @@ The iterated route (kimonu.iterated_route) is run alongside as the proven lower 
 
     python local_acr_symbolic.py small              -> ground-truth suite, all methods
     python local_acr_symbolic.py ladder <name> [s]  -> one network of the size ladder, time limit s per method
+
+Both write to results/kimonu/symbolic_local_acr/ of KIMONU_OUT (small.json, ladder_<name>.json); e_coli_core is read
+from networks/e_coli_core/ of KIMONU_RECORDS (records.py).
 """
 import json, os, signal, sys, time
 from fractions import Fraction
@@ -29,6 +32,7 @@ from itertools import combinations
 import numpy as np, scipy.sparse as sp
 B_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B_DIR, os.path.join(os.path.dirname(B_DIR), "src"), os.path.join(os.path.dirname(B_DIR), "tests")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import sympy
 from sympy.polys.matrices import DomainMatrix
 import straindesign as sd
@@ -37,7 +41,7 @@ from kimonu.linalg import entries
 from networks import matrices, ENVZ, ENVZ_SPECIES
 from kinetic_variants.tangent_fast import one_shot_fast
 
-OUT = os.environ.get("LACR_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_local_acr")
+OUT = os.path.join(records.OUT, records.LOCAL_ACR)             # small.json, ladder_<network>.json
 
 
 # ---- networks: (reactions, species, truth) -- truth: species -> True/False for unconditional ACR, where known
@@ -106,7 +110,7 @@ def ecoli_core(name="e_coli_core"):
     cobra.Configuration().solver = "glpk"                 # Gurobi is node-locked on the cluster
     from kimonu.network import build_crn
     # the .mat copy: the SBML reader needs libSBML, which this environment lacks
-    m = cobra.io.load_matlab_model(os.path.join(os.path.dirname(os.path.dirname(B_DIR)), "shared_models", f"{name}.mat"))
+    m = cobra.io.load_matlab_model(records.read("networks", "e_coli_core", f"{name}.mat"))   # BiGG e_coli_core
     for r in list(m.reactions):
         if r.lower_bound < 0:
             rv = cobra.Reaction(r.id + "_rev", lower_bound=0, upper_bound=-r.lower_bound if r.lower_bound > -1e9 else 1000)

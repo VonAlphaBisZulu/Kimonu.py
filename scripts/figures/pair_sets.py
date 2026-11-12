@@ -14,11 +14,13 @@ every arm, the coupled complex pairs (pairs within one kinetic module), the free
 ACRR pairs (closed under the rule above) are compared with Kimonu's default (iterated route, detached uptakes),
 and reported as: contained in Kimonu's, and how many are not.
 
-    python figures/pair_sets.py     # from scripts/  -> figures/pair_sets.json; updates "fixed" in figures/pair_counts.json
+    python figures/pair_sets.py     # from scripts/  -> pair_sets.json; updates "fixed" in pair_counts.json
+
+Both files are in figures/source_data/ of the records (records.py): read from KIMONU_RECORDS, written to KIMONU_OUT.
 """
 import glob, json, os, re, sys
 import numpy as np
-B = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(B)
+B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu.network import zero_complexes
@@ -26,9 +28,12 @@ from kimonu.reference import shinar_feinberg
 from run_kimonu_crn import triplets_to_sparse
 from figures.gather_figdata import read_pairs
 import csv
+import records
 
-REF_DIR = os.environ.get("KIMONU_REF_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing/ref")      # runs of the reference-equivalent mode (timing arm ref)
-D = json.load(open("figdata.json")); REF = sorted(D["ref_exh"], key=lambda m: D["n_complexes"][m])
+REF_DIR = records.read(records.TIMING, "ref")          # runs of the reference-equivalent mode (timing arm ref)
+REF_EXH, REF_SAMPLED = records.read(records.REF_EXHAUSTIVE), records.read(records.REF_SAMPLED)
+COCOA = {"cocoa_v110": records.read(records.COCOA_FALSE), "cocoa_eff": records.read(records.COCOA_TRUE)}
+D = json.load(open(records.read(records.SOURCE_DATA, "figdata.json"))); REF = sorted(D["ref_exh"], key=lambda m: D["n_complexes"][m])
 key = lambda comp: frozenset((k, float(v)) for k, v in comp.items() if v)
 
 
@@ -87,9 +92,9 @@ def cocoa_key(s, mets):
     return key(comp)
 
 
-out, counts = {}, json.load(open("figures/pair_counts.json"))
+out, counts = {}, json.load(open(records.read(records.SOURCE_DATA, "pair_counts.json")))
 for m in REF:
-    crn = json.load(open(f"unblocked/{m}_fixed.crn.json"))
+    crn = json.load(open(records.network(m)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     mets = crn["metabolites"]; cut = mets.index("E_1") if "E_1" in mets else nm; free = set(mets[:cut]); mset = set(mets)
@@ -115,14 +120,14 @@ for m in REF:
         single = [row[1] for row in list(csv.reader(open(f"{root}/Results/MetSingle/MetSingle_{stem}.csv"), delimiter=" "))[1:]]
         double = [tuple(p) for p in read_pairs(f"{root}/Results/MetDouble/MetDouble_{stem}.csv")]
         return (cpairs(km_),) + rule(single, double, free)
-    stem = next(os.path.basename(p)[8:-5] for p in glob.glob(f"reference_final/acr/Results/modules_{m}_concordant_fixed*.json"))
-    rt = f"reference_final/retest/reference_{m}_retest.json"
-    arms["ref_exh"] = [ref_arm(rt if "retest" in stem else f"reference_final/reference_{m}.json", "reference_final/acr", stem)]
-    arms["ref_sampled"] = [ref_arm(f, "reference_final_sampled/acr", f"{m}_seed{re.search(r'seed(\d+)', f).group(1)}")
-                           for f in sorted(glob.glob(f"reference_final_sampled/reference_{m}_seed*.json"), key=lambda f: int(re.search(r"seed(\d+)", f).group(1)))]
+    stem = next(os.path.basename(p)[8:-5] for p in glob.glob(f"{REF_EXH}/acr/Results/modules_{m}_concordant_fixed*.json"))
+    rt = f"{REF_EXH}/retest/reference_{m}_retest.json"
+    arms["ref_exh"] = [ref_arm(rt if "retest" in stem else f"{REF_EXH}/reference_{m}.json", f"{REF_EXH}/acr", stem)]
+    arms["ref_sampled"] = [ref_arm(f, f"{REF_SAMPLED}/acr", f"{m}_seed{re.search(r'seed(\d+)', f).group(1)}")
+                           for f in sorted(glob.glob(f"{REF_SAMPLED}/reference_{m}_seed*.json"), key=lambda f: int(re.search(r"seed(\d+)", f).group(1)))]
     for arm, sub in (("cocoa_false", "cocoa_v110"), ("cocoa_true", "cocoa_eff")):
         arms[arm] = []
-        for f in sorted(glob.glob(f"sweep/{sub}/{sub}_{m}_HiGHS_p64_seed*.json"), key=lambda f: int(re.search(r"seed(\d+)", f).group(1))):
+        for f in sorted(glob.glob(f"{COCOA[sub]}/{sub}_{m}_HiGHS_p64_seed*.json"), key=lambda f: int(re.search(r"seed(\d+)", f).group(1))):
             d = json.load(open(f)); keys = [cocoa_key(s, mset) for s in d["complex_ids"]]
             g = {}
             for c, lab in enumerate(d["kinetic_module"]):
@@ -148,5 +153,5 @@ for m in REF:
                 x.setdefault("fixed_as_reported", x["fixed"]); x["fixed"] = y["fixed"]
         else:
             v.setdefault("fixed_as_reported", v["fixed"]); v["fixed"] = new[0]["fixed"]
-json.dump(out, open("figures/pair_sets.json", "w"), indent=1)
-json.dump(counts, open("figures/pair_counts.json", "w"), indent=1)
+json.dump(out, open(records.write(records.SOURCE_DATA, "pair_sets.json"), "w"), indent=1)
+json.dump(counts, open(records.write(records.SOURCE_DATA, "pair_counts.json"), "w"), indent=1)

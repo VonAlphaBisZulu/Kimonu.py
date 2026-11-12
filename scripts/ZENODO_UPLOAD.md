@@ -1,6 +1,7 @@
 # Zenodo upload of the Kimonu records
 
-Everything is in `@OUT@/`, built from Kimonu.py commit @COMMIT@ by `scripts/zenodo_bundle.sh`.
+Everything is in `@OUT@/`, built from Kimonu.py commit @COMMIT@ and the records folder `@RECORDS@` by
+`scripts/zenodo_bundle.sh`.
 
 | file | what to do with it |
 |---|---|
@@ -8,7 +9,7 @@ Everything is in `@OUT@/`, built from Kimonu.py commit @COMMIT@ by `scripts/zeno
 | `upload/README.md` | upload (Zenodo shows it as a preview, and it is the same file as `README.md` inside the zip) |
 | `zenodo_metadata.json` | the metadata in the format of Zenodo's API, to copy field by field into the form |
 | `description.html` | the description, open it in a browser, select all and copy it into the Description field |
-| `bundle/` | the unpacked archive, for a look before uploading (do not upload) |
+| `work/test/unpacked/Kimonu_records/` | the archive unpacked from the zip by the rebuild test, for a look before uploading (do not upload) |
 | `work/logs/bundle_*.log` | the build log, which ends with the rebuild of the figures, tables and numbers from the zip |
 
 The record has 2 files and @ZIPMB@ MB, well within Zenodo's limits of 100 files and 50 GB per record.

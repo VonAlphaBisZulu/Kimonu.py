@@ -13,14 +13,16 @@ import json, os, sys, time
 import numpy as np, scipy.sparse as sp
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 from run_kimonu_crn import triplets_to_sparse, to_exact
 from kinetic_variants.two_point import substrate_composition, search, certify, iterated_constraints, realise
 
-OUT = os.environ.get("TWO_POINT_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_twopoint")
+OUT = os.path.join(records.OUT, records.TWO_POINT)            # prepare writes here (results/kimonu/gap_experiments/two_point)
+PREP = os.path.join(records.RECORDS, records.TWO_POINT)       # and a relation reads the prepared files from the records
 
 
 def load(M):
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+    crn = json.load(open(records.network(M)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     Nf = triplets_to_sparse(crn["S"], nm, nr)
@@ -57,8 +59,8 @@ def prepare(M):
 
 def relation(M, i, search_s=1200, milp_s=10800):
     crn, A, Y, Nf = load(M); mets = crn["metabolites"]
-    info = json.load(open(f"{OUT}/{M}_relations.json")); r = info["relations"][i]
-    V = sp.load_npz(f"{OUT}/{M}_V.npz")
+    info = json.load(open(f"{PREP}/{M}_relations.json")); r = info["relations"][i]
+    V = sp.load_npz(f"{PREP}/{M}_V.npz")
     G = substrate_composition(A, Y)
     c = np.zeros(len(mets))
     for k, v in r["c"].items(): c[mets.index(k)] = v
@@ -80,6 +82,7 @@ def relation(M, i, search_s=1200, milp_s=10800):
             if dxi is not None:      # a sign pattern exists: try to realise it along its ray
                 out["sign_pattern_realised"] = any(realise(Nf, G, t * dxi) is not None for t in (0.01, 0.1, 1, 10))
     print(json.dumps({k: v for k, v in out.items() if k != "dxi"}), flush=True)
+    os.makedirs(OUT, exist_ok=True)
     json.dump(out, open(f"{OUT}/{M}_rel{i}.json", "w"), indent=1)
 
 

@@ -8,12 +8,12 @@ import json, sys, os
 from fractions import Fraction
 import numpy as np, scipy.sparse as sp, scipy.io as sio
 import straindesign as sd
-sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts")
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 from run_kimonu_crn import triplets_to_sparse, to_exact
-B="/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts"
-OUT=f"{B}/coupling_exact"; os.makedirs(OUT, exist_ok=True)
+OUT=records.write(records.COUPLING_MATRICES, folder=True)    # networks/reference_coupling_matrices of KIMONU_OUT
 for M in sys.argv[1:]:
-    crn=json.load(open(f"{B}/unblocked/{M}_fixed.crn.json")); nr,nm=crn["n_reactions"],crn["n_metabolites"]
+    crn=json.load(open(records.network(M))); nr,nm=crn["n_reactions"],crn["n_metabolites"]
     K=sd.sparse_nullspace(to_exact(triplets_to_sparse(crn["S"],nm,nr)))
     rows={}
     if isinstance(K, sd.ExactCOO):

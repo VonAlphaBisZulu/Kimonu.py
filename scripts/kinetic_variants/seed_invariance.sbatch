@@ -7,7 +7,7 @@
 #SBATCH --array=1-33
 #SBATCH --output=/scratch/sadreyev_lab/pschneider/kimonu_seeds/logs/s_%A_%a.log
 # Kimonu's results under three seeds of the reference flux, one network per task (fig. S4, "three seeds identical").
-# Writes $SEED_OUT/<model>.json (default /scratch/sadreyev_lab/pschneider/kimonu_seeds). Ran 2026-11-02 (job 568581)
+# Writes experiments/seed_invariance/<model>.json of KIMONU_OUT (records.py; earlier /scratch/sadreyev_lab/pschneider/kimonu_seeds). Ran 2026-11-02 (job 568581)
 # with StrainDesign ~/sd-scip-pricing; set SD_TREE=$HOME/sd-kernel-nonzeros for StrainDesign 1.19.2.
 #   sbatch kinetic_variants/seed_invariance.sbatch        # from scripts/
 cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts

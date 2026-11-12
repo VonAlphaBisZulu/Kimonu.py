@@ -20,20 +20,22 @@ the iterated route from src): ACR e_i, ACRR e_a - e_b, coupled complex pairs y_c
 each candidate is still orthogonal to ker(J) at the random r mod p (the first-order claim at a second,
 independent r); proven relations give v^T q = 0; random v = J^T w give v^T q != 0 (the test has power).
 
-    python kinetic_variants/second_order_modp.py <model>   -> json line, also $SO_OUT/<model>_modp.json
+    python kinetic_variants/second_order_modp.py <model>   -> json line, also <model>_modp.json in
+results/kimonu/second_order/ of KIMONU_OUT (records.py)
 """
 import json, os, sys, time
 from fractions import Fraction
 import numpy as np, scipy.sparse as sp
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import straindesign as sd
 import kimonu
 from kimonu.linalg import entries
 from run_kimonu_crn import triplets_to_sparse, to_exact
 from kinetic_variants.tangent_fast import integer_positive_flux
 
-OUT = os.environ.get("SO_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_second_order")
+OUT = records.write(records.SECOND_ORDER, folder=True)
 P = 2147483647                                   # 2^31 - 1: products of two residues fit in int64
 N_H = 4
 rng = np.random.default_rng(7)
@@ -96,7 +98,7 @@ def pairs(groups):
 
 M = sys.argv[1]
 t_start = time.time()
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 S = to_exact(triplets_to_sparse(crn["S"], nm, nr))

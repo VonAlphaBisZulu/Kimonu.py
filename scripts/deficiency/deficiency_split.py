@@ -1,4 +1,7 @@
-"""Deficiency of the 33 benchmark models and its relation to Kimonu's concordance partition."""
+"""Deficiency of the 33 benchmark models and its relation to Kimonu's concordance partition.
+
+    python deficiency/deficiency_split.py [model ...]   # from scripts/ -> networks/deficiency/deficiency_33.json of KIMONU_OUT
+"""
 import json, sys, glob, os, time
 from fractions import Fraction
 import numpy as np
@@ -7,12 +10,13 @@ from scipy.sparse.csgraph import connected_components
 import straindesign as sd
 from kimonu.linalg import exact, matrix_product, entries
 from kimonu.readout import row_readout
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records                                         # networks and figdata.json from KIMONU_RECORDS, output to KIMONU_OUT
 
-B = os.path.expanduser('~/pipelines/2026-08_Kimonu/Kimonu.py/scripts')
-fig = json.load(open(f'{B}/figdata.json'))['kimonu_ref']
+fig = json.load(open(records.read(records.SOURCE_DATA, 'figdata.json')))['kimonu_ref']
 check_rank = set(sys.argv[1:])
 rows = []
-for f in sorted(glob.glob(f'{B}/unblocked/*_fixed.crn.json')):
+for f in sorted(glob.glob(records.read(records.UNBLOCKED, '*_fixed.crn.json'))):
     m = os.path.basename(f)[:-len('_fixed.crn.json')]
     d = json.load(open(f)); n, q = d['n_complexes'], d['n_reactions']
     A = sparse.csr_matrix(([v for _, _, v in d['A']], ([i - 1 for i, _, _ in d['A']], [j - 1 for _, j, _ in d['A']])), shape=(n, q))
@@ -40,4 +44,4 @@ for f in sorted(glob.glob(f'{B}/unblocked/*_fixed.crn.json')):
                      dimK=dK, balanced=len(zero), conc_nonsingle=nonsingle, directions=len(classes), rankM=rankM,
                      fig_bal=fd.get('balanced'), fig_conc=fd.get('conc'), sec=round(time.time() - t, 1)))
     print(json.dumps(rows[-1]), flush=True)
-json.dump(rows, open(os.path.join(os.path.dirname(__file__), 'deficiency_33.json'), 'w'), indent=1)
+json.dump(rows, open(records.write(records.DEFICIENCY, 'deficiency_33.json'), 'w'), indent=1)

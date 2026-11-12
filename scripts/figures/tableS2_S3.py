@@ -1,14 +1,14 @@
 """Tables S2 (the 33 networks) and S3 (kinetic modules, ACR and ACRR per network) of the Supplement as Markdown tables.
 
-Table S2. Sizes are those of the networks every tool received (unblocked/<model>_fixed.crn.json). Complexes are counted
+Table S2. Sizes are those of the networks every tool received (networks/unblocked/<model>_fixed.crn.json). Complexes are counted
 as in the deficiency, the zero complex included and the complexes that occur in no reaction left out (figdata.json
 n_complexes, gather_figdata.py). The crn.json lists such complexes only for iJB785 (51) and iSynCJ816 (29). They do not
 change the deficiency, since each would add one complex and one linkage class. Linkage classes, rank N, deficiency and
-dim ker N come from deficiency/deficiency_33.json (deficiency_split.py), balanced complexes and concordance modules with
+dim ker N come from networks/deficiency/deficiency_33.json (deficiency_split.py), balanced complexes and concordance modules with
 two or more complexes from Kimonu's default run (figdata.json, kimonu_det, balanced without the complexes of no
 reaction). Rows are sorted by the number of complexes.
 
-Table S3. Iterated route with detached uptakes (kinetic_variants/member_counts/, member_counts.py), in the order of
+Table S3. Iterated route with detached uptakes (results/kimonu/member_counts/, member_counts.py), in the order of
 table S2. A kinetic module has two or more complexes, and the share of complexes in a module is taken of the complexes
 of table S2 (Fig. 3C). ACRR is counted as k - 1 independent ratios per group of k metabolites without ACR, and among
 free metabolites as k - 1 per group of k free metabolites. The share of free metabolites with ACR or in an ACRR group is
@@ -21,17 +21,19 @@ import json, os, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from names import NAME as SHORT                    # one display name per network (figures/names.py)
-D = json.load(open(f"{B}/figdata.json"))
+sys.path.insert(0, B)
+import records                                     # every input from the records (KIMONU_RECORDS)
+D = json.load(open(records.read(records.SOURCE_DATA, "figdata.json")))
 nC, det = D["n_complexes"], D["kimonu_det"]
-F = {r["model"]: r for r in json.load(open(f"{B}/deficiency/deficiency_33.json"))}
-MC = {m: json.load(open(f"{B}/kinetic_variants/member_counts/{m}.json")) for m in nC}
+F = {r["model"]: r for r in json.load(open(records.read(records.DEFICIENCY, "deficiency_33.json")))}
+MC = {m: json.load(open(records.read(records.MEMBER_COUNTS, f"{m}.json"))) for m in nC}
 ORDER = sorted(nC, key=lambda m: nC[m])
 
 
 def rows_s2():
     out = []
     for m in ORDER:
-        crn, f, gone = json.load(open(f"{B}/unblocked/{m}_fixed.crn.json")), F[m], D["complexes_in_no_reaction"][m]
+        crn, f, gone = json.load(open(records.network(m))), F[m], D["complexes_in_no_reaction"][m]
         # the deficiency's n counts the zero complex and leaves out the complexes of no reaction, as n_complexes does;
         # its balanced count (Kimonu's, from M) still holds them
         assert f["n"] == nC[m] == crn["n_complexes"] - gone and f["delta"] == f["n"] - f["ell"] - f["rankN"], m

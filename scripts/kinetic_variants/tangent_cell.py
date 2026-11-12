@@ -2,7 +2,7 @@
 
     python tangent_cell.py <network> <out.json> [--attached] [--seed N]
 
-<network> is a benchmark model (unblocked/<network>_fixed.crn.json), a small network of local_acr_symbolic.py, a
+<network> is a benchmark model (networks/unblocked/<network>_fixed.crn.json of the records), a small network of local_acr_symbolic.py, a
 ladder step envz<k> or e_coli_core. Only kimonu.tangent_route is timed. Uptakes are detached unless --attached.
 --seed sets the seed of the interior flux r*.
 """
@@ -10,13 +10,14 @@ import json, os, sys, time
 import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS)
 import kimonu
 from run_kimonu_crn import triplets_to_sparse
 
 name, dest = sys.argv[1], sys.argv[2]
 detached = "--attached" not in sys.argv
 seed = int(sys.argv[sys.argv.index("--seed") + 1]) if "--seed" in sys.argv else 0
-path = f"{B}/unblocked/{name}_fixed.crn.json"
+path = records.network(name)
 if os.path.exists(path):
     crn = json.load(open(path))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]

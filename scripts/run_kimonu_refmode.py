@@ -11,13 +11,14 @@ more complexes, together with the balanced complexes, and merged where they over
 import json, os, sys, time
 import numpy as np
 B = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu.network import zero_complexes
 from kimonu.reference import shinar_feinberg, upstream_modules
 from run_kimonu_crn import triplets_to_sparse
 
 M, out = sys.argv[1:3]
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
+crn = json.load(open(records.network(M))); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)              # N = Y·A, the S of the crn.json
 t0 = time.perf_counter()

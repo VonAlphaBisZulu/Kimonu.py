@@ -4,17 +4,21 @@ Records the iterated route's ACR metabolites and ACRR groups (names) for attache
 for every metabolite that is ACR attached but not detached whether it lies in a detached ACRR group (its
 level then follows the supply while its ratio to other metabolites stays fixed).
 
-    python kinetic_variants/uptake_lists.py <model> <out_dir>   -> <out_dir>/<model>.json
+    python kinetic_variants/uptake_lists.py <model> [<out_dir>]   -> <out_dir>/<model>.json
+
+<out_dir> defaults to results/kimonu/acr_lists_by_uptake_mode/ of KIMONU_OUT (records.py).
 """
 import json, os, sys
 import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from run_kimonu_crn import triplets_to_sparse
 
-M, out_dir = sys.argv[1], sys.argv[2]
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+M = sys.argv[1]
+out_dir = sys.argv[2] if len(sys.argv) > 2 else records.write(records.UPTAKE_LISTS, folder=True)
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
 net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json

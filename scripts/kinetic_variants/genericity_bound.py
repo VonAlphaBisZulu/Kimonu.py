@@ -20,14 +20,16 @@ coordinates of J minus dim ker J, the tangent dimension of that record, so the s
 bits comes from the sz_flux.py record, or the default of kimonu.interior_flux. A later change of bits needs a new
 sz_flux.py record only for the check and the tangent dimension, which does not depend on the point.
 
-    python kinetic_variants/genericity_bound.py [model ...]   -> $GB_OUT/<model>.json, $GB_OUT/summary.json
+    python kinetic_variants/genericity_bound.py [model ...]   -> <model>.json, summary.json
 
-SZ_DIR is the sz_flux.py output read (default the rerun of 2026-11-11), GB_OUT the output directory.
+It reads the sz_flux.py records (results/kimonu/uniform_flux/ of KIMONU_RECORDS) and writes to
+results/kimonu/genericity_bound/ of KIMONU_OUT (records.py).
 """
 import inspect, json, os, statistics, subprocess, sys, time
 import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from kimonu import free_directions, readout, steady_state_map
 from kimonu.network import zero_complexes
@@ -35,9 +37,8 @@ from kimonu.linalg import nullspace
 from kimonu.readout import row_readout
 from run_kimonu_crn import triplets_to_sparse
 
-RERUN = "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111"
-SZ = os.environ.get("SZ_DIR", f"{RERUN}/sz_flux_33")
-OUT = os.environ.get("GB_OUT", f"{RERUN}/genericity_bound")
+SZ = records.read(records.UNIFORM_FLUX)
+OUT = records.write(records.GENERICITY_BOUND, folder=True)
 SEED = 0
 BITS_DEFAULT = inspect.signature(kimonu.interior_flux).parameters["bits"].default
 
@@ -65,7 +66,7 @@ def iterated_ranks(net, flux):
 
 
 def network(M):
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+    crn = json.load(open(records.network(M)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json

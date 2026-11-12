@@ -4,19 +4,19 @@ COCOA writes a stoichiometric coefficient as a `2_` prefix on the species, which
 comparisons here dropped, silently discarding the ~54 multi-coefficient complexes -- exactly the
 boundary complexes the partitions disagree about. Rendering both sides the same way removes that.
 """
-import json, sys
+import json, os, sys
 import numpy as np
 from collections import Counter, defaultdict
-sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts")
-sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src")
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "src"))
 import kimonu
 from compat import upstream
 from kimonu.reference import complex_graph, strong_components
 from run_kimonu_crn import triplets_to_sparse
 
-B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts"
 M = "iCN900"
-crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+crn = json.load(open(records.network(M)))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64)
 Y = triplets_to_sparse(crn["Y"], nm, nc)
@@ -27,7 +27,7 @@ for comp in strong_components(succ, set(range(nc))):
     if not any(succ[v] - comp for v in comp):
         term |= comp
 
-kim = json.load(open(f"{B}/sweep_shared/kimonu_{M}.json"))["complexes"]
+kim = json.load(open(records.read(records.UPSTREAM_ROUTE, "kimonu_runs", f"kimonu_{M}.json")))["complexes"]
 def cocoa_name(comp):
     """COCOA's complex id: species sorted, coefficient as a prefix -- `2_h[c]`, `4.5_h[c]`, none for 1."""
     parts = []
@@ -37,7 +37,7 @@ def cocoa_name(comp):
     return "+".join(sorted(parts))
 
 ours = [cocoa_name(c["composition"]) for c in kim]
-co = json.load(open(f"{B}/sweep/cocoa_eff/cocoa_eff_{M}_HiGHS_p64_seed1234.json"))
+co = json.load(open(records.read(records.COCOA_TRUE, f"cocoa_eff_{M}_HiGHS_p64_seed1234.json")))
 ids = ["+".join(sorted(s.split("+"))) for s in co["complex_ids"]]
 assert len(ids) == len(ours)
 dup = [n for n, c in Counter(ours).items() if c > 1]

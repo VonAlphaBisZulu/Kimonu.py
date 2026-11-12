@@ -6,18 +6,19 @@ pairs over all complexes, ACR metabolites, ACRR pairs, and the same restricted t
 gap relations are listed as in two_point_gap.py prepare: every ACR metabolite only the tangent route
 reports, and for each tangent ACRR group one link per iterated group it joins (rep_1 - rep_k). g_rel is the
 dimension these relation vectors add to C_iter, the span of the iterated route's fixed log-combinations
-(exact ranks, as in injectivity_gap.py). The attached block reproduces kinetic_variants/hierarchy/<model>.json
+(exact ranks, as in injectivity_gap.py). The attached block reproduces the October records hierarchy/<model>.json (commit 7fafd4a)
 and, on the gap models, the 31/6/14 relations and 21/3/7 directions; that is the check of this script.
 
-    python kinetic_variants/uptake_modes.py <model>            -> kinetic_variants/uptake_modes/<model>.json
-    python kinetic_variants/uptake_modes.py <model> detached   -> kinetic_variants/uptake_modes/<model>.detached.json
+    python kinetic_variants/uptake_modes.py <model>            -> results/kimonu/uptake_modes/<model>.json
+    python kinetic_variants/uptake_modes.py <model> detached   -> results/kimonu/uptake_modes/<model>.detached.json
 
-UM_OUT replaces the output directory kinetic_variants/uptake_modes (a rerun).
+Written to KIMONU_OUT (records.py).
 """
 import json, os, sys, time
 import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+import records                                         # paths of the records (KIMONU_RECORDS, KIMONU_OUT)
 import kimonu
 from run_kimonu_crn import triplets_to_sparse
 from kinetic_variants.injectivity_gap import exact_V, kernel_dim
@@ -88,7 +89,7 @@ def mode(crn, net, detach, free):
 
 if __name__ == "__main__":
     M = sys.argv[1]
-    crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
+    crn = json.load(open(records.network(M)))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A; metabolites by index
@@ -101,6 +102,4 @@ if __name__ == "__main__":
             continue
         out[name] = mode(crn, net, det, free)
         print(M, name, json.dumps({k: v for k, v in out[name].items() if k != "relations"}), flush=True)
-    D = os.environ.get("UM_OUT", f"{B}/kinetic_variants/uptake_modes")
-    os.makedirs(D, exist_ok=True)
-    json.dump(out, open(f"{D}/{M}{''.join('.' + o for o in only)}.json", "w"), indent=1)
+    json.dump(out, open(records.write(records.UPTAKE_MODES, f"{M}{''.join('.' + o for o in only)}.json"), "w"), indent=1)

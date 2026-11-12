@@ -13,7 +13,7 @@ of this script).
 
     python figures/fig3B_update_ratios.py <vault Figure3.svg> <out.svg> [--pairs]     # from scripts/
 
-HIERARCHY_DIR (default kinetic_variants/hierarchy_detached, written by hierarchy_detached.py) gives the counts.
+results/kimonu/hierarchy_detached/ of the records (records.py, written by hierarchy_detached.py) gives the counts.
 """
 import glob, json, math, os, re, sys, tempfile
 import xml.etree.ElementTree as ET
@@ -24,7 +24,9 @@ import svg_finish, svg_panels
 
 src, dest = sys.argv[1], sys.argv[2]
 PAIRS = "--pairs" in sys.argv[3:]
-HIERARCHY_DIR = os.environ.get("HIERARCHY_DIR", "kinetic_variants/hierarchy_detached")
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import records
+HIERARCHY_DIR = records.read(records.HIERARCHY_DETACHED)
 from names import NAME as SHORT                    # the tick labels of the vault file (figures/names.py)
 OLD_TITLE, NEW_TITLE = "ACR metabolites + ACRR pairs (free)", "ACR metabolites + ACRR ratios (free)"
 GREY, DARK = "#6b7480", "#3a4250"
