@@ -1,7 +1,7 @@
 # Run records and figure data for "@PAPER@"
 
 @AUTHOR@, @AFFILIATION@ (ORCID @ORCID@).
-Article DOI @ARTICLE_DOI@, archive DOI @ZENODO_DOI@.
+@ARTICLE_LINE@
 Built on @DATE@ by `scripts/zenodo_bundle.sh` and `scripts/make_zenodo_bundle.py` of Kimonu.py at commit @COMMIT@.
 
 ## What this archive holds

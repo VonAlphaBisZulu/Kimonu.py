@@ -191,8 +191,11 @@ REC = records.RECORDS
 git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, check=True).stdout.strip()
 REV = os.environ.get("KIMONU_REV", "HEAD")
 commit, commit_full = git("rev-parse", "--short=7", REV), git("rev-parse", REV)
-meta = {k: os.environ.get(k, d) for k, d in dict(ZENODO_DOI="10.5281/zenodo.24145925", ARTICLE_DOI="10.1126/sciadv.XXXXXXX",
-        ARCHIVE_VERSION="X.Y", RELEASE_DATE="YYYY-MM-DD").items()}
+meta = {k: os.environ.get(k, d) for k, d in dict(ZENODO_DOI="10.5281/zenodo.24145925", ARTICLE_DOI="",
+        ARCHIVE_VERSION="1.0", RELEASE_DATE="2026-11-12").items()}
+# Until the article is published, ARTICLE_DOI stays empty and the archive names it as submitted to Science Advances.
+ARTICLE_LINE = (f"Article DOI {meta['ARTICLE_DOI']}, archive DOI {meta['ZENODO_DOI']}." if meta["ARTICLE_DOI"]
+                else f"Archive DOI {meta['ZENODO_DOI']}. The article is submitted to Science Advances.")
 top, upload = os.path.join(out, "top"), os.path.join(out, "upload")
 for d in (top, upload):
     assert not os.path.exists(d), f"{d} exists"
@@ -245,6 +248,9 @@ fill = {"@PAPER@": PAPER, "@AUTHOR@": NAME, "@AUTHOR_FAMILY@": AUTHOR["family"],
         "@AFFILIATION@": AFFILIATION, "@COMMIT@": commit, "@COMMIT_FULL@": commit_full, "@RUN_COMMIT@": RUN_COMMIT, "@DATE@": datetime.date.today().isoformat(),
         "@LAYOUT@": layout.rstrip(), "@SNAPSHOT@": snapshot, "@YEAR@": meta["RELEASE_DATE"][:4]}
 fill.update({f"@{k}@": v for k, v in meta.items()})
+fill["@ARTICLE_LINE@"] = ARTICLE_LINE
+fill["@ARTICLE_CFF@"] = (f'  journal: "Science Advances"\n  year: {meta["RELEASE_DATE"][:4]}\n  doi: "{meta["ARTICLE_DOI"]}"\n'
+                       if meta["ARTICLE_DOI"] else '  journal: "Science Advances"\n  status: submitted\n')
 PLACEHOLDER = ("XXXXXXX", "X.Y", "YYYY")
 
 
@@ -309,10 +315,7 @@ preferred-citation:
     - family-names: "@AUTHOR_FAMILY@"
       given-names: "@AUTHOR_GIVEN@"
       orcid: "https://orcid.org/@ORCID@"
-  journal: "Science Advances"
-  year: @YEAR@
-  doi: "@ARTICLE_DOI@"
-""")
+@ARTICLE_CFF@""")
 named_paths_exist(open(os.path.join(top, "README.md"), encoding="utf-8").read())
 
 # ---- SHA256SUMS over the records and top/, then one zip, reopened and verified member by member
@@ -382,7 +385,7 @@ LAYOUT = [
     (snapshot, f"a snapshot of the source code and the scripts at commit {commit}")]
 esc = lambda s: s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 desc = (f"<p>Run records and figure data of the article \"{esc(paper)}\" by {esc(NAME)} (Science Advances, "
-        f"DOI {meta['ARTICLE_DOI']}). The archive holds every file that the figures, tables, Data S1 and S2 and the "
+        + (f"DOI {meta['ARTICLE_DOI']}" if meta["ARTICLE_DOI"] else "submitted") + "). The archive holds every file that the figures, tables, Data S1 and S2 and the "
         f"numbers of the article are computed from, and its README.md maps each file to the paper item it supports and "
         f"to the script that reads it.</p><p><strong>Abstract of the article.</strong> {esc(abstract)}</p>"
         f"<p><strong>Contents of Kimonu_records.zip.</strong></p><ul>"
@@ -400,7 +403,8 @@ record = {"metadata": {
     "related_identifiers": [
         {"identifier": REPO, "relation": "isSupplementTo", "resource_type": "software", "scheme": "url"},
         {"identifier": f"{REPO}/tree/{commit_full}", "relation": "isCompiledBy", "resource_type": "software", "scheme": "url"},
-        {"identifier": meta["ARTICLE_DOI"], "relation": "isSupplementTo", "resource_type": "publication-article", "scheme": "doi"}],
+    ] + ([{"identifier": meta["ARTICLE_DOI"], "relation": "isSupplementTo", "resource_type": "publication-article",
+           "scheme": "doi"}] if meta["ARTICLE_DOI"] else []),
     "references": REFERENCES, "version": meta["ARCHIVE_VERSION"], "publication_date": meta["RELEASE_DATE"],
     "language": "eng",
     "notes": f"Built by scripts/make_zenodo_bundle.py of {REPO} at commit {commit}."}}
