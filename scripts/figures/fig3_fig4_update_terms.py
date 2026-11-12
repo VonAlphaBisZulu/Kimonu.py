@@ -1,6 +1,6 @@
 """Figures 3 and 4 in the words and network names of the text, edited in place on the vault files.
 
-Figure 4 carries Phil's Illustrator edits and Figure 3 those of its chain (benchmarks/README.md), so both are edited
+Figure 4 carries Phil's Illustrator edits and Figure 3 those of its chain (scripts/README.md), so both are edited
 where they are instead of drawn again. Only these texts change.
 
 Figure 3  A, B  the iIS312 stages named as in every other item (figures/names.py), "iIS312 Try" for "iIS312 T" and so
@@ -12,7 +12,7 @@ Checks: every old text occurs as often as expected, no new text box runs into an
 rendering both files (rsvg-convert) changes no pixel outside the boxes of the changed texts. A file that already reads
 the new words is reported and copied unchanged.
 
-    python figures/fig3_fig4_update_terms.py <vault figures dir> <out dir>     # from benchmarks/; writes Figure3.svg, Figure4.svg
+    python figures/fig3_fig4_update_terms.py <vault figures dir> <out dir>     # from scripts/; writes Figure3.svg, Figure4.svg
 """
 import os, re, sys, tempfile
 import xml.etree.ElementTree as ET

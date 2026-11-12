@@ -14,7 +14,7 @@ every arm, the coupled complex pairs (pairs within one kinetic module), the free
 ACRR pairs (closed under the rule above) are compared with Kimonu's default (iterated route, detached uptakes),
 and reported as: contained in Kimonu's, and how many are not.
 
-    python figures/pair_sets.py     # from benchmarks/  -> figures/pair_sets.json; updates "fixed" in figures/pair_counts.json
+    python figures/pair_sets.py     # from scripts/  -> figures/pair_sets.json; updates "fixed" in figures/pair_counts.json
 """
 import glob, json, os, re, sys
 import numpy as np

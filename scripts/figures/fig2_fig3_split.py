@@ -1,7 +1,7 @@
 """Split the vault Figure 2 into Figure 2 (the kinase example, panels A-E) and Figure 3 (the 33 genome-scale models and
 the certificate, old panels F-I, now A-D), and fix the label typo in the old Figure 3, which becomes Figure 4.
 
-    python figures/fig2_fig3_split.py <vault figures dir> <out dir>      # from benchmarks/
+    python figures/fig2_fig3_split.py <vault figures dir> <out dir>      # from scripts/
 
 Every drawn element goes to the panel whose rectangle holds the centre of its bounding box (svg_panels), the bottom
 half moves up to the top of its own artboard, and its letters F-I become A-D. Fonts are subset again (svg_finish).

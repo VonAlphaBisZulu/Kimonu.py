@@ -4,7 +4,7 @@
 """
 import json, os, sys, time
 import numpy as np
-B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
+B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts"
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu import steady_state

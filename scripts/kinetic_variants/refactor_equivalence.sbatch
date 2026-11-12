@@ -7,7 +7,7 @@
 #SBATCH --time=2-00:00:00
 # Equivalence of two Kimonu commits on the 33 networks (refactor_equivalence.py): every network dumped with the src of
 # both commits, eight processes at a time with one BLAS thread each, largest networks first, then compared exactly.
-# Submit from the benchmarks directory of a checkout, with the log on scratch:
+# Submit from the scripts directory of a checkout, with the log on scratch:
 #   sbatch -o <dir>/%x_%j.log -e <dir>/%x_%j.err kinetic_variants/refactor_equivalence.sbatch <src A> <src B> <out dir>
 cd "$SLURM_SUBMIT_DIR"
 export SRC_A=$1 SRC_B=$2 OUT=$3

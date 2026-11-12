@@ -29,7 +29,7 @@ reference's definitions: concordance from ker(N), upstream sets merged by overla
 reference's pairwise rule (the Shinar-Feinberg criterion within kinetic modules). Stochastic arms show the median over three seeds. Layout is in inches at 7.2 in (518.4 pt) width; the
 supplementary table columns are sized from their measured text, so its axes are placed by hand.
 
-    python figures/fig4_figS1_S2_benchmark.py [out_dir]    # run from benchmarks/ after gather_figdata.py and pair_sets.py; default figures/main
+    python figures/fig4_figS1_S2_benchmark.py [out_dir]    # run from scripts/ after gather_figdata.py and pair_sets.py; default figures/main
 
 KIMONU_TIMING (default the paper's run, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing) holds the tangent-route
 times of B, KIMONU_LACR the symbolic baselines, KIMONU_REF_DIR the runs of the reference-equivalent mode for fig. S1.

@@ -5,10 +5,10 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=16G
 #SBATCH --partition=sadreyevlab
-#SBATCH --output=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks/reference_fixed2/full_%j.log
+#SBATCH --output=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts/reference_fixed2/full_%j.log
 set -u
 BASE=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py
-OUT=$BASE/benchmarks/reference_fixed2
+OUT=$BASE/scripts/reference_fixed2
 mkdir -p $OUT
 export PATH=$HOME/miniconda3/envs/octave/bin:$PATH
 export OCTAVE_HOME=$HOME/miniconda3/envs/octave
@@ -21,6 +21,6 @@ export REFERENCE_MODE=exhaustive
 # the four small iIS312 variants
 export REFERENCE_MAT_OUT=$OUT/${MODEL}_concordant_fixed.mat
 [ -s "$OUT/reference_${MODEL}.json" ] && { echo "have $MODEL"; exit 0; }
-stdbuf -oL -eL octave --no-gui $BASE/benchmarks/matlab_reference/run_reference.m \
-  $BASE/benchmarks/unblocked/${MODEL}_fixed.crn.json $OUT/reference_${MODEL}.json
+stdbuf -oL -eL octave --no-gui $BASE/scripts/matlab_reference/run_reference.m \
+  $BASE/scripts/unblocked/${MODEL}_fixed.crn.json $OUT/reference_${MODEL}.json
 echo "done $MODEL rc=$?"

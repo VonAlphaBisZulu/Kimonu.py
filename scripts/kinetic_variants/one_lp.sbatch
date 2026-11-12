@@ -9,7 +9,7 @@
 #SBATCH --time=04:00:00
 #SBATCH --output=/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/fva/one_lp_%j.log
 # One LP for blocked reactions, against the FVA: one core, one thread, nothing else on the node.
-cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 PY=$HOME/miniconda3/envs/straindesign/bin/python
 O=/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/fva

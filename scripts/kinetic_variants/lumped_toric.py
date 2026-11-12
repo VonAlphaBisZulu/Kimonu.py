@@ -9,7 +9,7 @@ with monomial rates. Boundary species become the zero complex; blocked reactions
 import sys, xml.etree.ElementTree as ET, numpy as np, scipy.sparse as sp
 from fractions import Fraction
 from scipy.optimize import linprog
-sys.path.insert(0, '/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks')
+sys.path.insert(0, '/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts')
 sys.path.insert(0, '/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src')
 from kinetic_variants.toric_check import check
 from kimonu.linalg import exact

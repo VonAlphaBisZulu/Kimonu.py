@@ -8,7 +8,7 @@ fig. S4 (FigS4_seeds) relations that change with the random seed, per network an
                 rank of what some seed finds minus the rank of what all seeds share, seed_spread.py).
                 figures/seed_spread.json (seed_spread.py); Kimonu's r* seeds 0, 1, 2 change nothing.
 
-    python figures/figS3_S4_uptakes_seeds.py <out_dir>        # from benchmarks/
+    python figures/figS3_S4_uptakes_seeds.py <out_dir>        # from scripts/
 """
 import io, json, os, sys, tempfile
 import numpy as np

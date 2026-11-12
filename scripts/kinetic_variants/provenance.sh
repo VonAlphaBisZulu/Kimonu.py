@@ -13,7 +13,7 @@ PY=$HOME/miniconda3/envs/straindesign/bin/python
   echo "host $(hostname)"
   echo "job $J"
   echo "kimonu $(git -C "$K" rev-parse HEAD)"
-  echo "kimonu_uncommitted_files $(git -C "$K" status --porcelain --untracked-files=no -- src benchmarks | wc -l)"
+  echo "kimonu_uncommitted_files $(git -C "$K" status --porcelain --untracked-files=no -- src scripts | wc -l)"
   echo "straindesign_tree $SD"
   echo "straindesign $(git -C "$SD" describe --tags --always) $(git -C "$SD" rev-parse HEAD)"
   echo "python $($PY -V 2>&1)"

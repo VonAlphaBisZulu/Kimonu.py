@@ -5,7 +5,7 @@ Carries the real metabolite ids across, so results can be compared against the r
 published ACR/ACRR files without a name mapping in between.
 
 Usage:
-    python benchmarks/export_split_model.py <upstream_repo> <model> [--variant fixed|random]
+    python scripts/export_split_model.py <upstream_repo> <model> [--variant fixed|random]
 """
 import argparse
 import json

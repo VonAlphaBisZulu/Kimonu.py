@@ -14,7 +14,7 @@
 # output exists is skipped, so a rerun picks up where a job stopped. Each arm's directory gets the job's provenance and
 # the node's hardware (kinetic_variants/provenance.sh). The nodes of partition sadreyevlab are Xeon Silver 4314.
 #   sbatch [--mem=2G] timing_exclusive.sbatch det att ref
-cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 SD=${SD_TREE:-$HOME/sd-kernel-nonzeros}
 export PYTHONPATH=$PWD:$SD OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 OUT=${TIMING_OUT:-/scratch/sadreyev_lab/pschneider/kimonu_timing}

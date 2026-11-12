@@ -8,7 +8,7 @@
 # using the fast path here would compare two incomplete methods and call it agreement.
 #
 # Usage:
-#   julia --project=benchmarks/julia_revision benchmarks/run_cocoa_acr.jl <crn.json> <out.json> [seed]
+#   julia --project=scripts/julia_revision scripts/run_cocoa_acr.jl <crn.json> <out.json> [seed]
 
 import COBREXA
 import AbstractFBCModels as A

@@ -12,7 +12,7 @@ gap. Data: kinetic_variants/member_counts/<model>.json (member_counts.py, detach
 in table S2, the zero complex included and the complexes that occur in no reaction (51 in iJB785, 29 in iSynCJ816)
 left out.
 
-    python figures/fig3CD_coverage.py <vault Figure3.svg> <out.svg> [--all-rows]     # from benchmarks/
+    python figures/fig3CD_coverage.py <vault Figure3.svg> <out.svg> [--all-rows]     # from scripts/
 
 Everything that was in the input must render as before, checked at the end (rows compared pixel by pixel, the two
 relabelled letters left out). An input that already has the panels C and D (groups panel_C, panel_D) gets them

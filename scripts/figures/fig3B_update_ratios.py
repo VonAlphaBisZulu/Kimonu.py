@@ -11,7 +11,7 @@ y = a - b log10(max(v, 0.7)) to within 0.05 pt, and the bar ends must lie on it 
 of its tick label. With --pairs the old counts are drawn again, and the output must render as the input (the check
 of this script).
 
-    python figures/fig3B_update_ratios.py <vault Figure3.svg> <out.svg> [--pairs]     # from benchmarks/
+    python figures/fig3B_update_ratios.py <vault Figure3.svg> <out.svg> [--pairs]     # from scripts/
 
 HIERARCHY_DIR (default kinetic_variants/hierarchy_detached, written by hierarchy_detached.py) gives the counts.
 """

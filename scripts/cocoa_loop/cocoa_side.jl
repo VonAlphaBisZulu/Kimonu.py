@@ -6,7 +6,7 @@
 # sampled ones. With the concordance input identical, any remaining difference to Kimonu's iterated
 # route comes from the kinetic loop itself.
 #
-# Usage: julia --project=benchmarks/julia_v110 cocoa_side.jl <crn.json> <kimonu_side.json> <out.json>
+# Usage: julia --project=scripts/julia_v110 cocoa_side.jl <crn.json> <kimonu_side.json> <out.json>
 
 import AbstractFBCModels as A
 using COCOA
@@ -18,7 +18,7 @@ kim = JSON3.read(read(kim_path, String), Dict)
 nr, nm = crn["n_reactions"], crn["n_metabolites"]
 rxn_ids = String.(crn["reactions"]); met_ids = String.(crn["metabolites"])
 
-# the same model rebuild as benchmarks/run_cocoa_acr.jl
+# the same model rebuild as scripts/run_cocoa_acr.jl
 S = spzeros(nm, nr)
 for t in crn["S"]
     S[Int(t[1]), Int(t[2])] = Float64(t[3])

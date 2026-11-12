@@ -11,8 +11,8 @@
 # What a user pays before the analysis on the two largest networks: load the SBML, split reversible reactions, find
 # the blocked reactions with one LP, build N = Y A (about 12 s on iAF1260b and iS_1188, one core, exclusive node).
 # Ran 2026-11-06 (job 570671) with StrainDesign 1.19.2.
-#   sbatch kinetic_variants/preprocess_time.sbatch        # from benchmarks/
-cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+#   sbatch kinetic_variants/preprocess_time.sbatch        # from scripts/
+cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 export PYTHONPATH=$HOME/sd-kernel-nonzeros:../src OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 PY=$HOME/miniconda3/envs/straindesign/bin/python; O=${FVA_OUT:-/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/fva}
 mkdir -p $O

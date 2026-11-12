@@ -6,7 +6,7 @@ or directory it comes from. After a rerun, point the variables below at the new 
 and update the text where a value changed. Numbers that no result file holds (software versions, SLURM settings of the
 other tools) are listed at the end with where they come from.
 
-    python figures/paper_numbers.py        # from benchmarks/
+    python figures/paper_numbers.py        # from scripts/
 
 Result directories (environment variable, default; RERUN = /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111, the
 runs of the paper on the final code):

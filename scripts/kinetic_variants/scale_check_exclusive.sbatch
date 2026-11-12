@@ -8,7 +8,7 @@
 #SBATCH --time=1:00:00
 #SBATCH --output=/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/logs/%x_%j.log
 # S8: LP point rounded at 10^6 against scale 100 and unrounded, iNJ661, three runs, one process pinned to one core.
-cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 export PYTHONPATH=$PWD:$HOME/sd-kernel-nonzeros OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 PY=$HOME/miniconda3/envs/straindesign/bin/python
 OUT=/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/scale_check/exclusive

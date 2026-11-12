@@ -1,6 +1,6 @@
 # Zenodo upload of the Kimonu records
 
-Everything is in `@OUT@/`, built from Kimonu.py commit @COMMIT@ by `benchmarks/zenodo_bundle.sh`.
+Everything is in `@OUT@/`, built from Kimonu.py commit @COMMIT@ by `scripts/zenodo_bundle.sh`.
 
 | file | what to do with it |
 |---|---|
@@ -60,7 +60,7 @@ the simplest way to let the reviewers open it.
 
       cd ~/pipelines/2026-08_Kimonu/Kimonu.py
       KIMONU_REV=@COMMIT@ ZENODO_DOI=10.5281/zenodo.NNNNNNN ARCHIVE_VERSION=1.0 RELEASE_DATE=YYYY-MM-DD \
-        bash benchmarks/zenodo_bundle.sh @OUT@
+        bash scripts/zenodo_bundle.sh @OUT@
 
   `ARTICLE_DOI=10.1126/sciadv...` can be added the same way once it exists. The same command
   without the variables rebuilds the whole package after any change of the figures, Data S1 and S2 or the records.

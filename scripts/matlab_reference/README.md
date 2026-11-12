@@ -17,12 +17,12 @@ The reference's own `.m` files are used unmodified. `compat/` supplies only what
 
 ```bash
 export UPSTREAM_ALGORITHM=/path/to/Upstream_Algorithm     # defaults to ../../../Upstream_Algorithm
-octave --no-gui benchmarks/matlab_reference/run_reference.m \
-    benchmarks/processed/concordance/e_coli_core.crn.json \
-    benchmarks/results/reference_concordance_i_e_coli_core.json
+octave --no-gui scripts/matlab_reference/run_reference.m \
+    scripts/processed/concordance/e_coli_core.crn.json \
+    scripts/results/reference_concordance_i_e_coli_core.json
 ```
 
-The input is the shared exported network (`benchmarks/export_crn.jl`), so the reference decides
+The input is the shared exported network (`scripts/export_crn.jl`), so the reference decides
 concordance on the *same* complex decomposition as Kimonu and COCOA. What is being compared is
 therefore the decision procedure, not three separate complex enumerations.
 

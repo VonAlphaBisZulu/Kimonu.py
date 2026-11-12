@@ -4,7 +4,7 @@ Shinar & Feinberg (2010) give two biochemical networks with ACR for every choice
 deficiency-one criterion (two non-terminal complexes that differ in one species). EnvZ-OmpR, here in their form with
 seven species (networks.py has the form with ADP-bound EnvZ of Figure 1), has ACR in the phosphorylated response
 regulator Yp. The IDHKP-IDH core, with the bifunctional kinase-phosphatase E (X1), phosphorylated IDH (X2) and IDH (X4),
-has ACR in X4. Two more networks are those of the injectivity test of benchmarks/kinetic_variants/test_tangent_one_shot.py.
+has ACR in X4. Two more networks are those of the injectivity test of scripts/kinetic_variants/test_tangent_one_shot.py.
 envz_ompr_letters is EnvZ-OmpR with letters for the species (A = X, B = XT, C = Xp, D = Y, E = XpY, F = Yp, G = XTYp),
 with ACR in F by the same criterion (B and B+F). concordant is a concordant network with the complex C + 4D, without ACR.
 

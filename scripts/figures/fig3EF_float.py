@@ -2,7 +2,7 @@
 are, the bottom row becomes the certificate of the two routes, exact nullspace (H) against SVD nullspace (I), both with one
 element-wise tolerance rule. fig2_fig3_split.py then made H, I the panels E, F of Figure 3 (via C, D and fig3CD_coverage.py).
 
-    python figures/fig3EF_float.py <vault Figure2_draft.svg> <out.svg>     # from benchmarks/
+    python figures/fig3EF_float.py <vault Figure2_draft.svg> <out.svg>     # from scripts/
 
 Drawn on a canvas of the full figure height, so that the new panels land where the old ones were; the render check at the
 end compares everything above the bottom row with the input.

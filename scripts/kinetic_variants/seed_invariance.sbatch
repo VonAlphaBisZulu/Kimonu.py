@@ -9,8 +9,8 @@
 # Kimonu's results under three seeds of the reference flux, one network per task (fig. S4, "three seeds identical").
 # Writes $SEED_OUT/<model>.json (default /scratch/sadreyev_lab/pschneider/kimonu_seeds). Ran 2026-11-02 (job 568581)
 # with StrainDesign ~/sd-scip-pricing; set SD_TREE=$HOME/sd-kernel-nonzeros for StrainDesign 1.19.2.
-#   sbatch kinetic_variants/seed_invariance.sbatch        # from benchmarks/
-cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+#   sbatch kinetic_variants/seed_invariance.sbatch        # from scripts/
+cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 SD=${SD_TREE:-$HOME/sd-scip-pricing}
 export PYTHONPATH=$SD OMP_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 MKL_NUM_THREADS=8
 echo "$(hostname) | kimonu $(git -C .. describe --always --dirty) | straindesign $(git -C $SD rev-parse --short HEAD) | $(date -Is)"

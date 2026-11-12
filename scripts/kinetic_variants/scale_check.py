@@ -1,7 +1,7 @@
 """S8 check: the tangent route (and the iterated route) at the LP point rounded at scale 10^6 (the package default),
 at scale 100, and unrounded (the LP point's float64 values as exact binary fractions, as before 2026-09-30).
 
-    python kinetic_variants/scale_check.py <model> <out.json>     # from benchmarks/, PYTHONPATH with StrainDesign 1.19.2
+    python kinetic_variants/scale_check.py <model> <out.json>     # from scripts/, PYTHONPATH with StrainDesign 1.19.2
 
 Run on 2026-11-11 for iNJ661 and iHN637 (sadreyevlab, 2 cores, not exclusive) into
 /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/scale_check/<model>.json, read by figures/paper_numbers.py (S8).
@@ -13,7 +13,7 @@ from fractions import Fraction
 from math import lcm
 import numpy as np
 from scipy.optimize import linprog
-B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
+B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts"
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu import steady_state

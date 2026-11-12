@@ -20,7 +20,7 @@ F  The computations per tool and stage on iLJ478 (3440 complexes), each cell in 
    The dashed green line marks Kimonu's reference-equivalent mode: Kimonu's concordance, then the reference's
    kinetic stage, labelled on the right. It runs in a lane above the wall time of each cell.
 
-    python figures/fig4EF_methods_iLJ478.py <out_dir>     # from benchmarks/; fig4_figS1_S2_benchmark.py imports draw()
+    python figures/fig4EF_methods_iLJ478.py <out_dir>     # from scripts/; fig4_figS1_S2_benchmark.py imports draw()
 """
 import json, os, sys
 import matplotlib

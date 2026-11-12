@@ -8,7 +8,7 @@ import straindesign as sd
 from kimonu.linalg import exact, matrix_product, entries
 from kimonu.readout import row_readout
 
-B = os.path.expanduser('~/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks')
+B = os.path.expanduser('~/pipelines/2026-08_Kimonu/Kimonu.py/scripts')
 fig = json.load(open(f'{B}/figdata.json'))['kimonu_ref']
 check_rank = set(sys.argv[1:])
 rows = []

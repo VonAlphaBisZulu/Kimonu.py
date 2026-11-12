@@ -4,7 +4,7 @@
 loses its colon, so the end of that line moves left by the width of one colon. Only the legend band may change, which
 is checked by rendering both files.
 
-    python figures/fig3AB_update_legend.py <vault Figure3.svg> <out.svg>     # from benchmarks/
+    python figures/fig3AB_update_legend.py <vault Figure3.svg> <out.svg>     # from scripts/
 """
 import os, sys, tempfile
 import numpy as np

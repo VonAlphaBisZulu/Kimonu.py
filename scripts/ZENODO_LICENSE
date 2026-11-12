@@ -11,7 +11,7 @@ those tools.
 
 Code. @SNAPSHOT@ is the source snapshot of https://github.com/VonAlphaBisZulu/Kimonu.py at commit @COMMIT@. It is
 licensed under the Apache License, Version 2.0, as stated in the LICENSE file inside the snapshot, except copies of
-third-party code, which keep their authors' terms (benchmarks/reference_final*/acr/Code/, from Upstream_Algorithm).
+third-party code, which keep their authors' terms (scripts/reference_final*/acr/Code/, from Upstream_Algorithm).
 The timing wrappers in results/cocoa_jl/kinetic_stage_iLJ478/ and results/reference/kinetic_stage_iLJ478/ are also
 under the Apache License, Version 2.0.
 

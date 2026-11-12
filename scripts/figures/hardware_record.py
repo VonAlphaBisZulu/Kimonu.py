@@ -1,8 +1,8 @@
 """Hardware, memory, thread and software record of the benchmark runs, for the Methods ("Benchmark tools, hardware and
-software", "Floating-point comparison"). Writes benchmarks/hardware_record.json from SLURM accounting (sacct), the job
+software", "Floating-point comparison"). Writes scripts/hardware_record.json from SLURM accounting (sacct), the job
 logs and the result files, so that every such number in the text has a source.
 
-    python figures/hardware_record.py            # run in benchmarks/
+    python figures/hardware_record.py            # run in scripts/
 
 Sources
   COCOA.jl   sweep/cocoa_v110, sweep/cocoa_eff: the 183 records gather_figdata.py reads; each is matched to the job log

@@ -1,11 +1,17 @@
 # Removed and renamed files
 
+On 2026-11-12 the folder `benchmarks/` was renamed `scripts/` (git mv, history kept), because it holds every script
+of the paper, not only the benchmarks. Paths in this file are relative to that folder. In commits before the rename it
+is `benchmarks/`, so a file of an older commit is `git show <commit>:benchmarks/<path>`, and `git log --follow
+scripts/<path>` shows the history of a file under both names.
+
 On 2026-11-11 the files listed below were removed from the working tree to keep `benchmarks/` readable. They
 record earlier stages of the work. These are the August pipeline, pilot runs, reference runs before the
 adaptations of the fork (pull request 1 of the reference repository), runs on shared nodes, the exploration that
 led to the iterated and tangent routes, earlier figure drafts and September notes. Later scripts replaced each of
 them, and no result in the paper depends on them. Every path is present at commit `3066b9b` (and up to `7fafd4a`).
-To look at or restore one, run `git show 3066b9b:benchmarks/<path>` or `git checkout 3066b9b -- benchmarks/<path>`.
+To look at or restore one, run `git show 3066b9b:benchmarks/<path>` or `git checkout 3066b9b -- benchmarks/<path>` (then `git mv` it into
+`scripts/`).
 The result folders these scripts wrote stay in place and are listed in `README.md` under "Data folders".
 
 Four superseded modules stay because live scripts import them. `compare.py` is imported by

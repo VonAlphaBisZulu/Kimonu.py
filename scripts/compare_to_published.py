@@ -14,7 +14,7 @@ direction of any disagreement: if every published module sits inside a single Ki
 published partition is strictly coarser-grained nowhere and its concordant pairs are a subset.
 
 Usage:
-    python benchmarks/compare_to_published.py <upstream_repo> [model ...] [--variant fixed|random]
+    python scripts/compare_to_published.py <upstream_repo> [model ...] [--variant fixed|random]
 """
 import argparse
 import os

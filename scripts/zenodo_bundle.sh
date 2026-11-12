@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Builds the Zenodo package of the paper in one command, run on the login node:
-#   bash benchmarks/zenodo_bundle.sh [out dir]        # default /scratch/sadreyev_lab/pschneider/kimonu_zenodo_2026-11
+#   bash scripts/zenodo_bundle.sh [out dir]        # default /scratch/sadreyev_lab/pschneider/kimonu_zenodo_2026-11
 # On the login node it copies the published figures, Data S1 and S2 (vault figures/*.svg, figures/supp/*.svg, *.csv)
 # and the manuscript (for the abstract) to <out>/work/, because the job reads scratch only, and submits itself to SLURM
 # (partition sadreyevlab, 2 CPUs, 8 GB, log in <out>/work/logs/). The job
@@ -49,13 +49,13 @@ run() {   # <python> <script> <listing dir> <out dir> <record_inputs.py>
 echo "== 1. tree at $KIMONU_REV $(date +%T)"
 mkdir -p $W/tree $W/listing $W/out
 git -C $K archive $KIMONU_REV | tar -x -C $W/tree
-for d in $FROZEN; do rsync -a $K/benchmarks/$d/ $W/tree/benchmarks/$d/; done
+for d in $FROZEN; do rsync -a $K/scripts/$d/ $W/tree/scripts/$d/; done
 echo "== 2. record the inputs $(date +%T)"
-cd $W/tree/benchmarks
-for s in $DATA; do run $SD $s $W/listing $W/out $W/tree/benchmarks/figures/record_inputs.py; done
-for s in $DRAW; do run $BIO $s $W/listing $W/out $W/tree/benchmarks/figures/record_inputs.py; done
+cd $W/tree/scripts
+for s in $DATA; do run $SD $s $W/listing $W/out $W/tree/scripts/figures/record_inputs.py; done
+for s in $DRAW; do run $BIO $s $W/listing $W/out $W/tree/scripts/figures/record_inputs.py; done
 echo "== 3. build $(date +%T)"
-cd $K/benchmarks
+cd $K/scripts
 MANUSCRIPT=$W/manuscript.md $SD make_zenodo_bundle.py $OUT $W/figures $W/listing/*.txt || exit 1
 echo "== 4. rebuild from the zip alone $(date +%T)"
 T=$W/test; mkdir -p $T/unpacked $T/listing $T/out; cd $T/unpacked
@@ -63,11 +63,11 @@ unzip -tq $OUT/upload/Kimonu_records.zip && unzip -q $OUT/upload/Kimonu_records.
 A=$T/unpacked/Kimonu_records; cd $A
 sha256sum -c --quiet SHA256SUMS && echo "SHA256SUMS verify, $(wc -l < SHA256SUMS) files"
 unzip -q Kimonu.py-$KIMONU_REV.zip -d $T/unpacked; C=$T/unpacked/Kimonu.py-$KIMONU_REV
-test -d $C/benchmarks || { echo "no benchmarks/ in the snapshot"; exit 1; }
+test -d $C/scripts || { echo "no scripts/ in the snapshot"; exit 1; }
 LINKS=$(bash $A/link_records.sh $C) || exit 1; eval "$LINKS"
-cd $C/benchmarks
-for s in $DATA; do run $SD $s $T/listing $T/out $W/tree/benchmarks/figures/record_inputs.py; done
-for s in $DRAW; do run $BIO $s $T/listing $T/out $W/tree/benchmarks/figures/record_inputs.py; done
+cd $C/scripts
+for s in $DATA; do run $SD $s $T/listing $T/out $W/tree/scripts/figures/record_inputs.py; done
+for s in $DRAW; do run $BIO $s $T/listing $T/out $W/tree/scripts/figures/record_inputs.py; done
 echo "== compare $(date +%T)"
 same() { cmp -s "$1" "$2" && echo "same bytes  $3" || $SD -c "import json,sys; a,b=(json.load(open(x)) for x in sys.argv[1:3]); print(('same JSON   ' if a==b else 'DIFFERENT   ')+sys.argv[3])" "$1" "$2" "$3" 2>/dev/null || echo "DIFFERENT   $3"; }
 for f in figdata.json figures/pair_counts.json figures/pair_sets.json figures/seed_spread.json; do same $f $A/figures/source_data/$(basename $f) "$f, rebuilt from the zip, against the archive"; done

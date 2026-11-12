@@ -15,7 +15,7 @@ with nothing as -1, Kimonu returns it as a one-element group; counting them diff
 easiest way to manufacture a disagreement that is not there.
 
 Usage:
-    python benchmarks/compare.py [--profile P] [--scenario i|ii] [--max-detail N]
+    python scripts/compare.py [--profile P] [--scenario i|ii] [--max-detail N]
 """
 import argparse
 import glob

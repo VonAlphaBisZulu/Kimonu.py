@@ -8,8 +8,8 @@ itself is in `../src/kimonu`. Large results live on the cluster scratch space an
 
 ## How to run
 
-- Run every script from `benchmarks/`. Most scripts put `benchmarks/` and `../src` on `sys.path` themselves, and the
-  sbatch files add `benchmarks/` to `PYTHONPATH`.
+- Run every script from `scripts/`. Most scripts put `scripts/` and `../src` on `sys.path` themselves, and the
+  sbatch files add `scripts/` to `PYTHONPATH`.
 - Python 3.12 with StrainDesign 1.19.2 (`pip install "straindesign>=1.19.2"`, or on the cluster
   `PYTHONPATH=$HOME/sd-kernel-nonzeros`, the tag v1.19.2), cobra, SciPy and, for `cert_modp.py`, python-flint.
   The cluster environment is `~/miniconda3/envs/straindesign/bin/python`.
@@ -150,7 +150,7 @@ One-off runs whose result the Supplement states in words. `kinetic_variants/READ
 - `figures/record_inputs.py` (records the files a script reads) and `make_zenodo_bundle.py` (the Zenodo archive, with
   `ZENODO_README.md`, `ZENODO_LICENSE` and the upload steps `ZENODO_UPLOAD.md`). The archive checks that it holds every
   file the recorded scripts read, and `link_records.sh` in it links the records into a checkout. `zenodo_bundle.sh`
-  runs it all in one command (`bash benchmarks/zenodo_bundle.sh`, on the login node), from copying the vault figures
+  runs it all in one command (`bash scripts/zenodo_bundle.sh`, on the login node), from copying the vault figures
   to rebuilding the figures, tables and numbers from the finished zip.
 - `docs/paper/` (`make_bib.py`, `kimonu.bib`, `md_to_sciadv.py`, `md_to_kimonu_tex.py`, the manuscript in LaTeX).
 

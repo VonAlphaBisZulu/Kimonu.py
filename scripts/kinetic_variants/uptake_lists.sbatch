@@ -7,7 +7,7 @@
 #SBATCH --array=1-33
 #SBATCH --output=/scratch/sadreyev_lab/pschneider/kimonu_uptake_modes/logs/ul_%A_%a.log
 # one model per task: iterated ACR / ACRR lists, attached and detached uptakes. UL_OUT replaces the output directory.
-cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 SD=${SD_TREE:-$HOME/sd-kernel-nonzeros}
 export PYTHONPATH=$PWD:$SD OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1} OPENBLAS_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1} MKL_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1}
 OUT=${UL_OUT:-/scratch/sadreyev_lab/pschneider/kimonu_uptake_modes/lists}

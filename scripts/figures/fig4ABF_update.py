@@ -16,7 +16,7 @@ The positions are calibrated on the tick marks of each axis, and the markers are
 the vault figure was drawn from: figdata.json of commit 451a748 (A) and the tangent runs in OLD_TIMING (B). Every
 matched marker must lie within 0.3 pt of its old position, and every old fit line must start where the old data put it.
 
-    python figures/fig4ABF_update.py <vault Figure4.svg> <out.svg>     # from benchmarks/, after gather_figdata.py
+    python figures/fig4ABF_update.py <vault Figure4.svg> <out.svg>     # from scripts/, after gather_figdata.py
 
 KIMONU_TIMING (default the rerun of 2026-11-11) gives the new tangent times, OLD_TIMING (default
 /scratch/sadreyev_lab/pschneider/kimonu_timing_seeds) the old ones, OLD_REV (default 451a748) the old figdata.json.
@@ -35,7 +35,7 @@ NEW_T = os.environ.get("KIMONU_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu
 OLD_T = os.environ.get("OLD_TIMING", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds")
 OLD_REV = os.environ.get("OLD_REV", "451a748")
 NEW = json.load(open("figdata.json"))
-OLD = json.loads(subprocess.run(["git", "show", f"{OLD_REV}:benchmarks/figdata.json"], capture_output=True, text=True, check=True).stdout)
+OLD = json.loads(subprocess.run(["git", "show", f"{OLD_REV}:scripts/figdata.json"], capture_output=True, text=True, check=True).stdout)
 SVG = svg_finish.SVG
 ET.register_namespace("", SVG); ET.register_namespace("xlink", "http://www.w3.org/1999/xlink")
 GREEN, BLUE, RED, WHITE = "#4daf4a", "#377eb8", "#e41a1c", "#fff"

@@ -18,7 +18,7 @@ FigS6_float_errors   fig. S6, per route and way: the models whose ACR and ACRR c
 Figs. S5 and S6 have the colour key in one row below the plots, so the plots take the full page width, and one SVG group
 per plot (panel_A, panel_B, ... row by row) plus panel_legend.
 
-    python figures/figS5_S6_float.py <out_dir>        # from benchmarks/
+    python figures/figS5_S6_float.py <out_dir>        # from scripts/
 """
 import glob, json, os, sys
 from collections import defaultdict

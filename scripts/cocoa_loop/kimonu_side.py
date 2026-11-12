@@ -5,7 +5,7 @@ two kinetic routes start from the same exact partition and only the loop differs
 composition (sorted metabolite:coefficient pairs), which is how the two tools are matched; the zero complex
 has no composition and is left out, as COCOA leaves it out of every result.
 
-    python kimonu_side.py <model> <out.json> [crn.json]   (default: benchmarks/unblocked/<model>_fixed.crn.json)
+    python kimonu_side.py <model> <out.json> [crn.json]   (default: scripts/unblocked/<model>_fixed.crn.json)
 """
 import json, os, sys, time
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -7,14 +7,14 @@ boundary complexes the partitions disagree about. Rendering both sides the same 
 import json, sys
 import numpy as np
 from collections import Counter, defaultdict
-sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks")
+sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts")
 sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src")
 import kimonu
 from compat import upstream
 from kimonu.reference import complex_graph, strong_components
 from run_kimonu_crn import triplets_to_sparse
 
-B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
+B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts"
 M = "iCN900"
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]

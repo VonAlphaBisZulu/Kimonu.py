@@ -10,7 +10,7 @@ uptakes. Data: HIERARCHY_DIR, default kinetic_variants/hierarchy_detached/<model
 uptake_modes.py), the input of Figure 3A, B. HIERARCHY_DIR=kinetic_variants/hierarchy draws the attached panels of
 October (hierarchy_data.py, removed, see HISTORY.md).
 
-    python figures/fig3AB_hierarchy.py [out_dir]   # from benchmarks/; default figures/main
+    python figures/fig3AB_hierarchy.py [out_dir]   # from scripts/; default figures/main
 
 Writes <out_dir>/Figure3AB_draft.svg. The published Figure 3 carries hand edits and was updated in place by
 fig3B_update_ratios.py, fig3AB_update_legend.py, fig3CD_coverage.py and fig3_fig4_update_terms.py.

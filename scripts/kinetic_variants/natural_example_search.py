@@ -13,7 +13,7 @@ assembled (2X or X) into an inactive kinase C; the active form P activates C by 
 Every network in the grammar is screened exactly (iterated vs tangent route), and the ones that differ
 are classified per species and per pair: certify (proof) or search (counterexample), both two-point.
 
-    python natural_example_search.py            # from benchmarks/kinetic_variants
+    python natural_example_search.py            # from scripts/kinetic_variants
 """
 import itertools, json, os, sys, time
 import numpy as np, scipy.sparse as sp

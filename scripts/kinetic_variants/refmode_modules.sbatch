@@ -9,8 +9,8 @@
 # of Figure 4C, D (figures/pair_sets.py reads $OUT through KIMONU_REFMOD_DIR). Not timed: the times of this mode come
 # from timing_exclusive.sbatch (arm ref). Ran 2026-11-02 (job 568514) with StrainDesign ~/sd-scip-pricing; set
 # SD_TREE=$HOME/sd-kernel-nonzeros for StrainDesign 1.19.2.
-#   sbatch kinetic_variants/refmode_modules.sbatch        # from benchmarks/
-cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+#   sbatch kinetic_variants/refmode_modules.sbatch        # from scripts/
+cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 SD=${SD_TREE:-$HOME/sd-scip-pricing}
 export PYTHONPATH=$SD OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 OUT=${REFMOD_OUT:-/scratch/sadreyev_lab/pschneider/kimonu_trip_2026-11-02/refmode_modules}

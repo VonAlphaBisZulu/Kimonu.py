@@ -1,6 +1,6 @@
 """End of each R stage of the exhaustive reference, for fig. S1: the modification time of its ACR log.
 
-    python figures/reference_rstage_end.py      # from benchmarks/; writes figures/reference_rstage_end.json
+    python figures/reference_rstage_end.py      # from scripts/; writes figures/reference_rstage_end.json
 
 The R stage of the reference (reference_final/acr/run_chain.sh) writes no end stamp, and its ACR log was last written
 when the stage ended. fig4_figS1_S2_benchmark.py takes the stage as the time from the start stamp in the chain log to
@@ -12,7 +12,7 @@ import glob, json, os
 
 OUT = "figures/reference_rstage_end.json"
 new = {os.path.basename(f)[:-len(".acr.log")]: os.path.getmtime(f) for f in sorted(glob.glob("reference_final/acr/*.acr.log"))}
-assert new, "no reference_final/acr/*.acr.log here (run from benchmarks/ of the checkout with the frozen records)"
+assert new, "no reference_final/acr/*.acr.log here (run from scripts/ of the checkout with the frozen records)"
 if os.path.exists(OUT):
     old = json.load(open(OUT))
     assert old == new, f"{OUT} differs from the modification times of the ACR logs (copies with rounded times?)"

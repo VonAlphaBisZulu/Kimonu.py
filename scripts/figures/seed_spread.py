@@ -11,7 +11,7 @@ some seed finds (the join of the partitions) minus the rank of what every seed f
 Kimonu: the three runs of the timing arm det (seeds 0, 1, 2 of r*, KIMONU_DET_DIR) must give identical modules, ACR
 and ACRR on every model, which is checked here, so its spread is zero. Output: figures/seed_spread.json.
 
-    python figures/seed_spread.py     # from benchmarks/
+    python figures/seed_spread.py     # from scripts/
 """
 import collections, glob, itertools, json, os, re, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(B); sys.path.insert(0, "figures")

@@ -17,7 +17,7 @@ Sets are compared, not counts: agreeing on how many ACR metabolites there are wh
 which ones would not be agreement.
 
 Usage:
-    python benchmarks/validate_acr_published.py <upstream_repo> [model ...] [--variant fixed|random]
+    python scripts/validate_acr_published.py <upstream_repo> [model ...] [--variant fixed|random]
 """
 import argparse
 import csv

@@ -4,12 +4,12 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=16G
 #SBATCH --time=2-00:00:00
-#SBATCH --output=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks/reference_final/finish_%x_%j.log
+#SBATCH --output=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts/reference_final/finish_%x_%j.log
 # Finish an exhaustive reference run: re-test the pairs it rejected (scaling-bound fix) when RETEST=1,
 # stage the .mat for the R pipeline, run the R stages (kinetic modules, ACR/ACRR) and dump the modules.
 # sbatch --export=ALL,MODEL=<model>,RETEST=0|1 ref_finish.sbatch
 set -u
-BASE=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+BASE=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 export PATH=$HOME/miniconda3/envs/octave/bin:$PATH OCTAVE_HOME=$HOME/miniconda3/envs/octave
 export LP_SERVER_PYTHON=$HOME/miniconda3/envs/straindesign/bin/python3
 export UPSTREAM_ALGORITHM=$HOME/pipelines/2026-08_Kimonu/Upstream_Algorithm

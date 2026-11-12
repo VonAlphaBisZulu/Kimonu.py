@@ -10,7 +10,7 @@ kimonu.iterated_route reads ACR and ACRR in its last round, so seconds_kinetic i
 kept for the readers of earlier records, is 0.
 
 Usage:
-    python benchmarks/run_kimonu_crn.py <crn.json> <out.json> [--repeats N] [--detach-uptakes] [--seed S]
+    python scripts/run_kimonu_crn.py <crn.json> <out.json> [--repeats N] [--detach-uptakes] [--seed S]
 """
 import argparse
 import json

@@ -1,7 +1,7 @@
 """Run a figure script and record every data file it reads, which gives the list for the archive.
 
-    python figures/record_inputs.py <list file> <script> [args...]      # from benchmarks/
-Appends to <list file> the data files the script opened for reading, without code and fonts. Files under benchmarks/
+    python figures/record_inputs.py <list file> <script> [args...]      # from scripts/
+Appends to <list file> the data files the script opened for reading, without code and fonts. Files under scripts/
 are written relative to it, files under the scratch results as absolute paths. make_zenodo_bundle.py checks that the
 archive holds every file of the list.
 """

@@ -8,9 +8,9 @@ import json, sys, os
 from fractions import Fraction
 import numpy as np, scipy.sparse as sp, scipy.io as sio
 import straindesign as sd
-sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks")
+sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts")
 from run_kimonu_crn import triplets_to_sparse, to_exact
-B="/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
+B="/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts"
 OUT=f"{B}/coupling_exact"; os.makedirs(OUT, exist_ok=True)
 for M in sys.argv[1:]:
     crn=json.load(open(f"{B}/unblocked/{M}_fixed.crn.json")); nr,nm=crn["n_reactions"],crn["n_metabolites"]

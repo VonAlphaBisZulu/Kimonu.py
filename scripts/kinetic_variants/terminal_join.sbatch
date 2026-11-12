@@ -7,7 +7,7 @@
 #SBATCH --array=0-32
 #SBATCH --output=/scratch/sadreyev_lab/pschneider/kimonu_terminal/logs/%x_%A_%a.log
 # one model per task, attached uptakes; results as json lines in /scratch/.../kimonu_terminal/
-cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
+cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 export PYTHONPATH=$HOME/sd-scip-pricing OMP_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 MKL_NUM_THREADS=8
 mapfile -t MODELS < kinetic_variants/models33.txt
 M=${MODELS[$SLURM_ARRAY_TASK_ID]}

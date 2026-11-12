@@ -17,7 +17,7 @@ singleton classes omitted and the balanced complexes present as a single class. 
 class (U/B/P/N), not a module id.
 
 Usage:
-    python benchmarks/validate_sweep.py --upstream <dir> --sweep <dir> [--variant fixed]
+    python scripts/validate_sweep.py --upstream <dir> --sweep <dir> [--variant fixed]
         [--out validation.json] [models ...]
 """
 import argparse
