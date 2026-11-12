@@ -4,8 +4,8 @@
  "n_metabolites": 4029,
  "n_free": 579,
  "attached": {
-  "seconds_iterated": 17.626774311065674,
-  "seconds_tangent": 27.62718176841736,
+  "seconds_iterated": 2.8371260166168213,
+  "seconds_tangent": 16.082284450531006,
   "tangent_dim": 556,
   "it": {
    "modules": 358,
@@ -331,11 +331,11 @@
   "n_relations": 6,
   "dim_kerV": 3367,
   "g_rel": 3,
-  "seconds_g_rel": 0.48408079147338867
+  "seconds_g_rel": 0.23769330978393555
  },
  "detached": {
-  "seconds_iterated": 17.410057306289673,
-  "seconds_tangent": 26.95750141143799,
+  "seconds_iterated": 2.981235980987549,
+  "seconds_tangent": 18.122063398361206,
   "tangent_dim": 568,
   "it": {
    "modules": 358,
@@ -661,6 +661,6 @@
   "n_relations": 6,
   "dim_kerV": 3367,
   "g_rel": 3,
-  "seconds_g_rel": 0.4838836193084717
+  "seconds_g_rel": 0.08397483825683594
  }
 }

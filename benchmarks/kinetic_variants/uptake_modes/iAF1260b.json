@@ -4,8 +4,8 @@
  "n_metabolites": 9382,
  "n_free": 1040,
  "attached": {
-  "seconds_iterated": 135.0602524280548,
-  "seconds_tangent": 2229.2842376232147,
+  "seconds_iterated": 10.549677848815918,
+  "seconds_tangent": 550.0436275005341,
   "tangent_dim": 1023,
   "it": {
    "modules": 1087,
@@ -35,8 +35,8 @@
   "n_relations": 0
  },
  "detached": {
-  "seconds_iterated": 135.82033324241638,
-  "seconds_tangent": 1797.2300772666931,
+  "seconds_iterated": 9.729212045669556,
+  "seconds_tangent": 342.13680028915405,
   "tangent_dim": 1041,
   "it": {
    "modules": 1087,

@@ -31,7 +31,7 @@
   "largest": 99,
   "balanced": 379
  },
- "seconds_flux_balance": 0.38049960136413574,
+ "seconds_flux_balance": 0.3529052734375,
  "rounds": 2,
  "rates_iterated": {
   "pairs": 1249,
@@ -66,7 +66,7 @@
   "balanced_in_modules": 56
  },
  "fixed_complexes_iterated": 0,
- "seconds_iterated": 2.1134541034698486,
+ "seconds_iterated": 1.7846035957336426,
  "rates_tangent": {
   "pairs": 1249,
   "groups": 411,
@@ -101,5 +101,5 @@
  },
  "fixed_complexes_tangent": 0,
  "rates_routes_agree": true,
- "seconds_tangent": 5.578158378601074
+ "seconds_tangent": 5.723520755767822
 }

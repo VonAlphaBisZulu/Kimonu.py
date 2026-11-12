@@ -476,7 +476,7 @@
   "fixed_members_free": 88
  },
  "rounds": 2,
- "seconds_iterated": 2.6193344593048096,
+ "seconds_iterated": 2.5658576488494873,
  "tan": {
   "module_sizes": [
    204,
@@ -946,5 +946,5 @@
   "fixed_members": 281,
   "fixed_members_free": 89
  },
- "seconds_tangent": 13.597971677780151
+ "seconds_tangent": 13.789875745773315
 }

@@ -31,7 +31,7 @@
   "largest": 587,
   "balanced": 1657
  },
- "seconds_flux_balance": 2.305821180343628,
+ "seconds_flux_balance": 2.490447998046875,
  "rounds": 2,
  "rates_iterated": {
   "pairs": 17663,
@@ -66,7 +66,7 @@
   "balanced_in_modules": 614
  },
  "fixed_complexes_iterated": 4,
- "seconds_iterated": 11.197932243347168,
+ "seconds_iterated": 11.20206093788147,
  "rates_tangent": null,
  "complexes_tangent": null,
  "rates_routes_agree": true

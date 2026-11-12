@@ -3,8 +3,8 @@
  "n_complexes": 7639,
  "n_metabolites": 4641,
  "tangent_dim": 477,
- "seconds_iterated": 48.63005352020264,
- "seconds_tangent": 549.2996251583099,
+ "seconds_iterated": 4.376277446746826,
+ "seconds_tangent": 93.32576012611389,
  "it": {
   "modules": 525,
   "giant": 95,
@@ -12,7 +12,9 @@
   "acr": 0,
   "acrr_pairs": 1271,
   "acr_free": 0,
-  "acrr_pairs_free": 70
+  "acrr_pairs_free": 70,
+  "acrr_ratios": 169,
+  "acrr_ratios_free": 38
  },
  "tan": {
   "modules": 525,
@@ -21,7 +23,9 @@
   "acr": 0,
   "acrr_pairs": 1271,
   "acr_free": 0,
-  "acrr_pairs_free": 70
+  "acrr_pairs_free": 70,
+  "acrr_ratios": 169,
+  "acrr_ratios_free": 38
  },
  "violations": {
   "pairs": 0,

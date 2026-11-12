@@ -10,8 +10,8 @@
  "regular": true,
  "second_order_consistent": true,
  "n_h": 4,
- "seconds_routes": 47.34312343597412,
- "seconds_modp": 350.5801477432251,
+ "seconds_routes": 33.49485540390015,
+ "seconds_modp": 320.1708071231842,
  "control_proven": {
   "n": 4894,
   "not_orthogonal": 0,
