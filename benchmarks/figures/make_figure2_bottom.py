@@ -46,15 +46,15 @@ for t in axI.texts:                                       # Phil's wording for t
         t.set_text("no rows ever exactly equal")
 axH.set_ylabel("models", labelpad=2, color=ff.INK)
 for ax in (axH, axI):
-    ax.set_xlabel("tolerance (0: rows exactly equal)", labelpad=2, color=ff.INK)
+    ax.set_xlabel("tolerance (0 = rows exactly equal)", labelpad=2, color=ff.INK)
     ax.tick_params(axis="x", pad=2)
     ax.tick_params(axis="y", length=2)
 LEG_X = XI + WP + 8
 ff.certificate_legend(fig, LEG_X / Wpt, ay(AX0 - 12), out["exactcmp"]["exact"])
 x, s = out["exactcmp"], out["svdabs"]
 fig.text(LEG_X / Wpt, ay(622), f"Exact rows at tolerance 0 settle\n{x['at_zero'][0]} of {sum(x['at_zero'])} models, and the other {x['at_zero'][1]} are\n"
-         f"the gap. Float rows are never\nexactly equal: both routes find\nnothing and so agree. No tolerance\n"
-         f"repairs this: the SVD kernel\ncertifies at most {max(s['certified'])} of {sum(s['exact'])}.",
+         f"the gap. Float rows are never\nexactly equal, so both routes find\nnothing and agree. No tolerance\n"
+         f"repairs this. The SVD kernel\ncertifies at most {max(s['certified'])} of {sum(s['exact'])}.",
          fontsize=6, color=ff.INK, va="top", ha="left", linespacing=1.25)
 LET = dict(fontsize=18, fontweight="bold", family="Arial", color=ff.INK, va="top", ha="left")
 fig.text(0.0, ay(TOP + 1), "H", **LET)
