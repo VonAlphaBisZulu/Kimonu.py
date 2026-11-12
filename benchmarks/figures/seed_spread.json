@@ -9,6 +9,10 @@
    "fixed": [
     0,
     16
+   ],
+   "fixed_ratios": [
+    0,
+    11
    ]
   },
   "Chlorella_variabilis_iAJ526": {
@@ -20,6 +24,10 @@
    "fixed": [
     0,
     66
+   ],
+   "fixed_ratios": [
+    0,
+    34
    ]
   },
   "Saha2011iRS1597": {
@@ -31,6 +39,10 @@
    "fixed": [
     102,
     633
+   ],
+   "fixed_ratios": [
+    3,
+    38
    ]
   },
   "iAB_RBC_283": {
@@ -42,6 +54,10 @@
    "fixed": [
     0,
     10
+   ],
+   "fixed_ratios": [
+    0,
+    9
    ]
   },
   "iAM_Pb448": {
@@ -53,6 +69,10 @@
    "fixed": [
     0,
     22
+   ],
+   "fixed_ratios": [
+    0,
+    10
    ]
   },
   "iAM_Pc455": {
@@ -64,6 +84,10 @@
    "fixed": [
     1,
     22
+   ],
+   "fixed_ratios": [
+    1,
+    10
    ]
   },
   "iAM_Pf480": {
@@ -75,6 +99,10 @@
    "fixed": [
     0,
     40
+   ],
+   "fixed_ratios": [
+    0,
+    18
    ]
   },
   "iAM_Pk459": {
@@ -86,6 +114,10 @@
    "fixed": [
     0,
     23
+   ],
+   "fixed_ratios": [
+    0,
+    11
    ]
   },
   "iAM_Pv461": {
@@ -97,6 +129,10 @@
    "fixed": [
     0,
     28
+   ],
+   "fixed_ratios": [
+    0,
+    13
    ]
   },
   "iCN718": {
@@ -108,6 +144,10 @@
    "fixed": [
     0,
     9
+   ],
+   "fixed_ratios": [
+    0,
+    6
    ]
   },
   "iCN900": {
@@ -117,6 +157,10 @@
     706
    ],
    "fixed": [
+    0,
+    8
+   ],
+   "fixed_ratios": [
     0,
     8
    ]
@@ -130,6 +174,10 @@
    "fixed": [
     2120,
     2236
+   ],
+   "fixed_ratios": [
+    69,
+    101
    ]
   },
   "iIS312": {
@@ -141,6 +189,10 @@
    "fixed": [
     0,
     4
+   ],
+   "fixed_ratios": [
+    0,
+    3
    ]
   },
   "iIS312_Amastigote": {
@@ -152,6 +204,10 @@
    "fixed": [
     0,
     5
+   ],
+   "fixed_ratios": [
+    0,
+    4
    ]
   },
   "iIS312_Epimastigote": {
@@ -163,6 +219,10 @@
    "fixed": [
     0,
     4
+   ],
+   "fixed_ratios": [
+    0,
+    3
    ]
   },
   "iIS312_Trypomastigote": {
@@ -172,6 +232,10 @@
     93
    ],
    "fixed": [
+    0,
+    1
+   ],
+   "fixed_ratios": [
     0,
     1
    ]
@@ -185,6 +249,10 @@
    "fixed": [
     2100,
     2120
+   ],
+   "fixed_ratios": [
+    62,
+    78
    ]
   },
   "iJB785": {
@@ -196,6 +264,10 @@
    "fixed": [
     0,
     26
+   ],
+   "fixed_ratios": [
+    0,
+    19
    ]
   },
   "iJN678": {
@@ -207,6 +279,10 @@
    "fixed": [
     0,
     2486
+   ],
+   "fixed_ratios": [
+    0,
+    143
    ]
   },
   "iJN746": {
@@ -218,6 +294,10 @@
    "fixed": [
     0,
     36
+   ],
+   "fixed_ratios": [
+    0,
+    25
    ]
   },
   "iJR904": {
@@ -229,6 +309,10 @@
    "fixed": [
     0,
     12
+   ],
+   "fixed_ratios": [
+    0,
+    11
    ]
   },
   "iLJ478": {
@@ -240,6 +324,10 @@
    "fixed": [
     0,
     24
+   ],
+   "fixed_ratios": [
+    0,
+    11
    ]
   },
   "iMM904": {
@@ -249,6 +337,10 @@
     1612
    ],
    "fixed": [
+    0,
+    22
+   ],
+   "fixed_ratios": [
     0,
     22
    ]
@@ -262,6 +354,10 @@
    "fixed": [
     0,
     18
+   ],
+   "fixed_ratios": [
+    0,
+    17
    ]
   },
   "iNF517": {
@@ -273,6 +369,10 @@
    "fixed": [
     0,
     19
+   ],
+   "fixed_ratios": [
+    0,
+    16
    ]
   },
   "iNJ661": {
@@ -284,6 +384,10 @@
    "fixed": [
     3,
     100
+   ],
+   "fixed_ratios": [
+    2,
+    50
    ]
   },
   "iSB619": {
@@ -295,6 +399,10 @@
    "fixed": [
     0,
     9
+   ],
+   "fixed_ratios": [
+    0,
+    6
    ]
   },
   "iSynCJ816": {
@@ -306,6 +414,10 @@
    "fixed": [
     0,
     45
+   ],
+   "fixed_ratios": [
+    0,
+    35
    ]
   },
   "iYO844": {
@@ -317,6 +429,10 @@
    "fixed": [
     5,
     9
+   ],
+   "fixed_ratios": [
+    2,
+    6
    ]
   },
   "iYS854": {
@@ -328,6 +444,10 @@
    "fixed": [
     2,
     73
+   ],
+   "fixed_ratios": [
+    1,
+    42
    ]
   }
  },
@@ -341,6 +461,10 @@
    "fixed": [
     0,
     16
+   ],
+   "fixed_ratios": [
+    0,
+    11
    ]
   },
   "Chlorella_variabilis_iAJ526": {
@@ -352,6 +476,10 @@
    "fixed": [
     0,
     66
+   ],
+   "fixed_ratios": [
+    0,
+    34
    ]
   },
   "Saha2011iRS1597": {
@@ -363,6 +491,10 @@
    "fixed": [
     67,
     598
+   ],
+   "fixed_ratios": [
+    2,
+    37
    ]
   },
   "iAB_RBC_283": {
@@ -374,6 +506,10 @@
    "fixed": [
     0,
     10
+   ],
+   "fixed_ratios": [
+    0,
+    9
    ]
   },
   "iAF1260b": {
@@ -385,6 +521,10 @@
    "fixed": [
     0,
     18
+   ],
+   "fixed_ratios": [
+    0,
+    16
    ]
   },
   "iAM_Pb448": {
@@ -396,6 +536,10 @@
    "fixed": [
     0,
     22
+   ],
+   "fixed_ratios": [
+    0,
+    10
    ]
   },
   "iAM_Pc455": {
@@ -407,6 +551,10 @@
    "fixed": [
     1,
     22
+   ],
+   "fixed_ratios": [
+    1,
+    10
    ]
   },
   "iAM_Pf480": {
@@ -418,6 +566,10 @@
    "fixed": [
     0,
     40
+   ],
+   "fixed_ratios": [
+    0,
+    18
    ]
   },
   "iAM_Pk459": {
@@ -429,6 +581,10 @@
    "fixed": [
     0,
     22
+   ],
+   "fixed_ratios": [
+    0,
+    10
    ]
   },
   "iAM_Pv461": {
@@ -440,6 +596,10 @@
    "fixed": [
     0,
     28
+   ],
+   "fixed_ratios": [
+    0,
+    13
    ]
   },
   "iCN718": {
@@ -451,6 +611,10 @@
    "fixed": [
     0,
     9
+   ],
+   "fixed_ratios": [
+    0,
+    6
    ]
   },
   "iCN900": {
@@ -460,6 +624,10 @@
     706
    ],
    "fixed": [
+    0,
+    8
+   ],
+   "fixed_ratios": [
     0,
     8
    ]
@@ -473,6 +641,10 @@
    "fixed": [
     834,
     947
+   ],
+   "fixed_ratios": [
+    46,
+    77
    ]
   },
   "iIS312": {
@@ -484,6 +656,10 @@
    "fixed": [
     0,
     4
+   ],
+   "fixed_ratios": [
+    0,
+    3
    ]
   },
   "iIS312_Amastigote": {
@@ -495,6 +671,10 @@
    "fixed": [
     0,
     5
+   ],
+   "fixed_ratios": [
+    0,
+    4
    ]
   },
   "iIS312_Epimastigote": {
@@ -506,6 +686,10 @@
    "fixed": [
     0,
     4
+   ],
+   "fixed_ratios": [
+    0,
+    3
    ]
   },
   "iIS312_Trypomastigote": {
@@ -515,6 +699,10 @@
     90
    ],
    "fixed": [
+    0,
+    1
+   ],
+   "fixed_ratios": [
     0,
     1
    ]
@@ -528,6 +716,10 @@
    "fixed": [
     4,
     20
+   ],
+   "fixed_ratios": [
+    1,
+    14
    ]
   },
   "iJB785": {
@@ -539,6 +731,10 @@
    "fixed": [
     0,
     24
+   ],
+   "fixed_ratios": [
+    0,
+    19
    ]
   },
   "iJN678": {
@@ -550,6 +746,10 @@
    "fixed": [
     504,
     626
+   ],
+   "fixed_ratios": [
+    62,
+    102
    ]
   },
   "iJN746": {
@@ -561,6 +761,10 @@
    "fixed": [
     1,
     37
+   ],
+   "fixed_ratios": [
+    1,
+    26
    ]
   },
   "iJR904": {
@@ -572,6 +776,10 @@
    "fixed": [
     0,
     10
+   ],
+   "fixed_ratios": [
+    0,
+    9
    ]
   },
   "iLJ478": {
@@ -583,6 +791,10 @@
    "fixed": [
     0,
     11
+   ],
+   "fixed_ratios": [
+    0,
+    10
    ]
   },
   "iMM904": {
@@ -592,6 +804,10 @@
     1605
    ],
    "fixed": [
+    0,
+    22
+   ],
+   "fixed_ratios": [
     0,
     22
    ]
@@ -605,6 +821,10 @@
    "fixed": [
     0,
     18
+   ],
+   "fixed_ratios": [
+    0,
+    17
    ]
   },
   "iNF517": {
@@ -616,6 +836,10 @@
    "fixed": [
     0,
     19
+   ],
+   "fixed_ratios": [
+    0,
+    16
    ]
   },
   "iNJ661": {
@@ -627,6 +851,10 @@
    "fixed": [
     25,
     97
+   ],
+   "fixed_ratios": [
+    6,
+    48
    ]
   },
   "iSB619": {
@@ -638,6 +866,10 @@
    "fixed": [
     0,
     9
+   ],
+   "fixed_ratios": [
+    0,
+    6
    ]
   },
   "iSynCJ816": {
@@ -649,6 +881,10 @@
    "fixed": [
     0,
     42
+   ],
+   "fixed_ratios": [
+    0,
+    34
    ]
   },
   "iYO844": {
@@ -660,6 +896,10 @@
    "fixed": [
     3,
     7
+   ],
+   "fixed_ratios": [
+    2,
+    6
    ]
   },
   "iYS854": {
@@ -671,6 +911,10 @@
    "fixed": [
     2,
     73
+   ],
+   "fixed_ratios": [
+    1,
+    42
    ]
   }
  },
@@ -684,6 +928,10 @@
    "fixed": [
     0,
     3
+   ],
+   "fixed_ratios": [
+    0,
+    3
    ]
   },
   "iCN900": {
@@ -693,6 +941,10 @@
     691
    ],
    "fixed": [
+    0,
+    1
+   ],
+   "fixed_ratios": [
     0,
     1
    ]
@@ -706,6 +958,10 @@
    "fixed": [
     0,
     1
+   ],
+   "fixed_ratios": [
+    0,
+    1
    ]
   },
   "iIS312_Amastigote": {
@@ -715,6 +971,10 @@
     75
    ],
    "fixed": [
+    0,
+    1
+   ],
+   "fixed_ratios": [
     0,
     1
    ]
@@ -728,6 +988,10 @@
    "fixed": [
     0,
     1
+   ],
+   "fixed_ratios": [
+    0,
+    1
    ]
   },
   "iIS312_Trypomastigote": {
@@ -737,6 +1001,10 @@
     90
    ],
    "fixed": [
+    0,
+    1
+   ],
+   "fixed_ratios": [
     0,
     1
    ]
@@ -750,6 +1018,10 @@
    "fixed": [
     0,
     4
+   ],
+   "fixed_ratios": [
+    0,
+    4
    ]
   },
   "iJB785": {
@@ -761,6 +1033,10 @@
    "fixed": [
     0,
     14
+   ],
+   "fixed_ratios": [
+    0,
+    13
    ]
   },
   "iLJ478": {
@@ -770,6 +1046,10 @@
     12725
    ],
    "fixed": [
+    0,
+    6
+   ],
+   "fixed_ratios": [
     0,
     6
    ]
@@ -783,6 +1063,10 @@
    "fixed": [
     0,
     8
+   ],
+   "fixed_ratios": [
+    0,
+    5
    ]
   },
   "iSB619": {
@@ -792,6 +1076,10 @@
     9703
    ],
    "fixed": [
+    0,
+    2
+   ],
+   "fixed_ratios": [
     0,
     2
    ]
@@ -807,6 +1095,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "Chlorella_variabilis_iAJ526": {
@@ -816,6 +1108,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -829,6 +1125,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iAB_RBC_283": {
@@ -838,6 +1138,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -851,6 +1155,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iAM_Pb448": {
@@ -860,6 +1168,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -873,6 +1185,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iAM_Pf480": {
@@ -882,6 +1198,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -895,6 +1215,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iAM_Pv461": {
@@ -904,6 +1228,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -917,6 +1245,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iCN900": {
@@ -926,6 +1258,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -939,6 +1275,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iIS312": {
@@ -948,6 +1288,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -961,6 +1305,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iIS312_Epimastigote": {
@@ -970,6 +1318,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -983,6 +1335,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iIT341": {
@@ -992,6 +1348,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -1005,6 +1365,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iJN678": {
@@ -1014,6 +1378,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -1027,6 +1395,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iJR904": {
@@ -1036,6 +1408,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -1049,6 +1425,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iMM904": {
@@ -1058,6 +1438,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -1071,6 +1455,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iNF517": {
@@ -1080,6 +1468,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -1093,6 +1485,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iSB619": {
@@ -1102,6 +1498,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -1115,6 +1515,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iS_1188": {
@@ -1124,6 +1528,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
@@ -1137,6 +1545,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iYO844": {
@@ -1148,6 +1560,10 @@
    "fixed": [
     0,
     null
+   ],
+   "fixed_ratios": [
+    0,
+    null
    ]
   },
   "iYS854": {
@@ -1157,6 +1573,10 @@
     null
    ],
    "fixed": [
+    0,
+    null
+   ],
+   "fixed_ratios": [
     0,
     null
    ]
