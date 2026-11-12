@@ -27,7 +27,7 @@ from run_kimonu_crn import triplets_to_sparse
 from figures.gather_figdata import read_pairs
 import csv
 
-REFMOD = os.environ.get("KIMONU_REFMOD_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_trip_2026-11-02/refmode_modules")
+REF_DIR = os.environ.get("KIMONU_REF_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing/ref")      # runs of the reference-equivalent mode (timing arm ref)
 D = json.load(open("figdata.json")); REF = sorted(D["ref_exh"], key=lambda m: D["n_complexes"][m])
 key = lambda comp: frozenset((k, float(v)) for k, v in comp.items() if v)
 
@@ -103,7 +103,7 @@ for m in REF:
     km = kimonu.iterated_route(net, detach_uptakes=True)
     arms["kimonu_det"] = [(cpairs(K(km.modules)),) + rule(km.acr, km.acrr, free)]
     # Kimonu reference-equivalent mode: its modules, ACR/ACRR by the reference's pairwise rule
-    k = json.load(open(f"{REFMOD}/kimonu_{m}.json"))
+    k = json.load(open(sorted(glob.glob(f"{REF_DIR}/kimonu_{m}_rep*.json"))[0]))     # the mode has no random point, its runs agree
     a, r = shinar_feinberg(net, k["modules"])
     arms["kimonu_ref"] = [(cpairs(K(k["modules"])),) + rule([mets[i] for i in a], [(mets[i], mets[j]) for i, j in r], free)]
     # reference, exhaustive and sampled: complexes in the reference's own list, matched by composition
@@ -134,7 +134,7 @@ for m in REF:
     for arm, recs in arms.items():
         out[m][arm] = [dict(pairs=len(p), fixed=independent(a, r), fixed_pairs=len(a) + len(r), acr=len(a), acrr=len(r), acr_acr_pairs_dropped=n,
                             pairs_not_in_kimonu=len(p - ref_pairs), acr_not_in_kimonu=sorted(a - ref_acr),
-                            acrr_not_in_kimonu=[sorted(x) for x in r - ref_acrr if not all(y in ref_acr for y in x)],
+                            acrr_not_in_kimonu=sorted(sorted(x) for x in r - ref_acrr if not all(y in ref_acr for y in x)),
                             kimonu_pairs_missing=len(ref_pairs - p))
                        for p, a, r, n in recs]
     print(m, {arm: [(v["pairs"], v["fixed"], v["pairs_not_in_kimonu"], len(v["acr_not_in_kimonu"]) + len(v["acrr_not_in_kimonu"]), v["acr_acr_pairs_dropped"]) for v in recs]

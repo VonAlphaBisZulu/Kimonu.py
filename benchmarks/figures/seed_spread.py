@@ -17,7 +17,7 @@ import collections, glob, itertools, json, os, re, sys
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(B); sys.path.insert(0, "figures")
 from gather_figdata import free_set, read_pairs
 D = json.load(open("figdata.json"))
-DET = os.environ.get("KIMONU_DET_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_timing_seeds/det")
+DET = os.environ.get("KIMONU_DET_DIR", "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing/det")
 FIXED = ("fixed",)
 
 def P(l):
