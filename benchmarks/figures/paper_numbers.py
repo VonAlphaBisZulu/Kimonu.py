@@ -373,10 +373,10 @@ for f in sorted(f for f in glob.glob(f"{SCALE}/*.json") if not f.endswith("_1e4.
             f"{c['seconds']:.1f} s ({c['max_bits']} bits, same {c['same_as_1e6']})", f"{f} (one run each, not exclusive)")
 for m in sorted({os.path.basename(f).split("_rep")[0] for f in glob.glob(f"{SCALE}/exclusive/*_rep*.json")}):
     reps = [json.load(open(f)) for f in sorted(glob.glob(f"{SCALE}/exclusive/{m}_rep*.json"))]
-    med = lambda key: statistics.median(r[key]["seconds"] for r in reps)
+    med_rep = lambda key: statistics.median(r[key]["seconds"] for r in reps)
     out(X, "S8a", f"{m}, tangent route, LP point at scale 10^6 against unrounded, median of {len(reps)} (exclusive node, 1 core)",
-        f"{med('tangent_scale_1e6'):.1f} s against {med('tangent_unrounded'):.1f} s (iterated {med('iterated_scale_1e6'):.1f} s against "
-        f"{med('iterated_unrounded'):.1f} s); same results {all(r['tangent_unrounded']['same_as_1e6'] for r in reps)}",
+        f"{med_rep('tangent_scale_1e6'):.1f} s against {med_rep('tangent_unrounded'):.1f} s (iterated {med_rep('iterated_scale_1e6'):.1f} s against "
+        f"{med_rep('iterated_unrounded'):.1f} s); same results {all(r['tangent_unrounded']['same_as_1e6'] for r in reps)}",
         f"{SCALE}/exclusive/{m}_rep*.json (job 572320)")
 for f in sorted(glob.glob(f"{SCALE}/*_1e4.json")):
     d = json.load(open(f))
@@ -417,9 +417,23 @@ for m in ("iCN718", "iHN637", "iNJ661"):
 
 # ---- numbers that no result file holds
 N = "not here"
-out(N, "N1", "COCOA.jl runs on the 4514Y nodes (53 of 183), 125 GB reserved, peak 86 GB; reference 2 cores, 4 to 26 GB, peak 20 GB",
-    "-", "SLURM accounting (sacct) of the COCOA.jl and reference jobs, and the sbatch files")
-out(N, "N2", "threads of the SVD (2 on most networks, up to 16)", "-", "kinetic_variants/float_four.sbatch, float_exactcmp.sbatch")
-out(N, "N3", "software versions", "-", "the environment (python -c 'import numpy, scipy, cobra, flint')")
+HW = json.load(open("hardware_record.json"))      # figures/hardware_record.py, from sacct, job logs and result files
+C, RF = HW["cocoa"], [HW["reference"][k] for k in ("reference_final", "reference_final_sampled")]
+ref_mem = sorted({k.split()[0] for r in RF for k in r["req_mem_by_state"]}, key=lambda m: float(re.sub(r"[^0-9.]", "", m)))
+out(M, "N1", "COCOA.jl runs on the 4514Y nodes; workers, memory reserved, peak MaxRSS of the runs with a record; reference "
+    "cores, memory reserved, peak", f"{C['n_on_4514Y']} of {C['n_runs']}; {C['workers']}; {C['req_mem']}; "
+    f"{C['peak_max_rss_gib_of_the_183']} GiB ({C['n_with_max_rss']} of {C['n_runs']} with a record); reference "
+    f"{sorted({c for r in RF for c in r['alloc_cpus']})} cores, {ref_mem[0]} to {ref_mem[-1]}, peak "
+    f"{max(r['peak_max_rss_gib'] for r in RF)} GiB", "hardware_record.json (cocoa, reference)")
+sp = HW["node_speed_4314_over_4514Y"]
+out(M, "N1.3", "single-core Kimonu, 4314 time over 4514Y time (median, min to max)", "; ".join(
+    f"{k} {sp[k]['median']} ({sp[k]['min']} to {sp[k]['max']}, n = {sp[k]['n']})" for k in ("det", "att", "ref", "tanatt")),
+    "hardware_record.json (node_speed_4314_over_4514Y)")
+ft = HW["float_threads"]
+out(M, "N2", "SVD threads, networks with all parts on 2 threads per arm; networks with more", f"{ft['n_models_all_parts_on_2_threads']}; "
+    f"{ {k: len(v) for k, v in ft['models_with_more_than_2_threads'].items()} }", "hardware_record.json (float_threads)")
+out(M, "N3", "software versions (environment as it is now; provenance records Python, Kimonu, StrainDesign)",
+    ", ".join(f"{k} {v}" for k, v in HW["versions"]["straindesign_env"].items()) + f", Julia {HW['versions']['julia_manifest']}",
+    "hardware_record.json (versions), timing/*/provenance_*.txt")
 out(N, "N4", "kinetic stage on iLJ478, COCOA.jl 4.5 s and reference 3.5 min", "-", "constants of figures/make_fig3_methods.py, from "
     "scratch cocoa_kin_timing_2026-11-03 and ref_rstage_timing_2026-11-03")
