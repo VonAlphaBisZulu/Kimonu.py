@@ -56,10 +56,12 @@ COCOA_FALSE = "results/cocoa_jl/efficient_false"
 COCOA_TRUE = "results/cocoa_jl/efficient_true"
 COCOA_KINETIC_ILJ478 = "results/cocoa_jl/kinetic_stage_iLJ478"
 COCOA_ON_KIMONU = "results/cocoa_jl/kinetic_stage_on_kimonu_partition"
+COCOA_NOT_FINISHED = "results/cocoa_jl/runs_not_finished"      # the runs of the networks without a result
 REF_EXHAUSTIVE = "results/reference/exhaustive"
 REF_SAMPLED = "results/reference/sampled"
 REF_KINETIC_ILJ478 = "results/reference/kinetic_stage_iLJ478"
 REF_GATE = "results/reference/fork_gate_runs"
+REF_TRIAL = "results/reference/trial_runs_2026-08"          # 24-h trial runs before the adaptations of the fork
 HARDWARE = "results/hardware"
 # figures
 SOURCE_DATA = "figures/source_data"                     # figdata.json, pair_counts.json, pair_sets.json, ...

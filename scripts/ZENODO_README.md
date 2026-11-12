@@ -23,8 +23,10 @@ Illustrator.
 
 Superseded runs are left out, except the upstream-set arm of September
 (`results/kimonu/upstream_set_route_2026-09/`), which `scripts/figures/gather_figdata.py` still reads into
-`figdata.json` although no figure, table or number shows it. The list of the 33 networks
-(`scripts/kinetic_variants/models33.txt`) is part of the snapshot, as are the cell lists of the SLURM arrays.
+`figdata.json` although no figure, table or number shows it, and the trial runs of the reference of August and
+September 2026 (`results/reference/trial_runs_2026-08/`), with 24 h per network and the code before the adaptations of
+the fork, which record how far the reference got on the 22 networks without a reference result. The list of the 33
+networks (`scripts/kinetic_variants/models33.txt`) is part of the snapshot, as are the cell lists of the SLURM arrays.
 
 ## Paper item by item
 
@@ -50,8 +52,11 @@ job script that produced each of them. The table "Layout" below gives the same f
 | Tables S2, S3 | `scripts/figures/tableS2_S3.py` | `networks/unblocked/`, `networks/deficiency/`, `figures/source_data/figdata.json`, `results/kimonu/member_counts/` | `scripts/write_unblocked_crn.py`; `scripts/deficiency/deficiency_split.py`; `scripts/figures/gather_figdata.py`; `scripts/kinetic_variants/member_counts.sbatch` |
 | Data S1 | `scripts/figures/dataS1_S2.py` (`figures/supp/DataS1_values.csv`) | `figures/source_data/figdata.json`, `figures/source_data/pair_counts.json`, `results/kimonu/uptake_modes/`, `results/kimonu/member_counts/`, `results/kimonu/timing/{tan,ref}`, `networks/unblocked/` | `scripts/figures/gather_figdata.py`; `scripts/figures/pair_sets.py`; `scripts/kinetic_variants/uptake_modes.sbatch`; `scripts/kinetic_variants/member_counts.sbatch`; `scripts/kinetic_variants/timing_exclusive.sbatch` (jobs 572312, 572311) |
 | Data S2 | `scripts/figures/dataS1_S2.py` (`figures/supp/DataS2_uptake_acr.csv`) | `results/kimonu/acr_lists_by_uptake_mode/` | `scripts/kinetic_variants/uptake_lists.sbatch` (job 572114) |
+| Fig. 4A, fig. S4, Data S1, networks without a result | none (records read as they are) | `results/cocoa_jl/runs_not_finished/runs_not_finished.tsv` (how every COCOA.jl run there ended), `results/reference/trial_runs_2026-08/` (the 24-h trial runs of the reference, `trial_runs.tsv`) | `scripts/figures/not_finished_record.py`, from sacct and the job logs; the trial runs by benchmarks/reference_sweep.sbatch and benchmarks/reference_sampled.sbatch of commit 3066b9b (`scripts/HISTORY.md`) |
 | Text S1 | `scripts/figures/textS1_walkthrough.py` | none (Kimonu run on the example network) | none |
 | numbers of the Results, Materials and Methods and Supplementary Text | `scripts/figures/paper_numbers.py`, one line per number with its source | all of the above, and `results/kimonu/flux_balance_vs_mass_action/`, `results/kimonu/gap_roots/`, `results/kimonu/second_order/`, `results/kimonu/gap_experiments/`, `results/kimonu/uniform_flux/`, `results/kimonu/genericity_bound/`, `results/kimonu/lp_point_rounding/`, `results/kimonu/preprocessing_time/`, `results/kimonu/one_lp_vs_fva/`, `results/hardware/` | see "Layout" |
+| Supplementary Text S6, sign program on subsystems | none (records read as they are) | `results/kimonu/gap_experiments/two_point/local/` (one record per relation, with its rounds and rows) | `scripts/kinetic_variants/two_point_local.sbatch`, SLURM job 568337 |
+| Materials and Methods, memory of the nodes | none (records read as they are) | `results/hardware/memcheck_572322.log` (256.0 GiB online on node02), `results/hardware/node_memory.tsv` (RealMemory of SLURM, 251 GiB on all 16 nodes) | an sbatch --wrap one-liner, SLURM job 572322; `scripts/figures/not_finished_record.py` |
 
 `scripts/figures/fig4_figS1_S2_benchmark.py` draws the values of Figure 4 without the hand edits, and figs. S1 to S6
 are published as their scripts draw them.
@@ -98,7 +103,8 @@ folder drafts of `KIMONU_OUT`, and runs that no paper item reads to its folder e
   request 1, head 8a6ed17) with the settings that needed adjusting at genome scale, described in Supplementary Text S3.
   `scripts/reference/fetch_upstream.sh` clones it at that commit. Concordance stage under GNU Octave 10.3.0 with CPLEX
   22.2 (bridge `scripts/matlab_reference/compat/lp_server.py`), kinetic stage in R 4.4.3.
-- Hardware. Cluster nodes with two 16-core Intel Xeon Silver 4314 at 2.40 GHz (64 logical cores, 251 GB by free -g).
+- Hardware. Cluster nodes with two 16-core Intel Xeon Silver 4314 at 2.40 GHz (64 logical cores, 256 GB of memory
+  online, of which the kernel and SLURM see 251 GB, `results/hardware/memcheck_572322.log`, free -g in `hardware_*.txt`).
   Each timed Kimonu run was one process pinned to one core of an exclusive node (node01, node03, node04), with 1 GB
   reserved (3 GB for the tangent route). COCOA.jl ran 54 of its 183 runs on nodes with Intel Xeon Silver 4514Y and the
   others on the 4314 nodes, with 64 workers, and the reference ran on 2 cores of the 4314 nodes.

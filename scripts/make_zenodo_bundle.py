@@ -87,6 +87,12 @@ PARTS = [
      "`scripts/kinetic_variants/descartes_vs_tangent.py`, run by `scripts/kinetic_variants/descartes_array.sbatch`"),
     ("results/kimonu/gap_experiments/autonomous_blocks", "Supplementary Text S6", "relations proven by autonomous blocks",
      "`scripts/kinetic_variants/autonomous_blocks.py`, run by `scripts/kinetic_variants/autonomous_blocks.sbatch` (one line per network)"),
+    ("results/kimonu/gap_experiments/two_point/local", "Supplementary Text S6",
+     "the sign program on subsystems grown from the balance rows of each relation (900 s per round, at most 8 rounds or "
+     "1500 rows), one record per open relation of the three gap networks (51, attached uptakes) with its rounds, and the "
+     "job logs (logs/)",
+     "`scripts/kinetic_variants/two_point_local.py`, run by `scripts/kinetic_variants/two_point_local.sbatch` with "
+     "`scripts/kinetic_variants/two_point_local_tasks.txt`, SLURM job 568337 (2026-10-30)"),
     ("results/kimonu/gap_experiments/two_point", "Supplementary Text S6",
      "two steady states at the same rate constants on the gap networks: the relations and bases of the prepare step "
      "(<network>_relations.json, <network>_V.npz, read by the injectivity, autonomous-block and gap-root runs), one "
@@ -128,6 +134,12 @@ PARTS = [
     ("results/cocoa_jl/efficient_true", "Fig. 4A, C, D, F, figs. S1, S4, Data S1", "COCOA.jl v1.1.0, efficient=true, three seeds",
      "`scripts/run_cocoa_acr.jl` with `scripts/julia_v110/`, run by `scripts/cocoa_eff.sbatch`, `scripts/cocoa_eff_big.sbatch`, `scripts/cocoa_eff_all.sbatch` "
      "and `scripts/cocoa_gap_true.sbatch`"),
+    ("results/cocoa_jl/runs_not_finished", "Fig. 4A, fig. S4, Data S1, Materials and Methods",
+     "every run of COCOA.jl on the networks and settings without a result (efficient=false on iAF1260b, iS_1188 and "
+     "iSDY_1059, efficient=true on iS_1188 and iSDY_1059), one row per seed, with how it ended (time limit of 7 days, "
+     "cancelled by hand, or no run), elapsed time, start, end, node, SLURM job and log (runs_not_finished.tsv)",
+     "`scripts/figures/not_finished_record.py`, from sacct and the job logs of `results/cocoa_jl/efficient_false/` and "
+     "`results/cocoa_jl/efficient_true/`"),
     ("results/cocoa_jl/kinetic_stage_iLJ478", "Fig. 4F",
      "COCOA.jl's kinetic stage on iLJ478 from saved concordance labels, three replicates (the 4.5 s of Fig. 4F)",
      "`run.sh` and `kin_only.jl` in this folder (SLURM job 568621), not in the repository"),
@@ -147,9 +159,23 @@ PARTS = [
     ("results/reference/fork_gate_runs", "Supplementary Text S3",
      "the gate runs of the adaptations of the reference (fixed/, fixed2/), exhaustive, on iIS312 Amastigote and Trypomastigote",
      "`scripts/matlab_reference/run_reference.m`, run by `scripts/ref_fixed_validate.sbatch` and `scripts/ref_fixed2_validate.sbatch`"),
+    ("results/reference/trial_runs_2026-08", "Fig. 4A, fig. S4, Data S1, Materials and Methods",
+     "trial runs of the reference on all 33 networks with a budget of 24 h per network, in August and September 2026 "
+     "with the code before the adaptations of the fork. Per-network logs of the exhaustive mode (exhaustive/, SLURM job "
+     "521953) and of the sampled mode at seed 1234 (sampled/, jobs 527897, 538873 and 546030), with the job logs. "
+     "trial_runs.tsv lists per network and mode the pairs tested within the budget, the candidate pairs, a linear "
+     "projection of the full run, and the wall time of the run reported for the 11 networks of the paper",
+     "benchmarks/reference_sweep.sbatch and benchmarks/reference_sampled.sbatch of commit 3066b9b (REFERENCE_TIME_BUDGET "
+     "86400 s of `scripts/matlab_reference/run_reference.m`), removed from the repository (`scripts/HISTORY.md`); "
+     "trial_runs.tsv by `scripts/figures/not_finished_record.py`"),
     ("results/hardware", "Materials and Methods",
-     "nodes, CPUs, memory reserved and used, threads and software versions of the benchmark runs",
-     "`scripts/figures/hardware_record.py`, from sacct, the job logs and the result files"),
+     "nodes, CPUs, memory reserved and used, threads and software versions of the benchmark runs (hardware_record.json), "
+     "CPUs and memory of the 16 nodes as SLURM configures them (node_memory.tsv, RealMemory 257,230 MiB or 251 GiB), and "
+     "the memory online on node02 by its memory blocks, 256.0 GiB, with the MemTotal of the kernel, 251 GiB "
+     "(memcheck_572322.log)",
+     "`scripts/figures/hardware_record.py` (hardware_record.json) and `scripts/figures/not_finished_record.py` "
+     "(node_memory.tsv), from sacct, scontrol, the job logs and the result files; memcheck_572322.log by a one-line "
+     "sbatch --wrap on node02, SLURM job 572322, whose command sacct keeps (SubmitLine)"),
     ("figures/source_data", "Fig. 4A to F, figs. S1 to S4, Tables S2, S3, Data S1",
      "figdata.json (the values the figures show, per network, tool and mode), pair_counts.json (relation counts per tool), "
      "pair_sets.json (set containment against Kimonu), seed_spread.json (relations that change with the seed), "
@@ -378,8 +404,10 @@ LAYOUT = [
                         "small networks), both routes in both uptake modes, coverage counts, ACR and ACRR lists, the gap "
                         "networks, the uniformly drawn flux with its Schwartz-Zippel bound, the rounding check, the "
                         "floating-point comparison and the symbolic baselines"),
-    ("results/cocoa_jl/", "COCOA.jl v1.1.0 with efficient=false and efficient=true, three seeds each (frozen records)"),
-    ("results/reference/", "the reference implementation of Langary et al. (2025), exhaustive and sampled (frozen records)"),
+    ("results/cocoa_jl/", "COCOA.jl v1.1.0 with efficient=false and efficient=true, three seeds each (frozen records), "
+                          "and how every run on a network without a result ended"),
+    ("results/reference/", "the reference implementation of Langary et al. (2025), exhaustive and sampled (frozen records), "
+                           "and its 24-h trial runs on all 33 networks"),
     ("results/hardware/", "nodes, CPUs, memory, threads and software versions of every benchmark run"),
     ("figures/", "the published figures (SVG), Data S1 and S2 (CSV) and the source data the figures are drawn from"),
     (snapshot, f"a snapshot of the source code and the scripts at commit {commit}")]
