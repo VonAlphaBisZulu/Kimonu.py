@@ -13,12 +13,12 @@ from kimonu.tangent import tangent_route
 ROUTES = ("iterated", "tangent", "reference", "both")
 
 
-def analyze(model, route="iterated", detach_uptakes=True, seed=0, draw="lp", bits=64, solver=None):
-    """Kinetic modules, ACR and ACRR of a cobra model, or of a :class:`kimonu.CRN` from :func:`kimonu.prepare`.
+def analyze(network, route="iterated", detach_uptakes=True, seed=0, draw="lp", bits=64, solver=None):
+    """Kinetic modules, ACR and ACRR of a network.
 
     Args:
-        model: a cobra model, which is prepared first, or a CRN that :func:`kimonu.prepare` returned. Pass the CRN
-            to read the complexes and reactions behind the indices of the result (``crn.complexes``,
+        network: a :class:`kimonu.CRN`, or a cobra model, which is prepared first (:func:`kimonu.prepare`). Prepare
+            it yourself to read the complexes and reactions behind the indices of the result (``crn.complexes``,
             ``crn.reaction_ids``).
         route: "iterated" (default, :func:`kimonu.iterated_route`), proven relations; "tangent"
             (:func:`kimonu.tangent_route`), every true relation and possibly false couplings; "reference"
@@ -34,12 +34,11 @@ def analyze(model, route="iterated", detach_uptakes=True, seed=0, draw="lp", bit
     """
     if route not in ROUTES:
         raise ValueError(f"route must be one of {', '.join(ROUTES)}, not {route!r}")
-    crn = model if isinstance(model, CRN) else prepare(model, solver)
-    A, Y, N, ids = crn.A, crn.Y, crn.N, crn.metabolite_ids
+    crn = network if isinstance(network, CRN) else prepare(network, solver)
     if route == "iterated":
-        return iterated_route(A, Y, N, detach_uptakes, seed, draw, bits, metabolite_ids=ids)
+        return iterated_route(crn, detach_uptakes, seed, draw, bits)
     if route == "tangent":
-        return tangent_route(A, Y, N, detach_uptakes, seed, draw, bits, metabolite_ids=ids)
+        return tangent_route(crn, detach_uptakes, seed, draw, bits)
     if route == "reference":
-        return reference_route(A, Y, N, metabolite_ids=ids)
-    return certify(A, Y, N, detach_uptakes, seed, draw, bits, metabolite_ids=ids)
+        return reference_route(crn)
+    return certify(crn, detach_uptakes, seed, draw, bits)

@@ -32,44 +32,30 @@ self-activating kinase of Fig. 2, 0 <-> X, 2X -> C, C + 2P -> 3P, C -> 0, P -> 0
 ker(W Yᵀ) = {0} at both, and the route reports ACR for X, C and P, C and P falsely. The iterated route claims
 neither C nor P and misses X. Where the two routes agree, the list is correct and complete (:func:`kimonu.certify`).
 
-The zero complex has ψ_∅ = 1. Detached (default), each uptake reaction gets a source coordinate of its own, a free
-variable in ker(W Yᵀ). Only the metabolite rows are read, and the zero complex is a module of its own. Attached,
+The zero complex has ψ_∅ = 1. Detached (default), each uptake reaction draws from a source of its own, a species
+with a free concentration (:func:`kimonu.steady_state.with_sources`), so W Yᵀ becomes W Ŷᵀ with one more coordinate
+per source. Only the metabolite rows are read, and the zero complex is a module of its own, listed last. Attached,
 its uptake reactions run at constant rate and add nothing to W Yᵀ.
 """
-from fractions import Fraction
-
-from scipy import sparse
-
-from kimonu.io import zero_complexes
-from kimonu.linalg import exact, null_space_rows
-from kimonu.readout import _pairs, _route_result, readout
-from kimonu.steady_state import interior_flux, steady_state_map
+from kimonu.linalg import matrix_product, null_space_rows
+from kimonu.readout import readout, route_result
+from kimonu.steady_state import interior_flux, steady_state_map, with_sources
 
 
-def tangent_space(A, Y, N, flux, detach_uptakes=True):
-    """An exact basis of ker(W Yᵀ) at the steady state x = 1 for the rate constants k = ``flux``.
+def tangent_space(crn, flux, detach_uptakes=True):
+    """An exact basis of ker(W Yᵀ) at the steady state x = 1 for the rate constants k = ``flux``, in row form.
 
-    One row per coordinate, each a sorted tuple of (basis vector, value). First come the m metabolites (ln x), then,
-    with detached uptakes, the sources (ln u) in the order of :func:`kimonu.steady_state.rate_columns`. The first m
-    rows are the B of the tangent route.
+    One row per coordinate. First come the m metabolites (ln x), then, with detached uptakes, the sources (ln u) in
+    the order of :func:`kimonu.steady_state.rate_columns`, the coordinates of :func:`kimonu.steady_state.with_sources`.
+    The first m rows are the B of the tangent route.
     """
-    n, m = A.shape[0], Y.shape[0]
-    # W Yᵀ: the column of complex c spreads over c's metabolites. A detached source keeps its own column, after the
-    # m metabolites.
-    W, (_, n_columns) = steady_state_map(A, Y, N, flux, detach_uptakes)
-    Ycsc = sparse.csc_matrix(Y)
-    J = {}
-    for (i, c), w in W.items():
-        if c >= n:
-            J[(i, m + c - n)] = w
-            continue
-        for k, y in zip(Ycsc.indices[Ycsc.indptr[c]:Ycsc.indptr[c + 1]], Ycsc.data[Ycsc.indptr[c]:Ycsc.indptr[c + 1]]):
-            J[(i, int(k))] = J.get((i, int(k)), Fraction(0)) + w * Fraction(str(y))
-    rows = null_space_rows(exact(((i, k, v) for (i, k), v in J.items()), (m, m + n_columns - n)))
-    return [tuple(sorted(r.items())) for r in rows]
+    W, _ = steady_state_map(crn, flux, detach_uptakes)
+    species = with_sources(crn, detach_uptakes)
+    # W Ŷᵀ: the column of complex c spreads over c's metabolites, and a detached source keeps a column of its own
+    return null_space_rows(matrix_product(W, species.Yt), len(species.metabolite_ids))
 
 
-def tangent_route(A, Y, N, detach_uptakes=True, seed=0, draw="lp", bits=64, metabolite_ids=None, flux=None):
+def tangent_route(crn, detach_uptakes=True, seed=0, draw="lp", bits=64, flux=None):
     """Kinetic modules, ACR and ACRR by the tangent route, which reports every true relation and possibly false ones.
 
     Every relation that holds at every positive steady state (for generic rate constants) is reported. A reported
@@ -77,26 +63,21 @@ def tangent_route(A, Y, N, detach_uptakes=True, seed=0, draw="lp", bits=64, meta
     connects (see the module docstring). :func:`kimonu.certify` compares with the iterated route at the same r*.
 
     Args:
-        A, Y, N: the network, as for :func:`kimonu.iterated_route`. The network must have no blocked reactions.
+        crn: the network, as for :func:`kimonu.iterated_route`, without blocked reactions.
         detach_uptakes: give every reaction out of the zero complex its own source (default), as for
             :func:`kimonu.iterated_route`.
         seed, draw, bits: of the reference flux r* (:func:`kimonu.interior_flux`). The default LP point keeps the
             integers small. draw="uniform" adds the probability bound and makes this route several times slower.
-        metabolite_ids: optional names for ``acr`` and ``acrr``. Indices are returned when omitted.
         flux: a reference flux r* to use instead of drawing one.
 
-    Returns a :class:`kimonu.RouteResult`, with ``dimension`` the dimension of ker(W Yᵀ).
+    Returns a :class:`kimonu.RouteResult`, with ``dimension`` the dimension of ker(W Yᵀ), sources included.
     """
-    n, m = A.shape[0], Y.shape[0]
-    skip = zero_complexes(Y) if detach_uptakes else set()
     # 1) Generic rate constants from an interior flux r*, as for the iterated route
     if flux is None:
-        flux = interior_flux(N, seed, draw, bits)
+        flux = interior_flux(crn, seed, draw, bits)
     # 2) ker(W Yᵀ), one row per coordinate. The metabolite rows are B.
-    rows = tangent_space(A, Y, N, flux, detach_uptakes)
-    B = rows[:m]
-    found = readout(Y, B, skip)
-    # 3) A detached zero complex is coupled to nothing and forms a module of its own.
-    modules = found.modules + [{c} for c in sorted(skip)]
-    return _route_result("tangent", n, modules, found.acr, _pairs(found.acrr_groups), metabolite_ids, B=B,
-                         dimension=len({j for r in rows for j, _ in r}), flux=flux)
+    rows = tangent_space(crn, flux, detach_uptakes)
+    B = rows[:len(crn.metabolite_ids)]
+    # 3) The readout. With detached uptakes the zero complex is a module of its own, listed last.
+    return route_result("tangent", crn, readout(crn, B, detach_uptakes), B=B,
+                        dimension=len({j for r in rows for j, _ in r}), flux=flux)

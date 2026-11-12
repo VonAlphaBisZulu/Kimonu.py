@@ -44,11 +44,9 @@ from fractions import Fraction
 from math import floor, lcm, log, exp
 
 from kimonu.io import substrate_complexes, zero_complexes
-from kimonu.linalg import exact, null_space_rows
+from kimonu.linalg import fraction, null_space_rows
 from kimonu.readout import free_directions, readout
 from kimonu.steady_state import steady_state_map
-
-from scipy import sparse
 
 Values = namedtuple("Values", ["acr", "acrr", "modules", "rounds"])
 
@@ -204,8 +202,8 @@ def _ratio_classes(rows, n):
     for c, row in enumerate(rows[:n]):
         if not row:
             raise ValueError(f"no positive steady state for these rate constants: complex {c} is forced to zero")
-        nz = sorted(row.items())
-        classes.setdefault(tuple((col, v / nz[0][1]) for col, v in nz), []).append((c, nz[0][1]))
+        first = row[0][1]
+        classes.setdefault(tuple((col, v / first) for col, v in row), []).append((c, first))
     out = []
     for members in classes.values():
         (first, f0), *_ = members
@@ -217,30 +215,24 @@ def _ratio_classes(rows, n):
     return out
 
 
-def _column(Ycsc, c):
-    return {int(i): Fraction(str(v)) for i, v in zip(Ycsc.indices[Ycsc.indptr[c]:Ycsc.indptr[c + 1]],
-                                                    Ycsc.data[Ycsc.indptr[c]:Ycsc.indptr[c + 1]])}
-
-
-def _difference(Ycsc, c, d):
-    """y_c - y_d"""
-    out = _column(Ycsc, c)
-    for i, v in _column(Ycsc, d).items():
+def _difference(crn, c, d):
+    """y_c - y_d as {metabolite: value}"""
+    out = dict(crn.Yt[c])
+    for i, v in crn.Yt[d]:
         out[i] = out.get(i, 0) - v
         if out[i] == 0:
             del out[i]
     return out
 
 
-def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
+def relation_values(crn, k, detach_uptakes=True):
     """Exact values of the ACR, ACRR and kinetic-module relations at the rate constants k.
 
     Args:
-        A, Y, N: the network, as for :func:`kimonu.iterated_route`.
+        crn: the network, as for :func:`kimonu.iterated_route`.
         k: one positive rate constant per reaction, in reaction order. Ints and Fractions are exact;
             a float is read as the decimal it prints as.
         detach_uptakes: as for :func:`kimonu.iterated_route`.
-        metabolite_ids: optional names for ``acr`` and ``acrr``; indices are used when omitted.
 
     Returns a :class:`Values` with every value a :class:`Value`:
         ``acr``: {metabolite: x_i} for the metabolites with ACR;
@@ -252,21 +244,19 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
 
     Raises ValueError when k admits no positive steady state, as far as the relations show it.
     """
-    n, q = A.shape[0], A.shape[1]
-    k = [x if isinstance(x, (int, Fraction)) else Fraction(str(x)) for x in k]
+    n, q = crn.A.shape
+    k = [fraction(x) for x in k]
     if len(k) != q or any(x <= 0 for x in k):
         raise ValueError(f"k needs one positive rate constant for each of the {q} reactions")
-    skip = zero_complexes(Y) if detach_uptakes else set()
-    Ycsc = sparse.csc_matrix(Y)
-    substrates = set(substrate_complexes(A).values()) - skip
+    skip = zero_complexes(crn) if detach_uptakes else set()
+    substrates = set(substrate_complexes(crn).values()) - skip
     equal, rounds = [], 0                             # feedback rows ψ_c = μ ψ_d as (c, d, μ)
     while True:
         rounds += 1
         # 1) Linear: proportional rows of ker(W_k), with the extra rows of the feedback
-        W, (m, n_columns) = steady_state_map(A, Y, N, k, detach_uptakes)
-        for t, (c, d, mu) in enumerate(equal):
-            W[(m + t, c)], W[(m + t, d)] = Fraction(1), -mu
-        rows = null_space_rows(exact(((i, j, v) for (i, j), v in W.items()), (m + len(equal), n_columns)))
+        W, n_columns = steady_state_map(crn, k, detach_uptakes)
+        W += [tuple(sorted(((c, 1), (d, -mu)))) for c, d, mu in equal]
+        rows = null_space_rows(W, n_columns)
         classes = [{c: x for c, x in g.items() if c not in skip} for g in _ratio_classes(rows, n)]
         classes = [g for g in classes if g]
         # 2) Log: the composition differences within each class, with ln of their ratios, span the fixed
@@ -276,8 +266,8 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
             first = min(g)
             for c in sorted(g):
                 if c != first:                        # y_first - y_c, at ln ψ_first / ψ_c
-                    span.add(_difference(Ycsc, first, c), {g[first] / g[c]: Fraction(1)})
-        found = readout(Y, free_directions(Y, [set(g) for g in classes]), skip)
+                    span.add(_difference(crn, first, c), {g[first] / g[c]: Fraction(1)})
+        found = readout(crn, free_directions(crn, [set(g) for g in classes]), detach_uptakes)
         # 3) Feedback: the merges that no class already holds, with their values. A complex that is no
         #    reaction's substrate has a zero column in W_k, so a row for it would fix only its own ψ.
         class_of = {c: t for t, g in enumerate(classes) for c in g}
@@ -287,7 +277,7 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
             first = inner[0] if inner else None
             for c in inner[1:]:
                 if class_of[c] != class_of[first]:
-                    mu = span.value(_difference(Ycsc, first, c))                # ψ_first / ψ_c
+                    mu = span.value(_difference(crn, first, c))                 # ψ_first / ψ_c
                     if mu.rational is None:
                         raise NotImplementedError(f"the feedback needs the irrational ratio {mu} "
                                                   f"of complexes {first} and {c}")
@@ -296,7 +286,7 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
             break
         equal += new
 
-    names = metabolite_ids if metabolite_ids is not None else list(range(Y.shape[0]))
+    names = crn.metabolite_ids
     acr = {names[i]: span.value({i: Fraction(1)}) for i in found.acr}
     acrr = [(names[g[0]], {names[j]: span.value({j: Fraction(1), g[0]: Fraction(-1)}) for j in g[1:]})
             for g in found.acrr_groups]
@@ -304,15 +294,15 @@ def relation_values(A, Y, N, k, detach_uptakes=True, metabolite_ids=None):
     for module in sorted(found.modules, key=min):
         if len(module) > 1:
             first = min(module)
-            modules.append((first, {c: span.value(_difference(Ycsc, c, first)) for c in sorted(module - {first})}))
+            modules.append((first, {c: span.value(_difference(crn, c, first)) for c in sorted(module - {first})}))
     return Values(acr=acr, acrr=acrr, modules=modules, rounds=rounds)
 
 
-def rate_constants(A, Y, flux, x=None):
+def rate_constants(crn, flux, x=None):
     """Rate constants k_j = r_j / ψ_s(j)(x) for which x is a positive steady state with flux r.
 
     Args:
-        A, Y: the network.
+        crn: the network.
         flux: an interior steady-state flux r (every entry positive, N r = 0), e.g. the ``flux`` of a
             :class:`kimonu.RouteResult`.
         x: positive concentrations, one per metabolite; all ones when omitted, which gives k = r.
@@ -324,12 +314,11 @@ def rate_constants(A, Y, flux, x=None):
     """
     if x is None:
         return list(flux)
-    Ycsc = sparse.csc_matrix(Y)
-    x = [v if isinstance(v, (int, Fraction)) else Fraction(str(v)) for v in x]
+    x = [fraction(v) for v in x]
     k = []
-    for j, c in sorted(substrate_complexes(A).items()):
+    for j, c in sorted(substrate_complexes(crn).items()):
         psi, inexact = Fraction(1), 1.0                # ψ_c(x) = psi · inexact
-        for i, y in _column(Ycsc, c).items():
+        for i, y in crn.Yt[c]:
             if x[i] == 1:
                 continue
             if y.denominator == 1:

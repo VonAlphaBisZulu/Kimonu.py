@@ -27,26 +27,31 @@ The true B cannot be computed from the network directly. Two routes bound it wit
     ker((YΔ)ᵀ)  ⊇  B  ⊇  ker(W Yᵀ),
 
 and both are read out here. The iterated route (:mod:`kimonu.iterated`) collects composition differences that it
-has proven fixed as the columns of YΔ and takes ker((YΔ)ᵀ) (:func:`free_directions`). Every column of YΔ lies in
-span(V), so ker((YΔ)ᵀ) contains B, and every zero row or pair of equal rows it shows is also one of B. The
-tangent route (:mod:`kimonu.tangent`) takes ker(W Yᵀ), which is contained in B, so it shows every relation of B
-and possibly false couplings. A larger nullspace has fewer zero rows and equal rows and reports fewer relations.
+has proven fixed as the columns of YΔ (:func:`composition_differences`) and takes ker((YΔ)ᵀ)
+(:func:`free_directions`). Every column of YΔ lies in span(V), so ker((YΔ)ᵀ) contains B, and every zero row or pair
+of equal rows it shows is also one of B. The tangent route (:mod:`kimonu.tangent`) takes ker(W Yᵀ), which is
+contained in B, so it shows every relation of B and possibly false couplings. A larger nullspace has fewer zero
+rows and equal rows and reports fewer relations.
+
+The zero complex has no metabolites, so its row of Yᵀ B is zero, and the readout would couple it to every complex
+made of ACR metabolites. With detached uptakes the readout leaves it out of the grouping, since no uptake draws
+from it, and reports it as a module of its own, listed last. The modules then still partition the complexes.
 
 The reference-equivalent mode (:mod:`kimonu.reference`) reads ACR and ACRR by the pairwise Shinar–Feinberg rule
-instead of from a basis. All three routes return the same :class:`RouteResult`.
+instead of from a basis. All three routes return the same :class:`RouteResult` (:func:`route_result`).
 """
 from collections import namedtuple
-from fractions import Fraction
 
 import numpy as np
-from scipy import sparse
 
-from kimonu.linalg import exact, null_space_rows
+from kimonu.io import zero_complexes
+from kimonu.linalg import matrix_product, null_space_rows
 
 Readout = namedtuple("Readout", ["modules", "acr", "acrr_groups"])
 Readout.__doc__ = """What :func:`readout` reads off a basis B, in indices.
 
-modules      groups of complexes with equal rows of Yᵀ B, in the order of their first complex, singletons included
+modules      kinetic modules, sets of complexes with equal rows of Yᵀ B, in the order of their first complex,
+             singletons included. With detached uptakes the zero complex is a module of its own, listed last.
 acr          metabolites with a zero row of B, in index order
 acrr_groups  groups of two or more metabolites without ACR whose rows of B are equal, each in index order
 """
@@ -56,20 +61,21 @@ RouteResult = namedtuple("RouteResult", ["route", "modules", "module_of", "n_mod
 RouteResult.__doc__ = """The relations one route reports, in one layout for all three routes.
 
 route         "iterated", "tangent" or "reference"
-modules       kinetic modules as sets of complex indices. They partition the complexes, singletons included, and
-              with detached uptakes the zero complex is a module of its own, listed last.
+modules       kinetic modules as sets of complex indices. They partition the complexes, singletons included. With
+              detached uptakes the zero complex is coupled to nothing and is a module of its own, listed last.
 module_of     numpy array, the module of each complex, counted from 1
 n_modules     number of modules with two or more complexes
 giant_module  size of the largest module
-acr           metabolites with ACR, as names when metabolite_ids is given and as indices otherwise
-acrr          sorted pairs of metabolites with ACRR, as names or indices. Pairs of two ACR metabolites are left
-              out, since their ratio is fixed only because each concentration is.
-B             the basis the relations were read from, one row per metabolite, each row a sorted tuple of
-              (basis vector, exact value). ker((YΔ)ᵀ) for the iterated route, the metabolite rows of ker(W Yᵀ)
-              for the tangent route, None for the reference route.
-dimension     number of basis vectors of that nullspace. With detached uptakes, ker(W Yᵀ) also has the source
-              coordinates, so for the tangent route this can exceed the dimension of B in metabolite space.
-              None for the reference route.
+acr           metabolites with ACR, named by crn.metabolite_ids, in index order
+acrr          sorted pairs of metabolites with ACRR, named by crn.metabolite_ids. Pairs of two ACR metabolites are
+              left out, since their ratio is fixed only because each concentration is.
+B             the basis the relations were read from, in row form with one row per metabolite. ker((YΔ)ᵀ) for the
+              iterated route, the metabolite rows of ker(W Yᵀ) for the tangent route, None for the reference route.
+dimension     the dimension of the nullspace the relations were read from, its number of basis vectors.
+              dim ker((YΔ)ᵀ) = m − rank(YΔ) for the iterated route, the directions in which ln x can still move by
+              what the route has proven. dim ker(W Yᵀ) for the tangent route, the directions of the steady states
+              through the reference to first order. With detached uptakes they include the source coordinates, so
+              this can exceed the dimension of B in metabolite space. None for the reference route.
 flux          the interior flux r* the route ran at (rate constants k = r* with the steady state x = 1, see
               :func:`kimonu.rate_constants`), None for the reference route
 rounds        rounds of the iterated route, or passes of the overlap merge of the reference route; None for the
@@ -78,143 +84,96 @@ concordance   the reference route's :class:`kimonu.ConcordanceResult`, None for 
 """
 
 
-def composition_differences(Y, modules, known_acr=()):
-    """YΔ, the composition differences within each module, as a scipy matrix for inspection.
+def composition_differences(crn, modules, known_acr=()):
+    """(YΔ)ᵀ in row form, one row per column of YΔ: the composition differences within each module.
 
     Δ (complexes x pairs) has one column e_c - e_d for each member c of a module other than its first member d, which
     spans the same subspace as all pairwise differences would. Metabolites already known to have ACR contribute
     their unit vector as an extra column, as in Langary et al. (2025). Once a metabolite is known to be fixed,
     differences involving it become decidable, which can license merges that were not decidable before.
 
-    Integer for an integer Y and the nearest floats otherwise. :func:`free_directions` works from the exact columns.
+    The differences are exact, from the rows of crn.Yt. A float could not hold them, since biomass coefficients come
+    with 15 significant digits and a difference such as 9.86915907870449e-05 - 4.11265742135554e-05 needs more.
     """
-    columns = _difference_columns(Y, modules, known_acr)
-    integer = np.issubdtype(Y.dtype, np.integer)
-    triples = [(i, k, int(v) if integer else float(v)) for k, col in enumerate(columns) for i, v in col.items()]
-    return sparse.csc_matrix(([v for *_, v in triples], ([i for i, *_ in triples], [k for _, k, _ in triples])),
-                             shape=(Y.shape[0], len(columns)), dtype=np.int64 if integer else np.float64)
-
-
-def _difference_columns(Y, modules, known_acr):
-    """The columns of YΔ as exact {metabolite: value} dicts.
-
-    Exact because a float cannot hold them. Biomass coefficients come with 15 significant digits, and a difference
-    such as 9.86915907870449e-05 - 4.11265742135554e-05 needs more. The rounded value would enter the exact
-    nullspace as if it were the true one.
-    """
-    Y = sparse.csc_matrix(Y)
-
-    def column(c):
-        return {int(i): Fraction(str(v)) for i, v in zip(Y.indices[Y.indptr[c]:Y.indptr[c + 1]],
-                                                       Y.data[Y.indptr[c]:Y.indptr[c + 1]])}
-
-    columns = []
+    rows = []
     for module in modules:
-        members = sorted(module)
-        if len(members) < 2:
+        if len(module) < 2:
             continue
-        reference = column(members[0])
-        for other in members[1:]:
+        first, *others = sorted(module)
+        reference = dict(crn.Yt[first])
+        for other in others:
             difference = dict(reference)
-            for i, v in column(other).items():
+            for i, v in crn.Yt[other]:
                 difference[i] = difference.get(i, 0) - v
-            columns.append({i: v for i, v in difference.items() if v != 0})
-    return columns + [{met: Fraction(1)} for met in sorted(known_acr)]
+            rows.append(tuple(sorted((i, v) for i, v in difference.items() if v)))
+    return rows + [((met, 1),) for met in sorted(known_acr)]
 
 
-def free_directions(Y, modules, known_acr=()):
-    """ker((YΔ)ᵀ) in row form, one hashable row per metabolite, the basis B of the iterated route (Eq. 4, left).
+def free_directions(crn, modules, known_acr=()):
+    """ker((YΔ)ᵀ) in row form, one row per metabolite, the basis B of the iterated route (Eq. 4, left).
 
     Each module contributes the differences of its first complex against every other member as columns of YΔ, and
-    each metabolite in ``known_acr`` its unit vector (:func:`composition_differences`). v lies in the span of YΔ
-    exactly when it is orthogonal to ker((YΔ)ᵀ), exactly, over the rationals. With no column to span, nothing is
-    fixed and the basis is the identity.
+    each metabolite in ``known_acr`` (indices) its unit vector (:func:`composition_differences`). v lies in the span
+    of YΔ exactly when it is orthogonal to ker((YΔ)ᵀ), exactly, over the rationals. With no column to span, nothing
+    is fixed and the basis is the identity.
     """
-    columns, m = _difference_columns(Y, modules, known_acr), Y.shape[0]
-    if not columns:
-        return [((i, Fraction(1)),) for i in range(m)]
-    YDt = exact(((k, i, v) for k, col in enumerate(columns) for i, v in col.items()), (len(columns), m))
-    return [tuple(sorted(r.items())) for r in null_space_rows(YDt)]
+    return null_space_rows(composition_differences(crn, modules, known_acr), len(crn.metabolite_ids))
 
 
-def complex_directions(Y, B):
-    """Yᵀ B in row form, one hashable row per complex: how ln ψ_c can differ between steady states.
+def complex_directions(crn, B):
+    """Yᵀ B in row form, one row per complex: how ln ψ_c can differ between steady states.
 
     Row c is the rows of B for complex c's metabolites, weighted by its composition. Complexes with equal rows are
     kinetically coupled, and :func:`kimonu.kinetic_flux_coupling` lifts the same rows into flux space.
     """
-    Ycsc = sparse.csc_matrix(Y)
-    return [_combined(Ycsc, B, c) for c in range(Ycsc.shape[1])]
+    return matrix_product(crn.Yt, B)
 
 
-def _combined(Ycsc, rows, c):
-    """Row c of Yᵀ B, the rows of B for complex c's metabolites weighted by its composition."""
-    acc = {}
-    for met, coeff in zip(Ycsc.indices[Ycsc.indptr[c]:Ycsc.indptr[c + 1]],
-                          Ycsc.data[Ycsc.indptr[c]:Ycsc.indptr[c + 1]]):
-        for col, value in rows[int(met)]:
-            acc[col] = acc.get(col, Fraction(0)) + Fraction(str(coeff)) * value
-    return tuple(sorted((col, v) for col, v in acc.items() if v != 0))
-
-
-def readout(Y, B, skip=()):
+def readout(crn, B, detach_uptakes=True):
     """Kinetic modules, ACR metabolites and ACRR groups from a basis B, by grouping identical rows.
 
     Args:
-        Y: metabolites x complexes composition matrix.
-        B: the basis in row form, one hashable exact row per metabolite (a sorted tuple of (basis vector, value)
-            pairs), as :func:`free_directions` returns it for the iterated route and
-            :func:`kimonu.tangent.tangent_space` for the tangent route.
-        skip: complexes left out of the modules (the zero complex when uptakes are detached).
+        crn: the network (:class:`kimonu.CRN`).
+        B: the basis in row form, one row per metabolite, as :func:`free_directions` returns it for the iterated
+            route and :func:`kimonu.tangent_space` for the tangent route.
+        detach_uptakes: True when uptakes are detached, which leaves the zero complex out of the grouping and lists
+            it last as a module of its own (see the module docstring).
 
     Returns a :class:`Readout` in indices.
     """
-    Ycsc = sparse.csc_matrix(Y)
+    skip = zero_complexes(crn) if detach_uptakes else set()
     # 1) Modules: complexes with equal rows of Yᵀ B, whose composition differences B annihilates
     groups = {}
-    for c in range(Ycsc.shape[1]):
+    for c, row in enumerate(complex_directions(crn, B)):
         if c not in skip:
-            groups.setdefault(_combined(Ycsc, B, c), set()).add(c)
-    # 2) ACR and ACRR: zero rows and equal nonzero rows of B
-    acr, acrr_groups = _robust(B)
-    return Readout(modules=list(groups.values()), acr=acr, acrr_groups=acrr_groups)
-
-
-def _robust(rows):
-    """ACR metabolites (zero rows of B) and ACRR groups (equal nonzero rows of B).
-
-    Pairs of ACR metabolites are left out of ACRR. Their ratio is constant only because each concentration is,
-    which is not an independent finding.
-    """
-    acr = [i for i, row in enumerate(rows) if not row]
+            groups.setdefault(row, set()).add(c)
+    # 2) ACR: zero rows of B. ACRR: equal nonzero rows. Pairs of ACR metabolites are left out of ACRR, since their
+    #    ratio is constant only because each concentration is, which is not an independent finding.
     same = {}
-    for i, row in enumerate(rows):
-        if row:
-            same.setdefault(row, []).append(i)
-    return acr, [g for g in same.values() if len(g) > 1]
+    for i, row in enumerate(B):
+        same.setdefault(row, []).append(i)
+    return Readout(modules=list(groups.values()) + [{c} for c in sorted(skip)], acr=same.pop((), []),
+                   acrr_groups=[g for g in same.values() if len(g) > 1])
 
 
-def _pairs(groups):
-    """All pairs (a, b), a before b, within each group, in the order of the groups."""
-    return [(a, b) for g in groups for k, a in enumerate(g) for b in g[k + 1:]]
+def route_result(route, crn, found, B=None, dimension=None, flux=None, rounds=None, concordance=None):
+    """The :class:`RouteResult` of a route, from what it found, a :class:`Readout` in indices.
 
-
-def _route_result(route, n_complexes, modules, acr, acrr, metabolite_ids=None, B=None, dimension=None, flux=None,
-                  rounds=None, concordance=None):
-    """The :class:`RouteResult` of a route, from its modules (indices), ACR (indices) and ACRR (index pairs)."""
-    module_of = np.zeros(n_complexes, dtype=np.int64)
-    for idx, group in enumerate(modules, start=1):
+    Metabolites are named by crn.metabolite_ids, and every ACRR group gives all its pairs.
+    """
+    module_of = np.zeros(len(crn.Yt), dtype=np.int64)
+    for idx, group in enumerate(found.modules, start=1):
         for c in group:
             module_of[c] = idx
-    name = (lambda i: i) if metabolite_ids is None else (lambda i: metabolite_ids[i])
+    name = crn.metabolite_ids
     return RouteResult(
         route=route,
-        modules=modules,
+        modules=found.modules,
         module_of=module_of,
-        n_modules=sum(1 for g in modules if len(g) > 1),
-        giant_module=max((len(g) for g in modules), default=0),
-        acr=[name(i) for i in sorted(acr)],
-        acrr=sorted((name(a), name(b)) for a, b in acrr),
+        n_modules=sum(1 for g in found.modules if len(g) > 1),
+        giant_module=max((len(g) for g in found.modules), default=0),
+        acr=[name[i] for i in sorted(found.acr)],
+        acrr=sorted((name[a], name[b]) for g in found.acrr_groups for k, a in enumerate(g) for b in g[k + 1:]),
         B=B,
         dimension=dimension,
         flux=flux,

@@ -1,27 +1,28 @@
-"""Networks and preprocessing: from a cobra model to the matrices N = Y·A.
+"""Networks and preprocessing: from a cobra model, or from given matrices, to the network N = Y·A.
 
 A metabolic network factorizes as N = Y·A:
   N : metabolites x reactions   stoichiometric matrix
   Y : metabolites x complexes   composition (which metabolites, and how many, form each complex)
   A : complexes  x reactions    incidence (-1 on a reaction's substrate complex, +1 on its product)
 
-A *complex* is one side of a reaction, a multiset of metabolites such as D + E, 2B or C. Uptake and export
-reactions have the zero complex on one side, a complex with no metabolites (an all-zero column of Y, as in COCOA's
-`:empty`). It gets its own row of A, so every reaction has a substrate and a product complex. Mass action needs
-that, because an uptake from the zero complex runs at rate k_j ψ_∅ with ψ_∅ = 1. Complexes are numbered in the
-order in which the reactions first use them, as in COCOA.
+A *complex* is one side of a reaction, a multiset of metabolites such as D + E, 2B or C. Column c of Y is its
+composition y_c. Uptake and export reactions have the zero complex on one side, a complex with no metabolites (an
+all-zero column of Y, as in COCOA's `:empty`). It gets its own row of A, so every reaction has a substrate and a
+product complex. Mass action needs that, because an uptake from the zero complex runs at rate k_j ψ_∅ with ψ_∅ = 1.
+Complexes are numbered in the order in which the reactions first use them, as in COCOA.
 
 Mass action gives every reaction one substrate complex and one direction, so a reaction that can run both ways
 becomes two (:func:`irreversible`). Each reaction is otherwise taken as one mass-action step. Kimonu does not split
 enzyme-catalyzed reactions into elementary steps, and networks that need them have to carry them already.
 
-:func:`prepare` is the preprocessing every analysis of a cobra model shares. It splits reversible reactions,
-removes blocked reactions, finds pinned rates and builds the factorization (:func:`build_crn`). Blocked reactions
-follow from one LP (:func:`kimonu.linalg.blocked_reactions`) when every lower bound is zero, and from FVA only when
-a positive lower bound forces flux, since only then can a bound pin a rate.
+The network is a :class:`CRN`, and every analysis takes it as its first argument. :func:`prepare` builds it from a
+cobra model with the preprocessing every analysis shares. It splits reversible reactions, removes blocked
+reactions, finds pinned rates and builds the factorization (:func:`build_crn`). Blocked reactions follow from one
+LP (:func:`kimonu.linalg.blocked_reactions`) when every lower bound is zero, and from FVA only when a positive lower
+bound forces flux, since only then can a bound pin a rate. :func:`crn_from_matrices` builds the CRN of a network
+that already comes as A and Y, such as the elementary-step models of Langary et al. (2025).
 """
 from collections import namedtuple
-from fractions import Fraction
 
 import cobra
 
@@ -31,47 +32,61 @@ from scipy import sparse
 
 import straindesign as sd
 
-from kimonu.linalg import blocked_reactions
+from kimonu.linalg import blocked_reactions, exact, fraction, matrix_product, row_form
 
-CRN = namedtuple("CRN", ["A", "Y", "N", "N_float", "complexes", "reaction_ids", "metabolite_ids", "pins"])
-CRN.__doc__ = """The matrices of N = Y·A for one network, with the names of their rows and columns.
+CRN = namedtuple("CRN", ["A", "Yt", "N", "complexes", "reaction_ids", "metabolite_ids", "pins"])
+CRN.__doc__ = """One network, N = Y·A, with the names of the rows and columns. Every analysis takes it first.
 
 A               scipy.sparse csr, int64 (complexes x reactions), the incidence matrix
-Y               scipy.sparse csr, float64 (metabolites x complexes), the composition. scipy.sparse cannot hold
-                Fractions, so exact readers convert each entry with Fraction(str(v)), which recovers the decimal
-                the model declares. ``complexes`` holds the same compositions as Fractions.
-N               straindesign RationalMatrix (metabolites x reactions), the stoichiometric matrix with exact
-                entries. Every nullspace is computed from it.
-N_float         scipy.sparse csr, float64, N = Y @ A in floating point, for inspection
-complexes       one canonical complex per row of A, a tuple of (metabolite id, Fraction coefficient)
+Yt              Yᵀ (complexes x metabolites) in the row form of :mod:`kimonu.linalg`, exact. Row c is the composition
+                y_c of complex c, a sorted tuple of (metabolite, coefficient) pairs, empty for the zero complex. Every
+                computation reads Y one complex at a time, Yᵀ B as matrix_product(Yt, B) and y_c - y_d from two rows.
+N               straindesign RationalMatrix (metabolites x reactions), the stoichiometric matrix N = Y·A, exact.
+                Every nullspace of N is computed from it.
+complexes       one complex per row of A, as a sorted tuple of (metabolite id, coefficient) pairs, for reading
 reaction_ids    reaction ids in the column order of A and N
-metabolite_ids  metabolite ids in the row order of Y and N
+metabolite_ids  metabolite ids in the row order of N. Results name metabolites by them.
 pins            {reaction id: exact value} of the rates that a bound holds at a nonzero value in every steady
-                state. Empty from :func:`build_crn`, found by :func:`prepare`.
+                state. Empty from :func:`build_crn` and :func:`crn_from_matrices`, found by :func:`prepare`.
 """
 
 
-def _exact(coeff):
-    """Exact rational value of a stoichiometric coefficient.
+def _crn(A, Yt, metabolite_ids, reaction_ids):
+    """The CRN of the incidence matrix A and the compositions Yt, with N = Y·A computed exactly.
 
-    ``Fraction(str(x))`` reproduces the decimal the model declares (1.496 -> 1496/1000), whereas ``Fraction(x)``
-    would recover the binary approximation of it. Coefficients are frequently fractional, as in biomass reactions
-    and half-oxygen terms such as 0.5 O2 in CYTBD, so this is the difference between analysing the model and
-    analysing a rounded version of it.
+    Column j of N is y_product(j) - y_substrate(j), the rows of Yt weighted by column j of A, so the rows of Nᵀ are
+    Aᵀ Yᵀ (:func:`kimonu.linalg.matrix_product`).
     """
-    return Fraction(str(coeff))
+    Nt = matrix_product(A.T, Yt)
+    N = exact(((i, j, v) for j, row in enumerate(Nt) for i, v in row), (len(metabolite_ids), len(reaction_ids)))
+    complexes = [tuple(sorted((metabolite_ids[i], v) for i, v in y)) for y in Yt]
+    return CRN(A=A, Yt=Yt, N=N, complexes=complexes, reaction_ids=list(reaction_ids),
+               metabolite_ids=list(metabolite_ids), pins={})
 
 
-def exact_matrix(entries, shape):
-    """A straindesign RationalMatrix from ``(row, col, value)`` triples, holding them exactly.
+def crn_from_matrices(A, Y, metabolite_ids=None, reaction_ids=None):
+    """The :class:`CRN` of a network that comes as its incidence matrix ``A`` and composition ``Y``.
 
-    Clearing denominators to int64 instead overflows on models whose coefficients are written as
-    15-significant-digit decimals. iYS854's -7.73333333333333e-08 has a denominator of 10**22, and
-    Chlorella_variabilis_iAJ526 mixes seven such terms in one row.
+    For networks that already carry a complex decomposition, such as the elementary-step models distributed with the
+    reference implementation of Langary et al. (2025), there is nothing to enumerate, and rebuilding a cobra model
+    only to take it apart again would risk changing the decomposition being analysed.
+
+    Args:
+        A: complexes x reactions incidence matrix, one -1 (the substrate complex) and one +1 (the product complex)
+            per column, as any scipy or numpy matrix.
+        Y: metabolites x complexes composition matrix, as any scipy or numpy matrix. Every entry is read exactly, a
+            float as the decimal it prints as (:func:`kimonu.linalg.fraction`).
+        metabolite_ids, reaction_ids: names of the rows of Y and of the columns of A. Indices when omitted, so
+            results then name metabolites by their index.
+
+    The network is taken as it is. It must have no blocked reactions for the mass-action routes and for exact
+    concordance, as :func:`prepare` ensures for a cobra model.
     """
-    return sd.RationalMatrix.from_fractions(
-        ((int(i), int(j), v if isinstance(v, Fraction) else Fraction(str(v))) for i, j, v in entries),
-        shape)
+    A = sparse.csr_matrix(A).astype(np.int64)
+    Yt = row_form(sparse.csr_matrix(Y).T)
+    m = sparse.csr_matrix(Y).shape[0]
+    return _crn(A, Yt, metabolite_ids if metabolite_ids is not None else list(range(m)),
+                reaction_ids if reaction_ids is not None else list(range(A.shape[1])))
 
 
 def irreversible(model):
@@ -106,57 +121,24 @@ def build_crn(model):
     model = irreversible(model)
     met_ids = [m.id for m in model.metabolites]
     met_idx = {m: i for i, m in enumerate(met_ids)}
-    rxn_ids = [r.id for r in model.reactions]
 
-    complex_index = {}   # canonical key -> complex row index
-    complex_comp = []    # complex row index -> {met_id: coeff (>0)}
+    complex_index = {}   # composition (sorted (metabolite index, coefficient) pairs) -> complex row index
 
-    def _complex(comp):
-        """Return the complex index for a multiset {met_id: coeff>0}; {} is the zero complex."""
-        key = tuple(sorted(comp.items()))
-        idx = complex_index.get(key)
-        if idx is None:
-            idx = len(complex_comp)
-            complex_index[key] = idx
-            complex_comp.append(comp)
-        return idx
+    def _complex(side):
+        """The row index of the complex with composition {metabolite: coefficient > 0}; {} is the zero complex."""
+        y = tuple(sorted((met_idx[m.id], fraction(abs(c))) for m, c in side.items()))
+        return complex_index.setdefault(y, len(complex_index))
 
-    # 1) A: one substrate and one product complex per reaction
+    # A: one substrate and one product complex per reaction, numbered in order of first use
     Ai, Aj, Av = [], [], []
     for j, r in enumerate(model.reactions):
-        substrate = {m.id: -_exact(c) for m, c in r.metabolites.items() if c < 0}   # |coeff| on the substrate side
-        product = {m.id: _exact(c) for m, c in r.metabolites.items() if c > 0}      # coeff on the product side
-        si = _complex(substrate)
-        pi = _complex(product)
-        Ai.append(si); Aj.append(j); Av.append(-1)
-        Ai.append(pi); Aj.append(j); Av.append(+1)
-
-    ncplx = len(complex_comp)
-    A = sparse.csr_matrix((Av, (Ai, Aj)), shape=(ncplx, len(rxn_ids)), dtype=np.int64)
-
-    # 2) Y: the composition of every complex
-    Yi, Yj, Yv = [], [], []
-    for c, comp in enumerate(complex_comp):
-        for m, coeff in comp.items():
-            Yi.append(met_idx[m]); Yj.append(c); Yv.append(coeff)
-    Y = sparse.csr_matrix(([float(v) for v in Yv], (Yi, Yj)),
-                          shape=(len(met_ids), ncplx), dtype=np.float64)
-
-    N_float = (Y @ A).tocsr()  # == stoichiometric matrix, by construction
-
-    # 3) N = Y·A exactly, accumulated from the rational compositions
-    exact = {}
-    for c, comp in enumerate(complex_comp):
-        for m, coeff in comp.items():
-            i = met_idx[m]
-            for k in range(A.indptr[c], A.indptr[c + 1]):
-                j = A.indices[k]
-                exact[(i, j)] = exact.get((i, j), Fraction(0)) + Fraction(int(A.data[k])) * coeff
-
-    N = exact_matrix(((i, j, v) for (i, j), v in exact.items() if v), (len(met_ids), len(rxn_ids)))
-
-    return CRN(A=A, Y=Y, N=N, N_float=N_float, complexes=[tuple(sorted(comp.items())) for comp in complex_comp],
-               reaction_ids=rxn_ids, metabolite_ids=met_ids, pins={})
+        Ai += [_complex({m: c for m, c in r.metabolites.items() if c < 0}),
+               _complex({m: c for m, c in r.metabolites.items() if c > 0})]
+        Aj += [j, j]
+        Av += [-1, 1]
+    A = sparse.csr_matrix((Av, (Ai, Aj)), shape=(len(complex_index), len(model.reactions)), dtype=np.int64)
+    # Yᵀ: the composition of every complex, in the order of the rows of A
+    return _crn(A, list(complex_index), met_ids, [r.id for r in model.reactions])
 
 
 def prepare(model, solver=None):
@@ -167,10 +149,10 @@ def prepare(model, solver=None):
     3. Rates that a bound holds at a nonzero value in every steady state (pins) are found.
     4. The factorization N = Y·A is built (:func:`build_crn`), with the pins attached.
 
-    Concordance is exact over the feasible steady states only when no reaction is blocked and the pins enter N as
-    rows (:func:`kimonu.concordance` adds them). The mass-action routes need a network without blocked reactions,
-    since they start from a strictly positive steady-state flux, and do not use the pins, since under mass action
-    the rate constants, not the bounds, set the rates.
+    Concordance is exact over the feasible steady states only when no reaction is blocked and the pins enter N.
+    :func:`kimonu.concordance` adds them as rows that fix the ratio of every two pinned rates. The mass-action routes
+    need a network without blocked reactions, since they start from a strictly positive steady-state flux, and do
+    not use the pins, since under mass action the rate constants, not the bounds, set the rates.
 
     Args:
         model: a cobra model. It is not changed.
@@ -214,19 +196,18 @@ def _pins(model, ranges, tol=1e-9):
             continue
         for b in (r.lower_bound, r.upper_bound):
             if abs(hi - b) <= tol * max(1, abs(b)):
-                pins[r.id] = Fraction(str(b))
+                pins[r.id] = fraction(b)
                 break
     return pins
 
 
-def substrate_complexes(A):
+def substrate_complexes(crn):
     """The substrate complex σ(j) of every reaction j, as {reaction: complex}. It defines S, S_cj = 1 when c = σ(j)."""
-    A = sparse.csc_matrix(A)
+    A = sparse.csc_matrix(crn.A)
     return {j: int(A.indices[k]) for j in range(A.shape[1])
             for k in range(A.indptr[j], A.indptr[j + 1]) if A.data[k] < 0}
 
 
-def zero_complexes(Y):
+def zero_complexes(crn):
     """Complexes with no metabolites, the zero complex of uptake and export reactions."""
-    Y = sparse.csc_matrix(Y)
-    return {c for c in range(Y.shape[1]) if Y.indptr[c] == Y.indptr[c + 1]}
+    return {c for c, y in enumerate(crn.Yt) if not y}

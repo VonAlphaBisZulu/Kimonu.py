@@ -5,7 +5,7 @@ the reference. It tests complex pairs with linear programs. This mode keeps its 
 pairwise tests by one nullspace, so that Kimonu can be compared with it like for like. It reproduces the results of
 the exhaustive reference on all 11 networks on which that finished.
 
-1. Concordance from M = A·K (:func:`kimonu.concordance_from_matrices`), as in the default mode.
+1. Concordance from M = A·K (:func:`kimonu.concordance`), without pinned rates, which mass action does not see.
 2. Seeds. Each concordance module with two or more complexes, together with the balanced complexes. Like the
    reference, the mode does not seed singletons.
 3. Upstream sets (:func:`upstream_set`). Within a seed, an upstream set is a set of complexes that no reaction
@@ -26,8 +26,8 @@ from collections import namedtuple
 
 from scipy import sparse
 
-from kimonu.concordance import concordance_from_matrices
-from kimonu.readout import _route_result
+from kimonu.concordance import concordance
+from kimonu.readout import Readout, route_result
 
 ComplexGraph = namedtuple("ComplexGraph", ["succ", "pred", "producers", "substrates"])
 ComplexGraph.__doc__ = """The complex graph, one vertex per complex and one edge per reaction from substrate to product.
@@ -38,9 +38,9 @@ substrates   per reaction, its substrate complexes (one for a mass-action networ
 """
 
 
-def complex_graph(A):
-    """The :class:`ComplexGraph` of the incidence matrix ``A``."""
-    A = sparse.csc_matrix(A)
+def complex_graph(crn):
+    """The :class:`ComplexGraph` of the network, read off its incidence matrix A."""
+    A = sparse.csc_matrix(crn.A)
     n = A.shape[0]
     succ, pred = [set() for _ in range(n)], [set() for _ in range(n)]
     producers, substrates = [[] for _ in range(n)], []
@@ -147,11 +147,11 @@ def upstream_set(candidates, graph):
     return current
 
 
-def upstream_modules(A, modules, balanced, max_rounds=20):
+def upstream_modules(crn, modules, balanced, max_rounds=20):
     """Kinetic modules from upstream sets merged by overlap, as the reference computes them, and the rounds taken.
 
     Args:
-        A: complexes x reactions incidence matrix.
+        crn: the network (:class:`kimonu.CRN`).
         modules: the concordance modules to seed with, as iterables of complex indices. :func:`reference_route`
             passes those with two or more complexes, as the reference does.
         balanced: the balanced complexes, added to every seed.
@@ -164,8 +164,8 @@ def upstream_modules(A, modules, balanced, max_rounds=20):
 
     Returns (modules, rounds). The modules partition the complexes, singletons included.
     """
-    n = A.shape[0]
-    graph = complex_graph(A)
+    n = crn.A.shape[0]
+    graph = complex_graph(crn)
     balanced = set(balanced)
     concordance = [set(m) - balanced for m in modules]
     concordance = [m for m in concordance if m]
@@ -210,7 +210,7 @@ def upstream_modules(A, modules, balanced, max_rounds=20):
     return result, rounds
 
 
-def shinar_feinberg(Y, modules):
+def shinar_feinberg(crn, modules):
     """ACR metabolites and ACRR pairs by the pairwise Shinar–Feinberg rule within each kinetic module, as indices.
 
     Two complexes of one module whose compositions differ in exactly one metabolite give that metabolite ACR
@@ -220,15 +220,12 @@ def shinar_feinberg(Y, modules):
 
     Returns (acr, acrr), a set of metabolites and a set of sorted metabolite pairs.
     """
-    Y = sparse.csc_matrix(Y)
     acr, acrr = set(), set()
     for module in modules:
         members = sorted(module)
         if len(members) < 2:
             continue
-        cols = {c: {int(i): float(v) for i, v in zip(Y.indices[Y.indptr[c]:Y.indptr[c + 1]],
-                                                      Y.data[Y.indptr[c]:Y.indptr[c + 1]]) if v != 0}
-                for c in members}
+        cols = {c: dict(crn.Yt[c]) for c in members}
         for k, c in enumerate(members):
             ca = cols[c]
             for d in members[k + 1:]:
@@ -241,22 +238,21 @@ def shinar_feinberg(Y, modules):
     return acr, acrr
 
 
-def reference_route(A, Y, N, metabolite_ids=None):
+def reference_route(crn):
     """Kinetic modules, ACR and ACRR in the reference-equivalent mode, the definitions of Langary et al. (2025).
 
     Args:
-        A, Y, N: the network, as for :func:`kimonu.iterated_route`, without blocked reactions.
-        metabolite_ids: optional names for ``acr`` and ``acrr``. Indices are returned when omitted.
+        crn: the network, as for :func:`kimonu.iterated_route`, without blocked reactions.
 
     Returns a :class:`kimonu.RouteResult` with ``rounds`` the rounds of :func:`upstream_modules` and
     ``concordance`` the :class:`kimonu.ConcordanceResult` it started from. ``B`` and ``flux`` are None, since the
     mode reads no basis and needs no reference flux.
     """
-    # 1) concordance from M = A·K
-    conc = concordance_from_matrices(A, N)
+    # 1) concordance from M = A·K, without the pins, since under mass action the bounds do not set the rates
+    conc = concordance(crn._replace(pins={}))
     # 2) to 4) seeds, upstream sets and the overlap merge
-    modules, rounds = upstream_modules(A, [g for g in conc.modules if len(g) > 1], conc.balanced)
-    # 5) ACR and ACRR by the Shinar–Feinberg rule
-    acr, acrr = shinar_feinberg(Y, modules)
-    return _route_result("reference", A.shape[0], modules, acr, acrr, metabolite_ids, rounds=rounds,
-                         concordance=conc)
+    modules, rounds = upstream_modules(crn, [g for g in conc.modules if len(g) > 1], conc.balanced)
+    # 5) ACR and ACRR by the Shinar–Feinberg rule. Each ACRR pair is a group of two.
+    acr, acrr = shinar_feinberg(crn, modules)
+    return route_result("reference", crn, Readout(modules, sorted(acr), [list(p) for p in sorted(acrr)]),
+                        rounds=rounds, concordance=conc)

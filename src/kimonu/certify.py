@@ -12,8 +12,8 @@ beyond the iterated route stays open. Each open relation asks whether a second s
 steady states connects to the reference, as in the self-activating kinase of Fig. 2.
 
 :func:`certify` draws one r* and runs both routes there, so they are compared at the same point. It is not the
-default analysis, since the tangent route's nullspace is denser and takes longer (up to about 8 minutes on the
-largest genome-scale networks at the default LP point, and about ten times that with the uniform draw).
+default analysis, since the tangent route's nullspace is denser and takes longer (about 7 minutes on the largest
+genome-scale networks at the default LP point, and about ten times that with the uniform draw).
 """
 import warnings
 from collections import namedtuple
@@ -40,19 +40,19 @@ def _coupled_pairs(modules):
     return {(a, b) for g in modules for a in g for b in g if a < b}
 
 
-def certify(A, Y, N, detach_uptakes=True, seed=0, draw="lp", bits=64, metabolite_ids=None):
+def certify(crn, detach_uptakes=True, seed=0, draw="lp", bits=64):
     """Run the iterated and the tangent route at one reference flux and tell whether their lists agree.
 
     Args:
-        A, Y, N, detach_uptakes, seed, draw, bits, metabolite_ids: as for :func:`kimonu.iterated_route`. One r* is drawn
-            with :func:`kimonu.interior_flux` and passed to both routes.
+        crn, detach_uptakes, seed, draw, bits: as for :func:`kimonu.iterated_route`. One r* is drawn with
+            :func:`kimonu.interior_flux` and passed to both routes.
 
     Returns a :class:`Certificate`. A gap between the routes is not an error. It gives a warning that says how many
     relations stay open.
     """
-    flux = interior_flux(N, seed, draw, bits)
-    it = iterated_route(A, Y, N, detach_uptakes, metabolite_ids=metabolite_ids, flux=flux)
-    tan = tangent_route(A, Y, N, detach_uptakes, metabolite_ids=metabolite_ids, flux=flux)
+    flux = interior_flux(crn, seed, draw, bits)
+    it = iterated_route(crn, detach_uptakes, flux=flux)
+    tan = tangent_route(crn, detach_uptakes, flux=flux)
     pairs_it, pairs_tan = _coupled_pairs(it.modules), _coupled_pairs(tan.modules)
     acr_it, acr_tan, acrr_it, acrr_tan = set(it.acr), set(tan.acr), set(it.acrr), set(tan.acrr)
     if not (pairs_it <= pairs_tan and acr_it <= acr_tan and acrr_it <= acrr_tan):

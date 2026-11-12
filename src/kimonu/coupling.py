@@ -20,8 +20,8 @@ reaction that consumes a complex whose concentration is fixed, as that of a comp
 
 Both routes read these classes off their basis B, in the way concordance reads M = A K. A reaction runs at its rate
 constant times the concentration of its substrate complex, so ln r − ln r* = Sᵀ Yᵀ (ln x − ln x*). A detached
-source enters as one more metabolite with a free concentration (Ŷ, the composition of the complexes and the
-sources), and
+source enters as one more species with a free concentration (Ŷ, the composition of the complexes and the
+sources, :func:`kimonu.steady_state.with_sources`), and
 
     Λ = Sᵀ Ŷᵀ B
 
@@ -44,94 +44,92 @@ partial coupling have no counterpart, since every rate is positive at a positive
 from collections import namedtuple
 
 import numpy as np
-from scipy import sparse
 
 from kimonu.io import zero_complexes
 from kimonu.iterated import coupled_columns, iterated_route
-from kimonu.readout import _combined, free_directions
-from kimonu.steady_state import interior_flux, rate_columns
+from kimonu.readout import complex_directions, free_directions
+from kimonu.steady_state import interior_flux, rate_columns, with_sources
 from kimonu.tangent import tangent_space
 
 FluxCouplingResult = namedtuple(
     "FluxCouplingResult",
     ["classes", "class_of", "n_classes", "largest_class", "fixed_rate", "route", "flux"],
 )
+FluxCouplingResult.__doc__ = """Reactions whose rates keep a fixed ratio under mass action, and the rates that are fixed.
+
+classes        sets of reactions with a fixed ratio of rates, partitioning the reactions, singletons included, in the
+               order of their first reaction
+class_of       numpy array, the class of each reaction, counted from 1
+n_classes      number of classes with more than one reaction
+largest_class  size of the largest class
+fixed_rate     reactions whose rate is the same at every steady state, proven by the iterated route and reported by
+               the tangent route, which can include false couplings
+route          "iterated" or "tangent"
+flux           the interior flux r* the route ran at. For the rate constants k = r*, two coupled rates keep the ratio
+               r*_i / r*_j at every steady state, and a fixed rate keeps the value r*_j.
+"""
 
 
-def _with_sources(Y, n_columns):
-    """Ŷ: the composition of the complexes, and one species of its own for each detached source."""
-    return sparse.block_diag((sparse.csc_matrix(Y), sparse.identity(n_columns - Y.shape[1])), format="csc")
-
-
-def _read(Yhat, rows, n_columns):
-    """Class label of every column from the equal rows of Ŷᵀ B, and the label of the zero row, if any."""
+def _labels(species, B):
+    """Class label of every column of W (complexes, then sources) from the equal rows of Ŷᵀ B, and the label of the
+    zero row, the fixed columns, if there is one."""
     keys = {}
-    label = {c: keys.setdefault(_combined(Yhat, rows, c), len(keys)) for c in range(n_columns)}
+    label = {c: keys.setdefault(row, len(keys)) for c, row in enumerate(complex_directions(species, B))}
     return label, {keys[()]} if () in keys else set()
 
 
-def _iterated(A, Y, N, detach_uptakes, flux):
+def _iterated(crn, detach_uptakes, flux):
     """Class label of every column and the labels of the fixed classes."""
-    found = iterated_route(A, Y, N, detach_uptakes, flux=flux)
+    found = iterated_route(crn, detach_uptakes, flux=flux)
     equal = [(min(g), c) for g in found.modules for c in g if c != min(g)]
-    classes = coupled_columns(A, Y, N, flux, detach_uptakes, equal)
-    n_columns = sum(len(g) for g in classes)
-    skip = zero_complexes(Y) if detach_uptakes else set()
-    Yhat = _with_sources(Y, n_columns)
-    rows = free_directions(Yhat, [set(g) - skip for g in classes], found.acr)
-    label, fixed = _read(Yhat, rows, n_columns)
+    classes = coupled_columns(crn, flux, detach_uptakes, equal)
+    skip = zero_complexes(crn) if detach_uptakes else set()
+    species = with_sources(crn, detach_uptakes)
+    index = {name: i for i, name in enumerate(crn.metabolite_ids)}
+    B = free_directions(species, [set(g) - skip for g in classes], [index[a] for a in found.acr])
+    label, fixed = _labels(species, B)
     for c in skip:                                        # no reaction consumes a detached zero complex
         label[c] = -1 - c
     return label, fixed
 
 
-def _tangent(A, Y, N, detach_uptakes, flux):
+def _tangent(crn, detach_uptakes, flux):
     """Class label of every column and the labels of the fixed classes."""
-    rows = tangent_space(A, Y, N, flux, detach_uptakes)
-    _, n_columns = rate_columns(A, Y, detach_uptakes)
-    label, fixed = _read(_with_sources(Y, n_columns), rows, n_columns)
-    for c in (zero_complexes(Y) if detach_uptakes else ()):
+    species = with_sources(crn, detach_uptakes)
+    label, fixed = _labels(species, tangent_space(crn, flux, detach_uptakes))
+    for c in (zero_complexes(crn) if detach_uptakes else ()):
         label[c] = -1 - c
     return label, fixed
 
 
-def kinetic_flux_coupling(A, Y, N, detach_uptakes=True, seed=0, route="iterated", draw="lp", bits=64,
-                          flux=None):
+def kinetic_flux_coupling(crn, route="iterated", detach_uptakes=True, seed=0, draw="lp", bits=64, flux=None):
     """Reactions whose rates keep a fixed ratio under mass action, and the rates that are fixed.
 
     Args:
-        A: complexes x reactions incidence matrix, one -1 and one +1 per column.
-        Y: metabolites x complexes composition matrix.
-        N: metabolites x reactions stoichiometric matrix, exact (straindesign RationalMatrix) or
-            integer; N = Y A. The network must have no blocked reactions.
+        crn: the network (:class:`kimonu.CRN`), without blocked reactions.
+        route: "iterated" (default) for couplings proven at every positive steady state, or "tangent" for every
+            true coupling and possibly false couplings (see :func:`kimonu.tangent_route`).
         detach_uptakes: give every reaction out of the zero complex its own source (default), as for
             :func:`kimonu.iterated_route`. False attaches the uptakes to the zero complex, so they run at
             constant rate.
         seed, draw, bits: of the reference flux r* (:func:`kimonu.interior_flux`). The results hold for generic rate
             constants.
-        route: "iterated" (default) for couplings proven at every positive steady state, or "tangent" for every
-            true coupling and possibly false couplings (see :func:`kimonu.tangent_route`).
         flux: a reference flux r* to use instead of drawing one.
 
-    Returns a :class:`FluxCouplingResult`. ``classes`` partition the reactions, singletons included,
-    ordered by their first reaction, and ``class_of`` gives each reaction's class, counted from 1.
-    ``n_classes`` counts the classes with more than one reaction. ``fixed_rate`` are the reactions whose
-    rate is the same at every steady state (proven by the iterated route, reported by the tangent route, which
-    can include false couplings). ``flux`` is the
-    interior flux r* the route ran at: for the rate constants k = r*, two coupled rates keep the ratio
-    r*_i / r*_j at every steady state, and a fixed rate keeps the value r*_j.
+    Returns a :class:`FluxCouplingResult`.
     """
     if route not in ("iterated", "tangent"):
         raise ValueError(f"route must be 'iterated' or 'tangent', not {route!r}")
     if flux is None:
-        flux = interior_flux(N, seed, draw, bits)
-    label, fixed = (_iterated if route == "iterated" else _tangent)(A, Y, N, detach_uptakes, flux)
-    column, _ = rate_columns(A, Y, detach_uptakes)
+        flux = interior_flux(crn, seed, draw, bits)
+    label, fixed = (_iterated if route == "iterated" else _tangent)(crn, detach_uptakes, flux)
+    column, _ = rate_columns(crn, detach_uptakes)
+    q = crn.A.shape[1]
     groups = {}
-    for j in range(A.shape[1]):
+    for j in range(q):
         groups.setdefault(label[column[j]], []).append(j)
     classes = [set(g) for g in groups.values()]
-    class_of = np.zeros(A.shape[1], dtype=np.int64)
+    class_of = np.zeros(q, dtype=np.int64)
     for idx, g in enumerate(classes, start=1):
         for j in g:
             class_of[j] = idx
@@ -140,7 +138,7 @@ def kinetic_flux_coupling(A, Y, N, detach_uptakes=True, seed=0, route="iterated"
         class_of=class_of,
         n_classes=sum(1 for g in classes if len(g) > 1),
         largest_class=max((len(g) for g in classes), default=0),
-        fixed_rate=sorted(j for j in range(A.shape[1]) if label[column[j]] in fixed),
+        fixed_rate=sorted(j for j in range(q) if label[column[j]] in fixed),
         route=route,
         flux=flux,
     )
