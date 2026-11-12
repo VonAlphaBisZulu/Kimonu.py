@@ -20,7 +20,7 @@ REC, REPO, OUT = real(records.RECORDS), real(records.REPO), real(records.OUT)
 CLUSTER = ("/scratch/sadreyev_lab/pschneider/", "/home/sadreyev_lab/pschneider/pipelines/")   # earlier results, the vault
 TMP = real(tempfile.gettempdir())
 WRITE = os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_APPEND
-SKIP = ("__pycache__", "font_cache", "/fontlist-v", "/.git/")   # caches of Python, the SVG fonts and matplotlib
+SKIP = ("__pycache__", "font_cache", "/fontlist-v", "/.git/", ".egg-info/", ".dist-info/")   # caches, package metadata
 seen = set()
 
 
