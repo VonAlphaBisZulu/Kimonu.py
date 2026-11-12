@@ -216,21 +216,21 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-benchmarks/processed/
-benchmarks/results/
-benchmarks/*.log
-benchmarks/julia/Manifest.toml
-benchmarks/published/
+scripts/processed/
+scripts/results/
+scripts/*.log
+scripts/julia/Manifest.toml
+scripts/published/
 
 # benchmark outputs: large, regenerable, and archived separately by archive_results.sh
-benchmarks/sweep/
-benchmarks/sweep_unblocked/
-benchmarks/triplicate*/
-benchmarks/reference/
-benchmarks/archive/
-benchmarks/unblocked/*.log
+scripts/sweep/
+scripts/sweep_unblocked/
+scripts/triplicate*/
+scripts/reference/
+scripts/archive/
+scripts/unblocked/*.log
 octave-workspace
-benchmarks/seedcheck_psi/
+scripts/seedcheck_psi/
 
 # SLURM logs that land in the submit directory
 slurm-*.out
