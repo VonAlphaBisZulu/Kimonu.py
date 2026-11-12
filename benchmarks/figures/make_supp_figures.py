@@ -43,7 +43,7 @@ def save(fig, stem, panels):
 def strip(ax, ylabel, title, names=True):
     ax.set_xlim(-0.6, len(MODELS) - 0.4); ax.set_xticks(range(len(MODELS)))
     ax.set_xticklabels([SHORT(m) for m in MODELS] if names else [], rotation=90, fontsize=6)
-    ax.tick_params(axis="x", length=0, pad=2)
+    ax.tick_params(axis="x", pad=2)                     # a tick at every network, the major size of the y axis
     for s in ("top", "right"): ax.spines[s].set_visible(False)
     ax.yaxis.grid(True, color=RULE, lw=0.4, zorder=0); ax.set_axisbelow(True)
     ax.set_ylabel(ylabel, labelpad=2); ax.set_title(title, fontsize=8, color=INK, loc="center", pad=4)
