@@ -104,7 +104,7 @@ def ecoli_core(name="e_coli_core"):
     """e_coli_core with reversible reactions split and blocked reactions removed (FVA), as (A, Y, N, species)"""
     import cobra
     cobra.Configuration().solver = "glpk"                 # Gurobi is node-locked on the cluster
-    from kimonu.io import build_crn
+    from kimonu.network import build_crn
     # the .mat copy: the SBML reader needs libSBML, which this environment lacks
     m = cobra.io.load_matlab_model(os.path.join(os.path.dirname(os.path.dirname(B_DIR)), "shared_models", f"{name}.mat"))
     for r in list(m.reactions):

@@ -17,9 +17,9 @@ from fractions import Fraction
 import numpy as np
 from scipy import sparse
 from kimonu import crn_from_matrices, interior_flux
-from kimonu.io import substrate_complexes, zero_complexes
+from kimonu.network import substrate_complexes, zero_complexes
 from kimonu.iterated import coupled_columns
-from kimonu.linalg import entries, fraction, null_space_rows
+from kimonu.linalg import entries, fraction, nullspace
 from kimonu.readout import composition_differences
 
 
@@ -33,7 +33,7 @@ def _psi_coupled(net, flux, detach_uptakes, equal=()):
 def _rows(net, sets, extra):
     """ker((YΔ | extra)ᵀ) in row form, one row per metabolite, or None when there is no column"""
     cols = composition_differences(net, sets) + [tuple((i, fraction(x)) for i, x in enumerate(v) if x) for v in extra]
-    return null_space_rows(cols, len(net.metabolite_ids)) if cols else None
+    return nullspace(cols, len(net.metabolite_ids)) if cols else None
 
 
 def _signature(Ycsc, rows, c):

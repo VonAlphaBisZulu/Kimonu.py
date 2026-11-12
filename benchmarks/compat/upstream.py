@@ -22,7 +22,7 @@ from collections import namedtuple
 import numpy as np
 
 import kimonu
-from kimonu.readout import complex_directions
+from kimonu.linalg import matrix_product
 from kimonu.reference import complex_graph, linkage_classes, strong_components, upstream_modules, upstream_set
 
 KineticResult = namedtuple(
@@ -39,7 +39,7 @@ def coupling_signatures(crn, modules, known_acr=()):
     """
     if not known_acr and not any(len(m) > 1 for m in modules):
         return None
-    rows = complex_directions(crn, kimonu.free_directions(crn, modules, known_acr))
+    rows = matrix_product(crn.Yt, kimonu.free_directions(crn, modules, known_acr))          # Yᵀ B
     return [rows[min(module)] for module in modules]
 
 

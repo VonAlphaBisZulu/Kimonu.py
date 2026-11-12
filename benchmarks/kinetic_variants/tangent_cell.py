@@ -37,7 +37,7 @@ modules = sorted(sorted(int(c) for c in s) for s in r.modules if len(s) > 1)
 acrr = sorted(sorted(int(x) for x in p) for p in r.acrr)
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 json.dump(dict(network=name, detached=detached, seed=seed, species=int(Y.shape[0]), complexes=int(A.shape[0]), seconds=seconds,
-               n_modules=r.n_modules, giant_module=r.giant_module, modules=modules,
+               n_modules=r.n_modules, giant_module=r.largest_module, modules=modules,
                acr=sorted(int(x) for x in r.acr), acrr=acrr), open(dest, "w"))
 print(f"{name} {'detached' if detached else 'attached'} {seconds:.2f} s, {r.n_modules} modules, "
       f"{len(r.acr)} ACR, {len(acrr)} ACRR pairs", flush=True)

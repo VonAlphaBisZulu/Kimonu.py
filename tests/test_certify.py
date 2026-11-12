@@ -1,4 +1,4 @@
-"""Both routes at one reference flux, and the one call from a cobra model (prepare, analyze).
+"""Both routes at one reference flux, and the routes on a cobra model.
 
 EnvZ-OmpR has one steady state per rate-constant set up to its conservation laws, so the routes agree and the list is
 certified. On the attached kinase of Figure 2 they differ, and X, C and P stay open, of which X is true.
@@ -45,19 +45,14 @@ def _toy():
     return m
 
 
-def test_analyze_runs_every_route_on_a_cobra_model():
+def test_every_route_runs_on_a_cobra_model():
     """Detached, the supply is free and a, b only keep their ratio. Attached, both have ACR."""
-    crn = kimonu.prepare(_toy())
+    crn = kimonu.preprocess(_toy())
     assert crn.reaction_ids == ["up", "ab", "out", "ab_rev"]
-    it = kimonu.analyze(_toy())
-    assert it.route == "iterated" and it.acr == [] and it.acrr == [("a", "b")]
-    assert kimonu.analyze(crn, detach_uptakes=False).acr == ["a", "b"]
-    assert kimonu.analyze(crn, route="tangent").acrr == [("a", "b")]
-    assert kimonu.analyze(crn, route="reference").route == "reference"
-    both = kimonu.analyze(crn, route="both")
+    it = kimonu.iterated_route(_toy())
+    assert it.route == "iterated" and it.acr == [] and it.acrr == [("a", "b")] and it.acrr_groups == [["a", "b"]]
+    assert kimonu.iterated_route(crn, detach_uptakes=False).acr == ["a", "b"]
+    assert kimonu.tangent_route(_toy()).acrr == [("a", "b")]
+    assert kimonu.reference_route(_toy()).route == "reference"
+    both = kimonu.certify(_toy())
     assert isinstance(both, kimonu.Certificate) and both.certified
-
-
-def test_analyze_rejects_an_unknown_route():
-    with pytest.raises(ValueError):
-        kimonu.analyze(kimonu.prepare(_toy()), route="sampling")

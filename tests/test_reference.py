@@ -141,7 +141,7 @@ def test_iterated_route_contains_the_coupled_pairs_of_the_reference():
     modes, with the zero complex left out."""
     for name, (R, S) in TOYS.items():
         crn, cx = network(R, S)
-        zero = kimonu.io.zero_complexes(crn)
+        zero = kimonu.network.zero_complexes(crn)
         pairs = lambda mods: {(a, b) for m in mods for a in m for b in m if a < b and a not in zero and b not in zero}
         ref = pairs(kimonu.reference_route(crn).modules)
         for detach in (True, False):

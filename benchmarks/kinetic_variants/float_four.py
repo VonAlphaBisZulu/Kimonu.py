@@ -34,10 +34,10 @@ from scipy.sparse.csgraph import minimum_spanning_tree
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.readout import complex_directions, free_directions, readout
-from kimonu.io import zero_complexes
-from kimonu.linalg import entries, exact, null_space_rows
-from kimonu.steady_state import interior_flux, rate_columns
+from kimonu.readout import free_directions, readout
+from kimonu.network import uptake_columns, zero_complexes
+from kimonu.linalg import entries, exact, matrix_product, nullspace
+from kimonu.steady_state import interior_flux
 from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
@@ -232,7 +232,7 @@ cx = [c for c in range(nc) if c not in skip]                 # the complexes tha
 def w_entries(flux):
     """W of Eq. 3 as {(metabolite, column): value} and its number of columns, filled reaction by reaction as
     kimonu.steady_state_map did up to commit f948ec4, so the float sums below add up in the order of the recorded runs"""
-    column, ncol = rate_columns(net, True)
+    column, ncol = uptake_columns(net, True)
     by_reaction = {}
     for i, j, v in entries(net.N)[0]:
         by_reaction.setdefault(j, []).append((i, v))
@@ -245,7 +245,7 @@ def w_entries(flux):
 
 def yt_rows(B):
     """Rows of Yᵀ B for the complexes that enter the modules"""
-    rows = complex_directions(net, B)
+    rows = matrix_product(net.Yt, B)                                           # Yᵀ B
     return [rows[c] for c in cx]
 
 
@@ -268,7 +268,7 @@ if DO_TANGENT:
         for k, y in net.Yt[c]:
             J[(i, k)] = J.get((i, k), Fraction(0)) + w * y
             Jf[i, k] += float(w) * float(y)
-    rows = null_space_rows(exact(((i, k, v) for (i, k), v in J.items()), (nm, nm + ncol - nc)))
+    rows = nullspace(exact(((i, k, v) for (i, k), v in J.items()), (nm, nm + ncol - nc)))
     ex = readout(net, [as_tuple(r) for r in rows[:nm]])
     ref = kimonu.tangent_route(net, detach_uptakes=True)
     assert sorted(ex.acr) == sorted(ref.acr), "tangent: own readout differs from kimonu.tangent_route"
@@ -344,7 +344,7 @@ if ITER:
                     Wq = dict(Wx)
                     for k, (c, d) in enumerate(equal):
                         Wq[(mW + k, c)], Wq[(mW + k, d)] = Fraction(1), Fraction(-1)
-                    X = ExactBasis(null_space_rows(exact(((i, j, v) for (i, j), v in Wq.items()),
+                    X = ExactBasis(nullspace(exact(((i, j, v) for (i, j), v in Wq.items()),
                                                          (mW + len(equal), ncolI)))).T
                 D, _ = rel_dist(X[cx])
                 memo_W[equal] = mst(D)

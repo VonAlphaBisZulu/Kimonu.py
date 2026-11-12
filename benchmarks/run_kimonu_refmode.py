@@ -12,7 +12,7 @@ import json, os, sys, time
 import numpy as np
 B = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
 import kimonu
-from kimonu.io import zero_complexes
+from kimonu.network import zero_complexes
 from kimonu.reference import shinar_feinberg, upstream_modules
 from run_kimonu_crn import triplets_to_sparse
 

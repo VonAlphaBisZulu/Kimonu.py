@@ -14,7 +14,8 @@ from scipy import sparse
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.readout import complex_directions, free_directions
+from kimonu.linalg import matrix_product
+from kimonu.readout import free_directions
 from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("ZM_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_accr")
@@ -33,7 +34,7 @@ for mode, detach in (("attached", False), ("detached", True)):
     mod = next((sorted(map(int, m)) for m in kin.modules if zero and zero[0] in m), [])
     members = [c for c in mod if c not in zero and c < nc]
     rows = free_directions(net, kin.modules)
-    YtB = complex_directions(net, rows)
+    YtB = matrix_product(net.Yt, rows)
     fixed = [c for c in range(nc) if c not in zero and YtB[c] == ()]
     if not detach:
         assert fixed == members, (M, len(fixed), len(members))

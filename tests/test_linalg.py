@@ -1,12 +1,12 @@
-"""The exact linear algebra helpers: the row form, reading matrices, nullspaces, proportional rows, blocked reactions."""
+"""The exact linear algebra helpers: the row form, reading matrices, products, nullspaces, and the row readout."""
 from fractions import Fraction
 
 import numpy as np
 import straindesign as sd
 from scipy import sparse
 
-from kimonu.linalg import (blocked_reactions, entries, exact, fraction, matrix_product, null_space_rows,
-                           proportional_classes, row_form, to_float)
+from kimonu.linalg import entries, exact, fraction, matrix_product, nullspace, row_form, to_float
+from kimonu.readout import row_readout
 
 N = sparse.csr_matrix(np.array([[1, -1, 0, 0], [0, 1, -1, -1]]))      # uptake of a, a -> b, two exports of b
 
@@ -37,23 +37,36 @@ def test_row_form_is_sorted_sparse_rows():
     assert row_form(exact(entries(M)[0], (3, 3))) == row_form(sparse.csr_matrix(M))
 
 
-def test_null_space_rows_and_proportional_classes():
+def test_nullspace_and_row_readout():
     """ker(N) is two-dimensional. The uptake and a -> b both carry the sum of the two exports, so rows 0 and 1 of K
     are equal, and rows 2 and 3 are proportional to neither them nor each other."""
-    rows = null_space_rows(N)
+    rows = nullspace(N)
     assert len(rows) == 4 and len({j for r in rows for j, _ in r}) == 2
     assert all(r == tuple(sorted(r)) for r in rows)
     Nd = N.toarray()
     for col in range(2):
         k = [dict(r).get(col, 0) for r in rows]
         assert all(sum(int(Nd[i, j]) * k[j] for j in range(4)) == 0 for i in range(2))
-    zero, classes = proportional_classes(rows)
-    assert zero == [] and [0, 1] in classes and len(classes) == 3
-    assert null_space_rows(row_form(N), 4) == rows
+    zero, groups, ratio = row_readout(rows)
+    assert zero == [] and [0, 1] in groups and len(groups) == 3 and ratio[1] == 1
+    assert nullspace(row_form(N), 4) == rows
 
 
-def test_null_space_of_a_matrix_without_rows_is_the_identity():
-    assert null_space_rows([], 3) == [((0, 1),), ((1, 1),), ((2, 1),)]
+def test_row_readout_gives_zero_rows_groups_and_ratios():
+    """Rows 0, 2 and 4 are proportional, row 2 = -2 · row 0 and row 4 = 1/2 · row 0, row 1 is zero, and row 3 is
+    proportional to no other row. The groups are in the order of their first row."""
+    F = Fraction
+    rows = [((0, F(2)), (3, F(-1))), (), ((0, F(-4)), (3, F(2))), ((1, F(1)),), ((0, F(1)), (3, F(-1, 2)))]
+    found = row_readout(rows)
+    assert found.zero == [1] and found.groups == [[0, 2, 4], [3]]
+    assert found.ratio == {0: 1, 2: -2, 4: F(1, 2), 3: 1}
+    for g in found.groups:
+        for i in g:
+            assert [(j, found.ratio[i] * v) for j, v in rows[g[0]]] == list(rows[i])
+
+
+def test_nullspace_of_a_matrix_without_rows_is_the_identity():
+    assert nullspace([], 3) == [((0, 1),), ((1, 1),), ((2, 1),)]
 
 
 def test_matrix_product_takes_row_forms_or_matrices():
@@ -62,12 +75,3 @@ def test_matrix_product_takes_row_forms_or_matrices():
     assert matrix_product(A, K) == [((0, 2),), ((0, 3), (1, -2)), ()]
     assert matrix_product(row_form(A), exact([(0, 0, 2), (1, 0, 1), (1, 1, -2)], (2, 2))) == \
         [((0, 2),), ((0, 3), (1, -2)), ()]
-
-
-def test_blocked_reactions_by_one_lp():
-    """A chain runs only while its export is open, and a product that nothing consumes blocks its producers."""
-    S = sparse.csr_matrix(np.array([[1, -1, 0, 0], [0, 1, -1, 0], [0, 0, 1, -1]]))    # up a, a -> b, b -> c, c out
-    assert blocked_reactions(S).tolist() == [False] * 4
-    assert blocked_reactions(S, closed=[3]).tolist() == [True] * 4
-    dead_end = sparse.csr_matrix(np.array([[1, -1, 0], [0, 1, 0], [0, 0, 1]]))           # b and the third are dead
-    assert blocked_reactions(dead_end).tolist() == [True, True, True]

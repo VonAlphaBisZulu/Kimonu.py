@@ -13,7 +13,7 @@ import pytest
 from cobra.io import read_sbml_model
 
 import kimonu
-from kimonu.io import build_crn, irreversible
+from kimonu.network import build_crn, make_irreversible
 
 SHARED = os.environ.get(
     "KIMONU_SHARED_MODELS",
@@ -33,7 +33,7 @@ def test_N_equals_Y_times_A():
     from cobra.util.array import create_stoichiometric_matrix
     m = _model("EnvZ_OmpR")
     crn = build_crn(m)
-    N_ref = create_stoichiometric_matrix(irreversible(m))          # metabolites x reactions
+    N_ref = create_stoichiometric_matrix(make_irreversible(m))          # metabolites x reactions
     assert np.array_equal(N_ref, _dense(crn) @ crn.A.toarray())
     assert np.array_equal(N_ref, crn.N.to_numpy().astype(float))
 
@@ -57,7 +57,7 @@ def test_fractional_coefficients_are_exact():
     from cobra.util.array import create_stoichiometric_matrix
     m = _model("e_coli_core")
     crn = build_crn(m)
-    S = create_stoichiometric_matrix(irreversible(m))
+    S = create_stoichiometric_matrix(make_irreversible(m))
 
     assert np.allclose(S, _dense(crn) @ crn.A.toarray())
     assert any(float(c) != int(c) for comp in crn.complexes for _, c in comp), \
@@ -122,10 +122,12 @@ TWO_FEEDS = {"k": {"U": 1}, "l": {"W": 1}, "x": {"U": 1, "W": 1}, "i": {"U": -1}
 
 
 def _coupled(model):
-    """Reaction ids grouped by proportional rows of the kernel K that concordance() computes, with the pins."""
-    from kimonu.linalg import proportional_classes
-    res = kimonu.concordance(model)
-    return {frozenset(res.reaction_ids[i] for i in c) for c in proportional_classes(res.K)[1] if len(c) > 1}
+    """Reaction ids of the fully coupled groups of mass_balance_flux_coupling, whose K, with the pins, is the K that
+    concordance() computes."""
+    crn = kimonu.preprocess(model)
+    res = kimonu.mass_balance_flux_coupling(crn)
+    assert res.K == kimonu.concordance(crn).K
+    return {frozenset(crn.reaction_ids[i] for i in g) for g in res.groups if len(g) > 1}
 
 
 def test_two_equal_pins_couple_reactions_that_still_vary():
@@ -167,8 +169,8 @@ def _random_irreversible(rng):
 
 
 def _blocked(model):
-    """Reaction ids that prepare() removes, and the pins it finds"""
-    crn = kimonu.prepare(model)
+    """Reaction ids that preprocess() removes, and the pins it finds"""
+    crn = kimonu.preprocess(model)
     return set(model.reactions.list_attr("id")) - set(crn.reaction_ids), crn.pins
 
 
@@ -209,8 +211,8 @@ def test_forced_flux_goes_through_fva_and_finds_pins():
 
 def test_concordance_of_a_network_given_as_matrices():
     """EnvZ-OmpR: five balanced complexes and a seven-dimensional kernel. K is a basis of ker(N), M = A·K, and the
-    modules are the classes of proportional nonzero rows of M."""
-    from kimonu.linalg import proportional_classes
+    modules are the groups of proportional nonzero rows of M."""
+    from kimonu.readout import row_readout
     from networks import ENVZ, ENVZ_SPECIES, matrices, network
     A, Y, N, _ = matrices(ENVZ, ENVZ_SPECIES)
     crn, cx = network(ENVZ, ENVZ_SPECIES)
@@ -222,16 +224,33 @@ def test_concordance_of_a_network_given_as_matrices():
         assert all(sum(int(Nd[i, j]) * k[j] for j in range(len(k))) == 0 for i in range(Nd.shape[0]))
         m = [dict(row).get(col, 0) for row in res.M]
         assert [sum(int(Ad[c, j]) * k[j] for j in range(len(k))) for c in range(len(cx))] == m
-    balanced, classes = proportional_classes(res.M)
-    assert balanced == res.balanced and classes == res.modules
+    balanced, groups, ratio = row_readout(res.M)
+    assert balanced == res.balanced and groups == res.modules and ratio == res.activity_ratio
+
+
+def test_activity_ratios_of_concordant_complexes():
+    """Row c of M is the activity ratio times the row of the first complex of its module, so a_c = λ a_d at every
+    steady state. On Figure 1, H is balanced, so all C+G that H net takes up returns as C+E, and the activity of C+E
+    is minus that of C+G."""
+    from networks import FIG1, network
+    crn, cx = network(FIG1, list("ABCDEFGHI"))
+    res = kimonu.concordance(crn)
+    for module in res.modules:
+        first = res.M[module[0]]
+        assert res.activity_ratio[module[0]] == 1
+        for c in module:
+            assert list(res.M[c]) == [(j, res.activity_ratio[c] * v) for j, v in first]
+    cg, ce = cx.index("C+G"), cx.index("C+E")
+    assert [cg, ce] in res.modules and res.activity_ratio[ce] == -1
+    assert set(res.activity_ratio) == set(range(len(cx))) - set(res.balanced)
 
 
 def test_pins_of_the_crn_enter_concordance():
-    """concordance(crn) uses the pins that prepare() found, and gives what concordance(model) gives. The same CRN
+    """concordance(crn) uses the pins that preprocess() found, and gives what concordance(model) gives. The same CRN
     without its pins has the partition of ker(N)."""
     net = {"k": {"X": 1}, "y": {"Y": 1}, "m": {"X": -1, "Y": -1},
            "l": {"W": 1}, "v": {"V": 1}, "n": {"W": -1, "V": -1}}
-    crn = kimonu.prepare(_toy(net, {"k": 2, "l": 7}))
+    crn = kimonu.preprocess(_toy(net, {"k": 2, "l": 7}))
     assert sorted(len(g) for g in kimonu.concordance(crn).modules) == [7]
     assert kimonu.concordance(crn).modules == kimonu.concordance(_toy(net, {"k": 2, "l": 7})).modules
     assert sorted(len(g) for g in kimonu.concordance(crn._replace(pins={})).modules) == [1, 3, 3]

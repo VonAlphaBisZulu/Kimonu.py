@@ -5,7 +5,8 @@ import numpy as np
 from scipy import sparse
 from scipy.sparse.csgraph import connected_components
 import straindesign as sd
-from kimonu.linalg import exact, matrix_product, proportional_classes, entries
+from kimonu.linalg import exact, matrix_product, entries
+from kimonu.readout import row_readout
 
 B = os.path.expanduser('~/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks')
 fig = json.load(open(f'{B}/figdata.json'))['kimonu_ref']
@@ -28,7 +29,7 @@ for f in sorted(glob.glob(f'{B}/unblocked/*_fixed.crn.json')):
     t = time.time(); K = sd.sparse_nullspace(N); dK = K.shape[1]
     rankN = q - dK; delta = n_used - ell - rankN
     Mrows = matrix_product(A.astype(np.int64), K)
-    zero, classes = proportional_classes(Mrows)
+    zero, classes, _ = row_readout(Mrows)
     nonsingle = sum(1 for c in classes if len(c) > 1)
     rankM = None
     if m in check_rank:

@@ -18,7 +18,7 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu import free_directions, readout
-from kimonu.io import zero_complexes
+from kimonu.network import zero_complexes
 from kimonu.iterated import coupled_columns
 from kimonu.reference import shinar_feinberg
 from run_kimonu_crn import triplets_to_sparse

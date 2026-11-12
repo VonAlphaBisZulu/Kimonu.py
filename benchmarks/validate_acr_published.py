@@ -164,7 +164,7 @@ def main():
                 bits.append(f"ACRR +{len(k_acrr - p_acrr)}/-{len(p_acrr - k_acrr)}")
             verdict = "exact match" if not bits else "differs: " + ", ".join(bits)
 
-            print(f"{name:<28} {A.shape[0]:>9} {kin.giant_module:>6} "
+            print(f"{name:<28} {A.shape[0]:>9} {kin.largest_module:>6} "
                   f"{f'{len(k_acr)}/{len(p_acr)}':>12} {f'{len(k_acrr)}/{len(p_acrr)}':>14} "
                   f"{seconds:>7.2f}  {verdict}")
         except Exception as exc:

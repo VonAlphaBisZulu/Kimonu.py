@@ -31,10 +31,10 @@ from concurrent.futures import ThreadPoolExecutor
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.readout import complex_directions, free_directions, readout
-from kimonu.io import zero_complexes
-from kimonu.linalg import entries, exact, null_space_rows
-from kimonu.steady_state import interior_flux, rate_columns
+from kimonu.readout import free_directions, readout
+from kimonu.network import uptake_columns, zero_complexes
+from kimonu.linalg import entries, exact, matrix_product, nullspace
+from kimonu.steady_state import interior_flux
 from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
@@ -262,7 +262,7 @@ skip = zero_complexes(net); cx = [c for c in range(nc) if c not in skip]
 def w_entries(flux):
     """W of Eq. 3 as {(metabolite, column): value} and its number of columns, filled reaction by reaction as
     kimonu.steady_state_map did up to commit f948ec4, so the float sums below add up in the order of the recorded runs"""
-    column, ncol = rate_columns(net, True)
+    column, ncol = uptake_columns(net, True)
     by_reaction = {}
     for i, j, v in entries(net.N)[0]:
         by_reaction.setdefault(j, []).append((i, v))
@@ -275,7 +275,7 @@ def w_entries(flux):
 
 def yt_rows(B):
     """Rows of Yᵀ B for the complexes that enter the modules"""
-    rows = complex_directions(net, B)
+    rows = matrix_product(net.Yt, B)                                           # Yᵀ B
     return [rows[c] for c in cx]
 
 
@@ -306,7 +306,7 @@ if PART == "tangent":
             J[(i, nm + c - nc)] = w; continue
         for k_, y in net.Yt[c]:
             J[(i, k_)] = J.get((i, k_), Fraction(0)) + w * y
-    rows = null_space_rows(exact(((i, k_, v) for (i, k_), v in J.items()), (nm, nm + ncol - nc)))
+    rows = nullspace(exact(((i, k_, v) for (i, k_), v in J.items()), (nm, nm + ncol - nc)))
     rows_m = [as_tuple(r) for r in rows[:nm]]
     ex = readout(net, rows_m)
     acr_x = np.zeros(nm, bool); acr_x[list(ex.acr)] = True
@@ -363,7 +363,7 @@ else:
             Wq = dict(Wx)
             for k_, (c, d) in enumerate(equal):
                 Wq[(mW + k_, c)], Wq[(mW + k_, d)] = Fraction(1), Fraction(-1)
-            rows = null_space_rows(exact(((i, j, v) for (i, j), v in Wq.items()), (mW + len(equal), ncolI)))
+            rows = nullspace(exact(((i, j, v) for (i, j), v in Wq.items()), (mW + len(equal), ncolI)))
             R = Rows([as_tuple(rows[c]) for c in cx])
             memo_W[equal] = (R, R.pairs(tau_max))
         return memo_W[equal]

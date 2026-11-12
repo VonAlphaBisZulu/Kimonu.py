@@ -11,7 +11,8 @@ import scipy.io as sio
 from scipy import sparse
 from scipy.sparse.csgraph import connected_components
 import straindesign as sd
-from kimonu.linalg import exact, matrix_product, proportional_classes
+from kimonu.linalg import exact, matrix_product
+from kimonu.readout import row_readout
 
 D = '/scratch/sadreyev_lab/pschneider/concordant_complexes/Results_concordant_original_irreversibility_considered'
 rows = []
@@ -45,7 +46,7 @@ for f in sorted(glob.glob(f'{D}/*.mat')):
     G = (abs(A) @ abs(A).T).tocsr(); ell, _ = connected_components(G, directed=False)
     Ai = sparse.csr_matrix(np.rint(A.toarray()).astype(np.int64))
     Mrows = matrix_product(Ai, K)
-    zero, classes = proportional_classes(Mrows)
+    zero, classes, _ = row_readout(Mrows)
     nonsingle = [c for c in classes if len(c) > 1]
     trip = [(i, j, v) for i, r in enumerate(Mrows) for j, v in r]
     rankM = dK - sd.sparse_nullspace(exact(trip, (n, dK))).shape[1] if trip else 0

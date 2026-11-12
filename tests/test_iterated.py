@@ -5,7 +5,7 @@ step, since the coupled sets of ker(W) alone leave the complexes that differ by 
 network pins the attached and detached uptake modes.
 """
 import kimonu
-from kimonu.io import zero_complexes
+from kimonu.network import zero_complexes
 from kimonu.iterated import coupled_columns
 from networks import ENVZ, ENVZ_SPECIES, OPEN, network
 
@@ -18,9 +18,9 @@ def test_envz_ompr_end_to_end():
     """Nine non-terminal complexes and X+Yp in one module, Yp the only ACR species, one 6-clique of ACRR."""
     crn, cx = network(ENVZ, ENVZ_SPECIES)
     it = kimonu.iterated_route(crn)
-    assert it.route == "iterated" and it.n_modules == 2 and it.giant_module == 10
-    giant = next(m for m in it.modules if len(m) == 10)
-    assert {cx[i] for i in giant} == {"XD", "X", "XT", "Xp+Y", "XpY", "XT+Yp", "XTYp", "XD+Yp", "XDYp", "X+Yp"}
+    assert it.route == "iterated" and it.n_modules == 2 and it.largest_module == 10
+    largest = next(m for m in it.modules if len(m) == 10)
+    assert {cx[i] for i in largest} == {"XD", "X", "XT", "Xp+Y", "XpY", "XT+Yp", "XTYp", "XD+Yp", "XDYp", "X+Yp"}
     assert it.acr == ["Yp"]
     assert len(it.acrr) == 15
     assert it.rounds == 2 and it.dimension == 2 and len(it.B) == len(ENVZ_SPECIES)
@@ -35,11 +35,11 @@ def test_feedback_is_what_couples_the_yp_complexes():
 
 
 def test_coupled_columns_partition_the_columns_and_take_the_feedback_rows():
-    """Every column of W lands in one class, and a row u_c = u_d puts c and d into one class."""
+    """Every column of W lands in one group, and a row u_c = u_d puts c and d into one group."""
     crn, cx = network(ENVZ, ENVZ_SPECIES)
     flux = kimonu.interior_flux(crn)
-    classes = coupled_columns(crn, flux)
-    assert sorted(c for g in classes for c in g) == list(range(len(cx)))
+    groups = coupled_columns(crn, flux)
+    assert sorted(c for g in groups for c in g) == list(range(len(cx)))
     xd, xdyp = cx.index("XD"), cx.index("XD+Yp")
     joined = coupled_columns(crn, flux, equal=[(xd, xdyp)])
     assert any(xd in g and xdyp in g for g in joined)

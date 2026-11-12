@@ -1,4 +1,4 @@
-"""Flux coupling under mass action: the kinetic modules lifted into flux space.
+"""Flux coupling: fully coupled reactions under mass balance, and the kinetic modules lifted into flux space.
 
 The small open network is checked by hand in both uptake modes. EnvZ-OmpR has all nine substrate
 complexes in one kinetic module, so at fixed rate constants every steady-state flux is a multiple of r*,
@@ -11,7 +11,8 @@ from fractions import Fraction
 import pytest
 
 import kimonu
-from kimonu.linalg import null_space_rows, proportional_classes
+from kimonu.linalg import nullspace
+from kimonu.readout import row_readout
 from networks import ENVZ, ENVZ_SPECIES, K, KINASE, KINASE_SPECIES, OPEN, TOYS, network
 
 
@@ -21,8 +22,7 @@ def _pairs(groups):
 
 def _flux_balance(crn):
     """Full coupling under flux balance: the proportional rows of K = ker(N)."""
-    _, classes = proportional_classes(null_space_rows(crn.N))
-    return classes
+    return row_readout(nullspace(crn.N)).groups
 
 
 def _rates(state, k=K, reactions=KINASE):
@@ -45,43 +45,43 @@ def test_open_network_by_hand():
     assert _pairs(_flux_balance(crn)) == {(0, 3)}
     for route in ("iterated", "tangent"):
         detached = kimonu.kinetic_flux_coupling(crn, route=route)
-        assert detached.classes == [{0, 1, 2, 3}] and detached.fixed_rate == [], route
+        assert detached.groups == [{0, 1, 2, 3}] and detached.fixed_rate == [], route
         attached = kimonu.kinetic_flux_coupling(crn, detach_uptakes=False, route=route)
-        assert attached.classes == [{0, 1, 2, 3}] and attached.fixed_rate == [0, 1, 2, 3], route
-        assert detached.n_classes == attached.n_classes == 1 and detached.largest_class == 4
+        assert attached.groups == [{0, 1, 2, 3}] and attached.fixed_rate == [0, 1, 2, 3], route
+        assert detached.n_groups == attached.n_groups == 1 and detached.largest_group == 4
 
 
-def test_envz_every_rate_in_one_class():
+def test_envz_every_rate_in_one_group():
     """All substrate complexes of EnvZ-OmpR lie in one kinetic module, so every rate keeps a fixed ratio to
     every other, while flux balance couples only XD <-> X and XT -> Xp with XpY -> X + Yp."""
     crn, cx = network(ENVZ, ENVZ_SPECIES)
     assert sorted(sorted(g) for g in _flux_balance(crn) if len(g) > 1) == [[0, 1], [4, 7]]
     for route in ("iterated", "tangent"):
         found = kimonu.kinetic_flux_coupling(crn, route=route)
-        assert found.n_classes == 1 and found.largest_class == len(ENVZ), route
-        assert list(found.class_of) == [1] * len(ENVZ) and found.fixed_rate == [], route
+        assert found.n_groups == 1 and found.largest_group == len(ENVZ), route
+        assert list(found.group_of) == [1] * len(ENVZ) and found.fixed_rate == [], route
 
 
 def test_flux_balance_and_both_routes_nest():
     """flux balance ⊆ iterated ⊆ tangent for the coupled pairs, iterated ⊆ tangent for the fixed rates,
-    and a fixed rate fixes its whole class, on every toy network in both uptake modes."""
+    and a fixed rate fixes its whole group, on every toy network in both uptake modes."""
     for name, (R, S) in TOYS.items():
         crn, cx = network(R, S)
         fb = _pairs(_flux_balance(crn))
         for detach in (True, False):
             it = kimonu.kinetic_flux_coupling(crn, detach_uptakes=detach)
             tan = kimonu.kinetic_flux_coupling(crn, detach_uptakes=detach, route="tangent")
-            assert fb <= _pairs(it.classes) <= _pairs(tan.classes), (name, detach)
+            assert fb <= _pairs(it.groups) <= _pairs(tan.groups), (name, detach)
             assert set(it.fixed_rate) <= set(tan.fixed_rate), (name, detach)
             for found in (it, tan):
-                assert sorted(j for g in found.classes for j in g) == list(range(len(R)))
-                for g in found.classes:
+                assert sorted(j for g in found.groups for j in g) == list(range(len(R)))
+                for g in found.groups:
                     assert not (g & set(found.fixed_rate)) or g <= set(found.fixed_rate), (name, detach, g)
 
 
-def test_classes_lift_the_kinetic_modules():
-    """Two reactions whose substrate complexes share a kinetic module share a class, and two reactions that
-    consume complexes (not detached sources) share a class only when their complexes share a module."""
+def test_groups_lift_the_kinetic_modules():
+    """Two reactions whose substrate complexes share a kinetic module share a group, and two reactions that
+    consume complexes (not detached sources) share a group only when their complexes share a module."""
     for name, (R, S) in TOYS.items():
         crn, cx = network(R, S)
         for detach in (True, False):
@@ -93,7 +93,7 @@ def test_classes_lift_the_kinetic_modules():
                 for i in substrate:
                     for j in substrate:
                         same_module = module_of[substrate[i]] == module_of[substrate[j]]
-                        assert same_module == (found.class_of[i] == found.class_of[j]), (name, detach, route, i, j)
+                        assert same_module == (found.group_of[i] == found.group_of[j]), (name, detach, route, i, j)
 
 
 def test_kinase_two_steady_states():
@@ -104,7 +104,7 @@ def test_kinase_two_steady_states():
     crn, cx = network(KINASE, KINASE_SPECIES)
     r1, r2 = (_rates({"X": 10, "C": c, "P": p}) for c, p in ((1, 4), (4, 1)))
     it = kimonu.kinetic_flux_coupling(crn, detach_uptakes=False)
-    assert [sorted(g) for g in it.classes if len(g) > 1] == [[3, 5]] and it.fixed_rate == [0]
+    assert [sorted(g) for g in it.groups if len(g) > 1] == [[3, 5]] and it.fixed_rate == [0]
     assert r1[3] / r1[5] == r2[3] / r2[5]
     assert all(r1[j] == r2[j] for j in it.fixed_rate)
     tan = kimonu.kinetic_flux_coupling(crn, detach_uptakes=False, route="tangent")
@@ -123,9 +123,35 @@ def test_ratio_is_the_ratio_at_the_reference_flux():
         rates = [r[0] * t] + _rates(x, k=r[1:], reactions=OPEN[1:])
         dx = {"a": rates[0] - rates[1] + rates[2], "b": rates[1] - rates[2] - rates[3]}
         assert not any(dx.values())
-        for g in found.classes:
+        for g in found.groups:
             i, *rest = sorted(g)
             assert all(rates[j] / rates[i] == r[j] / r[i] for j in rest)
+
+
+def test_mass_balance_coupling_gives_the_flux_ratios():
+    """EnvZ-OmpR: XD <-> X carry the same flux (λ = 1), and so do XT -> Xp and XpY -> X + Yp. On the open network,
+    the uptake and the export carry the same flux, and a -> b and b -> a are coupled to nothing."""
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    found = kimonu.mass_balance_flux_coupling(crn)
+    assert [sorted(g) for g in found.groups if len(g) > 1] == [[0, 1], [4, 7]] and found.blocked == []
+    assert found.ratio[1] == found.ratio[7] == 1 and found.n_groups == 2 and found.largest_group == 2
+    assert [sorted(g) for g in found.groups] == sorted(sorted(g) for g in _flux_balance(crn))
+    crn, cx = network(OPEN, ["a", "b"])
+    found = kimonu.mass_balance_flux_coupling(crn)
+    assert found.groups == [{0, 3}, {1}, {2}] and list(found.group_of) == [1, 2, 3, 1]
+    flux = kimonu.interior_flux(crn)
+    for g in found.groups:
+        i = min(g)
+        assert all(flux[j] == found.ratio[j] * flux[i] for j in g)
+
+
+def test_mass_balance_coupling_reports_blocked_reactions_and_ratios_other_than_one():
+    """a -> 2b with b -> 0 and a -> c without an exit: the uptake and a -> 2b are coupled, the export of b runs at
+    twice their rate, and a -> c is blocked, a zero row of K."""
+    crn, cx = network([("0", "a"), ("a", "b+b"), ("b", "0"), ("a", "c")], ["a", "b", "c"])
+    found = kimonu.mass_balance_flux_coupling(crn)
+    assert found.blocked == [3] and found.groups == [{0, 1, 2}] and list(found.group_of) == [1, 1, 1, 0]
+    assert found.ratio == {0: 1, 1: 1, 2: 2}
 
 
 def test_unknown_route():

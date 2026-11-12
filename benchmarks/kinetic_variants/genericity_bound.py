@@ -30,8 +30,9 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu import free_directions, readout, steady_state_map
-from kimonu.io import zero_complexes
-from kimonu.linalg import null_space_rows, proportional_classes
+from kimonu.network import zero_complexes
+from kimonu.linalg import nullspace
+from kimonu.readout import row_readout
 from run_kimonu_crn import triplets_to_sparse
 
 RERUN = "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111"
@@ -49,9 +50,9 @@ def iterated_ranks(net, flux):
         W, n_columns = steady_state_map(net, flux, True)
         m = len(W)
         W += [tuple(sorted(((c, 1), (d, -1)))) for c, d in equal]          # the feedback rows u_c - u_d = 0
-        rows = null_space_rows(W, n_columns)
+        rows = nullspace(W, n_columns)
         ranks.append(n_columns - len({j for r in rows for j, _ in r}))
-        _, classes = proportional_classes(rows)
+        _, classes, _ = row_readout(rows)
         coupled = [s for s in ({c for c in g if c < n} for g in classes) if s]
         found = readout(net, free_directions(net, coupled))
         if {frozenset(s) for s in found.modules} == {frozenset(s) for s in coupled}:      # as kimonu.iterated_route

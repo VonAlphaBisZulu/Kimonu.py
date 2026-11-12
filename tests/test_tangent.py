@@ -20,7 +20,7 @@ def _pairs(groups):
 
 
 def test_envz_both_routes_agree():
-    """One steady state per class: modules, ACR (Yp) and the 6-clique of ACRR are the iterated ones."""
+    """One steady state per compatibility class: modules, ACR (Yp) and the 6-clique of ACRR are the iterated ones."""
     crn, cx = network(ENVZ, ENVZ_SPECIES)
     tan = kimonu.tangent_route(crn)
     it = kimonu.iterated_route(crn)

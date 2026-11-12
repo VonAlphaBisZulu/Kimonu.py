@@ -28,8 +28,8 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu import free_directions, readout, steady_state_map
-from kimonu.io import zero_complexes
-from kimonu.linalg import null_space_rows
+from kimonu.network import zero_complexes
+from kimonu.linalg import nullspace
 from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("CM_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_cert_modp")
@@ -64,7 +64,7 @@ log("exact", round(time.time() - t0, 1), "s")
 
 # ---- a uniform point of ker N mod p
 t0 = time.time()
-K = null_space_rows(net.N)
+K = nullspace(net.N)
 d = max((j for r in K for j, _ in r), default=-1) + 1
 rng = np.random.default_rng(SEED)
 b = [int(rng.integers(0, P)) for _ in range(d)]

@@ -14,8 +14,8 @@ import numpy as np, scipy.sparse as sp, straindesign as sd
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src")); sys.path.insert(0, os.path.join(os.path.dirname(B), "tests"))
 import kimonu
-from kimonu import complex_directions, free_directions, interior_flux
-from kimonu.linalg import entries, null_space_rows, proportional_classes
+from kimonu import free_directions, interior_flux, row_readout
+from kimonu.linalg import entries, matrix_product, nullspace
 
 def psi_kernel(A, Y, N, flux, equal=()):
     n = A.shape[0]; Acsc = A.tocsc(); substrate = {}
@@ -29,8 +29,8 @@ def psi_kernel(A, Y, N, flux, equal=()):
         for i, v in by.get(j, ()): W[(i, s)] = W.get((i, s), Fraction(0)) + flux[j] * v
     for k, (c, d) in enumerate(equal): W[(m + k, c)], W[(m + k, d)] = Fraction(1), Fraction(-1)
     Wx = sd.RationalMatrix.from_fractions(((i, j, x) for (i, j), x in W.items() if x != 0), (m + len(equal), n))
-    K = null_space_rows(Wx)                       # classes of proportional nonzero rows of ker(W)
-    return len({j for row in K for j, _ in row}), proportional_classes(K)[1], set(substrate.values())
+    K = nullspace(Wx)                             # groups of proportional nonzero rows of ker(W)
+    return len({j for row in K for j, _ in row}), row_readout(K).groups, set(substrate.values())
 
 def check(A, Y, N):
     net = kimonu.crn_from_matrices(A, Y)
@@ -42,7 +42,7 @@ def check(A, Y, N):
         out.append((nullity, len(classes)))
         coupled = [set(g) for g in classes]
         coupled = [s for s in coupled if len(s) > 1 or next(iter(s)) in subs]
-        YtB = complex_directions(net, free_directions(net, coupled))      # read out only the complexes of the sets
+        YtB = matrix_product(net.Yt, free_directions(net, coupled))      # Yᵀ B, read out only for the sets
         groups = {}
         for c in sorted(set().union(*coupled)):
             groups.setdefault(YtB[c], set()).add(c)

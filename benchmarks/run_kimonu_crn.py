@@ -187,7 +187,7 @@ def main():
            "n_concordant_pairs": result.n_concordant_pairs,
            "n_sccs": len(sccs), "largest_scc": max((len(c) for c in sccs), default=0),
            "n_terminal_sccs": terminal,
-           "n_kinetic_modules": kin.n_modules, "giant_kinetic_module": kin.giant_module,
+           "n_kinetic_modules": kin.n_modules, "giant_kinetic_module": kin.largest_module,
            "kinetic_route": "iterated" + ("_detached" if args.detach_uptakes else ""),
            "deficiency": None,
            "kinetic_iterations": kin.rounds,

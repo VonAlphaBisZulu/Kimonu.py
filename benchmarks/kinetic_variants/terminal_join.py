@@ -21,7 +21,7 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from compat.upstream import coupling_signatures
-from kimonu.io import substrate_complexes, zero_complexes
+from kimonu.network import substrate_complexes, zero_complexes
 
 
 def join_terminals(net, result, detach_uptakes=False):

@@ -17,7 +17,7 @@ B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu import steady_state
-from kimonu.linalg import null_space_rows, to_float
+from kimonu.linalg import nullspace, to_float
 from run_kimonu_crn import triplets_to_sparse
 
 M, dest = sys.argv[1], sys.argv[2]
@@ -32,7 +32,7 @@ def unrounded(seed=0):
     rng = np.random.default_rng(seed)
     lower = 1 + rng.random(q)
     lp = linprog(rng.random(q), A_eq=Nf, b_eq=np.zeros(m), bounds=[(lo, None) for lo in lower], method="highs")
-    K = null_space_rows(net.N)
+    K = nullspace(net.N)
     free = {}
     for i, row in enumerate(K):
         if len(row) == 1:
@@ -45,7 +45,7 @@ def unrounded(seed=0):
 
 
 def summary(r, seconds, flux):
-    return dict(seconds=seconds, n_modules=r.n_modules, giant=r.giant_module, acr=len(r.acr), acrr_pairs=len(r.acrr),
+    return dict(seconds=seconds, n_modules=r.n_modules, giant=r.largest_module, acr=len(r.acr), acrr_pairs=len(r.acrr),
                 acrr_groups=len(getattr(r, "acrr_groups", []) or []), max_bits=max(int(x).bit_length() for x in flux),
                 modules=sorted(sorted(int(c) for c in s) for s in r.modules if len(s) > 1),
                 acr_list=sorted(int(x) for x in r.acr), acrr_list=sorted(sorted(int(x) for x in p) for p in r.acrr))

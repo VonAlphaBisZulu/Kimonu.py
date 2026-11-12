@@ -12,7 +12,8 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "src")); sys.path.insert(0, os.path.join(ROOT, "tests"))
 from networks import matrices, ENVZ, ENVZ_SPECIES
-from kimonu.linalg import matrix_product, null_space_rows, proportional_classes
+from kimonu.linalg import matrix_product, nullspace
+from kimonu.readout import row_readout
 from kimonu import crn_from_matrices, free_directions, readout, steady_state_map, tangent_route
 
 NAME = dict(zip(ENVZ_SPECIES, "ABCDEFGHI"))
@@ -56,19 +57,19 @@ p(tex(dense(as_rows(Y), len(CX)), SP, CX, "Y"))
 p(tex(dense(as_rows(A), len(RX)), CX, RX, "A"))
 
 # flux coupling: K = ker N
-Krows = null_space_rows(crn.N)
+Krows = nullspace(crn.N)
 d = max((j for r in Krows for j, _ in r), default=-1) + 1
 p("\n### S1.2 Flux coupling: $\\mathbf{K} = \\ker(\\mathbf{N})$\n")
 p(f"An exact basis with {d} columns. Zero rows are blocked reactions (none), proportional rows are fully coupled reactions.\n")
 p(tex(dense(Krows, d), RX, [f"k{j + 1}" for j in range(d)], "K"))
-zr, cl = proportional_classes(Krows)
+zr, cl, _ = row_readout(Krows)
 p("Fully coupled: " + "; ".join("{" + ", ".join(RX[i] for i in g) + "}" for g in cl if len(g) > 1) + ".\n")
 
 # concordance: M = A K
 Mrows = matrix_product(crn.A, Krows)
 p("\n### S1.3 Balanced and concordant complexes: $\\mathbf{M} = \\mathbf{A}\\mathbf{K}$\n")
 p(tex(dense(Mrows, d), CX, [f"k{j + 1}" for j in range(d)], "M"))
-zr, cl = proportional_classes(Mrows)
+zr, cl, _ = row_readout(Mrows)
 p("Balanced (zero rows): " + ", ".join(CX[i] for i in zr) + ". Concordance modules (proportional rows): "
   + "; ".join("{" + ", ".join(CX[i] for i in g) + "}" for g in cl if len(g) > 1) + ".\n")
 
@@ -81,9 +82,9 @@ p(tex(dense(W, nc), SP, CX, r"W = \mathbf{N}\,\mathrm{diag}(\mathbf{r}^*)\,\math
 equal, rnd = [], 0
 while True:
     rnd += 1
-    Wrows = null_space_rows(W + [tuple(sorted(((c, 1), (e, -1)))) for c, e in equal], nc)
+    Wrows = nullspace(W + [tuple(sorted(((c, 1), (e, -1)))) for c, e in equal], nc)
     dw = max((j for r in Wrows for j, _ in r), default=-1) + 1
-    _, cls = proportional_classes(Wrows)
+    _, cls, _ = row_readout(Wrows)
     sets = [set(g) for g in cls]
     p(f"\n**Round {rnd}.** $\\ker(\\mathbf{{W}})$" + (" with the feedback rows $u_c - u_d$" if equal else "")
       + f" has {dw} dimensions. Equal rows give the coupled sets "

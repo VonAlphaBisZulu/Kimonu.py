@@ -1,16 +1,19 @@
-"""build_crn on cobra models: the zero complex has its own row, so uptake and export reactions have
-a substrate and a product complex. Without that row, mass action loses the uptake rates (W u = 0 is
-then not the steady-state condition) and kinetic modules couple complexes that are not coupled."""
+"""Networks and preprocessing: build_crn on cobra models, preprocess, as_crn, and the blocked-reaction LP.
+
+The zero complex has its own row, so uptake and export reactions have a substrate and a product complex. Without that
+row, mass action loses the uptake rates (W u = 0 is then not the steady-state condition) and kinetic modules couple
+complexes that are not coupled."""
 import os
 from fractions import Fraction
 
 import numpy as np
 import pytest
 import cobra
+from scipy import sparse
 
 import kimonu
-from kimonu.io import build_crn, irreversible, substrate_complexes, zero_complexes
 from kimonu.linalg import matrix_product
+from kimonu.network import _blocked_reactions, build_crn, make_irreversible, substrate_complexes, zero_complexes
 
 SHARED = os.environ.get(
     "KIMONU_SHARED_MODELS",
@@ -111,12 +114,12 @@ def _bounded(**bounds):
 
 def test_a_network_without_reversible_reactions_is_left_as_it_is():
     m = _bounded(lb=0, ub=1000)
-    assert irreversible(m) is m
+    assert make_irreversible(m) is m
 
 
 def test_a_reversible_reaction_becomes_two():
     m = _bounded(lb=-5, ub=7)
-    split = irreversible(m)
+    split = make_irreversible(m)
     assert m.reactions.r.lower_bound == -5 and len(m.reactions) == 3        # the input is not changed
     forward, reverse = split.reactions.r, split.reactions.r_rev
     assert (forward.lower_bound, forward.upper_bound, reverse.lower_bound, reverse.upper_bound) == (0, 7, 0, 5)
@@ -124,7 +127,7 @@ def test_a_reversible_reaction_becomes_two():
 
 
 def test_a_reaction_that_only_runs_backwards_is_replaced():
-    split = irreversible(_bounded(lb=-5, ub=-2))
+    split = make_irreversible(_bounded(lb=-5, ub=-2))
     assert "r" not in split.reactions and (split.reactions.r_rev.lower_bound, split.reactions.r_rev.upper_bound) == (2, 5)
 
 
@@ -159,7 +162,7 @@ def test_concordance_does_not_change_with_the_split():
     def sizes(r):
         return r.n_balanced, sorted(len(g) for g in r.modules)
     m = _bounded(lb=-1000, ub=1000)
-    assert sizes(kimonu.concordance(m)) == sizes(kimonu.concordance(irreversible(m)))
+    assert sizes(kimonu.concordance(m)) == sizes(kimonu.concordance(make_irreversible(m)))
 
 
 def test_substrate_complexes_of_the_toy():
@@ -168,17 +171,62 @@ def test_substrate_complexes_of_the_toy():
     assert crn.complexes[0] == () and substrate_complexes(crn) == {0: 0, 1: 1, 2: 2, 3: 2}
 
 
-def test_prepare_removes_blocked_reactions_and_leaves_the_model_alone():
+def test_preprocess_removes_blocked_reactions_and_leaves_the_model_alone():
     """A dead end y -> z (nothing feeds y) is blocked, and its metabolites go with it."""
     m = _toy()
     y, z = cobra.Metabolite("y"), cobra.Metabolite("z")
     dead = cobra.Reaction("dead", lower_bound=0, upper_bound=1000)
     m.add_reactions([dead]); dead.add_metabolites({y: -1, z: 1})
-    crn = kimonu.prepare(m)
+    crn = kimonu.preprocess(m)
     assert crn.reaction_ids == ["up", "ab", "ba", "out"] and crn.metabolite_ids == ["a", "b"] and crn.pins == {}
     assert "dead" in m.reactions
 
 
-def test_prepare_splits_reversible_reactions():
-    crn = kimonu.prepare(_bounded(lb=-1000, ub=1000))
+def test_preprocess_splits_reversible_reactions():
+    crn = kimonu.preprocess(_bounded(lb=-1000, ub=1000))
     assert crn.reaction_ids == ["up", "r", "out", "r_rev"]
+
+
+def test_as_crn_passes_a_crn_and_preprocesses_a_model():
+    """A CRN comes back as it is. A cobra model is preprocessed, so its dead end goes, or only built with
+    preprocess=False, so the dead end stays."""
+    m = _toy()
+    y, z = cobra.Metabolite("y"), cobra.Metabolite("z")
+    dead = cobra.Reaction("dead", lower_bound=0, upper_bound=1000)
+    m.add_reactions([dead]); dead.add_metabolites({y: -1, z: 1})
+    crn = kimonu.preprocess(m)
+    assert kimonu.as_crn(crn) is crn
+    assert kimonu.as_crn(m).reaction_ids == crn.reaction_ids == ["up", "ab", "ba", "out"]
+    assert kimonu.as_crn(m, preprocess=False).reaction_ids == ["up", "ab", "ba", "out", "dead"]
+
+
+def test_every_analysis_takes_a_cobra_model():
+    """Each entry point preprocesses a cobra model as as_crn does, and gives what it gives on the CRN."""
+    m = _bounded(lb=-1000, ub=1000)
+    crn = kimonu.preprocess(m)
+    flux = kimonu.interior_flux(crn)
+    assert kimonu.interior_flux(m) == flux
+    assert kimonu.concordance(m).modules == kimonu.concordance(crn).modules
+    for route in (kimonu.iterated_route, kimonu.tangent_route):
+        assert route(m).modules == route(crn).modules and route(m).acrr == route(crn).acrr
+    assert kimonu.reference_route(m).modules == kimonu.reference_route(crn).modules
+    assert kimonu.certify(m).certified == kimonu.certify(crn).certified
+    assert kimonu.kinetic_flux_coupling(m).groups == kimonu.kinetic_flux_coupling(crn).groups
+    assert kimonu.mass_balance_flux_coupling(m).groups == kimonu.mass_balance_flux_coupling(crn).groups
+    assert kimonu.rate_constants(m, flux, [2, 3]) == kimonu.rate_constants(crn, flux, [2, 3])
+    assert kimonu.relation_values(m, flux).acrr == kimonu.relation_values(crn, flux).acrr
+    assert kimonu.binomial_formulas(m).constraints == kimonu.binomial_formulas(crn).constraints
+    assert kimonu.steady_state_map(m, flux) == kimonu.steady_state_map(crn, flux)
+    assert kimonu.tangent_space(m, flux) == kimonu.tangent_space(crn, flux)
+    B = kimonu.free_directions(crn, kimonu.iterated_route(crn).modules)
+    assert kimonu.free_directions(m, kimonu.iterated_route(crn).modules) == B
+    assert kimonu.readout(m, B) == kimonu.readout(crn, B)
+
+
+def test_blocked_reactions_by_one_lp():
+    """A chain runs only while its export is open, and a product that nothing consumes blocks its producers."""
+    S = sparse.csr_matrix(np.array([[1, -1, 0, 0], [0, 1, -1, 0], [0, 0, 1, -1]]))    # up a, a -> b, b -> c, c out
+    assert _blocked_reactions(S).tolist() == [False] * 4
+    assert _blocked_reactions(S, closed=[3]).tolist() == [True] * 4
+    dead_end = sparse.csr_matrix(np.array([[1, -1, 0], [0, 1, 0], [0, 0, 1]]))           # b and the third are dead
+    assert _blocked_reactions(dead_end).tolist() == [True, True, True]

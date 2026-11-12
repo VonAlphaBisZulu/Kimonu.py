@@ -14,7 +14,7 @@ from scipy import sparse
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.io import substrate_complexes
+from kimonu.network import substrate_complexes
 from kimonu import interior_flux
 from run_kimonu_crn import triplets_to_sparse
 

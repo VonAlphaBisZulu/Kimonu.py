@@ -8,7 +8,8 @@ from fractions import Fraction
 
 import numpy as np
 import kimonu
-from kimonu.readout import Readout, complex_directions, composition_differences, route_result
+from kimonu.linalg import matrix_product
+from kimonu.readout import Readout, composition_differences, route_result
 from networks import ENVZ, ENVZ_SPECIES, OPEN, TOYS, network
 
 # EnvZ-OmpR as COCOA constructs it: 9 species, 13 complexes.
@@ -31,7 +32,7 @@ COMPLEXES = [
     {"X": 1, "Yp": 1},         # 12
 ]
 
-# The kinetic modules of this network; the large one is the giant module.
+# The kinetic modules of this network; the large one is the largest module.
 KINETIC_MODULES = [{0, 1, 2, 3, 5, 6, 8, 10, 11}, {9}, {4}, {7}, {12}]
 
 
@@ -84,11 +85,11 @@ def test_composition_differences_against_the_first_member():
     assert rows == [((METABOLITES.index("Yp"), -1),), ((0, 1),)]
 
 
-def test_complex_directions_are_the_rows_of_yt_b():
+def test_equal_rows_of_yt_b_are_the_modules():
     """Row c of Yᵀ B adds the rows of B of complex c's metabolites, and equal rows are the readout's modules."""
     crn = _crn()
     B = kimonu.free_directions(crn, KINETIC_MODULES)
-    rows = complex_directions(crn, B)
+    rows = matrix_product(crn.Yt, B)
     assert len(rows) == len(COMPLEXES)
     groups = {}
     for c, row in enumerate(rows):
@@ -110,7 +111,21 @@ def test_route_result_names_metabolites_and_gives_every_acrr_pair():
     found = Readout(modules=[{0, 1}] + [{c} for c in range(2, len(cx))], acr=[6], acrr_groups=[[3, 0, 1]])
     res = route_result("iterated", crn, found, dimension=1)
     assert res.acr == ["Yp"] and res.acrr == [("XD", "X"), ("Xp", "X"), ("Xp", "XD")]
-    assert res.n_modules == 1 and res.giant_module == 2 and list(res.module_of[:3]) == [1, 1, 2]
+    assert res.acrr_groups == [["XD", "X", "Xp"]]
+    assert res.n_modules == 1 and res.largest_module == 2 and list(res.module_of[:3]) == [1, 1, 2]
+
+
+def test_acrr_groups_join_pairs_that_share_a_metabolite():
+    """The reference route's Shinar–Feinberg pairs (0, 1) and (1, 3) give one group of three, while acrr keeps the
+    pairs as they are. EnvZ-OmpR's iterated route has one group of six, the 15 pairs of acrr."""
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    found = Readout(modules=[{c} for c in range(len(cx))], acr=[], acrr_groups=[[0, 1], [1, 3], [4, 5]])
+    res = route_result("reference", crn, found)
+    assert res.acrr == [("X", "Xp"), ("XD", "X"), ("Y", "XpY")]
+    assert res.acrr_groups == [["XD", "X", "Xp"], ["Y", "XpY"]]
+    it = kimonu.iterated_route(crn)
+    assert len(it.acrr_groups) == 1 and len(it.acrr_groups[0]) == 6 and len(it.acrr) == 15
+    assert sum(len(g) - 1 for g in it.acrr_groups) == 5
 
 
 def test_readout_reproduces_the_iterated_route():

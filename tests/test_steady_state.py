@@ -7,7 +7,7 @@ from fractions import Fraction
 import pytest
 
 import kimonu
-from kimonu.steady_state import rate_columns, with_sources
+from kimonu.network import uptake_columns, with_sources
 from networks import ENVZ, ENVZ_SPECIES, OPEN, network
 
 
@@ -74,13 +74,13 @@ def test_blocked_network_is_rejected():
         kimonu.interior_flux(crn)
 
 
-def test_rate_columns_give_a_detached_uptake_its_own_source():
+def test_uptake_columns_give_a_detached_uptake_its_own_source():
     """0 -> a, a <-> b, b -> 0. Attached, the uptake runs from the zero complex. Detached, from a source after the
     three complexes."""
     crn, cx = network(OPEN, ["a", "b"])
     zero, a, b = cx.index("0"), cx.index("a"), cx.index("b")
-    assert rate_columns(crn, detach_uptakes=False) == ({0: zero, 1: a, 2: b, 3: b}, 3)
-    assert rate_columns(crn) == ({0: 3, 1: a, 2: b, 3: b}, 4)
+    assert uptake_columns(crn, detach_uptakes=False) == ({0: zero, 1: a, 2: b, 3: b}, 3)
+    assert uptake_columns(crn) == ({0: 3, 1: a, 2: b, 3: b}, 4)
 
 
 def test_with_sources_adds_one_species_per_detached_uptake():

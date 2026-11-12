@@ -12,7 +12,7 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import numpy as np
 import kimonu
-from kimonu.io import substrate_complexes
+from kimonu.network import substrate_complexes
 from run_kimonu_crn import triplets_to_sparse
 
 

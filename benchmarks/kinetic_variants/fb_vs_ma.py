@@ -41,9 +41,9 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.readout import complex_directions, free_directions, readout
-from kimonu.io import substrate_complexes, zero_complexes
-from kimonu.linalg import null_space_rows, proportional_classes
+from kimonu.readout import free_directions, readout, row_readout
+from kimonu.network import substrate_complexes, zero_complexes
+from kimonu.linalg import matrix_product, nullspace
 from kimonu.steady_state import interior_flux, steady_state_map
 from run_kimonu_crn import triplets_to_sparse
 
@@ -102,14 +102,14 @@ def iterated(net, detach, column):
     W, n_columns = steady_state_map(net, it.flux, detach)
     equal = [(min(g), c) for g in it.modules for c in g if c != min(g)]
     W += [tuple(sorted(((c, 1), (d, -1)))) for c, d in equal]
-    zero, classes = proportional_classes(null_space_rows(W, n_columns))
+    zero, classes, _ = row_readout(nullspace(W, n_columns))
     assert not zero and n_columns == max(n, 1 + max(column.values())), "columns"
     of_column = labels(classes, n_columns)
     # the classes of ker(W), restricted to the complexes, are the kinetic modules
     skip = zero_complexes(net) if detach else set()
     assert {frozenset(g) for g in it.modules if len(g) > 1} == \
         {frozenset(g) for g in ({c for c in cl if c < n and c not in skip} for cl in classes) if len(g) > 1}, "modules"
-    YtL = complex_directions(net, free_directions(net, it.modules, it.acr))
+    YtL = matrix_product(net.Yt, free_directions(net, it.modules, it.acr))                   # Yᵀ B
     fixed = {c for c in range(n) if c not in skip and not YtL[c]}
     return it.modules, of_column, fixed, it.rounds
 
@@ -121,7 +121,7 @@ def tangent(net, detach):
     skip = zero_complexes(net) if detach else set()
     rows = kimonu.tangent_space(net, interior_flux(net, 0), detach)           # ker(W Yᵀ), sources after the metabolites
     modules = readout(net, rows[:m], detach).modules
-    signature = complex_directions(net, rows[:m]) + rows[m:]
+    signature = matrix_product(net.Yt, rows[:m]) + rows[m:]                                 # Yᵀ B, sources
     keys = {}
     of_column = [keys.setdefault(s, len(keys)) for s in signature]
     for c in skip:                                 # a detached zero complex is no reaction's substrate
@@ -146,7 +146,7 @@ def reactions(fb, same, ma, fixed, column, n):
 def check_src(net, detach, route, lab):
     """kimonu.kinetic_flux_coupling must give the classes of this script; returns its fixed-rate count."""
     src = kimonu.kinetic_flux_coupling(net, route=route, detach_uptakes=detach)
-    assert len(set(zip(src.class_of, lab))) == len(set(src.class_of)) == len(set(lab)), (route, "src classes")
+    assert len(set(zip(src.group_of, lab))) == len(set(src.group_of)) == len(set(lab)), (route, "src classes")
     return len(src.fixed_rate)
 
 
@@ -183,7 +183,7 @@ if __name__ == "__main__":
 
     # flux balance: full coupling from K, concordance from M = A K
     t0 = time.time()
-    blocked, classes = proportional_classes(null_space_rows(net.N))
+    blocked, classes, _ = row_readout(nullspace(net.N))
     assert not blocked, "blocked reactions"
     fb = labels(classes, nr); same = [column[j] for j in range(nr)]
     conc = kimonu.concordance(net)

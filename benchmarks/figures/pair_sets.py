@@ -21,7 +21,7 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(B)
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.io import zero_complexes
+from kimonu.network import zero_complexes
 from kimonu.reference import shinar_feinberg
 from run_kimonu_crn import triplets_to_sparse
 from figures.gather_figdata import read_pairs
