@@ -84,9 +84,14 @@ and the scripts that read it.
 
 ## Software and hardware
 
-- Kimonu. The runs used commit 451a748 (`provenance_*.txt`). Later commits up to the snapshot @COMMIT@ change the
-  package (`src/kimonu`) only in docstrings. The latest stable version of Kimonu is under the releases of the
-  repository, https://github.com/VonAlphaBisZulu/Kimonu.py/releases.
+- Kimonu. The runs used commit 451a748 (`provenance_*.txt`). Later commits up to the snapshot @COMMIT@ restructure
+  the package (`src/kimonu`), with new module and function names, without changing its results. Up to commit ed9240e
+  they change it only in docstrings. After that, `benchmarks/kinetic_variants/refactor_equivalence.py` (run by
+  `refactor_equivalence.sbatch`) ran concordance, the iterated and the tangent route with detached and attached
+  uptakes, certify and kinetic flux coupling on all 33 networks at commit ed9240e and after the restructuring, and
+  every result was identical (modules, ACR, ACRR, counts, K, M, B, the flux r* and the coupling groups). The latest
+  stable version of Kimonu is under the releases of the repository,
+  https://github.com/VonAlphaBisZulu/Kimonu.py/releases.
 - StrainDesign 1.19.2 (git tag v1.19.2, commit 7143904), whose sparse RREF in rational arithmetic computes every
   nullspace.
 - Python 3.12.12 with NumPy 2.4.3, SciPy 1.17.1 (HiGHS), SymPy 1.14.0, cobra 0.30.0, optlang 1.8.3, python-flint 0.9.0

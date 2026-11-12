@@ -31,7 +31,7 @@ import datetime, fnmatch, glob, hashlib, json, os, re, shutil, subprocess, sys, 
 SCRATCH = "/scratch/sadreyev_lab/pschneider/"
 RERUN = SCRATCH + "kimonu_rerun_1111/"
 CODE = (".py", ".pyc", ".sbatch", ".sh", ".R", ".m", ".jl")
-RUN_COMMIT = "451a748"          # Kimonu commit of the final runs (provenance_*.txt); src changed only in docstrings since
+RUN_COMMIT = "451a748"          # Kimonu commit of the final runs (provenance_*.txt); later src gives the same results
 PLACED, ENV = "place", "env"
 
 # archive path, source (a directory, taken whole without code, or a glob), (PLACED, path under benchmarks/) or
@@ -457,7 +457,8 @@ desc = (f"<p>Run records and figure data of the article \"{esc(paper)}\" by Phil
         + f"</ul><p>SHA256SUMS lists every file with its checksum, and link_records.sh links the records into a checkout "
           f"of the repository, so that the scripts in benchmarks/ rebuild the figures, tables and numbers. The Kimonu "
           f"results were computed with commit {RUN_COMMIT} of <a href=\"{REPO}\">{REPO}</a>, and later commits up to the "
-          f"snapshot change the package only in docstrings. Data, records and figures are licensed under CC BY 4.0, and "
+          f"snapshot restructure the package without changing its results (benchmarks/kinetic_variants/"
+          f"refactor_equivalence.py). Data, records and figures are licensed under CC BY 4.0, and "
           f"the code in the snapshot under the Apache License 2.0.</p>")
 record = {"metadata": {
     "upload_type": "dataset", "title": TITLE,
