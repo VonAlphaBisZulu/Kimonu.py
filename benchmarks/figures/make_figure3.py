@@ -62,10 +62,9 @@ ARMS = {"kimonu_det":  ("Kimonu (iterated route)",           GREEN, "o", True, "
         "ref_sampled": ("Reference, sampled",                BLUE,  "s", False, "--"),
         "cocoa_false": ("COCOA.jl, efficient=false",         RED,   "^", True, "-"),
         "cocoa_true":  ("COCOA.jl, efficient=true",          RED,   "^", False, "--")}
-SHORT = {"iIS312_Trypomastigote": "iIS312 Trypomastigote", "iIS312_Amastigote": "iIS312 Amastigote",
-         "iIS312_Epimastigote": "iIS312 Epimastigote", "Saha2011iRS1597": "iRS1597"}
+from names import NAME as SHORT                    # one display name per network (figures/names.py)
 COLS = [("nC", "Complexes"), ("balanced", "Balanced\ncomplexes"), ("conc", "Concordance\nmodules"),
-        ("n_kinetic", "Kinetic\nmodules"), ("giant", "Largest\nmodule"), ("acr_free", "ACR\nspecies"), ("acrr_ratios_free", "ACRR\nratios")]
+        ("n_kinetic", "Kinetic\nmodules"), ("giant", "Largest\nmodule"), ("acr_free", "ACR\nmetabolites"), ("acrr_ratios_free", "ACRR\nratios")]
 T = {1: "1 s", 60: "1 min", 3600: "1 h", 86400: "1 day"}
 
 def seconds(arm, m):
@@ -151,7 +150,7 @@ for arm in A_ORDER:
     axS.plot(10 ** gx, 10 ** (a0 + b * gx), color=col, lw=1.1, ls=ls, zorder=2)
     mark(axS, X, Y, arm, s=14 if mk != "^" else 16)
     handles.append(Line2D([], [], color=col, lw=1.1, ls=ls, marker=mk, ms=4 if mk != "^" else 4.5, mfc=col if filled else "white",
-                          mec="white" if filled else col, mew=0.5 if filled else 0.9, label=f"{lab}\n" + (f"({CITE[arm]})\n" if arm in CITE else "") + f"{len(X)} models, slope {b:.2f}"))
+                          mec="white" if filled else col, mew=0.5 if filled else 0.9, label=f"{lab}\n" + (f"({CITE[arm]})\n" if arm in CITE else "") + f"{len(X)} networks, slope {b:.2f}"))
 axS.set_xscale("log"); axS.set_yscale("log"); axS.set_xlim(900, 2.7e4); axS.set_ylim(0.05, 2e6)
 axS.set_xticks([1000, 2000, 5000, 10000, 20000]); axS.set_xticklabels(["1000", "2000", "5000", "10 000", "20 000"]); axS.minorticks_off()
 axS.set_yticks([0.1, 1, 10, 100, 1e3, 1e4, 1e5, 1e6]); axS.set_yticklabels(["0.1", "1", "10", r"$10^2$", r"$10^3$", r"$10^4$", r"$10^5$", r"$10^6$"])
@@ -190,7 +189,7 @@ for key, col, mk, lab in (("minors", PURPLE, "s", "Symbolic minors (Pascual-Escu
     b_handles.append(Line2D([], [], ls="", marker=mk, ms=4, color=col, mew=0, label=lab))
 exact = [small[r["network"]] for r in rows if r["network"] in small] + list(genome.values())
 x, y = zip(*exact); axB.scatter(x, np.maximum(y, 1e-3), s=14, color=GREEN, marker="o", edgecolor="white", linewidths=0.3, zorder=4)
-b_handles.append(Line2D([], [], ls="", marker="o", ms=4, color=GREEN, mew=0, label=f"One exact nullspace (Kimonu, tangent route)\nat most {max(t for _, t in genome.values()):.0f} s on {len(genome)} models, one core"))
+b_handles.append(Line2D([], [], ls="", marker="o", ms=4, color=GREEN, mew=0, label=f"One exact nullspace (Kimonu, tangent route)\nat most {max(t for _, t in genome.values()):.0f} s on {len(genome)} networks, one core"))
 axB.set_xscale("log"); axB.set_yscale("log"); axB.set_xlim(1.4, 2.7e4); axB.set_ylim(6e-4, LIMIT * 6); axB.minorticks_off()
 axB.set_xticks([10, 100, 1000, 10000]); axB.set_xticklabels(["10", r"$10^2$", r"$10^3$", r"$10^4$"])
 axB.set_yticks([1e-3, 1e-2, 0.1, 1, 10, 100, 1e3]); axB.set_yticklabels(["0.001", "0.01", "0.1", "1", "10", r"$10^2$", r"$10^3$"])
@@ -233,7 +232,7 @@ for ax, k, title in ((axK, "pairs", "coupled complex pairs"), (axR, "fixed", "fi
                 ax.plot([x, x], [max(c[1], 0.8, lo), min(c[2], hi)], color=INK, lw=0.5, zorder=3, solid_capstyle="butt")
                 if c[2] > hi: print(f"whisker cut at the axis top: {arm} {m} {k} {c}")
     ax.set_yscale("log"); ax.set_xlim(-0.55, n - 0.45); ax.minorticks_off()
-    ax.set_xticks(range(n)); ax.set_xticklabels([SHORT.get(m, m).replace(" Trypomastigote", " Try").replace(" Amastigote", " Ama").replace(" Epimastigote", " Epi") for m in REF],
+    ax.set_xticks(range(n)); ax.set_xticklabels([SHORT.get(m, m) for m in REF],
                                                 rotation=40, ha="right", rotation_mode="anchor", fontsize=6)
     ax.tick_params(axis="x", length=0, pad=2); ax.tick_params(axis="y", colors=INK, length=2)
     for s in ("top", "right"): ax.spines[s].set_visible(False)
@@ -278,7 +277,7 @@ for i, m in enumerate(REF):
     axA.text(PAD / 2, i + 0.5, SHORT.get(m, m), ha="left", va="center", fontsize=7, color=INK)
 x1 = labw + colw[0] + PAD / 2                            # the spanner covers the six compared quantities
 axA.plot([x1, wA - PAD / 4], [-1.95, -1.95], color=INK, lw=0.6, clip_on=False)
-axA.text((x1 + wA) / 2, -2.05, "identical in Kimonu's reference-equivalent mode and the exhaustive\nreference, on the 11 models where the exhaustive reference finished", ha="center", va="bottom", fontsize=6, color=INK, linespacing=1.1)
+axA.text((x1 + wA) / 2, -2.05, "identical in Kimonu's reference-equivalent mode and the exhaustive\nreference, on the 11 networks where the exhaustive reference finished", ha="center", va="bottom", fontsize=6, color=INK, linespacing=1.1)
 axA.plot([0, wA], [n, n], color=RULE, lw=0.6, clip_on=False)
 
 axB.set_xscale("log"); axB.set_xlim(0.05, 2.5e6)
@@ -291,7 +290,7 @@ for i, m in enumerate(REF):
     e = int(np.floor(np.log10(r / k)))
     axB.text(1.0 + 0.08 / wB, i + 0.5, rf"${r / k / 10 ** e:.1f}\times10^{{{e}}}$", transform=axB.get_yaxis_transform(),
              ha="left", va="center", fontsize=7, color=INK, clip_on=False)
-axB.text(1.0 + 0.08 / wB, -0.2, "Speedup", transform=axB.get_yaxis_transform(), ha="left", va="bottom", fontsize=6, color=INK)
+axB.text(1.0 + 0.08 / wB, -0.2, "Speed-up", transform=axB.get_yaxis_transform(), ha="left", va="bottom", fontsize=6, color=INK)
 axB.set_xticks(list(T)); axB.set_xticklabels(list(T.values())); axB.minorticks_off()
 axB.set_yticks([]); axB.tick_params(axis="x", colors=INK, length=2)
 for s in ("top", "right", "left"): axB.spines[s].set_visible(False)
@@ -334,7 +333,7 @@ axD.set_yticks([]); axD.minorticks_off()
 axD.set_xticks([1, 60, 3600, 86400, 604800]); axD.set_xticklabels(["1 s", "1 min", "1 h", "1 day", "1 week"])
 for sp in ("top", "right", "left"): axD.spines[sp].set_visible(False)
 axD.spines["bottom"].set_color(MUTE); axD.tick_params(axis="x", colors=INK, length=2)
-axD.set_xlabel("wall time per stage (range over the 11 models of Fig. 4C, median marked)", labelpad=2)
+axD.set_xlabel("wall time per stage (range over the 11 networks of Fig. 4C, median marked)", labelpad=2)
 axD.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc=INK, mec="white", mew=0.5, label="concordance"),
                     Line2D([], [], ls="", marker="o", ms=4.5, mfc="white", mec=INK, mew=0.9, label="kinetic modules, ACR/ACRR")],
            loc="upper left", bbox_to_anchor=(1.01, 1.0), frameon=False, handletextpad=0.2, labelspacing=0.4)

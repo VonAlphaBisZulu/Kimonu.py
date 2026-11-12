@@ -1,5 +1,5 @@
 """Figure 3E, F, drawn into the combined Figure 2 of early November (Phil's Illustrator file): panels A-G stay as they
-are, the bottom row becomes the certificate of the two routes, exact kernel (H) against SVD kernel (I), both with one
+are, the bottom row becomes the certificate of the two routes, exact nullspace (H) against SVD nullspace (I), both with one
 element-wise tolerance rule. split_figure2.py then made H, I the panels E, F of Figure 3 (via C, D and extend_figure3.py).
 
     python figures/make_figure2_bottom.py <vault Figure2_draft.svg> <out.svg>     # from benchmarks/
@@ -39,12 +39,12 @@ fig = plt.figure(figsize=(W, H))
 fig.patch.set_visible(False)
 axH = fig.add_axes([XH / Wpt, ay(AX1), WP / Wpt, (AX1 - AX0) / Hpt])
 axI = fig.add_axes([XI / Wpt, ay(AX1), WP / Wpt, (AX1 - AX0) / Hpt], sharey=axH)
-out = ff.draw_certificate([axH, axI], ["exactcmp", "svdabs"], {"exactcmp": "exact kernel", "svdabs": "SVD kernel"})
+out = ff.draw_certificate([axH, axI], ["exactcmp", "svdabs"], {"exactcmp": "exact nullspace", "svdabs": "SVD nullspace"})
 plt.setp(axI.get_yticklabels(), visible=False)
 for t in axI.texts:                                       # Phil's wording for the SVD bar at tolerance 0
     if "false certificates" in t.get_text():
         t.set_text("no rows ever exactly equal")
-axH.set_ylabel("models", labelpad=2, color=ff.INK)
+axH.set_ylabel("networks", labelpad=2, color=ff.INK)
 for ax in (axH, axI):
     ax.set_xlabel("tolerance (0 = rows exactly equal)", labelpad=2, color=ff.INK)
     ax.tick_params(axis="x", pad=2)
@@ -52,9 +52,9 @@ for ax in (axH, axI):
 LEG_X = XI + WP + 8
 ff.certificate_legend(fig, LEG_X / Wpt, ay(AX0 - 12), out["exactcmp"]["exact"])
 x, s = out["exactcmp"], out["svdabs"]
-fig.text(LEG_X / Wpt, ay(622), f"Exact rows at tolerance 0 settle\n{x['at_zero'][0]} of {sum(x['at_zero'])} models, and the other {x['at_zero'][1]} are\n"
+fig.text(LEG_X / Wpt, ay(622), f"Exact rows at tolerance 0 settle\n{x['at_zero'][0]} of {sum(x['at_zero'])} networks, and the other {x['at_zero'][1]} are\n"
          f"the gap. Float rows are never\nexactly equal, so both routes find\nnothing and agree. No tolerance\n"
-         f"repairs this. The SVD kernel\ncertifies at most {max(s['certified'])} of {sum(s['exact'])}.",
+         f"repairs this. The SVD nullspace\ncertifies at most {max(s['certified'])} of {sum(s['exact'])}.",
          fontsize=6, color=ff.INK, va="top", ha="left", linespacing=1.25)
 LET = dict(fontsize=18, fontweight="bold", family="Arial", color=ff.INK, va="top", ha="left")
 fig.text(0.0, ay(TOP + 1), "H", **LET)

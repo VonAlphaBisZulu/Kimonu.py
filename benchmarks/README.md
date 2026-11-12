@@ -50,6 +50,7 @@ To rerun the Kimonu results (COCOA.jl and the reference are not rerun), in this 
 | Fig. 4C, D (K, F) | `figures/make_figure3.py` | `figures/pair_counts.json`, `pair_sets.json` from `figures/pair_sets.py`, which runs Kimonu's default and reads the modules of the reference-equivalent mode in scratch `kimonu_rerun_1111/timing/ref` and the module files of COCOA.jl and the reference | same |
 | Fig. 4E, F (F) | `figures/make_fig3_methods.py`, called by `make_figure3.py` | `figdata.json`, `reference_final/reference_iLJ478.json`, `sweep/cocoa_eff/cell_iLJ478_seed1234.log` | same |
 | Fig. 4 on new results (K) | `figures/figure4_update.py`, in place on the vault SVG, which carries Phil's Illustrator edits: moves the markers, fit lines and slopes of A, the exact-nullspace markers of B and Kimonu's times and the size of iLJ478 in F | `figdata.json` (new) and that of commit 451a748 (old), the timing arms small and tan of the rerun and of `kimonu_timing_seeds` | vault `Figure4.svg` |
+| Figs. 3, 4 in the words of the text | `figures/figure34_terms.py`, in place on both vault SVGs: nullspace for kernel, networks for models, the iIS312 stages as in `figures/names.py` | none | vault `Figure3.svg`, `Figure4.svg` |
 | fig. S1 (K, F) | `figures/make_figure3.py` | `KIMONU_REF_DIR`, `reference_final/acr/*.log`, COCOA.jl logs | `figures/supp/FigS_stage_timing.svg` |
 | fig. S2 (K, F) | `figures/make_figure3.py` (asserts that the reference-equivalent mode equals the exhaustive reference) | `figdata.json` | `figures/supp/FigS_reference_agreement.svg` |
 | fig. S3 (K) | `figures/make_supp_figures.py` | `figdata.json` (arms `kimonu`, `kimonu_det`) | `FigS_uptakes.svg` |
@@ -85,7 +86,8 @@ Runs behind single sentences, all in `kinetic_variants/` and read by `paper_numb
 - `figures/`. `gather_figdata.py`, `pair_sets.py`, `seed_spread.py`, `make_figure3.py`, `make_fig3_methods.py`,
   `make_hierarchy.py`, `extend_figure3.py`, `make_figure2_bottom.py`, `split_figure2.py` (the one-off split of the
   combined figure into Figures 2 and 3), `make_float_four.py`, `make_supp_figures.py`, `supp_walkthrough.py`,
-  `make_data_s1_s2.py`, `make_table_s2.py`, `paper_numbers.py`.
+  `make_data_s1_s2.py`, `make_table_s2.py`, `paper_numbers.py`, `figure34_terms.py`. `names.py` holds the one display name
+  per network that every figure, table and data file uses.
 - `deficiency/deficiency_split.py` (deficiency, linkage classes and ranks of the 33 networks).
 - `docs/examples/network/` (the edit scripts of Figures 1 and 2).
 

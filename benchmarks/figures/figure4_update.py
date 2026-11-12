@@ -147,11 +147,11 @@ for arm, (c, filled, dashed) in ARMS.items():
     report.append(f"A {arm}: {len(hit)} markers moved (matched within {worst:.2f} pt), slope {fits['old'][0]:.2f} -> {fits['new'][0]:.2f}")
 done = set()
 for ts in gA.iter(f"{{{SVG}}}tspan"):
-    m = re.fullmatch(r"(\d+) models, slope (\d\.\d\d)", ts.text or "")
+    m = re.fullmatch(r"(\d+) (?:models|networks), slope (\d\.\d\d)", ts.text or "")
     if not m: continue
     arm = [a for a, (o, _) in slopes.items() if f"{o:.2f}" == m.group(2) and a not in done]
     assert len(arm) == 1, (ts.text, arm)
-    ts.text = f"{m.group(1)} models, slope {slopes[arm[0]][1]:.2f}"; done.add(arm[0])
+    ts.text = f"{m.group(1)} networks, slope {slopes[arm[0]][1]:.2f}"; done.add(arm[0])
 assert done == set(ARMS), done
 
 # ------------------------------------------------------------------ B
@@ -201,7 +201,7 @@ def retext(g, old, new, keep="start", count=1):
         ts.text = new
 
 
-retext(gB, f"slowest of {n_gen} models: {slow_o:.0f} s, one core", f"at most {slow_n:.0f} s on {n_gen} models, one core")
+retext(gB, f"slowest of {n_gen} models: {slow_o:.0f} s, one core", f"at most {slow_n:.0f} s on {n_gen} networks, one core")
 retext(gB, "1 h limit (open: not finished)", "1 h limit (open markers did not finish)", keep="end")
 
 # ------------------------------------------------------------------ F

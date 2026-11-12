@@ -1,13 +1,13 @@
 """Drafts from kinetic_variants/float_four.py and float_exactcmp.py: floating point against exact arithmetic, for
 both routes and four ways of computing and comparing the nullspace rows.
 
-    exactcmp   exact kernel (Kimonu's RREF bases), rows kept as fractions, element-wise tolerance, decided exactly
-    exact      exact kernel rounded to an orthonormal float64 basis, row-relative Euclidean tolerance
-    svdabs     SVD kernel (orthonormal), element-wise tolerance
-    svd        SVD kernel (orthonormal), row-relative Euclidean tolerance
+    exactcmp   exact nullspace (Kimonu's RREF bases), rows kept as fractions, element-wise tolerance, decided exactly
+    exact      exact nullspace rounded to an orthonormal float64 basis, row-relative Euclidean tolerance
+    svdabs     SVD nullspace (orthonormal), element-wise tolerance
+    svd        SVD nullspace (orthonormal), row-relative Euclidean tolerance
 
-Fig_certificate     draft of Figure 3E, F (drawn into the figure by make_figure2_bottom.py): per tolerance, what the comparison of the two routes certifies, exact kernel
-                    (exactcmp) against SVD kernel (svdabs), one element-wise rule. Classes: the routes agree and are
+Fig_certificate     draft of Figure 3E, F (drawn into the figure by make_figure2_bottom.py): per tolerance, what the comparison of the two routes certifies, exact nullspace
+                    (exactcmp) against SVD nullspace (svdabs), one element-wise rule. Classes: the routes agree and are
                     right (the complete set, certified), the routes differ as they do exactly (the gap models), the
                     routes differ only because of floating point, the routes agree on a wrong answer (a false
                     certificate). The first bar is tolerance 0 (bitwise equal rows); the dashed line is what exact
@@ -33,12 +33,12 @@ import svg_finish, svg_panels
 KF = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
 plt.rcParams.update({"font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6, "ytick.labelsize": 6, "font.family": "Arial",
                      "axes.linewidth": 0.6, "xtick.major.width": 0.6, "ytick.major.width": 0.6, "svg.fonttype": "none",
-                     **svg_finish.mathtext_rc()})
+                     "text.color": "#1b2430", "axes.labelcolor": "#1b2430", **svg_finish.mathtext_rc()})   # INK, as the labels set it
 INK, MUTE = "#1b2430", "#6b7480"
 GREEN, RED, BLUE_, BOTH, GREY = "#4DAF4A", "#d6604d", "#4393c3", "#9e7bb5", "#b8bec6"
 WAYS = ["exactcmp", "exact", "svdabs", "svd"]
-WAYNAME = {"exactcmp": "exact kernel, exact comparison", "exact": "exact kernel, rounded to float64",
-           "svdabs": "SVD kernel, element-wise", "svd": "SVD kernel, row-relative"}
+WAYNAME = {"exactcmp": "exact nullspace, exact comparison", "exact": "exact nullspace, rounded to float64",
+           "svdabs": "SVD nullspace, element-wise", "svd": "SVD nullspace, row-relative"}
 KEYS = ("h_acr", "h_acrr", "h_mod")
 FILL_UNFINISHED = bool(os.environ.get("KF_FILL_UNFINISHED"))   # draft of the figure while the last parts run
 
@@ -198,10 +198,10 @@ def certificate(ways, name):
     fig, axs = plt.subplots(1, len(ways), figsize=(7.2, 2.2), sharey=True, squeeze=False)
     axs = axs[0]
     fig.subplots_adjust(left=0.07, right=0.76, bottom=0.2, top=0.86, wspace=0.08)
-    out = draw_certificate(axs, ways, {"exactcmp": "exact kernel", "svdabs": "SVD kernel"})
+    out = draw_certificate(axs, ways, {"exactcmp": "exact nullspace", "svdabs": "SVD nullspace"})
     for ax in axs:
         ax.set_xlabel("tolerance (0 = rows exactly equal)", color=INK)
-    axs[0].set_ylabel("models", color=INK)
+    axs[0].set_ylabel("networks", color=INK)
     certificate_legend(fig, 0.77, 0.86, out[ways[0]]["exact"])
     save_svg(fig, f"{OUT}/{name}"); plt.close(fig)
     return dict(n=max(len(v["models"]) for v in out.values()), ways=out)
@@ -216,7 +216,7 @@ def certificate_supp(ways, name):
     for ax in axs:
         sparse_ticks(ax)
         ax.set_xlabel("tolerance (0 = rows exactly equal)", color=INK)
-    axs[0].set_ylabel("models", color=INK)
+    axs[0].set_ylabel("networks", color=INK)
     ex = out[ways[0]]["exact"]
     handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (GREEN, BLUE_, GREY, RED)] + \
               [plt.Line2D([], [], color=INK, lw=0.6, ls=(0, (3, 2)))]
@@ -242,10 +242,10 @@ def errors(ways, name):
                 for k, t in enumerate(TAUS):
                     cls[klass(runs[m][arm]["sweep"][t]), k] += 1
             bars(ax, cls, zero, (GREEN, RED, BLUE_, BOTH)); axes_style(ax, n); sparse_ticks(ax)
-            ax.set_title(f"{route} route\n{WAYNAME[way]}", fontsize=8, color=INK, pad=3)
+            ax.set_title(f"{route} route, " + WAYNAME[way].replace(", ", "\n", 1), fontsize=8, color=INK, pad=3)   # fits the plot width
             out[arm] = dict(right=cls[0].astype(int).tolist(), at_zero=zero.astype(int).tolist())
     for ax in axs[1]: ax.set_xlabel("tolerance (0 = rows exactly equal)", color=INK)
-    for ax in axs[:, 0]: ax.set_ylabel("models")
+    for ax in axs[:, 0]: ax.set_ylabel("networks")
     handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (GREEN, RED, BLUE_, BOTH)]
     key_below(fig, handles, ["all relations right", "relations made up", "relations missed", "missed and made up"])
     save_svg(fig, f"{OUT}/{name}", groups(fig, len(ways), w, [0, 26 + h + 16, fig.get_figheight() * 72 - 14], key=14)); plt.close(fig)
