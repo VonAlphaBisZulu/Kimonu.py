@@ -58,7 +58,7 @@ To rerun the Kimonu results (COCOA.jl and the reference are not rerun), in this 
 | figs. S5, S6 (K) | `figures/make_float_four.py` | scratch `kimonu_float_four/parts` | `FigS_certificate.svg`, `FigS_float_errors.svg` |
 | Text S1 (K) | `figures/supp_walkthrough.py` | Kimonu at r* = K·1 | Markdown for the Supplement |
 | Tables S2, S3 | `figures/make_table_s2.py` | `unblocked/`, `deficiency/deficiency_33.json` (`deficiency_split.py`), `figdata.json`, `kinetic_variants/member_counts/` | Markdown tables |
-| Data S1 (K, F) | `figures/make_data_s1_s2.py` | `figdata.json`, `figures/pair_counts.json` | `DataS1_values.csv` |
+| Data S1 (K, F) | `figures/make_data_s1_s2.py` | `figdata.json`, `figures/pair_counts.json`, Kimonu's pairs and tangent-route rows from `kinetic_variants/uptake_modes/`, `member_counts/` and scratch `kimonu_rerun_1111/timing/{tan,ref}` | `DataS1_values.csv` |
 | Data S2 (K) | `figures/make_data_s1_s2.py` | scratch `kimonu_rerun_1111/uptake_lists` (`uptake_lists.py`, `.sbatch`) | `DataS2_uptake_acr.csv` |
 | numbers of Results, Methods and Supplementary Text | `figures/paper_numbers.py` | all of the above | one line per number with its source |
 
