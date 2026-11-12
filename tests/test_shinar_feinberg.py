@@ -13,7 +13,7 @@ On all four both routes agree, so the lists are exact, and the tests also pin th
 import pytest
 
 import kimonu
-from networks import matrices
+from networks import network
 
 
 def _rev(a, b):
@@ -51,9 +51,9 @@ def _pairs(groups):
 def test_both_routes_give_the_known_answer(name, detach):
     reactions, species = NETWORKS[name]
     acr, acrr_groups, modules = EXPECTED[name]
-    A, Y, N, cx = matrices(reactions, species)
-    it = kimonu.iterated_route(A, Y, N, metabolite_ids=species, detach_uptakes=detach)
-    tan = kimonu.tangent_route(A, Y, N, metabolite_ids=species, detach_uptakes=detach)
+    crn, cx = network(reactions, species)
+    it = kimonu.iterated_route(crn, detach_uptakes=detach)
+    tan = kimonu.tangent_route(crn, detach_uptakes=detach)
     named = lambda mods: sorted(sorted(cx[i] for i in m) for m in mods if len(m) > 1)
     assert sorted(it.acr) == acr and sorted(tan.acr) == acr, name
     assert sorted(tuple(sorted(p)) for p in it.acrr) == _pairs(acrr_groups), name

@@ -34,8 +34,17 @@ def test_N_equals_Y_times_A():
     m = _model("EnvZ_OmpR")
     crn = build_crn(m)
     N_ref = create_stoichiometric_matrix(irreversible(m))          # metabolites x reactions
-    N_ya = np.asarray((crn.Y @ crn.A).todense(), dtype=float)
-    assert np.array_equal(N_ref, N_ya)
+    assert np.array_equal(N_ref, _dense(crn) @ crn.A.toarray())
+    assert np.array_equal(N_ref, crn.N.to_numpy().astype(float))
+
+
+def _dense(crn):
+    """Y as a float array, from the exact rows of Yᵀ"""
+    Y = np.zeros((len(crn.metabolite_ids), len(crn.Yt)))
+    for c, y in enumerate(crn.Yt):
+        for i, v in y:
+            Y[i, c] = v
+    return Y
 
 
 def test_fractional_coefficients_are_exact():
@@ -50,7 +59,7 @@ def test_fractional_coefficients_are_exact():
     crn = build_crn(m)
     S = create_stoichiometric_matrix(irreversible(m))
 
-    assert np.array_equal(S, np.asarray((crn.Y @ crn.A).todense(), dtype=float))
+    assert np.allclose(S, _dense(crn) @ crn.A.toarray())
     assert any(float(c) != int(c) for comp in crn.complexes for _, c in comp), \
         "test model has no fractional coefficients — it cannot catch the rounding it is here to catch"
 
@@ -59,7 +68,8 @@ def test_fractional_coefficients_are_exact():
 
 
 def test_partition_is_internally_consistent():
-    """Balanced complexes have zero activity; complexes in a module have proportional M-rows."""
+    """Balanced complexes have zero activity; complexes in a module have proportional M-rows, with M computed
+    from straindesign's integer basis of ker(N) independently of concordance()."""
     import straindesign as sd
     m = _model("EnvZ_OmpR")
     crn = build_crn(m)
@@ -68,6 +78,8 @@ def test_partition_is_internally_consistent():
     M = np.asarray((crn.A @ K).todense(), dtype=object)
 
     r = kimonu.concordance(m, preprocess=False)      # partition of this exact crn
+    assert r.n_balanced + sum(len(g) for g in r.modules) == crn.A.shape[0]
+    assert kimonu.concordance(crn).modules == r.modules
     for i in r.balanced:
         assert all(v == 0 for v in M[i]), "balanced complex has nonzero activity"
     for grp in r.modules:
@@ -195,29 +207,31 @@ def test_forced_flux_goes_through_fva_and_finds_pins():
     assert blocked == set() and pins == {"k": Fraction(5), "l": Fraction(5)}
 
 
-def test_concordance_from_matrices_on_envz_ompr():
-    """Five balanced complexes and a seven-dimensional kernel. K is a basis of ker(N), M = A·K, and the modules are
-    the classes of proportional nonzero rows of M."""
+def test_concordance_of_a_network_given_as_matrices():
+    """EnvZ-OmpR: five balanced complexes and a seven-dimensional kernel. K is a basis of ker(N), M = A·K, and the
+    modules are the classes of proportional nonzero rows of M."""
     from kimonu.linalg import proportional_classes
-    from networks import ENVZ, ENVZ_SPECIES, matrices
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
-    res = kimonu.concordance_from_matrices(A, N, complexes=cx)
-    assert res.n_balanced == 5 and res.nullity == 7 and len(res.K) == A.shape[1] and res.complexes == cx
+    from networks import ENVZ, ENVZ_SPECIES, matrices, network
+    A, Y, N, _ = matrices(ENVZ, ENVZ_SPECIES)
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    res = kimonu.concordance(crn)
+    assert res.n_balanced == 5 and res.nullity == 7 and len(res.K) == A.shape[1] and res.complexes == crn.complexes
     Nd, Ad = N.toarray(), A.toarray()
     for col in range(res.nullity):
-        k = [row.get(col, 0) for row in res.K]
+        k = [dict(row).get(col, 0) for row in res.K]
         assert all(sum(int(Nd[i, j]) * k[j] for j in range(len(k))) == 0 for i in range(Nd.shape[0]))
-        m = [row.get(col, 0) for row in res.M]
+        m = [dict(row).get(col, 0) for row in res.M]
         assert [sum(int(Ad[c, j]) * k[j] for j in range(len(k))) for c in range(len(cx))] == m
     balanced, classes = proportional_classes(res.M)
     assert balanced == res.balanced and classes == res.modules
 
 
-def test_pins_enter_concordance_from_matrices():
-    """Passing the pins of prepare() to concordance_from_matrices gives what concordance() gives."""
+def test_pins_of_the_crn_enter_concordance():
+    """concordance(crn) uses the pins that prepare() found, and gives what concordance(model) gives. The same CRN
+    without its pins has the partition of ker(N)."""
     net = {"k": {"X": 1}, "y": {"Y": 1}, "m": {"X": -1, "Y": -1},
            "l": {"W": 1}, "v": {"V": 1}, "n": {"W": -1, "V": -1}}
     crn = kimonu.prepare(_toy(net, {"k": 2, "l": 7}))
-    with_pins = kimonu.concordance_from_matrices(crn.A, crn.N, reaction_ids=crn.reaction_ids, pins=crn.pins)
-    assert sorted(len(g) for g in with_pins.modules) == [7]
-    assert sorted(len(g) for g in kimonu.concordance_from_matrices(crn.A, crn.N).modules) == [1, 3, 3]
+    assert sorted(len(g) for g in kimonu.concordance(crn).modules) == [7]
+    assert kimonu.concordance(crn).modules == kimonu.concordance(_toy(net, {"k": 2, "l": 7})).modules
+    assert sorted(len(g) for g in kimonu.concordance(crn._replace(pins={})).modules) == [1, 3, 3]

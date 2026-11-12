@@ -9,14 +9,14 @@ import cobra
 import pytest
 
 import kimonu
-from networks import ENVZ, ENVZ_SPECIES, KINASE, KINASE_SPECIES, matrices
+from networks import ENVZ, ENVZ_SPECIES, KINASE, KINASE_SPECIES, network
 
 
 def test_envz_is_certified_without_a_warning():
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
     with warnings.catch_warnings():
         warnings.simplefilter("error")
-        cert = kimonu.certify(A, Y, N, metabolite_ids=ENVZ_SPECIES)
+        cert = kimonu.certify(crn)
     assert cert.certified and cert.open_pairs == [] and cert.open_acr == [] and cert.open_acrr == []
     assert cert.acr == ["Yp"] and len(cert.acrr) == 15 and cert.modules == cert.iterated.modules
     assert cert.iterated.flux is cert.tangent.flux is cert.flux
@@ -25,9 +25,9 @@ def test_envz_is_certified_without_a_warning():
 def test_kinase_gap_gives_a_warning_and_the_open_relations():
     """Attached, the iterated route proves the module {C+2P, P} and no ACR. The tangent route reports one module of
     all seven complexes and ACR for X, C and P."""
-    A, Y, N, cx = matrices(KINASE, KINASE_SPECIES)
+    crn, cx = network(KINASE, KINASE_SPECIES)
     with pytest.warns(UserWarning, match="stay open"):
-        cert = kimonu.certify(A, Y, N, detach_uptakes=False, metabolite_ids=KINASE_SPECIES)
+        cert = kimonu.certify(crn, detach_uptakes=False)
     assert not cert.certified and cert.acr == [] and cert.open_acr == ["C", "P", "X"]
     n = len(cx)
     assert len(cert.open_pairs) == n * (n - 1) // 2 - 1

@@ -1,4 +1,4 @@
-"""Small networks with known answers, shared by the tests, and a builder of their matrices A, Y and N.
+"""Small networks with known answers, shared by the tests, and builders of their matrices A, Y and N and their CRN.
 
 Reactions are written as (substrate, product) complexes, each a multiset of species joined by "+", with "0" for the
 zero complex. Complexes are numbered in the order in which the reactions first use them.
@@ -7,6 +7,8 @@ from fractions import Fraction
 
 import numpy as np
 from scipy import sparse
+
+import kimonu
 
 
 def matrices(reactions, species):
@@ -27,6 +29,13 @@ def matrices(reactions, species):
         for tok in c.split("+"):
             Y[species.index(tok), k] += 1
     return sparse.csr_matrix(A), sparse.csr_matrix(Y), sparse.csr_matrix(Y @ A), complexes
+
+
+def network(reactions, species, names=True):
+    """(CRN, complexes) of a network written as (substrate, product) pairs. Results name the metabolites by
+    ``species``, or by their index when names is False."""
+    A, Y, _, complexes = matrices(reactions, species)
+    return kimonu.crn_from_matrices(A, Y, metabolite_ids=species if names else None), complexes
 
 
 # EnvZ-OmpR with ADP-bound EnvZ (XD), as used by Langary et al. (2025) and in Figure 1. Yp has ACR for every choice of

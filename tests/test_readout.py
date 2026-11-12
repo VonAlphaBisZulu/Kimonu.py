@@ -7,11 +7,9 @@ readout independently of how the modules are derived.
 from fractions import Fraction
 
 import numpy as np
-from scipy import sparse
-
 import kimonu
-from kimonu.readout import complex_directions, composition_differences
-from networks import ENVZ, ENVZ_SPECIES, TOYS, matrices
+from kimonu.readout import Readout, complex_directions, composition_differences, route_result
+from networks import ENVZ, ENVZ_SPECIES, OPEN, TOYS, network
 
 # EnvZ-OmpR as COCOA constructs it: 9 species, 13 complexes.
 METABOLITES = ["X", "XD", "XDYp", "XT", "XTYp", "Xp", "XpY", "Y", "Yp"]
@@ -37,15 +35,15 @@ COMPLEXES = [
 KINETIC_MODULES = [{0, 1, 2, 3, 5, 6, 8, 10, 11}, {9}, {4}, {7}, {12}]
 
 
-def _Y():
-    index = {m: i for i, m in enumerate(METABOLITES)}
-    rows, cols, vals = [], [], []
-    for j, comp in enumerate(COMPLEXES):
-        for met, coeff in comp.items():
-            rows.append(index[met])
-            cols.append(j)
-            vals.append(coeff)
-    return sparse.csr_matrix((vals, (rows, cols)), shape=(len(METABOLITES), len(COMPLEXES)), dtype=np.int64)
+def _crn(Y=None):
+    """The CRN of the compositions alone, without reactions, which is all the readout reads."""
+    if Y is None:
+        index = {m: i for i, m in enumerate(METABOLITES)}
+        Y = np.zeros((len(METABOLITES), len(COMPLEXES)), dtype=np.int64)
+        for j, comp in enumerate(COMPLEXES):
+            for met, coeff in comp.items():
+                Y[index[met], j] = coeff
+    return kimonu.crn_from_matrices(np.zeros((Y.shape[1], 0), dtype=np.int64), Y)
 
 
 def _named(found):
@@ -54,74 +52,82 @@ def _named(found):
 
 def test_acr_is_exactly_yp():
     """Yp has ACR and no other species does."""
-    acr, _ = _named(kimonu.readout(_Y(), kimonu.free_directions(_Y(), KINETIC_MODULES)))
+    acr, _ = _named(kimonu.readout(_crn(), kimonu.free_directions(_crn(), KINETIC_MODULES)))
     assert acr == ["Yp"]
 
 
 def test_acrr_is_one_group_of_six():
     """The ratio-robust metabolites form one group of six, 15 pairs. ACR metabolites are left out of the groups:
     a constant ratio between two constants is not an independent finding."""
-    _, groups = _named(kimonu.readout(_Y(), kimonu.free_directions(_Y(), KINETIC_MODULES)))
+    _, groups = _named(kimonu.readout(_crn(), kimonu.free_directions(_crn(), KINETIC_MODULES)))
     assert [sorted(g) for g in groups] == [sorted(["X", "XD", "XDYp", "XT", "XTYp", "XpY"])]
 
 
 def test_no_modules_means_no_relation():
     """With no coupled complexes there is nothing to span, B is the identity, and nothing is fixed."""
-    B = kimonu.free_directions(_Y(), [{i} for i in range(len(COMPLEXES))])
+    B = kimonu.free_directions(_crn(), [{i} for i in range(len(COMPLEXES))])
     assert B == [((i, Fraction(1)),) for i in range(len(METABOLITES))]
-    found = kimonu.readout(_Y(), B)
+    found = kimonu.readout(_crn(), B)
     assert found.acr == [] and found.acrr_groups == [] and len(found.modules) == len(COMPLEXES)
 
 
 def test_known_acr_enters_as_a_unit_vector():
     """A metabolite known to have ACR gets a zero row of B even without a module that shows it."""
-    B = kimonu.free_directions(_Y(), [], known_acr=[METABOLITES.index("Y")])
-    assert kimonu.readout(_Y(), B).acr == [METABOLITES.index("Y")]
+    B = kimonu.free_directions(_crn(), [], known_acr=[METABOLITES.index("Y")])
+    assert kimonu.readout(_crn(), B).acr == [METABOLITES.index("Y")]
 
 
 def test_composition_differences_against_the_first_member():
-    """YΔ holds y_c - y_d against the first member d of each module, and a unit vector per known ACR metabolite."""
-    Y = _Y()
-    YD = composition_differences(Y, [{1, 12}, {4}], known_acr=[0])
-    assert YD.dtype == np.int64 and YD.shape == (len(METABOLITES), 2)
-    assert {METABOLITES[i]: int(v) for i, v in zip(YD[:, 0].nonzero()[0], YD[:, 0].data)} == {"Yp": -1}
-    assert YD[:, 1].toarray().ravel().tolist() == [1] + [0] * (len(METABOLITES) - 1)
+    """(YΔ)ᵀ has one row y_c - y_d against the first member d of each module, and a unit row per known ACR
+    metabolite."""
+    rows = composition_differences(_crn(), [{1, 12}, {4}, set()], known_acr=[0])
+    assert rows == [((METABOLITES.index("Yp"), -1),), ((0, 1),)]
 
 
 def test_complex_directions_are_the_rows_of_yt_b():
     """Row c of Yᵀ B adds the rows of B of complex c's metabolites, and equal rows are the readout's modules."""
-    Y = _Y()
-    B = kimonu.free_directions(Y, KINETIC_MODULES)
-    rows = complex_directions(Y, B)
+    crn = _crn()
+    B = kimonu.free_directions(crn, KINETIC_MODULES)
+    rows = complex_directions(crn, B)
     assert len(rows) == len(COMPLEXES)
     groups = {}
     for c, row in enumerate(rows):
         groups.setdefault(row, set()).add(c)
-    assert sorted(map(sorted, groups.values())) == sorted(map(sorted, kimonu.readout(Y, B).modules))
+    assert sorted(map(sorted, groups.values())) == sorted(map(sorted, kimonu.readout(crn, B).modules))
 
 
-def test_skipped_complexes_are_left_out_of_the_modules():
-    found = kimonu.readout(_Y(), kimonu.free_directions(_Y(), KINETIC_MODULES), skip={9})
-    assert all(9 not in m for m in found.modules)
+def test_detached_readout_lists_the_zero_complex_last():
+    """0 -> a, a <-> b, b -> 0 with all three complexes coupled, as attached. a and b have ACR, so the rows of Yᵀ B
+    of a, b and the zero complex are all zero. Detached, the zero complex is not grouped and comes last."""
+    crn, cx = network(OPEN, ["a", "b"], names=False)
+    B = kimonu.free_directions(crn, [{0, 1, 2}])
+    assert kimonu.readout(crn, B, detach_uptakes=False).modules == [{0, 1, 2}]
+    assert kimonu.readout(crn, B).modules == [{1, 2}, {0}] and kimonu.readout(crn, B).acr == [0, 1]
+
+
+def test_route_result_names_metabolites_and_gives_every_acrr_pair():
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    found = Readout(modules=[{0, 1}] + [{c} for c in range(2, len(cx))], acr=[6], acrr_groups=[[3, 0, 1]])
+    res = route_result("iterated", crn, found, dimension=1)
+    assert res.acr == ["Yp"] and res.acrr == [("XD", "X"), ("Xp", "X"), ("Xp", "XD")]
+    assert res.n_modules == 1 and res.giant_module == 2 and list(res.module_of[:3]) == [1, 1, 2]
 
 
 def test_readout_reproduces_the_iterated_route():
     """At the iterated route's final B = ker((YΔ)ᵀ), equal rows of Yᵀ B over all complexes are its modules and the zero
     rows of B its ACR metabolites, also when the modules and ACR are given back to free_directions."""
     for name, (R, S) in TOYS.items():
-        A, Y, N, cx = matrices(R, S)
+        crn, cx = network(R, S, names=False)
         for detach in (False, True):
-            it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
-            skip = kimonu.io.zero_complexes(Y) if detach else set()
-            again = kimonu.readout(Y, kimonu.free_directions(Y, it.modules, it.acr), skip)
-            assert {frozenset(m) for m in again.modules} | {frozenset({c}) for c in skip} == \
-                {frozenset(m) for m in it.modules}, (name, detach)
+            it = kimonu.iterated_route(crn, detach_uptakes=detach)
+            again = kimonu.readout(crn, kimonu.free_directions(crn, it.modules, it.acr), detach)
+            assert again.modules == it.modules, (name, detach)
             assert again.acr == it.acr, (name, detach)
 
 
 def test_route_result_layout_is_shared_by_the_three_routes():
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
-    results = [kimonu.iterated_route(A, Y, N), kimonu.tangent_route(A, Y, N), kimonu.reference_route(A, Y, N)]
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    results = [kimonu.iterated_route(crn), kimonu.tangent_route(crn), kimonu.reference_route(crn)]
     assert [r.route for r in results] == ["iterated", "tangent", "reference"]
     assert all(type(r) is kimonu.RouteResult for r in results)
     it, tan, ref = results
@@ -132,7 +138,7 @@ def test_route_result_layout_is_shared_by_the_three_routes():
 def test_free_directions_are_exact_for_long_decimal_coefficients():
     """Biomass-like coefficients with 15 significant digits: their difference does not fit in a float, and a basis
     built from the rounded difference would separate the two complexes of the module."""
-    Y = sparse.csr_matrix(np.array([[9.86915907870449e-05, 4.11265742135554e-05],
-                                    [0.000655436261176449, 1.65224841134181e-05],
-                                    [1.0, 1.0]]))
-    assert kimonu.readout(Y, kimonu.free_directions(Y, [{0, 1}])).modules == [{0, 1}]
+    crn = _crn(np.array([[9.86915907870449e-05, 4.11265742135554e-05],
+                         [0.000655436261176449, 1.65224841134181e-05],
+                         [1.0, 1.0]]))
+    assert kimonu.readout(crn, kimonu.free_directions(crn, [{0, 1}])).modules == [{0, 1}]

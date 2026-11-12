@@ -7,96 +7,105 @@ from fractions import Fraction
 import pytest
 
 import kimonu
-from kimonu.steady_state import rate_columns
-from networks import ENVZ, ENVZ_SPECIES, OPEN, matrices
+from kimonu.steady_state import rate_columns, with_sources
+from networks import ENVZ, ENVZ_SPECIES, OPEN, network
 
 
-def _steady(N, flux):
-    Nd = N.toarray()
+def _steady(crn, flux):
+    Nd = crn.N.to_numpy()
     return all(sum(Fraction(int(Nd[i, j])) * flux[j] for j in range(Nd.shape[1])) == 0 for i in range(Nd.shape[0]))
 
 
 @pytest.mark.parametrize("draw", ["uniform", "lp"])
 def test_interior_flux_is_an_exact_integer_interior_steady_state(draw):
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
-    flux = kimonu.interior_flux(N, draw=draw)
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    flux = kimonu.interior_flux(crn, draw=draw)
     assert all(isinstance(x, Fraction) and x > 0 and x.denominator == 1 for x in flux)
-    assert _steady(N, flux)
+    assert _steady(crn, flux)
 
 
 def test_the_uniform_draw_reaches_beyond_the_lp_point():
     """The uniform draw adds integers up to 2^64 to the free coordinates, so its entries are far larger, and it
     depends on the seed."""
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
-    lp, uniform = kimonu.interior_flux(N, draw="lp"), kimonu.interior_flux(N, draw="uniform")
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    lp, uniform = kimonu.interior_flux(crn, draw="lp"), kimonu.interior_flux(crn, draw="uniform")
     assert max(uniform) > 2**64 > max(lp)
-    assert kimonu.interior_flux(N, seed=1, draw="uniform") != uniform
-    assert kimonu.interior_flux(N, draw="uniform") == uniform
-    assert kimonu.interior_flux(N) == lp
+    assert kimonu.interior_flux(crn, seed=1, draw="uniform") != uniform
+    assert kimonu.interior_flux(crn, draw="uniform") == uniform
+    assert kimonu.interior_flux(crn) == lp
 
 
 def test_bits_set_the_size_of_the_uniform_draw():
     """r* = K (T c + s) with s below 2^bits and T = ceil(2 · 2^bits · reach / min r_c), so r* has at most about bits
     more bits than the LP point r_c (T is 1 while 2^bits is small against min r_c). bits=64 is the default of the
     uniform draw, and the LP point (the default draw) ignores bits."""
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
-    lp_flux = kimonu.interior_flux(N, draw="lp")
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    lp_flux = kimonu.interior_flux(crn, draw="lp")
     lp = max(lp_flux).numerator.bit_length()
     for bits in (8, 20, 64):
-        flux = kimonu.interior_flux(N, draw="uniform", bits=bits)
-        assert all(x > 0 and x.denominator == 1 for x in flux) and _steady(N, flux) and flux != lp_flux
+        flux = kimonu.interior_flux(crn, draw="uniform", bits=bits)
+        assert all(x > 0 and x.denominator == 1 for x in flux) and _steady(crn, flux) and flux != lp_flux
         assert max(flux).numerator.bit_length() <= lp + bits + 12
-    assert max(kimonu.interior_flux(N, draw="uniform", bits=64)).numerator.bit_length() > lp + 40
-    assert kimonu.interior_flux(N, draw="uniform", bits=64) == kimonu.interior_flux(N, draw="uniform")
-    assert kimonu.interior_flux(N, draw="lp", bits=8) == kimonu.interior_flux(N, draw="lp")
+    assert max(kimonu.interior_flux(crn, draw="uniform", bits=64)).numerator.bit_length() > lp + 40
+    assert kimonu.interior_flux(crn, draw="uniform", bits=64) == kimonu.interior_flux(crn, draw="uniform")
+    assert kimonu.interior_flux(crn, draw="lp", bits=8) == kimonu.interior_flux(crn, draw="lp")
     with pytest.raises(ValueError):
-        kimonu.interior_flux(N, bits=0)
+        kimonu.interior_flux(crn, bits=0)
 
 
 def test_bits_reach_every_route_and_certify():
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
-    flux = kimonu.interior_flux(N, bits=16)
-    assert kimonu.iterated_route(A, Y, N, bits=16).flux == flux == kimonu.tangent_route(A, Y, N, bits=16).flux
-    cert = kimonu.certify(A, Y, N, bits=16)
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    flux = kimonu.interior_flux(crn, bits=16)
+    assert kimonu.iterated_route(crn, bits=16).flux == flux == kimonu.tangent_route(crn, bits=16).flux
+    cert = kimonu.certify(crn, bits=16)
     assert cert.flux == flux and cert.certified
 
 
 def test_unknown_draw():
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
     with pytest.raises(ValueError):
-        kimonu.interior_flux(N, draw="sampled")
+        kimonu.interior_flux(crn, draw="sampled")
 
 
 def test_blocked_network_is_rejected():
     """a -> b with nothing consuming b has no positive steady state."""
-    A, Y, N, cx = matrices([("a", "b")], ["a", "b"])
+    crn, cx = network([("a", "b")], ["a", "b"])
     with pytest.raises(ValueError):
-        kimonu.interior_flux(N)
+        kimonu.interior_flux(crn)
 
 
 def test_rate_columns_give_a_detached_uptake_its_own_source():
     """0 -> a, a <-> b, b -> 0. Attached, the uptake runs from the zero complex. Detached, from a source after the
     three complexes."""
-    A, Y, N, cx = matrices(OPEN, ["a", "b"])
+    crn, cx = network(OPEN, ["a", "b"])
     zero, a, b = cx.index("0"), cx.index("a"), cx.index("b")
-    assert rate_columns(A, Y, detach_uptakes=False) == ({0: zero, 1: a, 2: b, 3: b}, 3)
-    assert rate_columns(A, Y) == ({0: 3, 1: a, 2: b, 3: b}, 4)
+    assert rate_columns(crn, detach_uptakes=False) == ({0: zero, 1: a, 2: b, 3: b}, 3)
+    assert rate_columns(crn) == ({0: 3, 1: a, 2: b, 3: b}, 4)
+
+
+def test_with_sources_adds_one_species_per_detached_uptake():
+    """Detached, the uptake of a draws from a source, a species of its own after a and b with composition e_2 and a
+    row of its own after the three complexes. Attached, the network stays as it is."""
+    crn, cx = network(OPEN, ["a", "b"])
+    species = with_sources(crn)
+    assert species.metabolite_ids == ["a", "b", "source of 0"] and species.Yt == crn.Yt + [((2, 1),)]
+    assert with_sources(crn, detach_uptakes=False) is crn
 
 
 def test_steady_state_map_by_hand():
     """Column c of W sums the columns of N of the reactions that consume c, weighted by r*."""
-    A, Y, N, cx = matrices(OPEN, ["a", "b"])
+    crn, cx = network(OPEN, ["a", "b"])
     r = [Fraction(v) for v in (2, 5, 3, 2)]
-    W, shape = kimonu.steady_state_map(A, Y, N, r, detach_uptakes=False)
+    W, n_columns = kimonu.steady_state_map(crn, r, detach_uptakes=False)
     zero, a, b = cx.index("0"), cx.index("a"), cx.index("b")
-    assert shape == (2, 3)
-    assert {k: v for k, v in W.items() if v} == {(0, zero): 2, (0, a): -5, (1, a): 5, (0, b): 3, (1, b): -5}
-    W, shape = kimonu.steady_state_map(A, Y, N, r)
-    assert shape == (2, 4) and W[(0, 3)] == 2 and (0, zero) not in W
+    assert n_columns == 3 and len(W) == 2
+    assert W == [tuple(sorted([(zero, 2), (a, -5), (b, 3)])), tuple(sorted([(a, 5), (b, -5)]))]
+    W, n_columns = kimonu.steady_state_map(crn, r)
+    assert n_columns == 4 and (3, 2) in W[0] and zero not in dict(W[0])
 
 
 def test_w_annihilates_the_reference():
     """u = 1 is the reference steady state, so W·1 = N r* = 0."""
-    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
-    W, (m, n_columns) = kimonu.steady_state_map(A, Y, N, kimonu.interior_flux(N))
-    assert all(sum(W.get((i, c), 0) for c in range(n_columns)) == 0 for i in range(m))
+    crn, cx = network(ENVZ, ENVZ_SPECIES)
+    W, n_columns = kimonu.steady_state_map(crn, kimonu.interior_flux(crn))
+    assert len(W) == len(ENVZ_SPECIES) and all(sum(v for _, v in row) == 0 for row in W)

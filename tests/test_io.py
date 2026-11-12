@@ -9,8 +9,8 @@ import pytest
 import cobra
 
 import kimonu
-from kimonu.io import build_crn, exact_matrix, irreversible, substrate_complexes, zero_complexes
-from kimonu.linalg import entries
+from kimonu.io import build_crn, irreversible, substrate_complexes, zero_complexes
+from kimonu.linalg import matrix_product
 
 SHARED = os.environ.get(
     "KIMONU_SHARED_MODELS",
@@ -28,20 +28,47 @@ def _toy():
     return m
 
 
+def _dense_Y(crn):
+    Y = np.zeros((len(crn.metabolite_ids), len(crn.Yt)))
+    for c, y in enumerate(crn.Yt):
+        for i, v in y:
+            Y[i, c] = v
+    return Y
+
+
 def test_zero_complex_has_its_own_row():
     crn = build_crn(_toy())
     A = crn.A.toarray()
-    assert len(zero_complexes(crn.Y)) == 1
+    assert zero_complexes(crn) == {0} and crn.Yt[0] == ()
     assert all(sorted(A[:, j][A[:, j] != 0]) == [-1, 1] for j in range(A.shape[1]))
-    assert np.array_equal((crn.Y @ crn.A).toarray(), crn.N_float.toarray())
-    assert np.array_equal(crn.N.to_numpy().astype(float), crn.N_float.toarray())
+    assert np.array_equal(_dense_Y(crn) @ A, crn.N.to_numpy().astype(float))
+    assert crn.Yt == [(), ((0, 1),), ((1, 1),)] and crn.complexes == [(), (("a", 1),), (("b", 1),)]
     assert isinstance(crn, kimonu.CRN) and crn.pins == {}
+
+
+def test_crn_from_matrices_is_the_crn_of_the_model():
+    """The same network given as A and Y gives the CRN that build_crn gives for the cobra model."""
+    crn = build_crn(_toy())
+    again = kimonu.crn_from_matrices(crn.A, _dense_Y(crn), metabolite_ids=crn.metabolite_ids,
+                                     reaction_ids=crn.reaction_ids)
+    assert (again.A != crn.A).nnz == 0 and again.Yt == crn.Yt and again.complexes == crn.complexes
+    assert np.array_equal(again.N.to_numpy(), crn.N.to_numpy()) and again.pins == {}
+    unnamed = kimonu.crn_from_matrices(crn.A.toarray(), _dense_Y(crn))
+    assert unnamed.metabolite_ids == [0, 1] and unnamed.reaction_ids == [0, 1, 2, 3]
+    assert unnamed.complexes == [(), ((0, 1),), ((1, 1),)]
+
+
+def test_compositions_are_exact_from_floats():
+    """A float coefficient enters Yt as its decimal, and N = Y·A keeps it."""
+    crn = kimonu.crn_from_matrices(np.array([[-1], [1]]), np.array([[0.1, 0.0], [0.0, 1.496]]))
+    assert crn.Yt == [((0, Fraction(1, 10)),), ((1, Fraction(1496, 1000)),)]
+    assert matrix_product(crn.A.T, crn.Yt) == [((0, Fraction(-1, 10)), (1, Fraction(1496, 1000)))]
 
 
 def test_attached_uptake_fixes_its_product():
     """psi_0 = 1: with a constant inflow, a's steady state is fixed, as in the matrix-built test."""
     crn = build_crn(_toy())
-    it = kimonu.iterated_route(crn.A, crn.Y, crn.N, detach_uptakes=False, metabolite_ids=crn.metabolite_ids)
+    it = kimonu.iterated_route(crn, detach_uptakes=False)
     assert "a" in it.acr
 
 
@@ -67,7 +94,7 @@ def test_e_coli_core_has_no_coupling_from_dropped_uptakes():
     """With the uptake rates missing from W, 2pg and 3pg came out as an ACRR pair; an exact second
     steady state with the same rate constants refutes it."""
     crn = build_crn(_e_coli_core())
-    it = kimonu.iterated_route(crn.A, crn.Y, crn.N, detach_uptakes=True, metabolite_ids=crn.metabolite_ids)
+    it = kimonu.iterated_route(crn, detach_uptakes=True)
     assert {"2pg_c", "3pg_c"} not in [set(p) for p in it.acrr]
 
 
@@ -113,7 +140,7 @@ def test_the_iterated_route_runs_on_a_model_with_reversible_reactions():
     """Written as one reaction, r would have to run forwards at every steady state of mass action."""
     m = _bounded(lb=-1000, ub=1000)
     crn = build_crn(m)
-    it = kimonu.iterated_route(crn.A, crn.Y, crn.N, detach_uptakes=True)
+    it = kimonu.iterated_route(crn, detach_uptakes=True)
     assert it.flux and all(x > 0 for x in it.flux)
 
 
@@ -135,16 +162,10 @@ def test_concordance_does_not_change_with_the_split():
     assert sizes(kimonu.concordance(m)) == sizes(kimonu.concordance(irreversible(m)))
 
 
-def test_exact_matrix_keeps_the_declared_decimals():
-    """-7.73333333333333e-08 has a denominator of 10**22, which int64 cannot clear; Fractions stay as they are."""
-    M = exact_matrix([(0, 0, -7.73333333333333e-08), (0, 1, Fraction(1, 3))], (1, 2))
-    assert sorted(entries(M)[0]) == [(0, 0, Fraction("-7.73333333333333e-08")), (0, 1, Fraction(1, 3))]
-
-
 def test_substrate_complexes_of_the_toy():
     """up: 0 -> a, ab: a -> b, ba: b -> a, out: b -> 0, with the complexes 0, a, b in order of first use"""
     crn = build_crn(_toy())
-    assert crn.complexes[0] == () and substrate_complexes(crn.A) == {0: 0, 1: 1, 2: 2, 3: 2}
+    assert crn.complexes[0] == () and substrate_complexes(crn) == {0: 0, 1: 1, 2: 2, 3: 2}
 
 
 def test_prepare_removes_blocked_reactions_and_leaves_the_model_alone():
