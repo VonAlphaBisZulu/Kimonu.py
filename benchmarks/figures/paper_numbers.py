@@ -58,10 +58,11 @@ def pct(a, b):
     return f"{100 * a / b:.1f}%"
 
 
-def maxrss_gb(paths):
-    """largest 'Maximum resident set size' of /usr/bin/time -v logs, in GB (10^6 kB, as SLURM reports memory)"""
+def maxrss_gib(paths):
+    """largest 'Maximum resident set size' of /usr/bin/time -v logs, in GiB (its kbytes are KiB, 2^20 of them a GiB), the
+    unit of SLURM's memory reservations (--mem=1G is 1 GiB) and of free -g"""
     kb = [int(m.group(1)) for p in paths for m in [re.search(r"Maximum resident set size \(kbytes\): (\d+)", open(p).read())] if m]
-    return max(kb) / 1e6 if kb else None
+    return max(kb) / 2 ** 20 if kb else None
 
 
 def times(arm):
@@ -265,8 +266,8 @@ if os.path.exists(jobs):
     J = [l.split("|") for l in open(jobs) if l.strip() and not l.startswith("JobID")]
     out(M, "M12", "memory reserved for the timed jobs, cores per run", "; ".join(f"{j[1]} {j[2]}" for j in J) + "; one process pinned to one core", jobs)
 logs = lambda arms: [p for a in arms for p in glob.glob(f"{TIMING}/{a}/*.log")]
-out(M, "M13", "peak memory, iterated route and reference-equivalent mode", f"{maxrss_gb(logs(['det', 'att', 'ref'])):.2f} GB", f"{TIMING}/{{det,att,ref}}/*.log (/usr/bin/time -v)")
-out(M, "M14", "peak memory, tangent route", f"{maxrss_gb(logs(['tan', 'tanatt'])):.2f} GB", f"{TIMING}/{{tan,tanatt}}/*.log")
+out(M, "M13", "peak memory, iterated route and reference-equivalent mode", f"{maxrss_gib(logs(['det', 'att', 'ref'])):.2f} GiB", f"{TIMING}/{{det,att,ref}}/*.log (/usr/bin/time -v)")
+out(M, "M14", "peak memory, tangent route", f"{maxrss_gib(logs(['tan', 'tanatt'])):.2f} GiB", f"{TIMING}/{{tan,tanatt}}/*.log")
 import numpy as np
 fits = {}
 for arm in ("ref_exh", "ref_sampled", "cocoa_false", "cocoa_true", "kimonu_det", "kimonu_ref"):
