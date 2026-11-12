@@ -13,7 +13,7 @@ steady states connects to the reference, as in the self-activating kinase of Fig
 
 :func:`certify` draws one r* and runs both routes there, so they are compared at the same point. It is not the
 default analysis, since the tangent route's nullspace is denser and takes longer (about 7 minutes on the largest
-genome-scale networks at the default LP point, and about ten times that with the uniform draw).
+genome-scale networks at the default LP point, and up to about ten times that with the uniform draw).
 """
 import warnings
 from collections import namedtuple

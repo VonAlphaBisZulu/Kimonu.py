@@ -67,7 +67,7 @@ def interior_flux(crn, seed=0, draw="lp", bits=64):
             stays strictly positive whatever s is. A shift by the fixed T c keeps the degree of a polynomial, so a
             nonzero polynomial of degree D in the free coordinates vanishes at r* with probability at most
             D / 2^bits (Schwartz–Zippel), and the bound applies to r* itself. The larger integers make the tangent
-            route about 2 to 12 times slower on genome-scale networks (bits=64); the iterated route costs the same.
+            route about 2 to 10 times slower on genome-scale networks (bits=64); the iterated route costs the same.
             On all 33 genome-scale networks both draws gave the same kinetic modules, ACR and ACRR for both routes.
         bits: size of the uniform draw, s in [0, 2^bits), used only for draw="uniform" (default 64). The bound
             D / 2^bits halves with every extra bit, and the tangent route's cost grows about linearly with bits.
