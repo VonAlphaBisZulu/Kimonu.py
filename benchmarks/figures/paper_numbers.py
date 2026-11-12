@@ -59,8 +59,8 @@ def pct(a, b):
 
 
 def maxrss_gib(paths):
-    """largest 'Maximum resident set size' of /usr/bin/time -v logs, in GiB (its kbytes are KiB, 2^20 of them a GiB), the
-    unit of SLURM's memory reservations (--mem=1G is 1 GiB) and of free -g"""
+    """largest 'Maximum resident set size' of /usr/bin/time -v logs, in GB as SLURM counts them (its kbytes are 1024 bytes,
+    2^20 of them a GB), the unit of SLURM's memory reservations (--mem=1G) and of free -g. The paper writes GB throughout."""
     kb = [int(m.group(1)) for p in paths for m in [re.search(r"Maximum resident set size \(kbytes\): (\d+)", open(p).read())] if m]
     return max(kb) / 2 ** 20 if kb else None
 
@@ -266,8 +266,8 @@ if os.path.exists(jobs):
     J = [l.split("|") for l in open(jobs) if l.strip() and not l.startswith("JobID")]
     out(M, "M12", "memory reserved for the timed jobs, cores per run", "; ".join(f"{j[1]} {j[2]}" for j in J) + "; one process pinned to one core", jobs)
 logs = lambda arms: [p for a in arms for p in glob.glob(f"{TIMING}/{a}/*.log")]
-out(M, "M13", "peak memory, iterated route and reference-equivalent mode", f"{maxrss_gib(logs(['det', 'att', 'ref'])):.2f} GiB", f"{TIMING}/{{det,att,ref}}/*.log (/usr/bin/time -v)")
-out(M, "M14", "peak memory, tangent route", f"{maxrss_gib(logs(['tan', 'tanatt'])):.2f} GiB", f"{TIMING}/{{tan,tanatt}}/*.log")
+out(M, "M13", "peak memory, iterated route and reference-equivalent mode", f"{maxrss_gib(logs(['det', 'att', 'ref'])):.2f} GB", f"{TIMING}/{{det,att,ref}}/*.log (/usr/bin/time -v)")
+out(M, "M14", "peak memory, tangent route", f"{maxrss_gib(logs(['tan', 'tanatt'])):.2f} GB", f"{TIMING}/{{tan,tanatt}}/*.log")
 import numpy as np
 fits = {}
 for arm in ("ref_exh", "ref_sampled", "cocoa_false", "cocoa_true", "kimonu_det", "kimonu_ref"):
@@ -423,9 +423,9 @@ C, RF = HW["cocoa"], [HW["reference"][k] for k in ("reference_final", "reference
 ref_mem = sorted({k.split()[0] for r in RF for k in r["req_mem_by_state"]}, key=lambda m: float(re.sub(r"[^0-9.]", "", m)))
 out(M, "N1", "COCOA.jl runs on the 4514Y nodes; workers, memory reserved, peak MaxRSS of the runs with a record; reference "
     "cores, memory reserved, peak", f"{C['n_on_4514Y']} of {C['n_runs']}; {C['workers']}; {C['req_mem']}; "
-    f"{C['peak_max_rss_gib_of_the_183']} GiB ({C['n_with_max_rss']} of {C['n_runs']} with a record); reference "
+    f"{C['peak_max_rss_gib_of_the_183']} GB ({C['n_with_max_rss']} of {C['n_runs']} with a record); reference "
     f"{sorted({c for r in RF for c in r['alloc_cpus']})} cores, {ref_mem[0]} to {ref_mem[-1]}, peak "
-    f"{max(r['peak_max_rss_gib'] for r in RF)} GiB", "hardware_record.json (cocoa, reference)")
+    f"{max(r['peak_max_rss_gib'] for r in RF)} GB", "hardware_record.json (cocoa, reference)")
 sp = HW["node_speed_4314_over_4514Y"]
 out(M, "N1.3", "single-core Kimonu, 4314 time over 4514Y time (median, min to max)", "; ".join(
     f"{k} {sp[k]['median']} ({sp[k]['min']} to {sp[k]['max']}, n = {sp[k]['n']})" for k in ("det", "att", "ref", "tanatt")),

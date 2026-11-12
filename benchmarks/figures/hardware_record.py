@@ -12,7 +12,7 @@ Sources
   Kimonu     /scratch/.../kimonu_rerun_1111/timing (hardware_*.txt, provenance_*.txt) and its logs (/usr/bin/time -v)
   node speed kimonu_timing (job 570234, node16) against kimonu_timing_4314 (job 570464, node08), same commit 323fe40
   threads    kimonu_float_four/logs and parts: the job that wrote each part and its allocated CPUs
-A job that sacct no longer holds is recorded with "sacct": null. MaxRSS of sacct is in KiB and is reported in GiB; it is
+A job that sacct no longer holds is recorded with "sacct": null. MaxRSS of sacct is in units of 1024 bytes and is reported in GB as SLURM counts them (2^30 bytes); it is
 sampled every 30 s and is missing (a few hundred KiB) for many batch steps, which the record counts.
 CPU models were read from /proc/cpuinfo of every node on 2026-11-12 (CPU_MODEL below); --probe reads them again by ssh.
 """
@@ -173,7 +173,7 @@ if __name__ == "__main__":
     json.dump(D, open("hardware_record.json", "w"), indent=1)
     c = D["cocoa"]
     print(f"COCOA.jl {c['n_runs']} runs, {c['n_on_4514Y']} on 4514Y {c['n_on_4514Y_by_efficient']}, ReqMem {c['req_mem']}, CPUs {c['alloc_cpus']}, "
-          f"peak of the 183 {c['peak_max_rss_gib_of_the_183']} GiB ({c['n_with_max_rss']} with MaxRSS), all jobs {c['peak_max_rss_gib_all_sweep_jobs']}")
+          f"peak of the 183 {c['peak_max_rss_gib_of_the_183']} GB ({c['n_with_max_rss']} with MaxRSS), all jobs {c['peak_max_rss_gib_all_sweep_jobs']}")
     for k, v in D["reference"].items(): print(k, v["cpus"], v["alloc_cpus"], v["req_mem_by_state"], "peak", v["peak_max_rss_gib"], "no sacct", v["jobs_without_sacct"])
     for k, v in D["kimonu_timing"].items(): print(k, v["host"], v["cpu_lscpu"], v.get("req_mem"), v.get("max_rss_gib"), v["peak_rss_gib_time_v_whole_job"])
     print({k: v for k, v in D["node_speed_4314_over_4514Y"].items() if k != "jobs"})
