@@ -13,7 +13,7 @@ authors = [{ name = "Philipp Schneider" }]
 keywords = ["metabolic-networks", "concordance", "kinetic-modules", "ACR", "nullspace", "cobra", "systems-biology"]
 # Pure-Python; a Julia toolchain is deliberately NOT required.
 dependencies = [
-  # exact sparse nullspace from straindesign (straindesign.sparse_nullspace, RationalMatrix.from_fractions)
+  # exact sparse nullspace from straindesign (straindesign.compression.nullspace, RationalMatrix.from_fractions)
   "straindesign>=1.19.2",
   "cobra>=0.26",
   "numpy",
@@ -21,9 +21,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# symbolic_formulas only
-symbolic = ["sympy>=1.12"]
-dev = ["pytest>=7", "sympy>=1.12"]
+dev = ["pytest>=7"]
 
 [project.urls]
 Homepage = "https://github.com/VonAlphaBisZulu/Kimonu.py"

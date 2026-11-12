@@ -54,10 +54,10 @@ Reference-equivalent mode (Fig. 4E)
     upstream sets, overlap merge, Shinar–Feinberg rule   reference_route(crn)
 Flux coupling under mass action
     Λ = Sᵀ Yᵀ B                                    kinetic_flux_coupling(crn, route=...)
-Values of the relations (Supplementary Text S13, not in the main text)
+Values of the relations (beyond the main text, see the Supplementary Text)
     exact values at given k                        relation_values(crn, k)
     k for given concentrations and fluxes          rate_constants(crn, r, x)
-    formulas in k                                  binomial_formulas(crn), symbolic_formulas(crn)
+    monomial formulas in k from flux coupling      binomial_formulas(crn)
 
 The three routes return one result type, :class:`RouteResult`, with the modules, ACR and ACRR, the basis B they
 were read from, the flux r* and the route-specific extras.
@@ -73,8 +73,7 @@ from kimonu.certify import Certificate, certify
 from kimonu.analysis import analyze
 from kimonu.reference import reference_route
 from kimonu.coupling import FluxCouplingResult, kinetic_flux_coupling
-from kimonu.values import Value, Values, rate_constants, relation_values
-from kimonu.formulas import Formulas, Monomial, binomial_formulas, symbolic_formulas
+from kimonu.values import Formulas, Monomial, Value, Values, binomial_formulas, rate_constants, relation_values
 
 __version__ = "0.0.1"
 __all__ = [
@@ -98,8 +97,7 @@ __all__ = [
     "reference_route",
     # flux coupling under mass action
     "kinetic_flux_coupling", "FluxCouplingResult",
-    # values and formulas
-    "relation_values", "rate_constants", "Values", "Value",
-    "binomial_formulas", "symbolic_formulas", "Formulas", "Monomial",
+    # values of the relations
+    "relation_values", "rate_constants", "binomial_formulas", "Values", "Value", "Formulas", "Monomial",
     "__version__",
 ]

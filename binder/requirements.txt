@@ -1,3 +1,2 @@
 straindesign>=1.19.2
 cobra>=0.26
-sympy>=1.12

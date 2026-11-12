@@ -1,43 +1,47 @@
-"""What the fixed log-combinations are fixed at: ACR values, ACRR ratios and module ψ ratios at given k.
+"""Values of the relations, beyond the main text: exact values at given k, k for given values, formulas in k.
 
-The routes decide which combinations vᵀ ln x take the same value at every positive steady state; this
-module computes that value for given rate constants k, exactly. It reruns the iterated route
-(:mod:`kimonu.iterated`) at k itself instead of at a generic flux:
+The routes decide which combinations vᵀ ln x take the same value at every positive steady state. This module
+computes that value for given rate constants k, exactly (:func:`relation_values`). It reruns the iterated route
+(:mod:`kimonu.iterated`) at k itself instead of at a generic flux.
 
-1. Linear: every positive steady state x for k has its complex concentrations ψ = ψ(x) in the kernel of
+1. Mass balance. Every positive steady state x for k has its complex concentrations ψ = ψ(x) in the kernel of
+   W_k = N diag(k) Sᵀ, the W of Eq. 3 with k in place of r* (:func:`kimonu.steady_state_map`). When rows c and d of
+   an exact basis of ker(W_k) are proportional, row c = λ row d, every kernel vector has ψ_c = λ ψ_d, so the ratio of
+   the two complex concentrations is λ, a rational number for rational k. No steady state has to be found.
+2. Composition. Within a coupled set, ln ψ_c - ln ψ_d = (y_c - y_d)ᵀ ln x = ln λ. A fixed combination v found by
+   the readout lies in the span of these composition differences, v = Σ_t a_t (y_c_t - y_d_t), so
+   vᵀ ln x = Σ_t a_t ln λ_t and e^(vᵀ ln x) = Π_t λ_t^a_t. The coefficients a_t are rational, so the value is a
+   rational number times a root of one. An ACR metabolite whose value is fixed through 2X is a square root, as
+   0 -> X, 2X -> 0 gives x = (k_1 / 2 k_2)^(1/2). :class:`Value` holds it in that form, exactly.
+3. Feedback. A merge found on the log scale is the linear fact ψ_c = μ ψ_d with μ the value of y_c - y_d. It goes
+   into W_k as a row, as u_c = u_d does in the iterated route, and the steps repeat until nothing merges.
 
-       W_k = N diag(k) Sᵀ,
+What this proves holds at the given k itself, not only for generic k, and for generic k it is what the iterated
+route finds. The attached zero complex has ψ_∅ = 1, which is how absolute values (ACR) arise, since a complex
+coupled to the zero complex has its concentration fixed, not only its ratio. Detached, only ratios that hold
+whatever the uptake rates are reported. The computation also tells when k has no positive steady state at all, a
+complex whose row of ker(W_k) is zero, a negative ratio, or two derivations of one combination that disagree. A
+ValueError says which.
 
-   the W of Eq. 3 with k in place of r* (:func:`kimonu.steady_state_map`). When rows c and d of an exact basis
-   of ker(W_k) are proportional, row c = λ row d, every kernel vector has ψ_c = λ ψ_d, so the ratio of the
-   two complex concentrations is λ, a rational number for rational k. No steady state has to be found.
-2. Log: within a coupled set, ln ψ_c - ln ψ_d = (y_c - y_d)ᵀ ln x = ln λ. A fixed combination v found
-   by the readout lies in the span of these composition differences, v = Σ_t a_t (y_c_t - y_d_t), so
+The reverse direction needs no computation. For an interior steady-state flux r and any x > 0, the rate constants
+k_j = r_j / ψ_σ(j)(x) have x as a positive steady state with flux r (:func:`rate_constants`). Each route picks one
+such r*, the ``flux`` of its result, at x* = 1, so its relations are found at k = r* with every fixed combination
+equal to zero there. Choosing x instead moves every ACR value to x_i, every ACRR ratio to x_j / x_i and every module
+ratio to ψ_d(x) / ψ_c(x). These are the rate constants to take to a kinetic model when given flux and
+concentrations should be a steady state, with the values of the relations prescribed.
 
-       vᵀ ln x = Σ_t a_t ln λ_t,   e^(vᵀ ln x) = Π_t λ_t^a_t.
-
-   The coefficients a_t are rational, so the value is a rational number times a root of one (an ACR
-   metabolite whose value is fixed through 2X is a square root: 0 -> X, 2X -> 0 gives
-   x = (k_1 / 2 k_2)^(1/2)). :class:`Value` holds it in that form, exactly.
-3. Feedback: a merge found in log space is the linear fact ψ_c = μ ψ_d with μ the value of
-   y_c - y_d; it goes into W_k as a row, as u_c = u_d does in the iterated route, and the steps repeat until
-   nothing merges.
-
-What this proves holds at the given k itself, not only for generic k, and for generic k it is what
-iterated_route finds. The attached zero complex has ψ_∅ = 1, which is how absolute values (ACR) arise:
-a complex coupled to the zero complex has its concentration fixed, not only its ratio. Detached,
-only ratios that hold whatever the uptake rates are reported.
-
-It also tells when k has no positive steady state at all: a complex whose row of ker(W_k) is zero, a
-negative ratio, or two derivations of one combination that disagree. A ValueError says which.
-
-The reverse direction needs no computation. For an interior steady-state flux r and any x > 0, the rate
-constants k_j = r_j / ψ_s(j)(x) have x as a positive steady state with flux r (rate_constants). Each
-route picks one such r*, the ``flux`` of its result, at x* = 1, so its relations are found at k = r*
-with every fixed combination equal to zero there; choosing x instead moves every ACR value to x_i,
-every ACRR ratio to x_i / x_j and every module ratio to ψ_c(x) / ψ_d(x). These are the rate constants
-to take to a kinetic model when given flux and concentrations should be a steady state, with the values
-of the relations prescribed.
+Formulas in k (:func:`binomial_formulas`). When two reactions j and l are fully coupled, v_j = ρ v_l for every
+steady-state flux (proportional rows of ker N), so mass action gives k_j ψ_σ(j) = ρ k_l ψ_σ(l) at every positive
+steady state, for every k, and ln ψ_σ(j) - ln ψ_σ(l) = ln ρ + ln k_l - ln k_j. These facts span composition
+differences as in step 2, and every relation whose vector lies in that span has a formula c Π_j k_j^e_j, a
+:class:`Monomial`. The facts need only the exact nullspace of N, as concordance does, so this runs at genome scale.
+A detached uptake runs at k_j s_j with a free source s_j and gives no fact. A fact that repeats a combination
+already spanned is a constraint instead, a monomial in k that equals one at every k with a positive steady state.
+Two uptakes from the attached zero complex whose fluxes are fully coupled, for instance, need k_j = ρ k_l. Other
+relations proven by the iterated route have values that are products of powers of rational functions of k, which
+the monomials do not cover. A relation that only the tangent route reports can have a value that is no such product
+at all. On the kinase of Fig. 2, X has ACR with x = (√(b² + 8ac) - b) / 4c at both steady states, with a, b and c
+the rate constants of 0 -> X, X -> 0 and 2X -> C, the root of a quadratic.
 """
 from collections import namedtuple
 from fractions import Fraction
@@ -46,9 +50,24 @@ from math import floor, lcm, log, exp
 from kimonu.io import substrate_complexes, zero_complexes
 from kimonu.linalg import fraction, null_space_rows
 from kimonu.readout import free_directions, readout
-from kimonu.steady_state import steady_state_map
+from kimonu.steady_state import interior_flux, steady_state_map
 
 Values = namedtuple("Values", ["acr", "acrr", "modules", "rounds"])
+Values.__doc__ = """The exact values of the relations at given rate constants, each a :class:`Value`.
+
+acr      {metabolite: x_i} for the metabolites with ACR
+acrr     one (reference, {metabolite: x_j / x_reference}) per ACRR group, the reference its first metabolite
+modules  one (reference, {complex: ψ_c / ψ_reference}) per kinetic module of two or more complexes, the reference
+         its first complex
+rounds   rounds of mass balance and composition, as in :class:`kimonu.RouteResult`
+"""
+
+Formulas = namedtuple("Formulas", ["acr", "acrr", "modules", "constraints"])
+Formulas.__doc__ = """Monomial formulas in k for the relations, in the layout of :class:`Values`.
+
+acr, acrr, modules  a :class:`Monomial` for every relation that flux coupling fixes, None for the others
+constraints         monomials that equal one at every k with a positive steady state
+"""
 
 
 class Value:
@@ -106,6 +125,39 @@ class Value:
             return str(self.r)
         root = f"({self.b})^(1/{self.q})"
         return root if self.r == 1 else f"{self.r}·{root}"
+
+
+class Monomial:
+    """c · Π_j k_j^e_j: an exact constant c (a :class:`Value`) times a monomial in the rate constants.
+
+    ``constant`` is c, ``exponents`` is {reaction: e_j} with rational e_j. Called with one rate constant
+    per reaction, it returns its exact Value there.
+    """
+    __slots__ = ("constant", "exponents", "_logs")
+
+    def __init__(self, logs):
+        """From a log value whose bases are Fractions (constants) and ("k", j) for rate constant j"""
+        self._logs = {b: e for b, e in logs.items() if not isinstance(b, tuple)}
+        self.exponents = dict(sorted((b[1], e) for b, e in logs.items() if isinstance(b, tuple) and e))
+        self.constant = Value(self._logs)
+
+    def __call__(self, k):
+        logs = dict(self._logs)
+        for j, e in self.exponents.items():
+            base = fraction(k[j])
+            logs[base] = logs.get(base, 0) + e
+        return Value(logs)
+
+    def format(self, names=None):
+        """as text, with rate constant j written k_<names[j]> (k<j> when names are omitted)"""
+        parts = [] if self.constant == 1 else [repr(self.constant)]
+        for j, e in self.exponents.items():
+            k = f"k_{names[j]}" if names is not None else f"k{j}"
+            parts.append(k if e == 1 else f"{k}^{e}" if e.denominator == 1 else f"{k}^({e})")
+        return "·".join(parts) or "1"
+
+    def __repr__(self):
+        return self.format()
 
 
 def _ln(x):
@@ -192,6 +244,20 @@ class _Span:
         return Value(logs)
 
 
+class _Facts(_Span):
+    """The span of the flux-coupling facts; a repeated combination is a constraint on k"""
+
+    def __init__(self):
+        super().__init__()
+        self.constraints = []
+
+    def _repeated(self, value):
+        if any(isinstance(b, tuple) for b in value):
+            self.constraints.append(Monomial(value))
+        else:                                         # the constants agree, since k = r* satisfies every fact
+            assert Value(value) == 1
+
+
 def _ratio_classes(rows, n):
     """Classes of proportional rows among the first n, with the ratio of every member to the first one.
 
@@ -234,16 +300,17 @@ def relation_values(crn, k, detach_uptakes=True):
             a float is read as the decimal it prints as.
         detach_uptakes: as for :func:`kimonu.iterated_route`.
 
-    Returns a :class:`Values` with every value a :class:`Value`:
-        ``acr``: {metabolite: x_i} for the metabolites with ACR;
-        ``acrr``: one (reference, {metabolite: x_j / x_reference}) per ACRR group, the reference being
-        the group's first metabolite;
-        ``modules``: one (reference, {complex: ψ_c / ψ_reference}) per kinetic module with two or more
-        complexes, the reference being its first complex;
-        ``rounds``: as in :class:`kimonu.RouteResult`.
-
+    Returns a :class:`Values`, with every value a :class:`Value` and metabolites named by crn.metabolite_ids.
     Raises ValueError when k admits no positive steady state, as far as the relations show it.
     """
+    values = _values(crn, k, detach_uptakes)
+    name = crn.metabolite_ids
+    return values._replace(acr={name[i]: x for i, x in values.acr.items()},
+                           acrr=[(name[r], {name[j]: x for j, x in ratios.items()}) for r, ratios in values.acrr])
+
+
+def _values(crn, k, detach_uptakes):
+    """:func:`relation_values` with metabolites as indices"""
     n, q = crn.A.shape
     k = [fraction(x) for x in k]
     if len(k) != q or any(x <= 0 for x in k):
@@ -286,10 +353,8 @@ def relation_values(crn, k, detach_uptakes=True):
             break
         equal += new
 
-    names = crn.metabolite_ids
-    acr = {names[i]: span.value({i: Fraction(1)}) for i in found.acr}
-    acrr = [(names[g[0]], {names[j]: span.value({j: Fraction(1), g[0]: Fraction(-1)}) for j in g[1:]})
-            for g in found.acrr_groups]
+    acr = {i: span.value({i: Fraction(1)}) for i in found.acr}
+    acrr = [(g[0], {j: span.value({j: Fraction(1), g[0]: Fraction(-1)}) for j in g[1:]}) for g in found.acrr_groups]
     modules = []
     for module in sorted(found.modules, key=min):
         if len(module) > 1:
@@ -327,3 +392,70 @@ def rate_constants(crn, flux, x=None):
                 inexact *= float(x[i]) ** float(y)
         k.append(flux[j] / psi if inexact == 1.0 else float(flux[j] / psi) / inexact)
     return k
+
+
+def binomial_formulas(crn, detach_uptakes=True, seed=0, draw="lp", bits=64):
+    """Monomial formulas in k for the relations that flux coupling fixes, and the constraints it puts on k.
+
+    Args:
+        crn: the network, as for :func:`kimonu.iterated_route`.
+        detach_uptakes: as for :func:`kimonu.iterated_route`.
+        seed, draw, bits: of the interior flux r* at which the relations are found (:func:`relation_values` at
+            k = r*, :func:`kimonu.interior_flux`).
+
+    Returns a :class:`Formulas` in the layout of :class:`Values`, with a :class:`Monomial` for every relation that
+    flux coupling fixes and None for the others, and the constraints flux coupling puts on k (see the module
+    docstring).
+    """
+    found = _values(crn, interior_flux(crn, seed, draw, bits), detach_uptakes)
+    facts = _flux_facts(crn, detach_uptakes)
+
+    def formula(vector):
+        logs = facts.logs(vector)
+        return None if logs is None else Monomial(logs)
+
+    acr, acrr, modules = _assemble(_targets(crn, found), formula, crn.metabolite_ids)
+    return Formulas(acr=dict(acr), acrr=acrr, modules=modules, constraints=facts.constraints)
+
+
+def _flux_facts(crn, detach_uptakes):
+    """The span of the flux-coupling facts, with the constraints they put on k"""
+    substrate = substrate_complexes(crn)
+    skip = zero_complexes(crn) if detach_uptakes else set()
+    # fully coupled reactions: proportional rows of ker N, each with its ratio to the first of its class
+    classes = {}
+    for j, row in enumerate(null_space_rows(crn.N)):
+        first = row[0][1]
+        classes.setdefault(tuple((col, v / first) for col, v in row), []).append((j, first))
+    facts = _Facts()
+    for members in classes.values():
+        members = [(j, f) for j, f in members if substrate[j] not in skip]
+        if not members:
+            continue
+        (j, f), *rest = members
+        for l, g in rest:                             # v_l = (g / f) v_j: k_l ψ_s(l) = (g / f) k_j ψ_s(j)
+            c, d = substrate[l], substrate[j]
+            facts.add(_difference(crn, c, d), {g / f: Fraction(1), ("k", j): Fraction(1), ("k", l): Fraction(-1)})
+    return facts
+
+
+def _targets(crn, found):
+    """(kind, key, vector) of every relation of a Values result in indices"""
+    out = [("acr", i, {i: Fraction(1)}) for i in found.acr]
+    out += [("acrr", (r, j), {j: Fraction(1), r: Fraction(-1)}) for r, ratios in found.acrr for j in ratios]
+    out += [("module", (c, d), _difference(crn, d, c)) for c, ratios in found.modules for d in ratios]
+    return out
+
+
+def _assemble(found, formula, names):
+    """acr, acrr and modules from the relations (kind, key, vector) and formula(vector) for each"""
+    acr, acrr, modules = {}, {}, {}
+    for kind, key, vector in found:
+        f = formula(vector)
+        if kind == "acr":
+            acr[names[key]] = f
+        elif kind == "acrr":
+            acrr.setdefault(names[key[0]], {})[names[key[1]]] = f
+        else:
+            modules.setdefault(key[0], {})[key[1]] = f
+    return list(acr.items()), list(acrr.items()), list(modules.items())
