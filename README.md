@@ -172,7 +172,7 @@ pytest
 
 ## Paper and scripts
 
-The paper is "Exact nullspaces find and certify kinetic modules and other mass-action invariants in metabolic
+The paper is "Exact nullspaces certify kinetic modules and other mass-action invariants in metabolic
 networks". [`scripts/README.md`](scripts/README.md) maps each of its figures, tables and numbers to the script
 that made it, and the Zenodo archive holds the results (`scripts/ZENODO_README.md`). No results are kept in git.
 The scripts read one records folder in the layout of the archive, named by the environment variable `KIMONU_RECORDS`
