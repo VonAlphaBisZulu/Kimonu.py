@@ -104,8 +104,7 @@ mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
 free_mets = set(range(mets.index("E_1") if "E_1" in mets else nm))
 
 # ---- exact routes at the real r* (as in hierarchy_data.py)
-it = kimonu.kinetic_modules(A, Y, S, detach_uptakes=False)
-ar = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
+it = kimonu.iterated_route(A, Y, S, detach_uptakes=False)
 flux = integer_positive_flux(S, seed=0)
 Ac = sp.csc_matrix(A); Yc = sp.csc_matrix(Y)
 sub = {}
@@ -139,7 +138,7 @@ for i in range(nm):
 acrr_t = pairs([sorted(g) for g in metg.values() if len(g) > 1])
 cp_t = pairs([sorted(g) for g in groups.values()])
 cp_it = pairs([sorted(m) for m in it.modules])
-acr_it = set(ar.acr); acrr_it = {tuple(sorted(p)) for p in ar.acrr}
+acr_it = set(it.acr); acrr_it = {tuple(sorted(p)) for p in it.acrr}
 t_routes = time.time() - t_start
 
 # ---- GF(p): random r in ker N, J = N diag(r) G, W = N diag(r) S^T

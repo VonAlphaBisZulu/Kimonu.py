@@ -72,9 +72,9 @@ if __name__ == "__main__":
     from run_kimonu_crn import triplets_to_sparse
     name, targets = sys.argv[1], sys.argv[2:]
     if name in ("cubic", "envz"):
-        from test_kinetic import _crn, ENVZ, ENVZ_SPECIES
+        from networks import matrices, ENVZ, ENVZ_SPECIES
         R, mets = ([("0", "A"), ("A", "0"), ("A+A", "A+A+A"), ("A+A+A", "A+A")], ["A"]) if name == "cubic" else (ENVZ, ENVZ_SPECIES)
-        A, Y, N, cx = _crn(R, mets); A, Y, N = sp.csr_matrix(A), sp.csr_matrix(Y, dtype=float), sp.csr_matrix(N, dtype=float)
+        A, Y, N, cx = matrices(R, mets); A, Y, N = sp.csr_matrix(A), sp.csr_matrix(Y, dtype=float), sp.csr_matrix(N, dtype=float)
     else:
         crn = json.load(open(f"{B}/unblocked/{name}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
         A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc); N = triplets_to_sparse(crn["S"], nm, nr)

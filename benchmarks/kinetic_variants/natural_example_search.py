@@ -21,7 +21,7 @@ import numpy as np, scipy.sparse as sp
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src"), os.path.join(os.path.dirname(B), "tests")]
 import kimonu
-from test_kinetic import _crn
+from networks import matrices
 from kinetic_variants.tangent_one_shot import one_shot_exact
 from kinetic_variants.two_point import substrate_composition, certify, search, iterated_constraints
 
@@ -53,15 +53,14 @@ def connected(R, S):
 def routes(R, S):
     """iterated route (attached uptakes) and tangent route, both exact. None if the network has blocked
     reactions (no strictly positive steady-state flux)."""
-    A, Y, N, cx = _crn(R, S)
+    A, Y, N, cx = matrices(R, S)
     try:
-        it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
+        it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
     except ValueError:
         return None
-    ia = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
     _, tacr, tgroups, dim = one_shot_exact(A, Y, N, detach=False, want_groups=True)
     pairs = lambda groups: {frozenset(p) for g in groups for p in itertools.combinations(sorted(g), 2)}
-    return dict(A=A, Y=Y, N=N, it_acr=set(ia.acr), it_acrr={frozenset(p) for p in ia.acrr},
+    return dict(A=A, Y=Y, N=N, it_acr=set(it.acr), it_acrr={frozenset(p) for p in it.acrr},
                 tan_acr=set(tacr), tan_acrr=pairs(tgroups), tan_dim=dim)
 
 

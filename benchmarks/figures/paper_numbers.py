@@ -203,8 +203,9 @@ w = [float(x) for x in re.findall(r"iAF1260b.*\n.*wall ([\d.]+) s", open(sorted(
 out(M, "preprocessing iAF1260b, load to factorization", f"{med(w):.1f} s (runs {', '.join(f'{x:.1f}' for x in w)})", f"{FVA}/preprocess_*.log")
 out(M, "second evaluation (mod p) reproduces both routes", f"{sum(c['tangent_match'] and c['iterated_match'] for c in C)} of {len(C)}", f"{CERT}/*.json")
 Z = [json.load(open(f)) for f in sorted(glob.glob(f"{SZ}/*.json"))]
-ri = [z["uniform"]["iterated"]["seconds"] / z["default"]["iterated"]["seconds"] for z in Z]
-rt = [z["uniform"]["tangent"]["seconds"] / z["default"]["tangent"]["seconds"] for z in Z]
+lp = lambda z: z["lp"] if "lp" in z else z["default"]         # records before 2026-11-11 call the LP arm "default"
+ri = [z["uniform"]["iterated"]["seconds"] / lp(z)["iterated"]["seconds"] for z in Z]
+rt = [z["uniform"]["tangent"]["seconds"] / lp(z)["tangent"]["seconds"] for z in Z]
 out(M, f"uniform 2^64 flux against the LP point, runtime ratio ({len(Z)} networks)",
     f"iterated {min(ri):.1f} to {max(ri):.1f}, tangent {min(rt):.1f} to {max(rt):.1f}; identical results "
     f"{sum(z['iterated_agree'] and z['tangent_agree'] for z in Z)} of {len(Z)}", SZ)

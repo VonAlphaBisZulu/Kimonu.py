@@ -3,7 +3,7 @@
 Per model and uptake mode (attached, detached):
 1. Round trip. x is a random small rational on every metabolite whose substrate coefficients are all
    integers and 1 on the rest, so ψ(x) stays rational; k = r* / ψ(x) (kimonu.rate_constants) with the
-   integer flux r* of the tangent route. relation_values(k) must return every ACR value as x_i, every ACRR
+   integer LP point r* (kimonu.interior_flux, draw="lp", the tangent route's flux of the recorded run). relation_values(k) must return every ACR value as x_i, every ACRR
    ratio as x_j / x_i and every module ratio as ψ_d(x) / ψ_c(x), exactly, and as many relations as the
    iterated route found in uptake_modes/<model>.json.
 2. Binomial values. With k_j the j-th prime under a random permutation, a value that is a monomial in k
@@ -20,7 +20,7 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu.io import substrate_complexes
-from kimonu.linalg import positive_flux
+from kimonu import interior_flux
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 OUT = os.environ.get("RV_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_values")
@@ -79,7 +79,7 @@ def all_values(v):
 
 
 t0 = time.time()
-flux = positive_flux(N, 0, scale=10**6)
+flux = interior_flux(N, 0, draw="lp")
 out = dict(model=M, n_reactions=nr, n_complexes=nc, n_metabolites=nm, seconds_flux=time.time() - t0)
 fractional = {i for c in set(substrate_complexes(A).values()) for i, y in column(c).items() if y.denominator != 1}
 rng = random.Random(0)

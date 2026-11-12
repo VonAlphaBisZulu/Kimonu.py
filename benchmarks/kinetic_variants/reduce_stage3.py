@@ -58,8 +58,8 @@ def ok(rx):
     try:
         A, Y, N, ms, _ = build(rx)
         if target not in ms: return False
-        ti = ms.index(target); it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
-        if ti in set(kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr): return False
+        ti = ms.index(target); it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+        if ti in set(it.acr): return False
         return ti in set(one_shot_exact(A, Y, N, False)[1])
     except Exception as e:
         print("   predicate error:", type(e).__name__, str(e)[:100], flush=True); return False

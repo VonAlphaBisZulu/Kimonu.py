@@ -1,4 +1,4 @@
-"""Iterated psi route with a Descartes step (benchmark variant of kimonu.kinetic_modules).
+"""Iterated psi route with a Descartes step (benchmark variant of kimonu.iterated_route).
 
 Besides the psi-kernel readout and the log closure, every metabolite balance sum_j N_ij k_j psi_s(j) = 0 is
 examined against the directions F already known to be fixed (composition differences within modules,
@@ -16,10 +16,18 @@ the psi kernel as in the default route. Every step is a theorem, so the route st
 from fractions import Fraction
 import numpy as np
 from scipy import sparse
-from kimonu.kinetic import positive_flux, _psi_coupled
-from kimonu.linalg import entries
-from kimonu.acr import composition_differences
-from kimonu.linalg import left_null_rows
+from kimonu import interior_flux
+from kimonu.io import substrate_complexes, zero_complexes
+from kimonu.iterated import coupled_columns
+from kimonu.linalg import entries, left_null_rows
+from kimonu.readout import composition_differences
+
+
+def _psi_coupled(A, Y, N, flux, detach_uptakes, equal=()):
+    """The coupled sets of ker(W) on the complexes, and the substrate complexes, without a detached zero complex"""
+    n, drop = A.shape[0], (zero_complexes(Y) if detach_uptakes else set())
+    sets = [{c for c in g if c < n and c not in drop} for g in coupled_columns(A, Y, N, flux, detach_uptakes, equal)]
+    return sets, set(substrate_complexes(A).values()) - drop
 
 
 def _rows(Y, sets, extra):
@@ -94,7 +102,7 @@ def _descartes(A, Y, N, rows, extra, flux, detach_uptakes):
 
 def kinetic_modules_descartes(A, Y, N, detach_uptakes=False, seed=0):
     n = A.shape[0]
-    flux = positive_flux(N, seed)
+    flux = interior_flux(N, seed)
     equal, extra, firings = [], [], []
     while True:
         coupled, subs = _psi_coupled(A, Y, N, flux, detach_uptakes, equal)

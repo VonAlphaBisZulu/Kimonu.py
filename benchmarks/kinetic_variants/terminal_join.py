@@ -20,20 +20,20 @@ import json, os, sys, time
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.acr import coupling_signatures
+from compat.upstream import coupling_signatures
 from kimonu.io import substrate_complexes, zero_complexes
 
 
 def join_terminals(A, Y, result, detach_uptakes=False):
-    """Modules of ``result`` (a KineticResult) with every non-substrate complex joined where it is coupled.
+    """Modules of ``result`` (a kimonu.RouteResult) with every non-substrate complex joined where it is coupled.
 
-    With detached uptakes the zero complex stays out, as kinetic_modules keeps it out of every module."""
+    With detached uptakes the zero complex stays out, as kimonu.iterated_route keeps it out of every module."""
     substrate = set(substrate_complexes(A).values())
     skip = zero_complexes(Y) if detach_uptakes else set()
     multi = [set(m) for m in result.modules if len(m) > 1]
     lone = [next(iter(m)) for m in result.modules if len(m) == 1 and not (set(m) & skip)]
     sets = multi + [{c} for c in lone]
-    sig = coupling_signatures(Y, sets, result.known_acr)
+    sig = coupling_signatures(Y, sets, result.acr)
     if sig is None:
         return [set(m) for m in result.modules]
     merged = {}
@@ -60,14 +60,14 @@ if __name__ == "__main__":
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
     t = time.time()
-    res = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach)
-    before = kimonu.acr_acrr(Y, res.modules, known_acr=res.known_acr)
+    res = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
+    before = kimonu.readout(Y, kimonu.free_directions(Y, res.modules, res.acr))
     joined = join_terminals(A, Y, res, detach_uptakes=detach)
-    after = kimonu.acr_acrr(Y, joined, known_acr=res.known_acr)
+    after = kimonu.readout(Y, kimonu.free_directions(Y, joined, res.acr))
     substrate = set(substrate_complexes(A).values())
     moved = sum(1 for m in joined if len(m) > 1 for c in m if c not in substrate)
     print(json.dumps(dict(model=M, detach=detach, seconds=round(time.time() - t, 1),
                           before=summarise([set(m) for m in res.modules]), after=summarise(joined),
                           terminal_joined=moved,
                           acr_same=sorted(before.acr) == sorted(after.acr),
-                          acrr_same=sorted(map(tuple, before.acrr)) == sorted(map(tuple, after.acrr)))), flush=True)
+                          acrr_same=sorted(map(tuple, before.acrr_groups)) == sorted(map(tuple, after.acrr_groups)))), flush=True)

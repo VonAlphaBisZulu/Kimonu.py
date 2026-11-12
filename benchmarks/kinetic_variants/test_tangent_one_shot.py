@@ -17,26 +17,26 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src")); sys.path.insert(0, os.path.join(os.path.dirname(B), "tests"))
 import kimonu
-from test_kinetic import _crn, ENVZ, ENVZ_SPECIES
+from networks import matrices, ENVZ, ENVZ_SPECIES
 from kinetic_variants.tangent_one_shot import one_shot_exact
 
 CUBIC = [("0", "A"), ("A", "0"), ("A+A", "A+A+A"), ("A+A+A", "A+A")]
 
 def test_cubic_is_local_only():
-    A, Y, N, cx = _crn(CUBIC, ["A"])
+    A, Y, N, cx = matrices(CUBIC, ["A"])
     _, acr, _, dim = one_shot_exact(A, Y, N, detach=False)
     assert dim == 0 and acr == [0], "each branch is an isolated point, so A is locally fixed"
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
-    assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == [], "A takes three values"
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+    assert it.acr == [], "A takes three values"
 
 def test_cubic_really_has_three_steady_states():
     roots = np.sort(np.roots([-1, 6, -11, 6]).real)        # 6 - 11x + 6x^2 - x^3
     assert np.allclose(roots, [1, 2, 3])
 
 def test_envz_both_routes_agree():
-    A, Y, N, cx = _crn(ENVZ, ENVZ_SPECIES)
+    A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
     mods, acr, groups, dim = one_shot_exact(A, Y, N, detach=False, want_groups=True)
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
     # one_shot_exact groups substrate complexes only; the iterated route now also places terminal ones
     sub = {int(i) for i in np.nonzero((A.toarray() < 0).any(axis=1))[0]}
     restrict = lambda ms: {frozenset(set(m) & sub) for m in ms if len(set(m) & sub) > 1}
@@ -49,12 +49,12 @@ def test_descartes_step_on_known_networks():
     """silent on the cubic (three sign changes), fires on constant supply with first- and second-order loss,
     and treats detached uptakes as free, not constant"""
     from kinetic_variants.descartes import kinetic_modules_descartes
-    A, Y, N, cx = _crn(CUBIC, ["A"])
+    A, Y, N, cx = matrices(CUBIC, ["A"])
     assert kinetic_modules_descartes(A, Y, N)[1] == []
     dimer = [("0", "X"), ("X", "0"), ("X+X", "0")]
-    A, Y, N, cx = _crn(dimer, ["X"])
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
-    assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == [], "the iterated route alone misses it"
+    A, Y, N, cx = matrices(dimer, ["X"])
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+    assert it.acr == [], "the iterated route alone misses it"
     assert kinetic_modules_descartes(A, Y, N)[1] == [0], "one sign change: exactly one positive x"
     assert kinetic_modules_descartes(A, Y, N, detach_uptakes=True)[1] == [], "a free source leaves x free"
 
@@ -66,9 +66,9 @@ def test_toys_separate_missed_from_local():
     from kinetic_variants.branch_certificate import certify
     for R, fixed in (([("0", "X"), ("X", "0"), ("X+X", "0"), ("0", "Y"), ("Y", "0"), ("X+Y", "0")], True),
                      ([("0", "X"), ("X", "0"), ("Y", "0"), ("X+Y+Y", "Y+Y+Y")], False)):
-        A, Y, N, cx = _crn(R, ["X", "Y"])
-        it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
-        assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == []
+        A, Y, N, cx = matrices(R, ["X", "Y"])
+        it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+        assert it.acr == []
         assert sorted(one_shot_exact(A, Y, N, False)[1]) == [0, 1]
         G = sp.csr_matrix((A.toarray() < 0).astype(float).T @ Y.toarray().T)
         status = certify(sp.csr_matrix(N.toarray().astype(float)), G, np.array([1.0, 0.0]))[0]
@@ -84,9 +84,9 @@ def test_example_network_for_the_completeness_figure():
     R = [("0", "A"), ("A", "0"), ("A+A", "0"), ("0", "B"), ("B", "0"), ("A+B", "0"),
          ("0", "C"), ("C", "0"), ("P", "0"), ("C+P+P", "P+P+P")]
     S = ["A", "B", "C", "P"]
-    A, Y, N, cx = _crn(R, S)
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
-    assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == []
+    A, Y, N, cx = matrices(R, S)
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+    assert it.acr == []
     assert sorted(one_shot_exact(A, Y, N, False)[1]) == [0, 1, 2, 3]
     G = sp.csr_matrix((A.toarray() < 0).astype(float).T @ Y.toarray().T); Nf = sp.csr_matrix(N.toarray().astype(float))
     proven = [s for i, s in enumerate(S) if "infeasible" in certify(Nf, G, np.eye(4)[i])[0]]
@@ -99,7 +99,7 @@ def test_example_network_for_the_completeness_figure():
 def _two_point_setup(R, species):
     import scipy.sparse as sp
     from kinetic_variants.two_point import substrate_composition
-    A, Y, N, cx = _crn(R, species)
+    A, Y, N, cx = matrices(R, species)
     return A, Y, N, substrate_composition(A, Y), sp.csr_matrix(N, dtype=float)
 
 
@@ -183,13 +183,13 @@ def test_terminal_complexes_join_the_module_they_are_coupled_to():
     """Figure 1: B+G joins the module (psi_{B+G}/psi_B = x_G, G has ACR), the one terminal complex Langary et al.
     report; A+E and C+E pair up (ratio x_A/x_C); D stays alone. ACR and ACRR do not change."""
     from kinetic_variants.terminal_join import join_terminals
-    A, Y, N, cx = _crn(FIG1, list("ABCDEFGHI"))
-    res = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
+    A, Y, N, cx = matrices(FIG1, list("ABCDEFGHI"))
+    res = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
     joined = {frozenset(cx[i] for i in m) for m in join_terminals(A, Y, res) if len(m) > 1}
     assert joined == {frozenset({"A", "B", "C", "D+E", "F", "C+G", "H", "A+G", "I", "B+G"}), frozenset({"A+E", "C+E"})}
-    before = kimonu.acr_acrr(Y, res.modules, known_acr=res.known_acr)
-    after = kimonu.acr_acrr(Y, [set(m) for m in join_terminals(A, Y, res)], known_acr=res.known_acr)
-    assert before.acr == after.acr and sorted(before.acrr) == sorted(after.acrr)
+    before = kimonu.readout(Y, kimonu.free_directions(Y, res.modules, res.acr))
+    after = kimonu.readout(Y, kimonu.free_directions(Y, [set(m) for m in join_terminals(A, Y, res)], res.acr))
+    assert before.acr == after.acr and sorted(before.acrr_groups) == sorted(after.acrr_groups)
 
 
 def test_autonomous_blocks_prove_what_uniqueness_gives():
@@ -203,7 +203,7 @@ def test_autonomous_blocks_prove_what_uniqueness_gives():
                                      ([("0", "X"), ("X", "0"), ("X+X", "0")], ["X"], ["X"], []),
                                      (CUBIC, ["A"], [], []),
                                      (ENVZ, ENVZ_SPECIES, ["Yp"], ["Yp"])]:
-        A, Y, N, cx = _crn(R, S)
+        A, Y, N, cx = matrices(R, S)
         for det, want in ((False, attached), (True, detached)):
             out = run(A, Y, N, sp.csr_matrix(N, dtype=float), detach_uptakes=det, log=lambda s: None)
             assert [S[i] for i in out["acr"]] == want, (S, det)
@@ -217,7 +217,7 @@ def test_published_local_acr_criterion_matches_the_nullspace_readout():
     from kinetic_variants.local_acr_symbolic import NETWORKS, run_network
     for name in ("GP2.18", "GP3.12", "GP3.14", "GP3.15", "GPB.3", "PEF4.6", "PEF5.5", "Fig3"):
         R, S, truth = NETWORKS[name]
-        A, Y, N, cx = _crn(R, S)
+        A, Y, N, cx = matrices(R, S)
         r = run_network(name, A, Y, N, S, truth, limit=60)
         assert r["agree_rref"] and r["agree_minors"] and not r["degenerate"], name
         assert r["chain_ok"], name
@@ -238,9 +238,9 @@ def test_natural_candidates_for_the_completeness_figure():
                   [dict(X=1, C=F(1, 10), P=F(2, 5), D=F(4, 25)), dict(X=1, C=F(2, 5), P=F(1, 10), D=F(1, 100))]),
     }
     for name, (R, S, k, states) in nets.items():
-        A, Y, N, cx = _crn(R, S)
-        it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
-        assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == [], name
+        A, Y, N, cx = matrices(R, S)
+        it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+        assert it.acr == [], name
         assert sorted(one_shot_exact(A, Y, N, False)[1]) == list(range(len(S))), name
         for x in states:
             f = {s: F(0) for s in S}
@@ -263,10 +263,10 @@ def test_integer_example_for_the_completeness_figure():
     from kinetic_variants.branch_certificate import certify
     R = [("0", "X"), ("X", "0"), ("X+X", "C"), ("C", "0"), ("C+P+P", "P+P+P"), ("P", "0")]
     S, k = ["X", "C", "P"], [20, 1, F(1, 20), 1, F(1, 4), 1]
-    A, Y, N, cx = _crn(R, S)
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
+    A, Y, N, cx = matrices(R, S)
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
     assert {frozenset(cx[i] for i in m) for m in it.modules if len(m) > 1} == {frozenset({"P", "C+P+P"})}
-    assert kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr == []
+    assert it.acr == []
     assert sorted(one_shot_exact(A, Y, N, False)[1]) == [0, 1, 2]
     G = (A.toarray() < 0).astype(int).T @ Y.toarray().T          # reactions x species: substrate compositions
     for state in (dict(X=10, C=1, P=4), dict(X=10, C=4, P=1)):

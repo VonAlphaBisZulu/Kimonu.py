@@ -46,11 +46,11 @@ def network(keep):
     return A.tocsr().astype(np.int64), Y[used_m, :].tocsr(), to_exact(N0[used_m, :][:, keep]), [mets[i] for i in used_m]
 
 from scipy.sparse.linalg import lsqr
-from kimonu.kinetic import positive_flux
+from kimonu import interior_flux
 
 def tangent_fixed_float(A, Y, N, ti):
     """e_ti in the row space of J = N diag(r*) G, in floating point"""
-    r = np.array([float(v) for v in positive_flux(N)])
+    r = np.array([float(v) for v in interior_flux(N, draw="lp")])
     Nf = N0_float(N); G = ((A < 0).astype(float).T @ Y.T).tocsr()
     J = (Nf @ sp.diags(r) @ G).tocsr()
     e = np.zeros(J.shape[1]); e[ti] = 1
@@ -70,8 +70,7 @@ def gap(keep, exact=False):
         A, Y, N, ms = network(kept)
         if target in ms:
             ti = ms.index(target)
-            it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
-            acr_it = set(kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr)
+            acr_it = set(kimonu.iterated_route(A, Y, N, detach_uptakes=False).acr)
             if ti not in acr_it:
                 if exact:
                     _, acr_t, _, _ = one_shot_exact(A, Y, N, False)

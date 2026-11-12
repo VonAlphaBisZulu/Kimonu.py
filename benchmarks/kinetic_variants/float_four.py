@@ -12,9 +12,9 @@ floating point needs a tolerance, and does so for both routes (detached uptakes 
 With an exact kernel, truly equal rows differ by exactly zero, so nothing can be missed, and every error is
 a relation made up by the tolerance. With an SVD kernel, a wrong rank decision can also break relations.
 
-The tangent route reads ACR and ACRR off T = ker(W Y^T) at r* (integer, scale 10^6, as in tangent.py). The
+The tangent route reads ACR and ACRR off T = ker(W Y^T) at r* (kimonu.interior_flux, as in tangent.py). The
 iterated route alternates ker(W) (plus the feedback rows u_c - u_d) with L = ker((Y Delta)^T) as in
-kinetic.py, at the same r* as kimonu.kinetic_modules; in floats every grouping in the loop (equal rows of
+iterated.py, at the same r*; in floats every grouping in the loop (equal rows of
 ker(W), equal rows of Y^T L) uses the same tau, so a wrong merge feeds back into the next round. Each arm is
 scored against its own exact route: ACR metabolites and ACRR pairs, missed (false negatives) and made up
 (false positives), over all metabolites and over the free ones.
@@ -34,10 +34,10 @@ from scipy.sparse.csgraph import minimum_spanning_tree
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.acr import _combined, _difference_columns, _kernel_rows, free_directions, readout
+from kimonu.readout import complex_directions, free_directions, readout
 from kimonu.io import zero_complexes
-from kimonu.kinetic import steady_state_map
-from kimonu.linalg import exact, null_space_rows, positive_flux
+from kimonu.linalg import exact, null_space_rows
+from kimonu.steady_state import interior_flux, steady_state_map
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 OUT = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
@@ -227,6 +227,14 @@ mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
 free = np.zeros(nm, bool); free[:mets.index("E_1") if "E_1" in mets else nm] = True
 skip = zero_complexes(Y)
 cx = [c for c in range(nc) if c not in skip]                 # the complexes that enter the modules
+
+
+def yt_rows(B):
+    """Rows of Yᵀ B for the complexes that enter the modules"""
+    rows = complex_directions(Y, B)
+    return [rows[c] for c in cx]
+
+
 Ycsc = sp.csc_matrix(Y)
 Yf = sp.csc_matrix(Y, dtype=float)
 iu = np.triu_indices(nm, 1)
@@ -237,7 +245,7 @@ log = lambda *a: print(f"[{time.strftime('%H:%M:%S')}] {M}:", *a, flush=True)
 if DO_TANGENT:
     # ---------------------------------------------------------------- tangent route
     t0 = time.time()
-    fluxT = positive_flux(N, 0, scale=10**6)
+    fluxT = interior_flux(N, 0)
     W, (_, ncol) = steady_state_map(A, Y, N, fluxT, True)
     J, Jf = {}, np.zeros((nm, nm + ncol - nc))
     for (i, c), w in W.items():
@@ -252,7 +260,7 @@ if DO_TANGENT:
     ref = kimonu.tangent_route(A, Y, N, detach_uptakes=True)
     assert sorted(ex.acr) == sorted(ref.acr), "tangent: own readout differs from kimonu.tangent_route"
     acr_x = np.zeros(nm, bool); acr_x[list(ex.acr)] = True
-    E = pair_matrix(nm, ex.acrr)
+    E = pair_matrix(nm, ex.acrr_groups)
     out["tangent_exact_relations"] = dict(acr=int(acr_x.sum()), acrr_pairs=int(E.sum()), acr_free=int((acr_x & free).sum()),
                                           acrr_pairs_free=int(E[np.ix_(free, free)].sum()), seconds=time.time() - t0)
     out["tangent_exact_relations"].update(exact_hashes(acr_x, E, ex.modules))
@@ -262,7 +270,7 @@ if DO_TANGENT:
 
     def tangent_exact():
         eb = ExactBasis(rows)
-        return eb.T[:nm], eb.apply([_combined(Ycsc, rows_m, c) for c in cx])
+        return eb.T[:nm], eb.apply(yt_rows(rows_m))
 
 
     def tangent_svd():
@@ -289,11 +297,11 @@ if DO_TANGENT:
 if ITER:
     # ---------------------------------------------------------------- iterated route
     t0 = time.time()
-    km = kimonu.kinetic_modules(A, Y, N, detach_uptakes=True, seed=0)
+    km = kimonu.iterated_route(A, Y, N, detach_uptakes=True, seed=0)
     fluxI = km.flux
     Rx = readout(Y, free_directions(Y, km.modules), skip)
     acr_xi = np.zeros(nm, bool); acr_xi[list(Rx.acr)] = True
-    Ei = pair_matrix(nm, Rx.acrr)
+    Ei = pair_matrix(nm, Rx.acrr_groups)
     mods_x = sorted(sorted(s) for s in km.modules if len(s) > 1)
     out["iterated_exact_relations"] = dict(acr=int(acr_xi.sum()), acrr_pairs=int(Ei.sum()), acr_free=int((acr_xi & free).sum()),
                                            acrr_pairs_free=int(Ei[np.ix_(free, free)].sum()), modules=len(mods_x),
@@ -342,10 +350,10 @@ if ITER:
                     L = svd_left_kernel(np.array(cols).T if cols else np.zeros((nm, 0)))
                     YtL = np.asarray(Yf.T @ L)[cx]
                 else:
-                    Lrows = _kernel_rows(_difference_columns(Y, [set(s) for s in key], ()), nm)
+                    Lrows = free_directions(Y, [set(s) for s in key])
                     eb = ExactBasis(Lrows)
                     L = eb.T
-                    YtL = eb.apply([_combined(Ycsc, Lrows, c) for c in cx])
+                    YtL = eb.apply(yt_rows(Lrows))
                 DL, nrmL = rel_dist(L)
                 DY, _ = rel_dist(YtL)
                 memo_L[key] = (DL.astype(np.float32), nrmL, mst(DY))

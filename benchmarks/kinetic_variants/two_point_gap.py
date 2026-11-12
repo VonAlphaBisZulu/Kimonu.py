@@ -32,15 +32,14 @@ def prepare(M):
     from kinetic_variants.tangent_one_shot import one_shot_exact
     crn, A, Y, Nf = load(M); mets = crn["metabolites"]; N = to_exact(Nf)
     V, classes, it = iterated_constraints(A, Y, N)
-    ar = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
     _, acr_t, groups_t, _ = one_shot_exact(A, Y, N, False, want_groups=True)
     # iterated ACRR groups (union of its pairs)
     parent = {}
     def find(a):
         while parent.setdefault(a, a) != a: a = parent[a]
         return a
-    for a, b in ar.acrr: parent[find(a)] = find(b)
-    rel = [dict(kind="ACR", c={mets[i]: 1}) for i in sorted(set(acr_t) - set(ar.acr))]
+    for a, b in it.acrr: parent[find(a)] = find(b)
+    rel = [dict(kind="ACR", c={mets[i]: 1}) for i in sorted(set(acr_t) - set(it.acr))]
     for g in groups_t:
         parts = {}
         for i in g: parts.setdefault(find(i) if i in parent else ("solo", i), []).append(i)

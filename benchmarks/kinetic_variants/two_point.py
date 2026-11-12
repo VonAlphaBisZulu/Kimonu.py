@@ -166,9 +166,9 @@ def certify(N, G, c, V=None, classes=None, free=(), time_limit=3600, threads=4, 
 def iterated_constraints(A, Y, N, detach=False):
     """V (rows: log-combinations the iterated route proves fixed) and reaction classes (one per module)."""
     import kimonu
-    from kimonu.acr import composition_differences
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach)
-    D = composition_differences(sp.csc_matrix(Y), it.modules, it.known_acr)
+    from kimonu.readout import composition_differences
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
+    D = composition_differences(sp.csc_matrix(Y), it.modules, it.acr)
     V = sp.csr_matrix(D.T, dtype=float)
     Ac = sp.csc_matrix(A)
     sub = {j: int(Ac.indices[Ac.indptr[j]:Ac.indptr[j + 1]][Ac.data[Ac.indptr[j]:Ac.indptr[j + 1]] < 0][0]) for j in range(A.shape[1])}
@@ -182,7 +182,8 @@ def exact_realise(N, G, xprime):
     """Exact counterexample for integer G and rational x' (x = 1): an r > 0 in ker N with
     N (r o psi(x')) = 0, from the exact nullspace of the stacked matrix. Returns r (Fractions) or None."""
     from fractions import Fraction
-    from kimonu.linalg import entries, exact, positive_flux
+    from kimonu import interior_flux
+    from kimonu.linalg import entries, exact
     triples, (m, q) = entries(N)
     Gc = sp.csr_matrix(G)
     psi = []
@@ -194,6 +195,6 @@ def exact_realise(N, G, xprime):
         psi.append(p)
     stacked = triples + [(m + i, j, v * psi[j]) for i, j, v in triples]
     try:
-        return positive_flux(exact(stacked, (2 * m, q)))
+        return interior_flux(exact(stacked, (2 * m, q)), draw="lp")
     except ValueError:
         return None

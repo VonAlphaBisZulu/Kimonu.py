@@ -1,7 +1,7 @@
 """Seed invariance of the iterated route: kinetic modules, ACR and ACRR at three random interior fluxes r*.
 
-The relations hold for generic rate constants, so a different seed (a different r*) may change them only with
-probability zero. Runs kimonu.kinetic_modules + acr_acrr with detached uptakes at seeds 0, 1, 2 and reports
+The relations hold for generic rate constants, so a different seed (a different r*) can change them only at finely
+tuned reference fluxes. Runs kimonu.iterated_route with detached uptakes at seeds 0, 1, 2 and reports
 whether the module partition, the ACR metabolites and the ACRR groups are identical.
 
     python kinetic_variants/seed_invariance.py <model>   -> $SEED_OUT/<model>.json
@@ -22,11 +22,10 @@ N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
 runs = []
 for seed in (0, 1, 2):
     t = time.time()
-    kin = kimonu.kinetic_modules(A, Y, N, detach_uptakes=True, seed=seed)
-    ar = kimonu.acr_acrr(Y, kin.modules, known_acr=kin.known_acr)
+    kin = kimonu.iterated_route(A, Y, N, detach_uptakes=True, seed=seed)
     runs.append(dict(seed=seed, seconds=time.time() - t,
                      modules=sorted(sorted(map(int, m)) for m in kin.modules if len(m) > 1),
-                     acr=sorted(map(int, ar.acr)), acrr=sorted(sorted(map(int, p)) for p in ar.acrr)))
+                     acr=sorted(map(int, kin.acr)), acrr=sorted(sorted(map(int, p)) for p in kin.acrr)))
     print(M, seed, len(runs[-1]["modules"]), len(runs[-1]["acr"]), len(runs[-1]["acrr"]), flush=True)
 same = {k: all(r[k] == runs[0][k] for r in runs) for k in ("modules", "acr", "acrr")}
 os.makedirs(OUT, exist_ok=True)

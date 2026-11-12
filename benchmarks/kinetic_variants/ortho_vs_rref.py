@@ -16,10 +16,9 @@ import numpy as np, scipy.sparse as sp
 import flint
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src"), os.path.join(B, "kinetic_variants")]
-from kimonu.acr import readout
+from kimonu import interior_flux, readout, steady_state_map
 from kimonu.io import zero_complexes
-from kimonu.kinetic import steady_state_map
-from kimonu.linalg import exact, null_space_rows, positive_flux
+from kimonu.linalg import exact, null_space_rows
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 TAUS = [float(10.0 ** e) for e in np.arange(-14, -0.5 + 1e-9, 0.5)]
@@ -32,7 +31,7 @@ for M in sys.argv[1:]:
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
     N = to_exact(triplets_to_sparse(crn["S"], nm, nr)); Ycsc = sp.csc_matrix(Y)
-    flux = positive_flux(N, 0, scale=10**6)
+    flux = interior_flux(N, 0, draw="lp")                     # the integer LP point of the recorded run
     W, (_, ncol) = steady_state_map(A, Y, N, flux, True)
     J = {}
     for (i, c), w in W.items():
@@ -41,7 +40,7 @@ for M in sys.argv[1:]:
             J[(i, int(k))] = J.get((i, int(k)), Fraction(0)) + w * Fraction(str(y))
     rows = null_space_rows(exact(((i, k, v) for (i, k), v in J.items()), (nm, nm + ncol - nc)))
     ex = readout(Y, [tuple(sorted(r.items())) for r in rows[:nm]], zero_complexes(Y))
-    acr_x = set(ex.acr); E = {(a, b) for g in ex.acrr for a in g for b in g if a < b}
+    acr_x = set(ex.acr); E = {(a, b) for g in ex.acrr_groups for a in g for b in g if a < b}
     d = max((j for r in rows for j in r), default=-1) + 1
     T = flint.fmpq_mat(len(rows), d)
     for i, r in enumerate(rows):

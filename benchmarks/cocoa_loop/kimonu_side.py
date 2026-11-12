@@ -38,11 +38,10 @@ def main(M, out, crn_path=None):
     res["concordance_modules"] = [g for g in res["concordance_modules"] if g]
     for mode, det in (("attached", False), ("detached", True)):
         t0 = time.perf_counter()
-        kin = kimonu.kinetic_modules(A, Y, S, detach_uptakes=det)
-        acr = kimonu.acr_acrr(Y, kin.modules, metabolite_ids=mets, known_acr=kin.known_acr)
+        kin = kimonu.iterated_route(A, Y, S, detach_uptakes=det, metabolite_ids=mets)
         res[mode] = {"seconds": time.perf_counter() - t0, "rounds": kin.rounds,
                      "modules": [[key(comp[j]) for j in g if comp[j]] for g in kin.modules if len([j for j in g if comp[j]]) > 1],
-                     "acr": sorted(acr.acr), "acrr": sorted(sorted(p) for p in acr.acrr)}
+                     "acr": sorted(kin.acr), "acrr": sorted(sorted(p) for p in kin.acrr)}
     json.dump(res, open(out, "w"))
     print(M, "done", {m: len(res[m]["modules"]) for m in ("attached", "detached")}, flush=True)
 

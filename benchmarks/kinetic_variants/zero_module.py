@@ -14,7 +14,7 @@ from scipy import sparse
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.acr import free_directions, _combined
+from kimonu.readout import complex_directions, free_directions
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 OUT = os.environ.get("ZM_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_accr")
@@ -29,16 +29,17 @@ comp = lambda c: {mets[i]: float(v) for i, v in zip(Yc.indices[Yc.indptr[c]:Yc.i
 zero = [c for c in range(nc) if Yc.indptr[c + 1] == Yc.indptr[c]]
 out = dict(model=M, n_complexes=nc, zero=zero)
 for mode, detach in (("attached", False), ("detached", True)):
-    kin = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach)
+    kin = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
     mod = next((sorted(map(int, m)) for m in kin.modules if zero and zero[0] in m), [])
     members = [c for c in mod if c not in zero and c < nc]
     rows = free_directions(Y, kin.modules)
-    fixed = [c for c in range(nc) if c not in zero and _combined(Yc, rows, c) == ()]
+    YtB = complex_directions(Y, rows)
+    fixed = [c for c in range(nc) if c not in zero and YtB[c] == ()]
     if not detach:
         assert fixed == members, (M, len(fixed), len(members))
     out[mode] = dict(n_zero_module=len(members), n_fixed=len(fixed), fixed=[comp(c) for c in fixed],
                      single=[next(iter(comp(c))) for c in fixed if len(comp(c)) == 1 and list(comp(c).values()) == [1.0]],
-                     n_acr=len(kin.known_acr))
+                     n_acr=len(kin.acr))
     print(M, mode, "zero module", len(members), "fixed", len(fixed), flush=True)
 os.makedirs(OUT, exist_ok=True)
 json.dump(out, open(f"{OUT}/{M}.json", "w"), indent=1)

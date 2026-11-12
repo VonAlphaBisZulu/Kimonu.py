@@ -11,14 +11,12 @@ from fractions import Fraction
 import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "src")); sys.path.insert(0, os.path.join(ROOT, "tests"))
-from test_kinetic import _crn, ENVZ, ENVZ_SPECIES
+from networks import matrices, ENVZ, ENVZ_SPECIES
 from kimonu.linalg import exact, matrix_product, null_space_rows, proportional_classes
-from kimonu.kinetic import steady_state_map, _closure
-from kimonu.acr import free_directions, readout
-from kimonu.tangent import tangent_route
+from kimonu import free_directions, readout, steady_state_map, tangent_route
 
 NAME = dict(zip(ENVZ_SPECIES, "ABCDEFGHI"))
-A, Y, N, cx = _crn(ENVZ, ENVZ_SPECIES)
+A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
 CX = ["+".join(NAME[s] for s in c.split("+")) for c in cx]
 RX = [f"R{j + 1}" for j in range(A.shape[1])]
 SP = [NAME[s] for s in ENVZ_SPECIES]
@@ -100,7 +98,8 @@ while True:
     dl = max((j for r in Lrows for j, _ in r), default=-1) + 1
     p(f"Log closure: $\\ker((\\mathbf{{Y}}\\Delta)^\\top)$ has {dl} dimensions.\n")
     p(tex(dense([dict(r) for r in Lrows], dl), SP, [f"l{j + 1}" for j in range(dl)], r"\ker((Y\Delta)^\top)"))
-    merged, acr = _closure(Y, [s for s in sets if s], set())
+    found = readout(Y, Lrows)
+    merged, acr = found.modules, set(found.acr)
     p("Readout: kinetic modules " + "; ".join("{" + ", ".join(CX[i] for i in sorted(s)) + "}" for s in merged if len(s) > 1)
       + (", ACR " + ", ".join(SP[i] for i in sorted(acr)) if acr else ", no ACR yet") + ".\n")
     if len(merged) == len([s for s in sets if s]):
@@ -112,7 +111,7 @@ R = readout(Y, free_directions(Y, merged))
 p("\n### S1.5 Final readout\n")
 p("Kinetic modules: " + "; ".join("{" + ", ".join(CX[i] for i in sorted(s)) + "}" for s in R.modules if len(s) > 1)
   + ". ACR: " + ", ".join(SP[i] for i in R.acr) + ". ACRR groups: "
-  + "; ".join("{" + ", ".join(SP[i] for i in g) + "}" for g in R.acrr) + ".\n")
+  + "; ".join("{" + ", ".join(SP[i] for i in g) + "}" for g in R.acrr_groups) + ".\n")
 T = tangent_route(A, Y, N)
 p(f"The tangent route, $\\ker(\\mathbf{{W}}\\mathbf{{Y}}^\\top)$ at a random interior point, gives the same modules, ACR and ACRR: "
   f"{'yes' if sorted(map(sorted, (m for m in T.modules if len(m) > 1))) == sorted(map(sorted, (m for m in R.modules if len(m) > 1))) else 'NO'}.\n")

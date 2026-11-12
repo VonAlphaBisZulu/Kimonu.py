@@ -14,7 +14,7 @@ import numpy as np, scipy.sparse as sp, straindesign as sd
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src")); sys.path.insert(0, os.path.join(os.path.dirname(B), "tests"))
 import kimonu
-from kimonu.kinetic import positive_flux, _closure
+from kimonu import free_directions, interior_flux, readout
 from kimonu.linalg import entries
 from kimonu.concordance import concordance_from_matrices
 
@@ -34,7 +34,7 @@ def psi_kernel(A, Y, N, flux, equal=()):
     return res, set(substrate.values())
 
 def check(A, Y, N):
-    flux = positive_flux(N)
+    flux = interior_flux(N)
     out = []
     equal = []
     while True:
@@ -42,19 +42,20 @@ def check(A, Y, N):
         out.append((res.nullity, len(res.modules)))
         coupled = [set(g) for g in res.modules]
         coupled = [s for s in coupled if len(s) > 1 or next(iter(s)) in subs]
-        sets, known, _ = _closure(Y, coupled)
+        outside = set(range(Y.shape[1])) - set().union(*coupled)       # read out only the complexes of the sets
+        sets = readout(Y, free_directions(Y, coupled), outside).modules
         if len(sets) == len(coupled): break
         equal = [(min(s), c) for s in sets for c in s if c != min(s)]
     return out
 
 if __name__ == "__main__":
     from run_kimonu_crn import triplets_to_sparse, to_exact
-    from test_kinetic import _crn, ENVZ, ENVZ_SPECIES
+    from networks import matrices, ENVZ, ENVZ_SPECIES
     TOY = {"cubic": ([("0", "A"), ("A", "0"), ("A+A", "A+A+A"), ("A+A+A", "A+A")], ["A"]), "envz": (ENVZ, ENVZ_SPECIES),
            "langary": ([('A','B'),('B','A'),('B','C'),('C','B'),('C','D'),('D+E','F'),('F','D+E'),('F','B+G'),('C+G','H'),('H','C+G'),('H','C+E'),('A+G','I'),('I','A+G'),('I','A+E')], list("ABCDEFGHI"))}
     for name in sys.argv[1:]:
         if name in TOY:
-            A, Y, N, _ = _crn(*TOY[name])
+            A, Y, N, _ = matrices(*TOY[name])
         else:
             crn = json.load(open(f"{B}/unblocked/{name}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
             A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc); N = to_exact(triplets_to_sparse(crn["S"], nm, nr))

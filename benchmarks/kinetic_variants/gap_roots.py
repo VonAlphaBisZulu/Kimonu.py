@@ -94,15 +94,14 @@ def fixed(rx, roots):
 
 
 def proven(A, Y, N, ms):
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=DETACH)
-    ar = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
-    acr = {ms[i] for i in ar.acr}
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=DETACH)
+    acr = {ms[i] for i in it.acr}
     parent = {}
     def find(a):
         while parent.setdefault(a, a) != a:
             a = parent[a]
         return a
-    for a, b in ar.acrr:
+    for a, b in it.acrr:
         parent[find(ms[a])] = find(ms[b])
     return acr, find
 

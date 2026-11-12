@@ -1,6 +1,6 @@
 """Attached against detached uptakes: both routes, the gap relations and their dimension, per model.
 
-For each uptake mode the iterated route (kimonu.kinetic_modules + acr_acrr) and the tangent route
+For each uptake mode the iterated route (kimonu.iterated_route) and the tangent route
 (kimonu.tangent_route), both from src, are compared with the counts of hierarchy_data.py (coupled complex
 pairs over all complexes, ACR metabolites, ACRR pairs, and the same restricted to free metabolites). The
 gap relations are listed as in two_point_gap.py prepare: every ACR metabolite only the tangent route
@@ -44,15 +44,14 @@ def groups_of(links):
 def mode(crn, A, Y, N, detach, free):
     nm = Y.shape[0]
     t0 = time.time()
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach)
-    ar = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
     t_it = time.time() - t0
     t0 = time.time()
     tan = kimonu.tangent_route(A, Y, N, detach_uptakes=detach)
     t_tan = time.time() - t0
     cp_it, cp_t = pairs([sorted(m) for m in it.modules]), pairs([sorted(m) for m in tan.modules])
-    acr_it, acr_t = set(ar.acr), set(tan.acr)
-    acrr_it = {tuple(sorted(p)) for p in ar.acrr}; acrr_t = {tuple(sorted(p)) for p in tan.acrr}
+    acr_it, acr_t = set(it.acr), set(tan.acr)
+    acrr_it = {tuple(sorted(p)) for p in it.acrr}; acrr_t = {tuple(sorted(p)) for p in tan.acrr}
     nontriv = lambda gs: [len(g) for g in gs if len(g) > 1]
     count = lambda mods, acr, acrr: dict(
         modules=len(nontriv(mods)), giant=max(nontriv(mods), default=1), pairs=len(pairs([sorted(m) for m in mods])),
@@ -78,7 +77,7 @@ def mode(crn, A, Y, N, detach, free):
     out["n_relations"] = len(rel)
     if rel:
         t0 = time.time()
-        _, Vrows = exact_V(crn["Y"], nm, it.modules, it.known_acr)
+        _, Vrows = exact_V(crn["Y"], nm, it.modules, it.acr)
         C = [{mets.index(k): Fraction(v) for k, v in r["c"].items()} for r in rel]
         dKV = kernel_dim([Vrows], nm)
         out.update(dim_kerV=dKV, g_rel=dKV - kernel_dim([Vrows, C], nm), seconds_g_rel=time.time() - t0)

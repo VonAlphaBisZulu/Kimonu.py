@@ -25,9 +25,9 @@ if os.path.exists(path):
 else:
     from kinetic_variants import local_acr_symbolic as L
     if name in L.NETWORKS:
-        A, Y, N, _ = L._crn(*L.NETWORKS[name][:2])
+        A, Y, N, _ = L.matrices(*L.NETWORKS[name][:2])
     elif name.startswith("envz"):
-        A, Y, N, _ = L._crn(*L.envz_copies(int(name[4:])))
+        A, Y, N, _ = L.matrices(*L.envz_copies(int(name[4:])))
     else:
         A, Y, N, _ = L.ecoli_core(name)
 t0 = time.perf_counter()

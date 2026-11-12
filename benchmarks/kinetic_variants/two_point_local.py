@@ -162,7 +162,7 @@ def toys():
     """Known answers: Figure 2's kinase (X proven; C and P have a second steady state), the completeness example
     (A, B proven; C, P refuted) and Figure 1 (G proven with the iterated equalities only)."""
     sys.path.insert(0, os.path.join(os.path.dirname(B), "tests"))
-    from test_kinetic import _crn
+    from networks import matrices
     from kinetic_variants.two_point import substrate_composition, iterated_constraints
     cases = [
         ("kinase", [("0", "X"), ("X", "0"), ("X+X", "C"), ("C", "0"), ("C+P+P", "P+P+P"), ("P", "0")],
@@ -176,7 +176,7 @@ def toys():
     ]
     ok = True
     for name, R, S, want, use_V in cases:
-        A, Y, N, _ = _crn(R, S)
+        A, Y, N, _ = matrices(R, S)
         G = substrate_composition(A, Y); Nf = sp.csr_matrix(N, dtype=float)
         V = classes = None
         if use_V:

@@ -31,10 +31,10 @@ from concurrent.futures import ThreadPoolExecutor
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.acr import _combined, _difference_columns, _kernel_rows, free_directions, readout
+from kimonu.readout import complex_directions, free_directions, readout
 from kimonu.io import zero_complexes
-from kimonu.kinetic import steady_state_map
-from kimonu.linalg import exact, null_space_rows, positive_flux
+from kimonu.linalg import exact, null_space_rows
+from kimonu.steady_state import interior_flux, steady_state_map
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 OUT = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
@@ -257,6 +257,14 @@ N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
 mets = [m_ if isinstance(m_, str) else m_.get("id") for m_ in crn["metabolites"]]
 free = np.zeros(nm, bool); free[:mets.index("E_1") if "E_1" in mets else nm] = True
 skip = zero_complexes(Y); cx = [c for c in range(nc) if c not in skip]
+
+
+def yt_rows(B):
+    """Rows of Yᵀ B for the complexes that enter the modules"""
+    rows = complex_directions(Y, B)
+    return [rows[c] for c in cx]
+
+
 Ycsc = sp.csc_matrix(Y); Yf = sp.csc_matrix(Y, dtype=float); iu = np.triu_indices(nm, 1)
 out = dict(model=M, m=nm, n=nc, taus=TAUS)
 tau_max = TAUS[-1]
@@ -276,7 +284,7 @@ def mods_from(Rc, pc, k):
 
 if PART == "tangent":
     t0 = time.time()
-    flux = positive_flux(N, 0, scale=10**6)
+    flux = interior_flux(N, 0)
     W, (_, ncol) = steady_state_map(A, Y, N, flux, True)
     J = {}
     for (i, c), w in W.items():
@@ -288,7 +296,7 @@ if PART == "tangent":
     rows_m = [as_tuple(r) for r in rows[:nm]]
     ex = readout(Y, rows_m, skip)
     acr_x = np.zeros(nm, bool); acr_x[list(ex.acr)] = True
-    E = pair_matrix(nm, ex.acrr)
+    E = pair_matrix(nm, ex.acrr_groups)
     out["tangent_exact_relations"] = dict(acr=int(acr_x.sum()), acrr_pairs=int(E.sum()),
                                           h_acr=sha(np.flatnonzero(acr_x)), h_acrr=sha(np.flatnonzero(E[iu])),
                                           h_mod=hmods(ex.modules))
@@ -301,7 +309,7 @@ if PART == "tangent":
         Tm = np.ascontiguousarray(svd_kernel(Jf)[:nm]); del Jf
         Rm = Rows(Tm); Rc = Rows(np.ascontiguousarray(np.asarray(Yf.T @ Tm)[cx]))
     else:
-        Rm = Rows(rows_m); Rc = Rows([_combined(Ycsc, rows_m, c) for c in cx])
+        Rm = Rows(rows_m); Rc = Rows(yt_rows(rows_m))
     lev_m = Rm.norm_levels(); pm = Rm.pairs(tau_max); pc = Rc.pairs(tau_max)
     at = lambda k: dict(score(Rm, lev_m, pm, k, acr_x, E, free, iu), h_mod=hmods(mods_from(Rc, pc, k)))
     out[f"tangent_{ARM}"] = dict(sweep=[at(k) for k in range(len(TAUS))], check=at(-1), seconds=time.time() - t0)
@@ -316,10 +324,10 @@ else:
         ks = [k for k in range(len(TAUS)) if k * NCHUNK // len(TAUS) == chunk] + ([-1] if chunk == 0 else [])
     tau_max = max(TAUS[k] for k in ks if k >= 0)      # the pairs for larger tolerances are never used in this chunk
     t0 = time.time()
-    km = kimonu.kinetic_modules(A, Y, N, detach_uptakes=True, seed=0)
+    km = kimonu.iterated_route(A, Y, N, detach_uptakes=True, seed=0)
     Rx = readout(Y, free_directions(Y, km.modules), skip)
     acr_x = np.zeros(nm, bool); acr_x[list(Rx.acr)] = True
-    E = pair_matrix(nm, Rx.acrr)
+    E = pair_matrix(nm, Rx.acrr_groups)
     out["iterated_exact_relations"] = dict(acr=int(acr_x.sum()), acrr_pairs=int(E.sum()),
                                            h_acr=sha(np.flatnonzero(acr_x)), h_acrr=sha(np.flatnonzero(E[iu])),
                                            h_mod=hmods(km.modules))
@@ -358,9 +366,9 @@ else:
             memo_L[key] = (Rm, Rm.norm_levels(), Rm.pairs(tau_max), Rc, Rc.pairs(tau_max))
         if key not in memo_L:
             if len(memo_L) >= MEMO: memo_L.clear()
-            Lrows = _kernel_rows(_difference_columns(Y, [set(s) for s in sorted(map(sorted, key))], ()), nm)
+            Lrows = free_directions(Y, [set(s) for s in sorted(map(sorted, key))])
             Rm = Rows(Lrows); lev = Rm.norm_levels()
-            Rc = Rows([_combined(Ycsc, Lrows, c) for c in cx])
+            Rc = Rows(yt_rows(Lrows))
             memo_L[key] = (Rm, lev, Rm.pairs(tau_max), Rc, Rc.pairs(tau_max))
         return memo_L[key]
 

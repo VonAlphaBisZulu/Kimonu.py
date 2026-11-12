@@ -18,7 +18,7 @@ of this criterion are implemented here; both are ours, written from the paper, w
 
 With N diag(v) B^T of rank < s for all v (degenerate steady states) every s x s minor vanishes and the
 published criterion reports every species; such networks are flagged ("degenerate") instead of compared.
-The iterated route (kimonu.kinetic_modules + acr_acrr) is run alongside as the proven lower bound.
+The iterated route (kimonu.iterated_route) is run alongside as the proven lower bound.
 
     python local_acr_symbolic.py small              -> ground-truth suite, all methods
     python local_acr_symbolic.py ladder <name> [s]  -> one network of the size ladder, time limit s per method
@@ -34,7 +34,7 @@ from sympy.polys.matrices import DomainMatrix
 import straindesign as sd
 import kimonu
 from kimonu.linalg import entries
-from test_kinetic import _crn, ENVZ, ENVZ_SPECIES
+from networks import matrices, ENVZ, ENVZ_SPECIES
 from kinetic_variants.tangent_fast import one_shot_fast
 
 OUT = os.environ.get("LACR_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_local_acr")
@@ -115,7 +115,7 @@ def ecoli_core(name="e_coli_core"):
     ranges = sd.fva(m, solver="glpk")              # Gurobi is node-locked on the cluster
     m.remove_reactions([r for r in ranges.index if abs(ranges.at[r, "maximum"]) <= 1e-9], remove_orphans=True)
     crn = build_crn(m)                              # the zero complex has its own row of A
-    return sp.csr_matrix(crn.A, dtype=np.int64), sp.csr_matrix(crn.Y), crn.N_exact, crn.metabolite_ids
+    return sp.csr_matrix(crn.A, dtype=np.int64), sp.csr_matrix(crn.Y), crn.N, crn.metabolite_ids
 
 
 class Timeout(Exception):
@@ -206,9 +206,8 @@ def run_network(name, A, Y, N, species, truth=None, limit=3600):
     _, acr_k, groups_k, dimT = res
     rec["kimonu"] = dict(seconds=t, acr=sorted(acr_k), acrr=groups_to_pairs(groups_k), dim_T=dimT)
     # iterated route (proven)
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=False)
-    ar = kimonu.acr_acrr(Y, it.modules, metabolite_ids=list(range(m)), known_acr=it.known_acr)
-    rec["iterated"] = dict(acr=sorted(int(x) for x in ar.acr), acrr=sorted((min(i, j), max(i, j)) for i, j in ar.acrr))
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+    rec["iterated"] = dict(acr=sorted(int(x) for x in it.acr), acrr=sorted((min(i, j), max(i, j)) for i, j in it.acrr))
     # symbolic criterion
     t0 = time.time()
     J, a, s, _ = symbolic_setup(A, Y, N)
@@ -240,7 +239,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "small":
         out = []
         for name, (R, S, truth) in NETWORKS.items():
-            A, Y, N, cx = _crn(R, S)
+            A, Y, N, cx = matrices(R, S)
             r = run_network(name, A, Y, N, S, truth, limit=600)
             if name in UNCONDITIONAL: r["truth_unconditional"] = UNCONDITIONAL[name]
             out.append(r)
@@ -252,7 +251,7 @@ if __name__ == "__main__":
     else:
         name = sys.argv[2]; limit = float(sys.argv[3]) if len(sys.argv) > 3 else 3600
         if name.startswith("envz"):
-            R, S = envz_copies(int(name[4:])); A, Y, N, cx = _crn(R, S)
+            R, S = envz_copies(int(name[4:])); A, Y, N, cx = matrices(R, S)
         else:
             A, Y, N, S = ecoli_core(name)
         r = run_network(name, A, Y, N, S, limit=limit)

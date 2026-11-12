@@ -22,19 +22,18 @@ mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
 free = set(range(mets.index("E_1") if "E_1" in mets else nm))
 out = dict(model=M)
 for name, det in (("attached", False), ("detached", True)):
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=det)
-    ar = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=det)
     parent = {}
     def find(a):
         while parent.setdefault(a, a) != a:
             a = parent[a]
         return a
-    for a, b in ar.acrr:
+    for a, b in it.acrr:
         parent[find(a)] = find(b)
     groups = {}
     for a in parent:
         groups.setdefault(find(a), []).append(a)
-    out[name] = dict(acr=sorted(int(i) for i in ar.acr), acrr_groups=[sorted(int(i) for i in g) for g in groups.values()])
+    out[name] = dict(acr=sorted(int(i) for i in it.acr), acrr_groups=[sorted(int(i) for i in g) for g in groups.values()])
 att, det = set(out["attached"]["acr"]), set(out["detached"]["acr"])
 in_group = {i for g in out["detached"]["acrr_groups"] for i in g}
 lost = sorted(att - det)

@@ -15,7 +15,7 @@ B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu.io import substrate_complexes
-from kimonu.linalg import positive_flux
+from kimonu import interior_flux
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 OUT = os.environ.get("BF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_binomial")
@@ -30,12 +30,12 @@ fractional = {int(i) for c in set(substrate_complexes(A).values())
               if Fraction(str(y)).denominator != 1}
 rng = random.Random(0)
 x = [Fraction(1) if i in fractional else Fraction(rng.randint(1, 5), rng.randint(1, 5)) for i in range(nm)]
-k = kimonu.rate_constants(A, Y, positive_flux(N, 0, scale=10**6), x)
+k = kimonu.rate_constants(A, Y, interior_flux(N, 0, draw="lp"), x)
 out = dict(model=M)
 for mode, detach in (("attached", False), ("detached", True)):
     v = kimonu.relation_values(A, Y, N, k, detach_uptakes=detach)
     t0 = time.time()
-    b = kimonu.binomial_formulas(A, Y, N, detach_uptakes=detach)
+    b = kimonu.binomial_formulas(A, Y, N, detach_uptakes=detach, draw="lp")
     res = out[mode] = dict(seconds=time.time() - t0, constraints=len(b.constraints),
                            constraints_hold=all(c(k) == 1 for c in b.constraints))
     triples = [("acr", v.acr[i], b.acr[i]) for i in v.acr]

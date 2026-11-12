@@ -97,9 +97,9 @@ def autonomous_acr(Nf, G, known=(), detach_uptakes=False, max_block=60, time_lim
 
 
 def augment(Y, modules, known):
-    """Log closure (Proposition S3-4) and ACR (Remark S3-6) restarted with extra known-ACR species."""
+    """Log closure (merge by coupling signature) and ACR, restarted with extra known-ACR species (Langary et al., 2025)."""
     import kimonu
-    from kimonu.acr import coupling_signatures
+    from compat.upstream import coupling_signatures
     sets, known = [set(m) for m in modules], set(known)
     while True:
         sig = coupling_signatures(Y, sets, known)
@@ -107,7 +107,7 @@ def augment(Y, modules, known):
         for s, key in zip(sets, sig):
             merged.setdefault(key, set()).update(s)
         merged = list(merged.values())
-        found = known | set(kimonu.acr_acrr(Y, merged, known_acr=known).acr)
+        found = known | set(kimonu.readout(Y, kimonu.free_directions(Y, merged, known)).acr)
         if len(merged) == len(sets) and found == known:
             return merged, known
         sets, known = merged, found
@@ -118,8 +118,8 @@ def run(A, Y, N, Nf, detach_uptakes=False, max_block=60, time_limit=600, log=pri
     import kimonu
     from kinetic_variants.two_point import substrate_composition
     G = substrate_composition(A, Y)
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach_uptakes)
-    base = set(kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr).acr)
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach_uptakes)
+    base = set(it.acr)
     modules, known, rounds, tested = it.modules, set(base), 0, {}
     while True:
         rounds += 1
@@ -132,8 +132,9 @@ def run(A, Y, N, Nf, detach_uptakes=False, max_block=60, time_limit=600, log=pri
         if known2 == known:
             break
         known = known2
-    acr = kimonu.acr_acrr(Y, modules, known_acr=known)
-    return dict(iterated_acr=sorted(base), acr=sorted(acr.acr), acrr=acr.acrr, modules=modules,
+    acr = kimonu.readout(Y, kimonu.free_directions(Y, modules, known))
+    acrr = sorted((a, b) for g in acr.acrr_groups for k, a in enumerate(g) for b in g[k + 1:])
+    return dict(iterated_acr=sorted(base), acr=sorted(acr.acr), acrr=acrr, modules=modules,
                 rounds=rounds,
                 tested=sorted(((len(b), s) for b, s in tested.items()), key=lambda t: t[0]))
 

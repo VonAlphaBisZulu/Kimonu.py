@@ -1,10 +1,11 @@
 """Certificate of genericity: both routes again at a uniformly random point, modulo the prime p = 2^61 - 1.
 
-Kimonu's relations are read off one interior flux r* (an LP point snapped exactly onto ker N). They hold for
+Kimonu's relations are read off one interior flux r* (kimonu.interior_flux). They hold for
 generic rate constants unless r* lies on the zero set of one of finitely many polynomials in r: the minors of
 W(r) or J(r) = W(r) Y^T that decide its rank and whether a candidate vector (e_i, e_i - e_j, y_c - y_d) lies in
-its row space. Their entries are linear in r, so these polynomials have degree at most rank + 1. An LP point
-is not a random draw, so no probability bound applies to r* itself.
+its row space. Their entries are linear in r, so these polynomials have degree at most rank + 1. The recorded
+run used the LP point snapped exactly onto ker N (now draw="lp"), which is not a random draw, so no probability
+bound applies to it. The default uniform draw has a bound of its own.
 
 Here the readout is computed once more at r' = K b, with b uniform over GF(p)^d, in arithmetic modulo p.
 A polynomial that is nonzero over Q (and not identically zero mod p) vanishes at r' with probability at most
@@ -15,7 +16,7 @@ only if r' is non-generic in the same way, so
 
 with one test per candidate relation (m ACR, m(m-1)/2 ACRR, n(n-1)/2 complex pairs) and one for the rank.
 The iterated route computes ker W in modular arithmetic and its log-space closure exactly (that part does not
-depend on r), round by round as kimonu.kinetic_modules. Detached uptakes.
+depend on r), round by round as kimonu.iterated_route. Detached uptakes.
 
     python cert_modp.py <model> [seed]   -> $CM_OUT/<model>.json
 """
@@ -26,9 +27,8 @@ import flint
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.acr import free_directions, readout
+from kimonu import free_directions, readout, steady_state_map
 from kimonu.io import zero_complexes
-from kimonu.kinetic import _closure, steady_state_map
 from kimonu.linalg import entries, null_space_rows
 from run_kimonu_crn import triplets_to_sparse, to_exact
 import scipy.sparse as sp
@@ -57,13 +57,12 @@ Ycol = [[(int(k), mod(Fraction(str(v)))) for k, v in zip(Ycsc.indices[Ycsc.indpt
 # ---- the exact results of the default pipeline
 t0 = time.time()
 tr = kimonu.tangent_route(A, Y, N, detach_uptakes=True)
-km = kimonu.kinetic_modules(A, Y, N, detach_uptakes=True)
-Rx = readout(Y, free_directions(Y, km.modules), skip)
+km = kimonu.iterated_route(A, Y, N, detach_uptakes=True)
 mods = lambda ms: sorted(sorted(int(c) for c in s) for s in ms if len(s) > 1)
 exact_res = dict(tangent=dict(modules=mods(tr.modules), acr=sorted(map(int, tr.acr)),
                               acrr=sorted(tuple(sorted(map(int, a))) for a in tr.acrr), dim=tr.dimension),
-                 iterated=dict(modules=mods(km.modules), acr=sorted(map(int, Rx.acr)),
-                               acrr=sorted(tuple(sorted((a, b))) for g in Rx.acrr for i, a in enumerate(g) for b in g[i + 1:])))
+                 iterated=dict(modules=mods(km.modules), acr=sorted(map(int, km.acr)),
+                               acrr=sorted(tuple(sorted(map(int, a))) for a in km.acrr)))
 log("exact", round(time.time() - t0, 1), "s")
 
 # ---- a uniform point of ker N mod p
@@ -146,13 +145,13 @@ while True:
     coupled = [set(g) for g in groups([normalized(r) for r in rowsW[:nc]], range(nc))]
     coupled = [{c for c in s if c not in drop} for s in coupled]
     coupled = [s for s in coupled if s]
-    sets, _ = _closure(Y, coupled, skip)
+    sets = readout(Y, free_directions(Y, coupled), skip).modules
     if len(sets) == len(coupled):
         break
     equal = [(min(s), c) for s in sets for c in s if c != min(s)]
 Rp = readout(Y, free_directions(Y, sets), skip)
 it = dict(modules=mods(sets), acr=sorted(map(int, Rp.acr)),
-          acrr=sorted(tuple(sorted((a, b2))) for g in Rp.acrr for i, a in enumerate(g) for b2 in g[i + 1:]))
+          acrr=sorted(tuple(sorted((a, b2))) for g in Rp.acrr_groups for i, a in enumerate(g) for b2 in g[i + 1:]))
 it_ok = {k: it[k] == exact_res["iterated"][k] for k in it}
 log("iterated mod p", round(time.time() - t0, 1), "s, rounds", rnd, it_ok)
 

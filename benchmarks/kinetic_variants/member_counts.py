@@ -6,7 +6,7 @@ ACR or belong to an ACRR group, over all metabolites and over the free metabolit
 without enzymes and enzyme-substrate complexes). A free metabolite counts as an ACRR member when its group holds at
 least one other free metabolite, in line with the ACRR pairs among free metabolites of uptake_modes.py.
 
-The iterated route (kimonu.kinetic_modules + acr_acrr, from src) runs on every model. The tangent route runs only
+The iterated route (kimonu.iterated_route, from src) runs on every model. The tangent route runs only
 where the uptake_modes record reports a gap, since elsewhere both routes return the same modules, ACR and ACRR. The
 counts of this run must reproduce the record of uptake_modes.py (modules, giant, pairs, acr, acrr_pairs and the
 two free counts); that is the check of this script.
@@ -54,9 +54,8 @@ if __name__ == "__main__":
     stored = json.load(open(one if os.path.exists(one) else f))[name]
     out = dict(model=M, uptakes=name, n_complexes=nc, n_metabolites=nm, n_free=len(free), gap=stored["gap"])
     t0 = time.time()
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach)
-    ar = kimonu.acr_acrr(Y, it.modules, known_acr=it.known_acr)
-    record, out["it"] = members(it.modules, ar.acr, ar.acrr, free)
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
+    record, out["it"] = members(it.modules, it.acr, it.acrr, free)
     assert record == {k: stored["it"][k] for k in KEYS}, (M, "iterated", record, stored["it"])
     out["rounds"], out["seconds_iterated"] = it.rounds, time.time() - t0
     out["tan"] = None                             # no gap: the tangent route returns the same lists

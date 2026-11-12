@@ -21,7 +21,7 @@ steady state.
 
 Complexes. Under flux balance two complexes are concordant when their rows of M = A K are proportional, and
 balanced when the row is zero. Under mass action they are coupled when they share a kinetic module. The first
-compares activities, the second monomials, so neither contains the other, and the script counts the pairs in
+compares activities, the second complex concentrations, so neither contains the other, and the script counts the pairs in
 each and in both.
 
 Checks of this run: flux coupling refines the iterated classes, which refine the tangent classes; the
@@ -41,10 +41,10 @@ from scipy import sparse
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.acr import _combined, free_directions, readout
+from kimonu.readout import complex_directions, free_directions, readout
 from kimonu.io import substrate_complexes, zero_complexes
-from kimonu.kinetic import steady_state_map
-from kimonu.linalg import exact, null_space_rows, positive_flux, proportional_classes
+from kimonu.linalg import exact, null_space_rows, proportional_classes
+from kimonu.steady_state import interior_flux, steady_state_map
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 
@@ -98,7 +98,7 @@ def module_record(modules):
 def iterated(A, Y, N, detach, column):
     """Kinetic modules by the iterated route, the class of every column of W, and the fixed complexes."""
     n = A.shape[0]
-    it = kimonu.kinetic_modules(A, Y, N, detach_uptakes=detach)
+    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
     W, (m, n_columns) = steady_state_map(A, Y, N, it.flux, detach)
     equal = [(min(g), c) for g in it.modules for c in g if c != min(g)]
     for k, (c, d) in enumerate(equal):
@@ -111,8 +111,8 @@ def iterated(A, Y, N, detach, column):
     skip = zero_complexes(Y) if detach else set()
     assert {frozenset(g) for g in it.modules if len(g) > 1} == \
         {frozenset(g) for g in ({c for c in cl if c < n and c not in skip} for cl in classes) if len(g) > 1}, "modules"
-    Ycsc = sparse.csc_matrix(Y); L = free_directions(Y, it.modules, it.known_acr)
-    fixed = {c for c in range(n) if c not in skip and not _combined(Ycsc, L, c)}
+    YtL = complex_directions(Y, free_directions(Y, it.modules, it.acr))
+    fixed = {c for c in range(n) if c not in skip and not YtL[c]}
     return it.modules, of_column, fixed, it.rounds
 
 
@@ -121,7 +121,7 @@ def tangent(A, Y, N, detach):
     and the fixed complexes."""
     n, m = A.shape[0], Y.shape[0]
     skip = zero_complexes(Y) if detach else set()
-    flux = positive_flux(N, 0, scale=10**6)
+    flux = interior_flux(N, 0)
     W, (_, n_columns) = steady_state_map(A, Y, N, flux, detach)
     Ycsc = sparse.csc_matrix(Y)
     J = {}
@@ -134,7 +134,7 @@ def tangent(A, Y, N, detach):
     rows = null_space_rows(exact(((i, k, v) for (i, k), v in J.items()), (m, m + n_columns - n)))
     rows = [tuple(sorted(r.items())) for r in rows]
     modules = readout(Y, rows[:m], skip).modules + [{c} for c in sorted(skip)]
-    signature = [_combined(Ycsc, rows[:m], c) for c in range(n)] + rows[m:]
+    signature = complex_directions(Y, rows[:m]) + rows[m:]
     keys = {}
     of_column = [keys.setdefault(s, len(keys)) for s in signature]
     for c in skip:                                 # a detached zero complex is no reaction's substrate
