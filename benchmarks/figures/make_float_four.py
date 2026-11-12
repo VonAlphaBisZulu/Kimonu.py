@@ -15,6 +15,9 @@ Fig_certificate     draft of Figure 3E, F (drawn into the figure by make_figure2
 FigS_certificate    fig. S5, the same for all four ways.
 FigS_float_errors   fig. S6, per route and way: the models whose ACR and ACRR come out right, only made up, only missed, or both.
 
+Figs. S5 and S6 have the colour key in one row below the plots, so the plots take the full page width, and one SVG group
+per plot (panel_A, panel_B, ... row by row) plus panel_legend.
+
     python figures/make_float_four.py <out_dir>        # from benchmarks/
 """
 import glob, json, os, sys
@@ -62,15 +65,57 @@ X = np.arange(len(TAUS)); XE, WE = -2.5, 2.3                     # bar positions
 dec = [k for k, t in enumerate(TAUS) if abs(np.log10(t) - round(np.log10(t))) < 1e-9 and round(np.log10(t)) % 3 == 1]
 
 
-def save_svg(fig, stem):
-    """SVG with live text, embedded fonts and no clipping, plus a PNG for checking"""
+def save_svg(fig, stem, panels=None):
+    """SVG with live text, embedded fonts and no clipping, plus a PNG for checking. panels: the groups, as for
+    svg_panels.Figure.assign (default one group for everything)"""
     buf = io.StringIO(); fig.savefig(buf, format="svg"); raw = buf.getvalue()
     n, box = svg_finish.check(raw, raw, tempfile.mkdtemp())
     assert n == 0, f"{os.path.basename(stem)}: removing the clipping changes {n} pixels in {box} (pt)"
     fg = svg_panels.Figure(raw)
-    fg.assign([("all", [(0, 0, 1e4, 1e4)])])
+    miss = fg.assign(panels or [("all", [(0, 0, 1e4, 1e4)])])
+    assert not miss, f"{os.path.basename(stem)}: {len(miss)} elements outside the panels"
     open(stem + ".svg", "w", encoding="utf-8").write(svg_finish.finish(fg.svg())[0])
     fig.savefig(stem + ".png", dpi=200)
+
+
+# ---- figs. S5 and S6: plots over the full page width, the colour key in one row below them (all in pt)
+W = 518.4                                            # page width (7.2 in)
+LEFT, RIGHT, WGAP = 30.0, 4.0, 9.0                   # y label and ticks, right edge, between the plots
+KEY = 21.0                                           # band at the bottom that holds a key of two-line labels
+
+
+def place(fig, nrow, ncol, top, bottom, hgap=0.0):
+    """Places the axes of plt.subplots in pt from the page edges and returns the plot width and height."""
+    H = fig.get_figheight() * 72
+    w = (W - LEFT - RIGHT - (ncol - 1) * WGAP) / ncol
+    h = (H - top - bottom - (nrow - 1) * hgap) / nrow
+    fig.subplots_adjust(left=LEFT / W, right=1 - RIGHT / W, top=1 - top / H, bottom=bottom / H, wspace=WGAP / w, hspace=hgap / h)
+    return w, h
+
+
+def groups(fig, ncol, w, row_edges, key=KEY):
+    """One group per plot (A, B, ... row by row, the columns split halfway between the axes) and one for the key.
+    row_edges: the y in pt from the top between the rows, from 0 to the top of the key band (key pt high)."""
+    H = fig.get_figheight() * 72
+    xs = [0.0] + [LEFT + j * (w + WGAP) - WGAP / 2 for j in range(1, ncol)] + [W]
+    names = iter("ABCDEFGH")
+    out = [("legend", [(0, H - key, W, H)])]
+    for y0, y1 in zip(row_edges, row_edges[1:]):
+        out += [(next(names), [(xs[j], y0, xs[j + 1], y1)]) for j in range(ncol)]
+    return out
+
+
+def key_below(fig, handles, labels):
+    """The colour key in one row under the plots, centred on them."""
+    H = fig.get_figheight() * 72
+    fig.legend(handles, labels, frameon=False, loc="lower center", ncol=len(labels), fontsize=6, borderaxespad=0,
+               bbox_to_anchor=((LEFT + W - RIGHT) / 2 / W, 3 / H), handlelength=1, handletextpad=.4, columnspacing=1.5)
+
+
+def sparse_ticks(ax):
+    """0, then every third decade from 1e-11 (a label at 1e-14 would touch the 0 beside it)."""
+    ax.set_xticks([XE] + [X[k] for k in dec[1:]])
+    ax.set_xticklabels(["0"] + [f"$\\mathregular{{10^{{{round(np.log10(TAUS[k]))}}}}}$" for k in dec[1:]])
 
 
 def axes_style(ax, n):
@@ -147,30 +192,44 @@ def certificate_legend(fig, x, y, exact):
 
 
 def certificate(ways, name):
+    """Fig_certificate (two ways, the key at the right as in Figure 3) or, for more ways, fig. S5 (the key below)."""
+    if len(ways) > 2:
+        return certificate_supp(ways, name)
     fig, axs = plt.subplots(1, len(ways), figsize=(7.2, 2.2), sharey=True, squeeze=False)
     axs = axs[0]
-    right = 0.76 if len(ways) == 2 else 0.8
-    fig.subplots_adjust(left=0.07, right=right, bottom=0.2, top=0.8 if len(ways) > 2 else 0.86, wspace=0.08)
-    titles = {"exactcmp": "exact kernel", "svdabs": "SVD kernel"} if len(ways) == 2 else {w: WAYNAME[w].replace(", ", ",\n") for w in ways}
-    out = draw_certificate(axs, ways, titles)
-    if len(ways) > 2:                                    # narrow panels: fewer tick labels, so that 0 stays clear
-        for ax in axs:
-            ax.set_xticks([XE] + [X[k] for k in dec[1::2]])
-            ax.set_xticklabels(["0"] + [f"$\\mathregular{{10^{{{round(np.log10(TAUS[k]))}}}}}$" for k in dec[1::2]])
-            ax.title.set_fontsize(7)
+    fig.subplots_adjust(left=0.07, right=0.76, bottom=0.2, top=0.86, wspace=0.08)
+    out = draw_certificate(axs, ways, {"exactcmp": "exact kernel", "svdabs": "SVD kernel"})
     for ax in axs:
         ax.set_xlabel("tolerance (0: rows exactly equal)", color=INK)
     axs[0].set_ylabel("models", color=INK)
-    certificate_legend(fig, right + 0.01, 0.8 if len(ways) > 2 else 0.86, out[ways[0]]["exact"])
+    certificate_legend(fig, 0.77, 0.86, out[ways[0]]["exact"])
     save_svg(fig, f"{OUT}/{name}"); plt.close(fig)
+    return dict(n=max(len(v["models"]) for v in out.values()), ways=out)
+
+
+def certificate_supp(ways, name):
+    """fig. S5: one plot per way over the full width, the key in one row below."""
+    fig, axs = plt.subplots(1, len(ways), figsize=(W / 72, 2.6), sharey=True, squeeze=False)
+    axs = axs[0]
+    w, h = place(fig, 1, len(ways), top=26, bottom=52)
+    out = draw_certificate(axs, ways, {w_: WAYNAME[w_].replace(", ", ",\n") for w_ in ways})
+    for ax in axs:
+        sparse_ticks(ax)
+        ax.set_xlabel("tolerance (0: rows exactly equal)", color=INK)
+    axs[0].set_ylabel("models", color=INK)
+    ex = out[ways[0]]["exact"]
+    handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (GREEN, BLUE_, GREY, RED)] + \
+              [plt.Line2D([], [], color=INK, lw=0.6, ls=(0, (3, 2)))]
+    key_below(fig, handles, LABELS[::-1] + [f"certified in exact arithmetic\n({ex[0]:.0f} of {sum(ex):.0f})"])
+    save_svg(fig, f"{OUT}/{name}", groups(fig, len(ways), w, [0, fig.get_figheight() * 72 - KEY])); plt.close(fig)
     return dict(n=max(len(v["models"]) for v in out.values()), ways=out)
 
 
 def errors(ways, name):
     arms = [f"{r}_{w}" for r in ("iterated", "tangent") for w in ways]
     models = models_for(arms); n = len(models)
-    fig, axs = plt.subplots(2, len(ways), figsize=(7.2, 4.0), sharey=True, squeeze=False)
-    fig.subplots_adjust(left=0.06, right=0.84, bottom=0.11, top=0.9, wspace=0.08, hspace=0.5)
+    fig, axs = plt.subplots(2, len(ways), figsize=(W / 72, 4.4), sharey=True, squeeze=False)
+    w, h = place(fig, 2, len(ways), top=26, bottom=47, hgap=40)
     out = {}
     klass = lambda r: (lambda miss, fake: 0 if not (miss or fake) else 2 if not fake else 1 if not miss else 3)(
         r["acr_fn"] + r["acrr_fn"] > 0, r["acr_fp"] + r["acrr_fp"] > 0)
@@ -182,15 +241,14 @@ def errors(ways, name):
                 zero[klass(runs[m][arm]["check"])] += 1
                 for k, t in enumerate(TAUS):
                     cls[klass(runs[m][arm]["sweep"][t]), k] += 1
-            bars(ax, cls, zero, (GREEN, RED, BLUE_, BOTH)); axes_style(ax, n)
-            ax.set_title(f"{route} route\n{WAYNAME[way]}", fontsize=7, color=INK, pad=3)
+            bars(ax, cls, zero, (GREEN, RED, BLUE_, BOTH)); axes_style(ax, n); sparse_ticks(ax)
+            ax.set_title(f"{route} route\n{WAYNAME[way]}", fontsize=8, color=INK, pad=3)
             out[arm] = dict(right=cls[0].astype(int).tolist(), at_zero=zero.astype(int).tolist())
     for ax in axs[1]: ax.set_xlabel("tolerance (0: rows exactly equal)", color=INK)
     for ax in axs[:, 0]: ax.set_ylabel("models")
-    handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (BOTH, BLUE_, RED, GREEN)]
-    fig.legend(handles, ["missed and made up", "relations missed", "relations made up", "all relations right"],
-               frameon=False, loc="upper left", fontsize=6, bbox_to_anchor=(0.85, 0.9), handlelength=1, handletextpad=.4)
-    save_svg(fig, f"{OUT}/{name}"); plt.close(fig)
+    handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (GREEN, RED, BLUE_, BOTH)]
+    key_below(fig, handles, ["all relations right", "relations made up", "relations missed", "missed and made up"])
+    save_svg(fig, f"{OUT}/{name}", groups(fig, len(ways), w, [0, 26 + h + 16, fig.get_figheight() * 72 - 14], key=14)); plt.close(fig)
     return dict(models=models, n=n, arms=out)
 
 
