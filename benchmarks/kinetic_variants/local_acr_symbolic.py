@@ -115,7 +115,10 @@ def ecoli_core(name="e_coli_core"):
     ranges = sd.fva(m, solver="glpk")              # Gurobi is node-locked on the cluster
     m.remove_reactions([r for r in ranges.index if abs(ranges.at[r, "maximum"]) <= 1e-9], remove_orphans=True)
     crn = build_crn(m)                              # the zero complex has its own row of A
-    return sp.csr_matrix(crn.A, dtype=np.int64), sp.csr_matrix(crn.Y), crn.N, crn.metabolite_ids
+    Y = sp.csr_matrix(([float(v) for y in crn.Yt for _, v in y],
+                       ([i for y in crn.Yt for i, _ in y], [c for c, y in enumerate(crn.Yt) for _ in y])),
+                      shape=(len(crn.metabolite_ids), len(crn.Yt)))
+    return sp.csr_matrix(crn.A, dtype=np.int64), Y, crn.N, crn.metabolite_ids
 
 
 class Timeout(Exception):
@@ -206,7 +209,7 @@ def run_network(name, A, Y, N, species, truth=None, limit=3600):
     _, acr_k, groups_k, dimT = res
     rec["kimonu"] = dict(seconds=t, acr=sorted(acr_k), acrr=groups_to_pairs(groups_k), dim_T=dimT)
     # iterated route (proven)
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+    it = kimonu.iterated_route(kimonu.crn_from_matrices(A, Y), detach_uptakes=False)
     rec["iterated"] = dict(acr=sorted(int(x) for x in it.acr), acrr=sorted((min(i, j), max(i, j)) for i, j in it.acrr))
     # symbolic criterion
     t0 = time.time()

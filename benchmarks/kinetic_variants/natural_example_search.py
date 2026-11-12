@@ -55,7 +55,7 @@ def routes(R, S):
     reactions (no strictly positive steady-state flux)."""
     A, Y, N, cx = matrices(R, S)
     try:
-        it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+        it = kimonu.iterated_route(kimonu.crn_from_matrices(A, Y), detach_uptakes=False)
     except ValueError:
         return None
     _, tacr, tgroups, dim = one_shot_exact(A, Y, N, detach=False, want_groups=True)

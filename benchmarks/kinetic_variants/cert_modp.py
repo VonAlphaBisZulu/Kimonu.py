@@ -29,9 +29,8 @@ sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu import free_directions, readout, steady_state_map
 from kimonu.io import zero_complexes
-from kimonu.linalg import entries, null_space_rows
-from run_kimonu_crn import triplets_to_sparse, to_exact
-import scipy.sparse as sp
+from kimonu.linalg import null_space_rows
+from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("CM_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_cert_modp")
 P = 2**61 - 1
@@ -48,16 +47,14 @@ def mod(x):
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
-skip = zero_complexes(Y)
-Ycsc = sp.csc_matrix(Y)
-Ycol = [[(int(k), mod(Fraction(str(v)))) for k, v in zip(Ycsc.indices[Ycsc.indptr[c]:Ycsc.indptr[c + 1]],
-                                                          Ycsc.data[Ycsc.indptr[c]:Ycsc.indptr[c + 1]])] for c in range(nc)]
+net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
+skip = zero_complexes(net)
+Ycol = [[(k, mod(v)) for k, v in y] for y in net.Yt]
 
 # ---- the exact results of the default pipeline
 t0 = time.time()
-tr = kimonu.tangent_route(A, Y, N, detach_uptakes=True)
-km = kimonu.iterated_route(A, Y, N, detach_uptakes=True)
+tr = kimonu.tangent_route(net, detach_uptakes=True)
+km = kimonu.iterated_route(net, detach_uptakes=True)
 mods = lambda ms: sorted(sorted(int(c) for c in s) for s in ms if len(s) > 1)
 exact_res = dict(tangent=dict(modules=mods(tr.modules), acr=sorted(map(int, tr.acr)),
                               acrr=sorted(tuple(sorted(map(int, a))) for a in tr.acrr), dim=tr.dimension),
@@ -67,14 +64,15 @@ log("exact", round(time.time() - t0, 1), "s")
 
 # ---- a uniform point of ker N mod p
 t0 = time.time()
-K = null_space_rows(N)
-d = max((j for r in K for j in r), default=-1) + 1
+K = null_space_rows(net.N)
+d = max((j for r in K for j, _ in r), default=-1) + 1
 rng = np.random.default_rng(SEED)
 b = [int(rng.integers(0, P)) for _ in range(d)]
-Kmod = [[(j, mod(v)) for j, v in r.items()] for r in K]
+Kmod = [[(j, mod(v)) for j, v in r] for r in K]
 rp = [sum(v * b[j] for j, v in r) % P for r in Kmod]
-W, (m, ncols) = steady_state_map(A, Y, N, rp, True)          # entries r'_j * N_ij, exact integers times Fractions
-Wm = {key: mod(v) for key, v in W.items()}
+W, ncols = steady_state_map(net, rp, True)          # entries r'_j * N_ij, exact integers times Fractions
+m = len(W)
+Wm = {(i, c): mod(v) for i, row in enumerate(W) for c, v in row}
 Wm = {key: v for key, v in Wm.items() if v}
 
 
@@ -145,11 +143,12 @@ while True:
     coupled = [set(g) for g in groups([normalized(r) for r in rowsW[:nc]], range(nc))]
     coupled = [{c for c in s if c not in drop} for s in coupled]
     coupled = [s for s in coupled if s]
-    sets = readout(Y, free_directions(Y, coupled), skip).modules
+    # the readout lists the detached zero complex last as a module of its own, which coupled leaves out
+    sets = [s for s in readout(net, free_directions(net, coupled)).modules if not s & skip]
     if len(sets) == len(coupled):
         break
     equal = [(min(s), c) for s in sets for c in s if c != min(s)]
-Rp = readout(Y, free_directions(Y, sets), skip)
+Rp = readout(net, free_directions(net, sets))
 it = dict(modules=mods(sets), acr=sorted(map(int, Rp.acr)),
           acrr=sorted(tuple(sorted((a, b2))) for g in Rp.acrr_groups for i, a in enumerate(g) for b2 in g[i + 1:]))
 it_ok = {k: it[k] == exact_res["iterated"][k] for k in it}

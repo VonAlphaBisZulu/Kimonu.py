@@ -47,7 +47,7 @@ for f in sorted(glob.glob(f'{D}/*.mat')):
     Mrows = matrix_product(Ai, K)
     zero, classes = proportional_classes(Mrows)
     nonsingle = [c for c in classes if len(c) > 1]
-    trip = [(i, j, v) for i, r in enumerate(Mrows) for j, v in r.items()]
+    trip = [(i, j, v) for i, r in enumerate(Mrows) for j, v in r]
     rankM = dK - sd.sparse_nullspace(exact(trip, (n, dK))).shape[1] if trip else 0
     kB = len(np.atleast_1d(d['B'])); kcls = len(np.atleast_1d(d['class'])); kcwb = len(np.atleast_1d(d['class_with_balanced']))
     ksizes = [len(np.atleast_1d(c)) for c in np.atleast_1d(d['class'])]

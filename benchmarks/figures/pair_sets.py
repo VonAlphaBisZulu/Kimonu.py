@@ -23,7 +23,7 @@ sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu.io import zero_complexes
 from kimonu.reference import shinar_feinberg
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 from figures.gather_figdata import read_pairs
 import csv
 
@@ -92,19 +92,19 @@ for m in REF:
     crn = json.load(open(f"unblocked/{m}_fixed.crn.json"))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-    N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
     mets = crn["metabolites"]; cut = mets.index("E_1") if "E_1" in mets else nm; free = set(mets[:cut]); mset = set(mets)
     Yc = Y.tocsc()
     ckey = [key({mets[i]: v for i, v in zip(Yc.indices[Yc.indptr[c]:Yc.indptr[c + 1]], Yc.data[Yc.indptr[c]:Yc.indptr[c + 1]])}) for c in range(nc)]
-    skip = zero_complexes(Y)
+    net = kimonu.crn_from_matrices(A, Y, metabolite_ids=mets)
+    skip = zero_complexes(net)
     K = lambda mods: [[ckey[c] for c in mod if c not in skip] for mod in mods if len(set(mod) - skip) > 1]
     arms = {}
     # Kimonu default
-    km = kimonu.iterated_route(A, Y, N, detach_uptakes=True, metabolite_ids=mets)
+    km = kimonu.iterated_route(net, detach_uptakes=True)
     arms["kimonu_det"] = [(cpairs(K(km.modules)),) + rule(km.acr, km.acrr, free)]
     # Kimonu reference-equivalent mode: its modules, ACR/ACRR by the reference's pairwise rule
     k = json.load(open(f"{REFMOD}/kimonu_{m}.json"))
-    a, r = shinar_feinberg(Y, k["modules"])
+    a, r = shinar_feinberg(net, k["modules"])
     arms["kimonu_ref"] = [(cpairs(K(k["modules"])),) + rule([mets[i] for i in a], [(mets[i], mets[j]) for i, j in r], free)]
     # reference, exhaustive and sampled: complexes in the reference's own list, matched by composition
     def ref_arm(rec_json, root, stem):

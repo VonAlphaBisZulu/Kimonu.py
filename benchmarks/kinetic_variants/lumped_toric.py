@@ -12,7 +12,7 @@ from scipy.optimize import linprog
 sys.path.insert(0, '/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks')
 sys.path.insert(0, '/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src')
 from kinetic_variants.toric_check import check
-from kimonu.io import exact_matrix
+from kimonu.linalg import exact
 M = sys.argv[1]
 root = ET.parse(f'/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Upstream_Algorithm/Models/original/{M}.xml').getroot()
 ns = {'s': root.tag.split('}')[0].strip('{')}
@@ -63,7 +63,7 @@ A = sp.csr_matrix(([v for _, _, v in Ae], ([i for i, _, _ in Ae], [j for _, j, _
 Y = sp.csr_matrix(([v for _, _, v in Ye], ([i for i, _, _ in Ye], [j for _, j, _ in Ye])), shape=(m_, len(cx)))
 Ndict = {}
 for i, j, v in Ne: Ndict[(i, j)] = Ndict.get((i, j), 0) + v
-N = exact_matrix(((i, j, v) for (i, j), v in Ndict.items() if v != 0), (m_, q))
+N = exact(((i, j, v) for (i, j), v in Ndict.items() if v != 0), (m_, q))
 print(f"{M} original: {m_} metabolites, {q} unblocked reactions, {len(cx)} complexes", flush=True)
 rounds = check(A, Y, N)
 f, l = rounds[0], rounds[-1]

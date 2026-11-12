@@ -70,7 +70,9 @@ Runs behind single sentences, all in `kinetic_variants/` and read by `paper_numb
 
 - Runners. `run_kimonu_crn.py` runs concordance and the iterated route (`kimonu.iterated_route`) on a crn.json
   (uptakes attached unless `--detach-uptakes`) and holds the crn.json loader (`triplets_to_sparse`, `to_exact`) that
-  most scripts import. `run_kimonu_refmode.py` times the stages of the reference-equivalent mode
+  most scripts import, and `crn_of`, the `kimonu.CRN` of a script's own A, Y and exact N. The scripts build the
+  `kimonu.CRN` of a crn.json with `kimonu.crn_from_matrices(A, Y)`, whose N = Y·A equals the S of the file on all 33
+  networks. `run_kimonu_refmode.py` times the stages of the reference-equivalent mode
   (`kimonu.reference_route`, upstream sets merged by overlap only and the Shinar–Feinberg rule).
   `kinetic_variants/tangent_cell.py` times the tangent route.
 - `kinetic_variants/`. `timing_exclusive.sbatch`, `uptake_modes.py`, `hierarchy_detached.py`, `member_counts.py`,

@@ -31,11 +31,8 @@ import h5py
 import numpy as np
 from scipy import sparse
 
-import straindesign as sd
-
 import kimonu
 from compat import upstream
-from kimonu.io import exact_matrix
 
 
 def read_sparse(group):
@@ -53,12 +50,6 @@ def read_strings(fh, dataset):
         chars = np.asarray(fh[ref]).ravel()
         out.append("".join(chr(c) for c in chars))
     return out
-
-
-def to_exact(M):
-    """Exact rational form of ``M`` for the kernel computation."""
-    M = M.tocoo()
-    return exact_matrix(zip(M.row, M.col, M.data), M.shape)
 
 
 
@@ -146,12 +137,11 @@ def main():
                 free_upto = len(mets)
             free = set(mets[:free_upto])
 
-            N = to_exact(S)
+            net = kimonu.crn_from_matrices(A, Y)              # N = Y·A
             t0 = time.perf_counter()
-            conc = kimonu.concordance_from_matrices(A, N)
-            nullity = sd.sparse_nullspace(N).shape[1]
-            kin = upstream.kinetic_modules(A, conc.modules, conc.balanced, Y=Y, nullity=nullity)
-            found = kimonu.readout(Y, kimonu.free_directions(Y, kin.modules))
+            conc = kimonu.concordance(net)
+            kin = upstream.kinetic_modules(net, conc.modules, conc.balanced, nullity=conc.nullity)
+            found = kimonu.readout(net, kimonu.free_directions(net, kin.modules), detach_uptakes=False)
             seconds = time.perf_counter() - t0
 
             k_acr = {mets[i] for i in found.acr if mets[i] in free}

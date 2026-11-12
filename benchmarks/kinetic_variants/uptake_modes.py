@@ -19,7 +19,7 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 from kinetic_variants.injectivity_gap import exact_V, kernel_dim
 from fractions import Fraction
 
@@ -43,13 +43,13 @@ def groups_of(links):
     return list(out.values()), find, parent
 
 
-def mode(crn, A, Y, N, detach, free):
-    nm = Y.shape[0]
+def mode(crn, net, detach, free):
+    nm = len(net.metabolite_ids)
     t0 = time.time()
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
+    it = kimonu.iterated_route(net, detach_uptakes=detach)
     t_it = time.time() - t0
     t0 = time.time()
-    tan = kimonu.tangent_route(A, Y, N, detach_uptakes=detach)
+    tan = kimonu.tangent_route(net, detach_uptakes=detach)
     t_tan = time.time() - t0
     cp_it, cp_t = pairs([sorted(m) for m in it.modules]), pairs([sorted(m) for m in tan.modules])
     acr_it, acr_t = set(it.acr), set(tan.acr)
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-    N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+    net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A; metabolites by index
     mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
     free = set(range(mets.index("E_1") if "E_1" in mets else nm))
     out = dict(model=M, n_complexes=nc, n_metabolites=nm, n_free=len(free))
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     for name, det in (("attached", False), ("detached", True)):
         if only and name not in only:
             continue
-        out[name] = mode(crn, A, Y, N, det, free)
+        out[name] = mode(crn, net, det, free)
         print(M, name, json.dumps({k: v for k, v in out[name].items() if k != "relations"}), flush=True)
     D = os.environ.get("UM_OUT", f"{B}/kinetic_variants/uptake_modes")
     os.makedirs(D, exist_ok=True)

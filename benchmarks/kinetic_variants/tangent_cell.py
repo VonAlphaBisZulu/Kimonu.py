@@ -11,7 +11,7 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 name, dest = sys.argv[1], sys.argv[2]
 detached = "--attached" not in sys.argv
@@ -21,7 +21,6 @@ if os.path.exists(path):
     crn = json.load(open(path))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-    N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
 else:
     from kinetic_variants import local_acr_symbolic as L
     if name in L.NETWORKS:
@@ -30,8 +29,9 @@ else:
         A, Y, N, _ = L.matrices(*L.envz_copies(int(name[4:])))
     else:
         A, Y, N, _ = L.ecoli_core(name)
+net = kimonu.crn_from_matrices(A, Y)                     # N = Y·A
 t0 = time.perf_counter()
-r = kimonu.tangent_route(A, Y, N, detach_uptakes=detached, seed=seed)
+r = kimonu.tangent_route(net, detach_uptakes=detached, seed=seed)
 seconds = time.perf_counter() - t0
 modules = sorted(sorted(int(c) for c in s) for s in r.modules if len(s) > 1)
 acrr = sorted(sorted(int(x) for x in p) for p in r.acrr)

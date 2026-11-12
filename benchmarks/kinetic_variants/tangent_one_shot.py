@@ -2,13 +2,13 @@
 Coupled complexes: equal rows of Y^T T_xi; ACR: zero rows of T_xi; ACRR: equal rows of T_xi."""
 import numpy as np, scipy.sparse as sp, straindesign as sd
 from fractions import Fraction
-from kimonu import interior_flux
+from kimonu import CRN, interior_flux
 from kimonu.linalg import entries
 
 
 def positive_flux(N, seed=0):
-    """r* of the one-shot readout. tangent_fast.py swaps in its own integer flux."""
-    return interior_flux(N, seed)
+    """r* of the one-shot readout. tangent_fast.py swaps in its own integer flux. interior_flux reads only N."""
+    return interior_flux(CRN(A=None, Yt=None, N=N, complexes=None, reaction_ids=None, metabolite_ids=None, pins={}), seed)
 
 def one_shot_exact(A, Y, N, detach, seed=0, want_groups=False):
     n = A.shape[0]; Ac = sp.csc_matrix(A); Yc = sp.csc_matrix(Y)

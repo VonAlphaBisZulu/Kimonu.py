@@ -21,14 +21,14 @@ sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu.io import substrate_complexes
 from kimonu import interior_flux
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("RV_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_values")
 M = sys.argv[1]
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
 Ycsc = sparse.csc_matrix(Y)
 ref = json.load(open(f"{B}/kinetic_variants/uptake_modes/{M}.json"))
 if os.path.exists(f"{B}/kinetic_variants/uptake_modes/{M}.detached.json"):
@@ -79,19 +79,19 @@ def all_values(v):
 
 
 t0 = time.time()
-flux = interior_flux(N, 0, draw="lp")
+flux = interior_flux(net, 0, draw="lp")
 out = dict(model=M, n_reactions=nr, n_complexes=nc, n_metabolites=nm, seconds_flux=time.time() - t0)
-fractional = {i for c in set(substrate_complexes(A).values()) for i, y in column(c).items() if y.denominator != 1}
+fractional = {i for c in set(substrate_complexes(net).values()) for i, y in column(c).items() if y.denominator != 1}
 rng = random.Random(0)
 x = [Fraction(1) if i in fractional else Fraction(rng.randint(1, 5), rng.randint(1, 5)) for i in range(nm)]
 P = primes(nr)
 for mode, detach in (("attached", False), ("detached", True)):
     res = out[mode] = {}
     # 1) round trip
-    k = kimonu.rate_constants(A, Y, flux, x)
+    k = kimonu.rate_constants(net, flux, x)
     t0 = time.time()
     try:
-        v = kimonu.relation_values(A, Y, N, k, detach_uptakes=detach)
+        v = kimonu.relation_values(net, k, detach_uptakes=detach)
     except (ValueError, NotImplementedError) as e:
         res["error"] = repr(e); print(M, mode, e, flush=True); continue
     res["seconds"], res["rounds"] = time.time() - t0, v.rounds
@@ -109,7 +109,7 @@ for mode, detach in (("attached", False), ("detached", True)):
         perm = list(range(nr)); random.Random(seed).shuffle(perm)
         prime_of = {P[perm[j]]: j for j in range(nr)}
         try:
-            vp = kimonu.relation_values(A, Y, N, [P[perm[j]] for j in range(nr)], detach_uptakes=detach)
+            vp = kimonu.relation_values(net, [P[perm[j]] for j in range(nr)], detach_uptakes=detach)
         except (ValueError, NotImplementedError) as e:
             res["primes_error"] = repr(e); break
         found.append({(kind, key): exponents(val, prime_of) for kind, key, val in all_values(vp)})

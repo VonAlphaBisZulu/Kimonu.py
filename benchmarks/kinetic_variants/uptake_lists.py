@@ -11,18 +11,18 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 M, out_dir = sys.argv[1], sys.argv[2]
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
 mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
 free = set(range(mets.index("E_1") if "E_1" in mets else nm))
 out = dict(model=M)
 for name, det in (("attached", False), ("detached", True)):
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=det)
+    it = kimonu.iterated_route(net, detach_uptakes=det)
     parent = {}
     def find(a):
         while parent.setdefault(a, a) != a:

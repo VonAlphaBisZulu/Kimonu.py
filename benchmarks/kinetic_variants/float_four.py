@@ -36,9 +36,9 @@ sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu.readout import complex_directions, free_directions, readout
 from kimonu.io import zero_complexes
-from kimonu.linalg import exact, null_space_rows
-from kimonu.steady_state import interior_flux, steady_state_map
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from kimonu.linalg import entries, exact, null_space_rows
+from kimonu.steady_state import interior_flux, rate_columns
+from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("KF_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_float_four")
 TAUS = [float(10.0 ** e) for e in np.arange(-14, -0.5 + 1e-9, 0.5)]
@@ -222,20 +222,33 @@ ITER = [("exact", None), ("svd", None)] if PART == "all" else \
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
 mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
 free = np.zeros(nm, bool); free[:mets.index("E_1") if "E_1" in mets else nm] = True
-skip = zero_complexes(Y)
+skip = zero_complexes(net)
 cx = [c for c in range(nc) if c not in skip]                 # the complexes that enter the modules
+
+
+def w_entries(flux):
+    """W of Eq. 3 as {(metabolite, column): value} and its number of columns, filled reaction by reaction as
+    kimonu.steady_state_map did up to commit f948ec4, so the float sums below add up in the order of the recorded runs"""
+    column, ncol = rate_columns(net, True)
+    by_reaction = {}
+    for i, j, v in entries(net.N)[0]:
+        by_reaction.setdefault(j, []).append((i, v))
+    W = {}
+    for j, col in column.items():
+        for i, v in by_reaction.get(j, ()):
+            W[(i, col)] = W.get((i, col), Fraction(0)) + flux[j] * v
+    return W, ncol
 
 
 def yt_rows(B):
     """Rows of Yᵀ B for the complexes that enter the modules"""
-    rows = complex_directions(Y, B)
+    rows = complex_directions(net, B)
     return [rows[c] for c in cx]
 
 
-Ycsc = sp.csc_matrix(Y)
 Yf = sp.csc_matrix(Y, dtype=float)
 iu = np.triu_indices(nm, 1)
 out = dict(model=M, m=nm, n=nc, taus=TAUS)
@@ -245,19 +258,19 @@ log = lambda *a: print(f"[{time.strftime('%H:%M:%S')}] {M}:", *a, flush=True)
 if DO_TANGENT:
     # ---------------------------------------------------------------- tangent route
     t0 = time.time()
-    fluxT = interior_flux(N, 0)
-    W, (_, ncol) = steady_state_map(A, Y, N, fluxT, True)
+    fluxT = interior_flux(net, 0)
+    W, ncol = w_entries(fluxT)
     J, Jf = {}, np.zeros((nm, nm + ncol - nc))
     for (i, c), w in W.items():
         if c >= nc:
             J[(i, nm + c - nc)] = w; Jf[i, nm + c - nc] += float(w)
             continue
-        for k, y in zip(Ycsc.indices[Ycsc.indptr[c]:Ycsc.indptr[c + 1]], Ycsc.data[Ycsc.indptr[c]:Ycsc.indptr[c + 1]]):
-            J[(i, int(k))] = J.get((i, int(k)), Fraction(0)) + w * Fraction(str(y))
-            Jf[i, int(k)] += float(w) * float(y)
+        for k, y in net.Yt[c]:
+            J[(i, k)] = J.get((i, k), Fraction(0)) + w * y
+            Jf[i, k] += float(w) * float(y)
     rows = null_space_rows(exact(((i, k, v) for (i, k), v in J.items()), (nm, nm + ncol - nc)))
-    ex = readout(Y, [as_tuple(r) for r in rows[:nm]], skip)
-    ref = kimonu.tangent_route(A, Y, N, detach_uptakes=True)
+    ex = readout(net, [as_tuple(r) for r in rows[:nm]])
+    ref = kimonu.tangent_route(net, detach_uptakes=True)
     assert sorted(ex.acr) == sorted(ref.acr), "tangent: own readout differs from kimonu.tangent_route"
     acr_x = np.zeros(nm, bool); acr_x[list(ex.acr)] = True
     E = pair_matrix(nm, ex.acrr_groups)
@@ -297,9 +310,9 @@ if DO_TANGENT:
 if ITER:
     # ---------------------------------------------------------------- iterated route
     t0 = time.time()
-    km = kimonu.iterated_route(A, Y, N, detach_uptakes=True, seed=0)
+    km = kimonu.iterated_route(net, detach_uptakes=True, seed=0)
     fluxI = km.flux
-    Rx = readout(Y, free_directions(Y, km.modules), skip)
+    Rx = readout(net, free_directions(net, km.modules))
     acr_xi = np.zeros(nm, bool); acr_xi[list(Rx.acr)] = True
     Ei = pair_matrix(nm, Rx.acrr_groups)
     mods_x = sorted(sorted(s) for s in km.modules if len(s) > 1)
@@ -308,7 +321,7 @@ if ITER:
                                            rounds=km.rounds, seconds=time.time() - t0)
     out["iterated_exact_relations"].update(exact_hashes(acr_xi, Ei, km.modules))
     log("iterated exact", out["iterated_exact_relations"])
-    Wx, (mW, ncolI) = steady_state_map(A, Y, N, fluxI, True)
+    Wx, ncolI = w_entries(fluxI); mW = nm
     Wf = np.zeros((mW, ncolI))
     for (i, c), w in Wx.items():
         Wf[i, c] = float(w)
@@ -350,7 +363,7 @@ if ITER:
                     L = svd_left_kernel(np.array(cols).T if cols else np.zeros((nm, 0)))
                     YtL = np.asarray(Yf.T @ L)[cx]
                 else:
-                    Lrows = free_directions(Y, [set(s) for s in key])
+                    Lrows = free_directions(net, [set(s) for s in key])
                     eb = ExactBasis(Lrows)
                     L = eb.T
                     YtL = eb.apply(yt_rows(Lrows))

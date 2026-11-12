@@ -14,9 +14,8 @@ import numpy as np, scipy.sparse as sp, straindesign as sd
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src")); sys.path.insert(0, os.path.join(os.path.dirname(B), "tests"))
 import kimonu
-from kimonu import free_directions, interior_flux, readout
-from kimonu.linalg import entries
-from kimonu.concordance import concordance_from_matrices
+from kimonu import complex_directions, free_directions, interior_flux
+from kimonu.linalg import entries, null_space_rows, proportional_classes
 
 def psi_kernel(A, Y, N, flux, equal=()):
     n = A.shape[0]; Acsc = A.tocsc(); substrate = {}
@@ -30,20 +29,24 @@ def psi_kernel(A, Y, N, flux, equal=()):
         for i, v in by.get(j, ()): W[(i, s)] = W.get((i, s), Fraction(0)) + flux[j] * v
     for k, (c, d) in enumerate(equal): W[(m + k, c)], W[(m + k, d)] = Fraction(1), Fraction(-1)
     Wx = sd.RationalMatrix.from_fractions(((i, j, x) for (i, j), x in W.items() if x != 0), (m + len(equal), n))
-    res = concordance_from_matrices(sp.identity(n, format="csr", dtype=np.int64), Wx)
-    return res, set(substrate.values())
+    K = null_space_rows(Wx)                       # classes of proportional nonzero rows of ker(W)
+    return len({j for row in K for j, _ in row}), proportional_classes(K)[1], set(substrate.values())
 
 def check(A, Y, N):
-    flux = interior_flux(N)
+    net = kimonu.crn_from_matrices(A, Y)
+    flux = interior_flux(net)
     out = []
     equal = []
     while True:
-        res, subs = psi_kernel(A, Y, N, flux, equal)
-        out.append((res.nullity, len(res.modules)))
-        coupled = [set(g) for g in res.modules]
+        nullity, classes, subs = psi_kernel(A, Y, N, flux, equal)
+        out.append((nullity, len(classes)))
+        coupled = [set(g) for g in classes]
         coupled = [s for s in coupled if len(s) > 1 or next(iter(s)) in subs]
-        outside = set(range(Y.shape[1])) - set().union(*coupled)       # read out only the complexes of the sets
-        sets = readout(Y, free_directions(Y, coupled), outside).modules
+        YtB = complex_directions(net, free_directions(net, coupled))      # read out only the complexes of the sets
+        groups = {}
+        for c in sorted(set().union(*coupled)):
+            groups.setdefault(YtB[c], set()).add(c)
+        sets = list(groups.values())
         if len(sets) == len(coupled): break
         equal = [(min(s), c) for s in sets for c in s if c != min(s)]
     return out

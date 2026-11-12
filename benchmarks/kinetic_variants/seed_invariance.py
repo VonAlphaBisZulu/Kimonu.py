@@ -11,18 +11,18 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("SEED_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_seeds")
 M = sys.argv[1]
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
 runs = []
 for seed in (0, 1, 2):
     t = time.time()
-    kin = kimonu.iterated_route(A, Y, N, detach_uptakes=True, seed=seed)
+    kin = kimonu.iterated_route(net, detach_uptakes=True, seed=seed)
     runs.append(dict(seed=seed, seconds=time.time() - t,
                      modules=sorted(sorted(map(int, m)) for m in kin.modules if len(m) > 1),
                      acr=sorted(map(int, kin.acr)), acrr=sorted(sorted(map(int, p)) for p in kin.acrr)))

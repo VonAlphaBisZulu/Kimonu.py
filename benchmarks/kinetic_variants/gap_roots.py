@@ -22,7 +22,8 @@ from scipy.optimize import linprog
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.io import exact_matrix
+from kimonu.linalg import exact
+from run_kimonu_crn import crn_of
 
 M = sys.argv[1]
 DETACH = os.environ.get("DETACH") == "1"
@@ -65,7 +66,7 @@ def build(rx):
     A = sp.csr_matrix(([v for *_, v in Ae], ([i for i, *_ in Ae], [j for _, j, _ in Ae])), shape=(len(cx), len(rx)), dtype=np.int64)
     Ye = [(mi[n], k, float(v)) for k, key in enumerate(cx) for n, v in key]
     Y = sp.csr_matrix(([v for *_, v in Ye], ([i for i, *_ in Ye], [k for _, k, _ in Ye])), shape=(len(ms), len(cx)))
-    N = exact_matrix(((i, j, v) for (i, j), v in Ne.items() if v != 0), (len(ms), len(rx)))
+    N = exact(((i, j, v) for (i, j), v in Ne.items() if v != 0), (len(ms), len(rx)))
     return A, Y, N, ms, rx
 
 def fixed(rx, roots):
@@ -94,7 +95,7 @@ def fixed(rx, roots):
 
 
 def proven(A, Y, N, ms):
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=DETACH)
+    it = kimonu.iterated_route(crn_of(A, Y, N), detach_uptakes=DETACH)
     acr = {ms[i] for i in it.acr}
     parent = {}
     def find(a):

@@ -23,7 +23,7 @@ from scipy.optimize import linprog
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
 import kimonu
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import crn_of, triplets_to_sparse, to_exact
 from kinetic_variants.tangent_one_shot import one_shot_exact
 
 M, target, out = sys.argv[1:4]
@@ -50,7 +50,7 @@ from kimonu import interior_flux
 
 def tangent_fixed_float(A, Y, N, ti):
     """e_ti in the row space of J = N diag(r*) G, in floating point"""
-    r = np.array([float(v) for v in interior_flux(N, draw="lp")])
+    r = np.array([float(v) for v in interior_flux(crn_of(A, Y, N), draw="lp")])
     Nf = N0_float(N); G = ((A < 0).astype(float).T @ Y.T).tocsr()
     J = (Nf @ sp.diags(r) @ G).tocsr()
     e = np.zeros(J.shape[1]); e[ti] = 1
@@ -70,7 +70,7 @@ def gap(keep, exact=False):
         A, Y, N, ms = network(kept)
         if target in ms:
             ti = ms.index(target)
-            acr_it = set(kimonu.iterated_route(A, Y, N, detach_uptakes=False).acr)
+            acr_it = set(kimonu.iterated_route(crn_of(A, Y, N), detach_uptakes=False).acr)
             if ti not in acr_it:
                 if exact:
                     _, acr_t, _, _ = one_shot_exact(A, Y, N, False)

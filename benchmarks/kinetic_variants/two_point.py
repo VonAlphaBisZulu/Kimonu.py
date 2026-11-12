@@ -166,10 +166,13 @@ def certify(N, G, c, V=None, classes=None, free=(), time_limit=3600, threads=4, 
 def iterated_constraints(A, Y, N, detach=False):
     """V (rows: log-combinations the iterated route proves fixed) and reaction classes (one per module)."""
     import kimonu
+    from kimonu.linalg import exact, to_float
     from kimonu.readout import composition_differences
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
-    D = composition_differences(sp.csc_matrix(Y), it.modules, it.acr)
-    V = sp.csr_matrix(D.T, dtype=float)
+    from run_kimonu_crn import crn_of
+    net = crn_of(A, Y, N)
+    it = kimonu.iterated_route(net, detach_uptakes=detach)
+    D = composition_differences(net, it.modules, it.acr)                 # (YΔ)ᵀ in row form
+    V = to_float(exact(((k, i, v) for k, row in enumerate(D) for i, v in row), (len(D), Y.shape[0])))
     Ac = sp.csc_matrix(A)
     sub = {j: int(Ac.indices[Ac.indptr[j]:Ac.indptr[j + 1]][Ac.data[Ac.indptr[j]:Ac.indptr[j + 1]] < 0][0]) for j in range(A.shape[1])}
     cls = {}
@@ -182,7 +185,7 @@ def exact_realise(N, G, xprime):
     """Exact counterexample for integer G and rational x' (x = 1): an r > 0 in ker N with
     N (r o psi(x')) = 0, from the exact nullspace of the stacked matrix. Returns r (Fractions) or None."""
     from fractions import Fraction
-    from kimonu import interior_flux
+    from kimonu import CRN, interior_flux
     from kimonu.linalg import entries, exact
     triples, (m, q) = entries(N)
     Gc = sp.csr_matrix(G)
@@ -195,6 +198,8 @@ def exact_realise(N, G, xprime):
         psi.append(p)
     stacked = triples + [(m + i, j, v * psi[j]) for i, j, v in triples]
     try:
-        return interior_flux(exact(stacked, (2 * m, q)), draw="lp")
+        stack = CRN(A=None, Yt=None, N=exact(stacked, (2 * m, q)), complexes=None, reaction_ids=None, metabolite_ids=None,
+                    pins={})                       # interior_flux reads only N
+        return interior_flux(stack, draw="lp")
     except ValueError:
         return None

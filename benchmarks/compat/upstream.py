@@ -31,7 +31,7 @@ KineticResult = namedtuple(
 )
 
 
-def coupling_signatures(Y, modules, known_acr=()):
+def coupling_signatures(crn, modules, known_acr=()):
     """The row of Yᵀ ker((YΔ)ᵀ) of each module's first complex. Modules with equal signatures are coupled.
 
     YΔ holds the composition differences within the modules and the unit vectors of ``known_acr``. None when it has
@@ -39,7 +39,7 @@ def coupling_signatures(Y, modules, known_acr=()):
     """
     if not known_acr and not any(len(m) > 1 for m in modules):
         return None
-    rows = complex_directions(Y, kimonu.free_directions(Y, modules, known_acr))
+    rows = complex_directions(crn, kimonu.free_directions(crn, modules, known_acr))
     return [rows[min(module)] for module in modules]
 
 
@@ -49,7 +49,7 @@ def is_weakly_reversible(succ, pred, n):
                for component in linkage_classes(succ, pred, set(range(n))))
 
 
-def classical_deficiency(Y, A, succ, pred, nullity=None):
+def classical_deficiency(crn, succ, pred, nullity=None):
     """delta = n - l - rank(N): complexes, minus linkage classes, minus the rank of N = Y*A.
 
     The rank comes from the exact nullspace, not from an SVD. A float rank test would put a numerical tolerance in
@@ -57,12 +57,11 @@ def classical_deficiency(Y, A, succ, pred, nullity=None):
     between delta = 1 and delta = 2 changes the answer. ``nullity`` may be supplied when the kernel is known from the
     concordance partition.
     """
-    n = A.shape[0]
+    n, q = crn.A.shape
     linkage = len(linkage_classes(succ, pred, set(range(n))))
     if nullity is None:
-        import straindesign as sd
-        nullity = sd.sparse_nullspace((Y @ A).tocsr()).shape[1]
-    rank = A.shape[1] - nullity
+        nullity = kimonu.concordance(crn).nullity
+    rank = q - nullity
     return n - linkage - rank
 
 
@@ -77,31 +76,31 @@ def _result(result, known_acr, iterations, deficiency):
                          iterations=iterations, deficiency=deficiency)
 
 
-def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20, nullity=None):
-    """Kinetic modules from the concordance partition, with the September merges when Y is given.
+def kinetic_modules(crn, modules, balanced, merges=True, max_iterations=20, nullity=None):
+    """Kinetic modules from the concordance partition, with the September merges.
 
     Args:
-        A: complexes x reactions incidence matrix.
+        crn: the network (kimonu.CRN).
         modules: concordance modules as iterables of complex indices (singletons included).
         balanced: indices of balanced complexes.
-        Y: metabolites x complexes composition matrix, for the coupling and deficiency merges. Without it only
-            overlapping upstream sets merge, as in kimonu.reference.upstream_modules.
+        merges: the coupling and deficiency merges of September (default). Without them only overlapping upstream
+            sets merge, as in kimonu.reference.upstream_modules.
         max_iterations: cap on the outer loop.
         nullity: dimension of ker(N), when known from the concordance step.
 
     Returns a :class:`KineticResult`.
     """
-    if Y is None:
-        result, rounds = upstream_modules(A, modules, balanced, max_iterations)
+    if not merges:
+        result, rounds = upstream_modules(crn, modules, balanced, max_iterations)
         return _result(result, (), rounds, -1)
 
-    n = A.shape[0]
-    graph = complex_graph(A)
+    n = crn.A.shape[0]
+    graph = complex_graph(crn)
     succ, pred = graph.succ, graph.pred
     balanced = set(balanced)
     concordance = [set(m) - balanced for m in modules]
     concordance = [m for m in concordance if m]
-    initial_delta = classical_deficiency(Y, A, succ, pred, nullity=nullity)
+    initial_delta = classical_deficiency(crn, succ, pred, nullity=nullity)
     weakly_reversible = is_weakly_reversible(succ, pred, n)
 
     known_acr, n_merges, previous, iterations, current_modules = set(), 0, None, 0, []
@@ -115,14 +114,14 @@ def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20, nullity=Non
                 origin.append(idx)
         if not upstream_sets:
             break
-        sets = _group_sets(upstream_sets, origin, Y, known_acr)
+        sets = _group_sets(upstream_sets, origin, crn, known_acr)
         # a merge of upstream sets is a merge of the concordance modules behind them
         new_concordance = [set().union(*(concordance[i] for i in sources)) for _, sources in sets]
         new_concordance += [module for idx, module in enumerate(concordance)
                             if not any(idx in sources for _, sources in sets)]
         n_merges += len(concordance) - len(new_concordance)
         current_modules = [s for s, _ in sets]
-        known_acr |= set(kimonu.readout(Y, kimonu.free_directions(Y, current_modules, known_acr)).acr)
+        known_acr |= set(kimonu.readout(crn, kimonu.free_directions(crn, current_modules, known_acr), False).acr)
         state = (frozenset(frozenset(s) for s in current_modules),
                  frozenset(frozenset(m) for m in new_concordance))
         concordance = new_concordance
@@ -137,7 +136,7 @@ def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20, nullity=Non
         if lower == 1 and upper == 1:
             concordance = [set().union(*concordance)]
             upstream_sets = [s for s in (upstream_set(m | balanced, graph) for m in concordance) if s]
-            sets = _group_sets(upstream_sets, list(range(len(upstream_sets))), Y, known_acr)
+            sets = _group_sets(upstream_sets, list(range(len(upstream_sets))), crn, known_acr)
             current_modules = [s for s, _ in sets]
 
     result = list(current_modules)
@@ -151,7 +150,7 @@ def kinetic_modules(A, modules, balanced, Y=None, max_iterations=20, nullity=Non
     return _result(result, known_acr, iterations, initial_delta)
 
 
-def _group_sets(upstream_sets, origin, Y, known_acr):
+def _group_sets(upstream_sets, origin, crn, known_acr):
     """Merge upstream sets by overlap and by coupling signature. Returns (merged set, origin indices) pairs."""
     merged = []
     for group, sources in ((set(s), {o}) for s, o in zip(upstream_sets, origin)):
@@ -161,7 +160,7 @@ def _group_sets(upstream_sets, origin, Y, known_acr):
         merged.append((group, sources))
     if len(merged) < 2:
         return merged
-    signatures = coupling_signatures(Y, [g for g, _ in merged], known_acr)
+    signatures = coupling_signatures(crn, [g for g, _ in merged], known_acr)
     if signatures is None:
         return merged
     by_signature = {}

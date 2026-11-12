@@ -24,16 +24,16 @@ from compat.upstream import coupling_signatures
 from kimonu.io import substrate_complexes, zero_complexes
 
 
-def join_terminals(A, Y, result, detach_uptakes=False):
+def join_terminals(net, result, detach_uptakes=False):
     """Modules of ``result`` (a kimonu.RouteResult) with every non-substrate complex joined where it is coupled.
 
     With detached uptakes the zero complex stays out, as kimonu.iterated_route keeps it out of every module."""
-    substrate = set(substrate_complexes(A).values())
-    skip = zero_complexes(Y) if detach_uptakes else set()
+    substrate = set(substrate_complexes(net).values())
+    skip = zero_complexes(net) if detach_uptakes else set()
     multi = [set(m) for m in result.modules if len(m) > 1]
     lone = [next(iter(m)) for m in result.modules if len(m) == 1 and not (set(m) & skip)]
     sets = multi + [{c} for c in lone]
-    sig = coupling_signatures(Y, sets, result.acr)
+    sig = coupling_signatures(net, sets, result.acr)
     if sig is None:
         return [set(m) for m in result.modules]
     merged = {}
@@ -53,18 +53,18 @@ def summarise(modules):
 
 if __name__ == "__main__":
     import numpy as np
-    from run_kimonu_crn import triplets_to_sparse, to_exact
+    from run_kimonu_crn import triplets_to_sparse
     M = sys.argv[1]; detach = "--detach" in sys.argv
     crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))      # blocked reactions already removed
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-    N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+    net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
     t = time.time()
-    res = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
-    before = kimonu.readout(Y, kimonu.free_directions(Y, res.modules, res.acr))
-    joined = join_terminals(A, Y, res, detach_uptakes=detach)
-    after = kimonu.readout(Y, kimonu.free_directions(Y, joined, res.acr))
-    substrate = set(substrate_complexes(A).values())
+    res = kimonu.iterated_route(net, detach_uptakes=detach)
+    before = kimonu.readout(net, kimonu.free_directions(net, res.modules, res.acr), False)
+    joined = join_terminals(net, res, detach_uptakes=detach)
+    after = kimonu.readout(net, kimonu.free_directions(net, joined, res.acr), False)
+    substrate = set(substrate_complexes(net).values())
     moved = sum(1 for m in joined if len(m) > 1 for c in m if c not in substrate)
     print(json.dumps(dict(model=M, detach=detach, seconds=round(time.time() - t, 1),
                           before=summarise([set(m) for m in res.modules]), after=summarise(joined),

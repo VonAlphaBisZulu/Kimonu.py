@@ -80,11 +80,14 @@ def kimonu_ref_rec(m):
     if not reps: return None
     d = reps[0]; med = lambda k: sorted(r[k] for r in reps)[len(reps) // 2]
     sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
+    import kimonu
     from kimonu.reference import shinar_feinberg
     from run_kimonu_crn import triplets_to_sparse
     crn = json.load(open(f"unblocked/{m}_fixed.crn.json"))
     mets = crn["metabolites"]; free = free_set(m)
-    acr, acrr = shinar_feinberg(triplets_to_sparse(crn["Y"], crn["n_metabolites"], crn["n_complexes"]), d["modules"])
+    nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
+    net = kimonu.crn_from_matrices(triplets_to_sparse(crn["A"], nc, nr, dtype=int), triplets_to_sparse(crn["Y"], nm, nc))
+    acr, acrr = shinar_feinberg(net, d["modules"])
     pairs = [(mets[i], mets[j]) for i, j in acrr]
     assert (len(acr), len(pairs), n_free(list(map(list, pairs)), free)) == (d["acr"], d["acrr"], d["acrr_free"]), m
     return dict(balanced=d["balanced"], conc=d["conc"], n_kinetic=d["n_kinetic"], giant=d["giant"],

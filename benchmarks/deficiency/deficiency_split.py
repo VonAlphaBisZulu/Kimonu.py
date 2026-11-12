@@ -32,7 +32,7 @@ for f in sorted(glob.glob(f'{B}/unblocked/*_fixed.crn.json')):
     nonsingle = sum(1 for c in classes if len(c) > 1)
     rankM = None
     if m in check_rank:
-        trip = [(i, j, v) for i, r in enumerate(Mrows) for j, v in r.items()]
+        trip = [(i, j, v) for i, r in enumerate(Mrows) for j, v in r]
         rankM = dK - sd.sparse_nullspace(exact(trip, (n, dK))).shape[1]
     fd = fig.get(m, {})
     rows.append(dict(model=m, n=n_used, zero_cx=n_used - sum(1 for c in range(n) if c in ycols and used[c]), ell=ell, rankN=rankN, delta=delta,

@@ -19,8 +19,8 @@ from scipy.optimize import linprog
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
 import kimonu
-from kimonu.io import exact_matrix
-from run_kimonu_crn import triplets_to_sparse
+from kimonu.linalg import exact
+from run_kimonu_crn import crn_of, triplets_to_sparse
 from kinetic_variants.tangent_one_shot import one_shot_exact
 
 M, target, start, out = sys.argv[1:5]
@@ -103,7 +103,7 @@ def build_list(rx):
     A = sp.csr_matrix(([v for *_, v in Ae], ([i for i, *_ in Ae], [j for _, j, _ in Ae])), shape=(len(cx), len(rx)), dtype=np.int64)
     Ye = [(mi[n], k, float(v)) for k, key in enumerate(cx) for n, v in key]
     Y = sp.csr_matrix(([v for *_, v in Ye], ([i for i, *_ in Ye], [k for _, k, _ in Ye])), shape=(len(ms), len(cx)))
-    N = exact_matrix(((i, j, v) for (i, j), v in Ne.items() if v != 0), (len(ms), len(rx)))
+    N = exact(((i, j, v) for (i, j), v in Ne.items() if v != 0), (len(ms), len(rx)))
     return A, Y, N, ms, rx
 
 cache = {}
@@ -115,7 +115,7 @@ def gap(contracted):
         A, Y, N, ms, _ = build(contracted)
         if target in ms:
             ti = ms.index(target)
-            it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+            it = kimonu.iterated_route(crn_of(A, Y, N), detach_uptakes=False)
             if ti not in set(it.acr):
                 ok = ti in set(one_shot_exact(A, Y, N, False)[1])
     except Exception as e:
@@ -179,7 +179,7 @@ def ok_list(rx):
     try:
         A, Y, N, ms, _ = build_list(rx)
         if target not in ms: return False
-        ti = ms.index(target); it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+        ti = ms.index(target); it = kimonu.iterated_route(crn_of(A, Y, N), detach_uptakes=False)
         if ti in set(it.acr): return False
         return ti in set(one_shot_exact(A, Y, N, False)[1])
     except Exception as e:

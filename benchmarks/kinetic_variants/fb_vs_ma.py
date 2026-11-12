@@ -37,17 +37,15 @@ UM_DIR replaces the record checked against (kinetic_variants/uptake_modes) and F
 """
 import json, os, sys, time
 from collections import Counter
-from fractions import Fraction
 import numpy as np
-from scipy import sparse
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu.readout import complex_directions, free_directions, readout
 from kimonu.io import substrate_complexes, zero_complexes
-from kimonu.linalg import exact, null_space_rows, proportional_classes
+from kimonu.linalg import null_space_rows, proportional_classes
 from kimonu.steady_state import interior_flux, steady_state_map
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 
 def n_pairs(sizes):
@@ -97,46 +95,33 @@ def module_record(modules):
     return dict(modules=len(sizes), giant=max(sizes, default=1), pairs=n_pairs(sizes))
 
 
-def iterated(A, Y, N, detach, column):
+def iterated(net, detach, column):
     """Kinetic modules by the iterated route, the class of every column of W, and the fixed complexes."""
-    n = A.shape[0]
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
-    W, (m, n_columns) = steady_state_map(A, Y, N, it.flux, detach)
+    n = net.A.shape[0]
+    it = kimonu.iterated_route(net, detach_uptakes=detach)
+    W, n_columns = steady_state_map(net, it.flux, detach)
     equal = [(min(g), c) for g in it.modules for c in g if c != min(g)]
-    for k, (c, d) in enumerate(equal):
-        W[(m + k, c)], W[(m + k, d)] = Fraction(1), Fraction(-1)
-    zero, classes = proportional_classes(null_space_rows(exact(((i, j, v) for (i, j), v in W.items()),
-                                                               (m + len(equal), n_columns))))
+    W += [tuple(sorted(((c, 1), (d, -1)))) for c, d in equal]
+    zero, classes = proportional_classes(null_space_rows(W, n_columns))
     assert not zero and n_columns == max(n, 1 + max(column.values())), "columns"
     of_column = labels(classes, n_columns)
     # the classes of ker(W), restricted to the complexes, are the kinetic modules
-    skip = zero_complexes(Y) if detach else set()
+    skip = zero_complexes(net) if detach else set()
     assert {frozenset(g) for g in it.modules if len(g) > 1} == \
         {frozenset(g) for g in ({c for c in cl if c < n and c not in skip} for cl in classes) if len(g) > 1}, "modules"
-    YtL = complex_directions(Y, free_directions(Y, it.modules, it.acr))
+    YtL = complex_directions(net, free_directions(net, it.modules, it.acr))
     fixed = {c for c in range(n) if c not in skip and not YtL[c]}
     return it.modules, of_column, fixed, it.rounds
 
 
-def tangent(A, Y, N, detach):
+def tangent(net, detach):
     """Kinetic modules by the tangent route (as kimonu.tangent_route), the signature of every column of W,
     and the fixed complexes."""
-    n, m = A.shape[0], Y.shape[0]
-    skip = zero_complexes(Y) if detach else set()
-    flux = interior_flux(N, 0)
-    W, (_, n_columns) = steady_state_map(A, Y, N, flux, detach)
-    Ycsc = sparse.csc_matrix(Y)
-    J = {}
-    for (i, c), w in W.items():
-        if c >= n:
-            J[(i, m + c - n)] = w
-            continue
-        for k, y in zip(Ycsc.indices[Ycsc.indptr[c]:Ycsc.indptr[c + 1]], Ycsc.data[Ycsc.indptr[c]:Ycsc.indptr[c + 1]]):
-            J[(i, int(k))] = J.get((i, int(k)), Fraction(0)) + w * Fraction(str(y))
-    rows = null_space_rows(exact(((i, k, v) for (i, k), v in J.items()), (m, m + n_columns - n)))
-    rows = [tuple(sorted(r.items())) for r in rows]
-    modules = readout(Y, rows[:m], skip).modules + [{c} for c in sorted(skip)]
-    signature = complex_directions(Y, rows[:m]) + rows[m:]
+    n, m = net.A.shape[0], len(net.metabolite_ids)
+    skip = zero_complexes(net) if detach else set()
+    rows = kimonu.tangent_space(net, interior_flux(net, 0), detach)           # ker(W Yᵀ), sources after the metabolites
+    modules = readout(net, rows[:m], detach).modules
+    signature = complex_directions(net, rows[:m]) + rows[m:]
     keys = {}
     of_column = [keys.setdefault(s, len(keys)) for s in signature]
     for c in skip:                                 # a detached zero complex is no reaction's substrate
@@ -158,9 +143,9 @@ def reactions(fb, same, ma, fixed, column, n):
     return out, lab
 
 
-def check_src(A, Y, N, detach, route, lab):
+def check_src(net, detach, route, lab):
     """kimonu.kinetic_flux_coupling must give the classes of this script; returns its fixed-rate count."""
-    src = kimonu.kinetic_flux_coupling(A, Y, N, detach, route=route)
+    src = kimonu.kinetic_flux_coupling(net, route=route, detach_uptakes=detach)
     assert len(set(zip(src.class_of, lab))) == len(set(src.class_of)) == len(set(lab)), (route, "src classes")
     return len(src.fixed_rate)
 
@@ -186,10 +171,10 @@ if __name__ == "__main__":
     crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-    N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+    net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
     f = f"{os.environ.get('UM_DIR', B + '/kinetic_variants/uptake_modes')}/{M}.json"; one = f.replace(".json", f".{name}.json")
     stored = json.load(open(one if os.path.exists(one) else f))[name]
-    substrate, zero = substrate_complexes(A), zero_complexes(Y)
+    substrate, zero = substrate_complexes(net), zero_complexes(net)
     column, sources = {}, {}                      # the column of W that carries each reaction, as in steady_state_map
     for j, c in substrate.items():
         column[j] = sources.setdefault(j, nc + len(sources)) if detach and c in zero else c
@@ -198,10 +183,10 @@ if __name__ == "__main__":
 
     # flux balance: full coupling from K, concordance from M = A K
     t0 = time.time()
-    blocked, classes = proportional_classes(null_space_rows(N))
+    blocked, classes = proportional_classes(null_space_rows(net.N))
     assert not blocked, "blocked reactions"
     fb = labels(classes, nr); same = [column[j] for j in range(nr)]
-    conc = kimonu.concordance_from_matrices(A, N)
+    conc = kimonu.concordance(net)
     balanced_too = labels(conc.modules + [conc.balanced], nc)
     out["flux_coupling"] = summary(fb)
     out["shared_substrate"] = dict(summary(same), also_flux_coupled=both(fb, same))
@@ -211,10 +196,10 @@ if __name__ == "__main__":
 
     # mass action, iterated route
     t0 = time.time()
-    modules, of_column, fixed, out["rounds"] = iterated(A, Y, N, detach, column)
+    modules, of_column, fixed, out["rounds"] = iterated(net, detach, column)
     assert module_record(modules) == {k: stored["it"][k] for k in ("modules", "giant", "pairs")}, (M, "iterated")
     out["rates_iterated"], lab_it = reactions(fb, same, of_column, fixed, column, nc)
-    out["rates_iterated"]["fixed_rate_src"] = check_src(A, Y, N, detach, "iterated", lab_it)
+    out["rates_iterated"]["fixed_rate_src"] = check_src(net, detach, "iterated", lab_it)
     out["complexes_iterated"] = complexes(conc, balanced_too, modules, nc)
     out["fixed_complexes_iterated"] = len(fixed)
     out["seconds_iterated"] = time.time() - t0
@@ -223,10 +208,10 @@ if __name__ == "__main__":
     out["rates_tangent"] = out["complexes_tangent"] = None      # None: the same lists as the iterated route
     if detach or stored["gap"]:
         t0 = time.time()
-        modules_t, of_column, fixed_t = tangent(A, Y, N, detach)
+        modules_t, of_column, fixed_t = tangent(net, detach)
         assert module_record(modules_t) == {k: stored["tan"][k] for k in ("modules", "giant", "pairs")}, (M, "tangent")
         out["rates_tangent"], lab_tan = reactions(fb, same, of_column, fixed_t, column, nc)
-        out["rates_tangent"]["fixed_rate_src"] = check_src(A, Y, N, detach, "tangent", lab_tan)
+        out["rates_tangent"]["fixed_rate_src"] = check_src(net, detach, "tangent", lab_tan)
         assert refines(lab_it, lab_tan), "the iterated classes must refine the tangent classes"
         out["complexes_tangent"] = complexes(conc, balanced_too, modules_t, nc)
         out["fixed_complexes_tangent"] = len(fixed_t)

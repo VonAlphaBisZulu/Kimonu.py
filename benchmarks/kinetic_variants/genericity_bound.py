@@ -1,6 +1,6 @@
 """The Schwartz–Zippel bound of the uniformly drawn reference flux, per network, from exact ranks.
 
-kimonu.interior_flux(N, seed, draw="uniform", bits) draws r* = K (T c + s), with s uniform over the integers
+kimonu.interior_flux(net, seed, draw="uniform", bits) draws r* = K (T c + s), with s uniform over the integers
 [0, 2^bits) in every free coordinate (the LP point, draw="lp", is the default and has no such bound). Both routes read
 their relations off matrices whose entries are linear in r*: W(r*), with the feedback rows of each round, for the
 iterated route, and J(r*) = W(r*) Yᵀ for the tangent route. The result at r* differs from the generic one only if
@@ -25,15 +25,14 @@ sz_flux.py record only for the check and the tangent dimension, which does not d
 SZ_DIR is the sz_flux.py output read (default the rerun of 2026-11-11), GB_OUT the output directory.
 """
 import inspect, json, os, statistics, subprocess, sys, time
-from fractions import Fraction
 import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
 from kimonu import free_directions, readout, steady_state_map
 from kimonu.io import zero_complexes
-from kimonu.linalg import exact, null_space_rows, proportional_classes
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from kimonu.linalg import null_space_rows, proportional_classes
+from run_kimonu_crn import triplets_to_sparse
 
 RERUN = "/scratch/sadreyev_lab/pschneider/kimonu_rerun_1111"
 SZ = os.environ.get("SZ_DIR", f"{RERUN}/sz_flux_33")
@@ -42,21 +41,20 @@ SEED = 0
 BITS_DEFAULT = inspect.signature(kimonu.interior_flux).parameters["bits"].default
 
 
-def iterated_ranks(A, Y, N, flux):
+def iterated_ranks(net, flux):
     """The rounds of kimonu.iterated_route (detached uptakes) with the exact rank of W in each round."""
-    n = A.shape[0]
-    skip = zero_complexes(Y)
+    n = net.A.shape[0]
     equal, ranks = [], []
     while True:
-        W, (m, n_columns) = steady_state_map(A, Y, N, flux, True)
-        for k, (c, d) in enumerate(equal):                # the feedback rows u_c - u_d = 0
-            W[(m + k, c)], W[(m + k, d)] = Fraction(1), Fraction(-1)
-        rows = null_space_rows(exact(((i, j, v) for (i, j), v in W.items()), (m + len(equal), n_columns)))
-        ranks.append(n_columns - len({j for r in rows for j in r}))
+        W, n_columns = steady_state_map(net, flux, True)
+        m = len(W)
+        W += [tuple(sorted(((c, 1), (d, -1)))) for c, d in equal]          # the feedback rows u_c - u_d = 0
+        rows = null_space_rows(W, n_columns)
+        ranks.append(n_columns - len({j for r in rows for j, _ in r}))
         _, classes = proportional_classes(rows)
-        coupled = [s for s in ({c for c in g if c < n and c not in skip} for g in classes) if s]
-        found = readout(Y, free_directions(Y, coupled), skip)
-        if len(found.modules) == len(coupled):
+        coupled = [s for s in ({c for c in g if c < n} for g in classes) if s]
+        found = readout(net, free_directions(net, coupled))
+        if {frozenset(s) for s in found.modules} == {frozenset(s) for s in coupled}:      # as kimonu.iterated_route
             break
         equal = [(min(s), c) for s in found.modules for c in s if c != min(s)]
     pairs = sorted(sorted((int(a), int(b))) for g in found.acrr_groups for i, a in enumerate(sorted(g)) for b in sorted(g)[i + 1:])
@@ -69,18 +67,18 @@ def network(M):
     crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-    N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+    net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
     rec = json.load(open(f"{SZ}/{M}.json"))
     bits = rec.get("bits", BITS_DEFAULT)
     t0 = time.time()
-    flux = kimonu.interior_flux(N, SEED, "uniform", bits=bits)
-    it = iterated_ranks(A, Y, N, flux)
+    flux = kimonu.interior_flux(net, SEED, "uniform", bits=bits)
+    it = iterated_ranks(net, flux)
     seconds = time.time() - t0
     u = rec["uniform"]
     check = dict(modules=it["modules"] == u["iterated"]["modules"], acr=it["acr"] == u["iterated"]["acr"],
                  acrr=it["acrr"] == sorted(sorted(p) for p in u["iterated"]["acrr"]), rounds=it["rounds"] == u["iterated"]["rounds"])
     assert all(check.values()), (M, check)
-    skip = zero_complexes(Y)
+    skip = zero_complexes(net)
     ncx = nc - len(skip)
     tests = nm + nm * (nm - 1) // 2 + ncx * (ncx - 1) // 2 + 1
     coords_J = nm + it["n_columns"] - nc                  # metabolites, then the detached sources

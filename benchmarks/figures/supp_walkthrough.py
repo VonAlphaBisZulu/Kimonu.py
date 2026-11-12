@@ -12,11 +12,12 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "src")); sys.path.insert(0, os.path.join(ROOT, "tests"))
 from networks import matrices, ENVZ, ENVZ_SPECIES
-from kimonu.linalg import exact, matrix_product, null_space_rows, proportional_classes
-from kimonu import free_directions, readout, steady_state_map, tangent_route
+from kimonu.linalg import matrix_product, null_space_rows, proportional_classes
+from kimonu import crn_from_matrices, free_directions, readout, steady_state_map, tangent_route
 
 NAME = dict(zip(ENVZ_SPECIES, "ABCDEFGHI"))
 A, Y, N, cx = matrices(ENVZ, ENVZ_SPECIES)
+crn = crn_from_matrices(A, Y)
 CX = ["+".join(NAME[s] for s in c.split("+")) for c in cx]
 RX = [f"R{j + 1}" for j in range(A.shape[1])]
 SP = [NAME[s] for s in ENVZ_SPECIES]
@@ -28,8 +29,8 @@ def frac(v):
 
 
 def dense(rows, ncols):
-    """row-form dicts -> list of lists of Fractions"""
-    return [[Fraction(r.get(j, 0)) for j in range(ncols)] for r in rows]
+    """a row form (or rows as dicts) -> list of lists of Fractions"""
+    return [[Fraction(dict(r).get(j, 0)) for j in range(ncols)] for r in rows]
 
 
 def tex(M, rows, cols, name):
@@ -55,8 +56,8 @@ p(tex(dense(as_rows(Y), len(CX)), SP, CX, "Y"))
 p(tex(dense(as_rows(A), len(RX)), CX, RX, "A"))
 
 # flux coupling: K = ker N
-Krows = null_space_rows(N)
-d = max((j for r in Krows for j in r), default=-1) + 1
+Krows = null_space_rows(crn.N)
+d = max((j for r in Krows for j, _ in r), default=-1) + 1
 p("\n### S1.2 Flux coupling: $\\mathbf{K} = \\ker(\\mathbf{N})$\n")
 p(f"An exact basis with {d} columns. Zero rows are blocked reactions (none), proportional rows are fully coupled reactions.\n")
 p(tex(dense(Krows, d), RX, [f"k{j + 1}" for j in range(d)], "K"))
@@ -64,8 +65,7 @@ zr, cl = proportional_classes(Krows)
 p("Fully coupled: " + "; ".join("{" + ", ".join(RX[i] for i in g) + "}" for g in cl if len(g) > 1) + ".\n")
 
 # concordance: M = A K
-Kex = exact([(i, j, v) for i, r in enumerate(Krows) for j, v in r.items()], (len(RX), d))
-Mrows = matrix_product(A, Kex)
+Mrows = matrix_product(crn.A, Krows)
 p("\n### S1.3 Balanced and concordant complexes: $\\mathbf{M} = \\mathbf{A}\\mathbf{K}$\n")
 p(tex(dense(Mrows, d), CX, [f"k{j + 1}" for j in range(d)], "M"))
 zr, cl = proportional_classes(Mrows)
@@ -73,20 +73,16 @@ p("Balanced (zero rows): " + ", ".join(CX[i] for i in zr) + ". Concordance modul
   + "; ".join("{" + ", ".join(CX[i] for i in g) + "}" for g in cl if len(g) > 1) + ".\n")
 
 # iterated route at r* = K 1
-flux = [sum(r.values(), Fraction(0)) for r in Krows]
+flux = [sum((v for _, v in r), Fraction(0)) for r in Krows]
 p("\n### S1.4 The iterated route at $\\mathbf{r}^* = \\mathbf{K}\\mathbf{1}$\n")
 p("$\\mathbf{r}^* = (" + ", ".join(frac(v) for v in flux) + ")^\\top$.\n")
-W, (m, nc) = steady_state_map(A, Y, N, flux, False)
-Wd = [[W.get((i, j), Fraction(0)) for j in range(nc)] for i in range(m)]
-p(tex(Wd, SP, CX, r"W = \mathbf{N}\,\mathrm{diag}(\mathbf{r}^*)\,\mathbf{S}^\top"))
+W, nc = steady_state_map(crn, flux, False)
+p(tex(dense(W, nc), SP, CX, r"W = \mathbf{N}\,\mathrm{diag}(\mathbf{r}^*)\,\mathbf{S}^\top"))
 equal, rnd = [], 0
 while True:
     rnd += 1
-    Wx = dict(W)
-    for k, (c, e) in enumerate(equal):
-        Wx[(m + k, c)], Wx[(m + k, e)] = Fraction(1), Fraction(-1)
-    Wrows = null_space_rows(exact([(i, j, v) for (i, j), v in Wx.items()], (m + len(equal), nc)))
-    dw = max((j for r in Wrows for j in r), default=-1) + 1
+    Wrows = null_space_rows(W + [tuple(sorted(((c, 1), (e, -1)))) for c, e in equal], nc)
+    dw = max((j for r in Wrows for j, _ in r), default=-1) + 1
     _, cls = proportional_classes(Wrows)
     sets = [set(g) for g in cls]
     p(f"\n**Round {rnd}.** $\\ker(\\mathbf{{W}})$" + (" with the feedback rows $u_c - u_d$" if equal else "")
@@ -94,25 +90,25 @@ while True:
       + "; ".join("{" + ", ".join(CX[i] for i in sorted(s)) + "}" for s in sets if len(s) > 1) + ".\n")
     if rnd == 1:
         p(tex(dense(Wrows, dw), CX, [f"w{j + 1}" for j in range(dw)], r"\ker(W)"))
-    Lrows = free_directions(Y, [s for s in sets if s])
+    Lrows = free_directions(crn, [s for s in sets if s])
     dl = max((j for r in Lrows for j, _ in r), default=-1) + 1
     p(f"Log closure: $\\ker((\\mathbf{{Y}}\\Delta)^\\top)$ has {dl} dimensions.\n")
-    p(tex(dense([dict(r) for r in Lrows], dl), SP, [f"l{j + 1}" for j in range(dl)], r"\ker((Y\Delta)^\top)"))
-    found = readout(Y, Lrows)
+    p(tex(dense(Lrows, dl), SP, [f"l{j + 1}" for j in range(dl)], r"\ker((Y\Delta)^\top)"))
+    found = readout(crn, Lrows, detach_uptakes=False)
     merged, acr = found.modules, set(found.acr)
     p("Readout: kinetic modules " + "; ".join("{" + ", ".join(CX[i] for i in sorted(s)) + "}" for s in merged if len(s) > 1)
       + (", ACR " + ", ".join(SP[i] for i in sorted(acr)) if acr else ", no ACR yet") + ".\n")
-    if len(merged) == len([s for s in sets if s]):
+    if {frozenset(s) for s in merged} == {frozenset(s) for s in sets}:
         break
     equal = [(min(s), c) for s in merged for c in s if c != min(s)]
 
 # final readout and tangent route
-R = readout(Y, free_directions(Y, merged))
+R = readout(crn, free_directions(crn, merged), detach_uptakes=False)
 p("\n### S1.5 Final readout\n")
 p("Kinetic modules: " + "; ".join("{" + ", ".join(CX[i] for i in sorted(s)) + "}" for s in R.modules if len(s) > 1)
   + ". ACR: " + ", ".join(SP[i] for i in R.acr) + ". ACRR groups: "
   + "; ".join("{" + ", ".join(SP[i] for i in g) + "}" for g in R.acrr_groups) + ".\n")
-T = tangent_route(A, Y, N)
+T = tangent_route(crn)
 p(f"The tangent route, $\\ker(\\mathbf{{W}}\\mathbf{{Y}}^\\top)$ at a random interior point, gives the same modules, ACR and ACRR: "
   f"{'yes' if sorted(map(sorted, (m for m in T.modules if len(m) > 1))) == sorted(map(sorted, (m for m in R.modules if len(m) > 1))) else 'NO'}.\n")
 print("\n".join(out))

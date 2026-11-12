@@ -104,7 +104,7 @@ mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
 free_mets = set(range(mets.index("E_1") if "E_1" in mets else nm))
 
 # ---- exact routes at the real r* (as in hierarchy_data.py)
-it = kimonu.iterated_route(A, Y, S, detach_uptakes=False)
+it = kimonu.iterated_route(kimonu.crn_from_matrices(A, Y), detach_uptakes=False)
 flux = integer_positive_flux(S, seed=0)
 Ac = sp.csc_matrix(A); Yc = sp.csc_matrix(Y)
 sub = {}

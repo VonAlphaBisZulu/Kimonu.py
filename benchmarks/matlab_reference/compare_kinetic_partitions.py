@@ -12,7 +12,7 @@ sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimon
 import kimonu
 from compat import upstream
 from kimonu.reference import complex_graph, strong_components
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
 M = "iCN900"
@@ -20,8 +20,8 @@ crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64)
 Y = triplets_to_sparse(crn["Y"], nm, nc)
-S = to_exact(triplets_to_sparse(crn["S"], nm, nr))
-graph = complex_graph(A); succ, pred = graph.succ, graph.pred
+net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
+graph = complex_graph(net); succ, pred = graph.succ, graph.pred
 term = set()
 for comp in strong_components(succ, set(range(nc))):
     if not any(succ[v] - comp for v in comp):
@@ -75,10 +75,10 @@ def merge(sets):
         out.append(g)
     return out
 
-res = kimonu.concordance_from_matrices(A, S); bal = set(res.balanced)
+res = kimonu.concordance(net); bal = set(res.balanced)
 seeds = [m for m in (set(x) - bal for x in res.modules) if m]
 T = merge([s for s in (tentative(m | bal) for m in seeds) if s])
-kin = upstream.kinetic_modules(A, res.modules, res.balanced, Y=Y, nullity=res.nullity)
+kin = upstream.kinetic_modules(net, res.modules, res.balanced, nullity=res.nullity)
 for tag, blocks in (("tentative (S.2.2)", T), ("Kimonu (S2-1)", [set(m) for m in kin.modules]),
                     ("COCOA", list(C.values()))):
     ns = [b for b in blocks if len(b) > 1]

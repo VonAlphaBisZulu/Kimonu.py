@@ -19,20 +19,20 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("SZ_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_sz_flux")
 M = sys.argv[1]; BITS = int(sys.argv[2]) if len(sys.argv) > 2 else 64
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
 
 
 def run(draw):
-    flux = kimonu.interior_flux(N, 0, draw, bits=BITS)
-    t0 = time.time(); it = kimonu.iterated_route(A, Y, N, detach_uptakes=True, flux=flux); ti = time.time() - t0
-    t0 = time.time(); tr = kimonu.tangent_route(A, Y, N, detach_uptakes=True, flux=flux); tt = time.time() - t0
+    flux = kimonu.interior_flux(net, 0, draw, bits=BITS)
+    t0 = time.time(); it = kimonu.iterated_route(net, detach_uptakes=True, flux=flux); ti = time.time() - t0
+    t0 = time.time(); tr = kimonu.tangent_route(net, detach_uptakes=True, flux=flux); tt = time.time() - t0
     mods = lambda ms: sorted(sorted(int(c) for c in s) for s in ms if len(s) > 1)
     bits = max(int(x).bit_length() for x in flux)
     return dict(iterated=dict(seconds=ti, modules=mods(it.modules), acr=sorted(map(int, it.acr)),

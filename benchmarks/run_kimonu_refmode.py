@@ -12,21 +12,23 @@ import json, os, sys, time
 import numpy as np
 B = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, B); sys.path.insert(0, os.path.join(os.path.dirname(B), "src"))
 import kimonu
+from kimonu.io import zero_complexes
 from kimonu.reference import shinar_feinberg, upstream_modules
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 M, out = sys.argv[1:3]
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json")); nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
-A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc); S = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
+net = kimonu.crn_from_matrices(A, Y)              # N = Y·A, the S of the crn.json
 t0 = time.perf_counter()
-res = kimonu.concordance_from_matrices(A, S)
+res = kimonu.concordance(net)
 t1 = time.perf_counter()
-modules, _ = upstream_modules(A, [g for g in res.modules if len(g) > 1], res.balanced)
+modules, _ = upstream_modules(net, [g for g in res.modules if len(g) > 1], res.balanced)
 t2 = time.perf_counter()
-acr, acrr = shinar_feinberg(Y, modules)
+acr, acrr = shinar_feinberg(net, modules)
 t3 = time.perf_counter()
 mets = crn["metabolites"]; cut = mets.index("E_1") if "E_1" in mets else nm
-zero = {c for c in range(nc) if Y.tocsc()[:, c].nnz == 0}
+zero = zero_complexes(net)
 n_kinetic, giant = sum(1 for m in modules if len(m) > 1), max(len(m) for m in modules)
 json.dump(dict(model=M, seconds=t3 - t0, seconds_concordance=t1 - t0, seconds_kinetic=t2 - t1, seconds_acr=t3 - t2,
                n_complexes=nc - len(zero), balanced=res.n_balanced, conc=sum(1 for g in res.modules if len(g) > 1),

@@ -29,7 +29,6 @@ import scipy.io as sio
 from scipy import sparse
 
 import kimonu
-from kimonu.io import exact_matrix
 
 
 def read_sparse(group):
@@ -40,12 +39,6 @@ def read_sparse(group):
     jc = np.asarray(group["jc"]).ravel().astype(np.int64)
     ncols = len(jc) - 1
     return sparse.csc_matrix((data, ir, jc), shape=(nrows, ncols))
-
-
-def to_exact(M):
-    """Exact rational form of ``M`` for the kernel computation."""
-    M = M.tocoo()
-    return exact_matrix(zip(M.row, M.col, M.data), M.shape)
 
 
 
@@ -107,12 +100,12 @@ def main():
                 key = next(k for k in fh if k.startswith("model_elementary"))
                 m = fh[key]
                 A = read_sparse(m["A"]).tocsr().astype(np.int64)
-                S = read_sparse(m["S"])
-            N = to_exact(S)
+                Y = read_sparse(m["Y"])
+            net = kimonu.crn_from_matrices(A, Y)          # N = Y·A, the S of the model
             nc = A.shape[0]
 
             t0 = time.perf_counter()
-            res = kimonu.concordance_from_matrices(A, N)
+            res = kimonu.concordance(net)
             secs = time.perf_counter() - t0
 
             k_label = np.zeros(nc, dtype=np.int64)

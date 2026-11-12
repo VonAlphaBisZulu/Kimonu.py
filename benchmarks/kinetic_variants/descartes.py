@@ -16,25 +16,24 @@ the psi kernel as in the default route. Every step is a theorem, so the route st
 from fractions import Fraction
 import numpy as np
 from scipy import sparse
-from kimonu import interior_flux
+from kimonu import crn_from_matrices, interior_flux
 from kimonu.io import substrate_complexes, zero_complexes
 from kimonu.iterated import coupled_columns
-from kimonu.linalg import entries, left_null_rows
+from kimonu.linalg import entries, fraction, null_space_rows
 from kimonu.readout import composition_differences
 
 
-def _psi_coupled(A, Y, N, flux, detach_uptakes, equal=()):
+def _psi_coupled(net, flux, detach_uptakes, equal=()):
     """The coupled sets of ker(W) on the complexes, and the substrate complexes, without a detached zero complex"""
-    n, drop = A.shape[0], (zero_complexes(Y) if detach_uptakes else set())
-    sets = [{c for c in g if c < n and c not in drop} for g in coupled_columns(A, Y, N, flux, detach_uptakes, equal)]
-    return sets, set(substrate_complexes(A).values()) - drop
+    n, drop = net.A.shape[0], (zero_complexes(net) if detach_uptakes else set())
+    sets = [{c for c in g if c < n and c not in drop} for g in coupled_columns(net, flux, detach_uptakes, equal)]
+    return sets, set(substrate_complexes(net).values()) - drop
 
 
-def _rows(Y, sets, extra):
-    YD = composition_differences(Y, sets)
-    cols = [YD] + [sparse.csc_matrix(v.reshape(-1, 1)) for v in extra]
-    YD = sparse.hstack(cols).tocsc() if extra else YD
-    return left_null_rows(YD) if YD.shape[1] else None
+def _rows(net, sets, extra):
+    """ker((YΔ | extra)ᵀ) in row form, one row per metabolite, or None when there is no column"""
+    cols = composition_differences(net, sets) + [tuple((i, fraction(x)) for i, x in enumerate(v) if x) for v in extra]
+    return null_space_rows(cols, len(net.metabolite_ids)) if cols else None
 
 
 def _signature(Ycsc, rows, c):
@@ -45,11 +44,11 @@ def _signature(Ycsc, rows, c):
     return {k: v for k, v in acc.items() if v != 0}
 
 
-def _closure(Y, sets, extra):
+def _closure(net, Y, sets, extra):
     """merge sets with equal signatures modulo F = span(YΔ, extra) until stable"""
     Ycsc = Y.tocsc()
     while True:
-        rows = _rows(Y, sets, extra)
+        rows = _rows(net, sets, extra)
         groups = {}
         for s in sets:
             key = tuple(sorted(_signature(Ycsc, rows, min(s)).items()))
@@ -102,12 +101,13 @@ def _descartes(A, Y, N, rows, extra, flux, detach_uptakes):
 
 def kinetic_modules_descartes(A, Y, N, detach_uptakes=False, seed=0):
     n = A.shape[0]
-    flux = interior_flux(N, seed)
+    net = crn_from_matrices(A, Y)                              # N = Y·A
+    flux = interior_flux(net, seed)
     equal, extra, firings = [], [], []
     while True:
-        coupled, subs = _psi_coupled(A, Y, N, flux, detach_uptakes, equal)
+        coupled, subs = _psi_coupled(net, flux, detach_uptakes, equal)
         coupled = [s for s in coupled if len(s) > 1 or (len(s) == 1 and next(iter(s)) in subs)]
-        sets, rows = _closure(Y, coupled, extra)
+        sets, rows = _closure(net, Y, coupled, extra)
         new = _descartes(A, Y, N, rows, extra, flux, detach_uptakes)
         if new:
             i, v = new[0]; extra.append(v); firings.append(i)
@@ -115,7 +115,7 @@ def kinetic_modules_descartes(A, Y, N, detach_uptakes=False, seed=0):
         if len(sets) == len(coupled):
             break
         equal = [(min(s), c) for s in sets for c in s if c != min(s)]
-    rows = _rows(Y, sets, extra)
+    rows = _rows(net, sets, extra)
     m = Y.shape[0]
     acr = [i for i in range(m) if rows is not None and not rows[i]]
     groups = {}

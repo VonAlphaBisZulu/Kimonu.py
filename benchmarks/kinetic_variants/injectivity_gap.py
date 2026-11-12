@@ -23,7 +23,7 @@ import numpy as np, scipy.sparse as sp
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import straindesign as sd
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import crn_of, triplets_to_sparse, to_exact
 from kimonu.linalg import entries, exact
 from kinetic_variants.two_point import substrate_composition, iterated_constraints, realise
 from kinetic_variants.tangent_fast import integer_positive_flux
@@ -113,7 +113,7 @@ def gap_dims(crn, A, Y, N, Nf, relations=(), seeds=4, log=print):
     ACRR e_i - e_j) add to C_iter. All ranks exact."""
     import kimonu
     m = Nf.shape[0]; t0 = time.time()
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+    it = kimonu.iterated_route(crn_of(A, Y, N), detach_uptakes=False)
     Vx, Vrows = exact_V(crn["Y"], m, it.modules, it.acr)
     dKV = kernel_dim([Vrows], m); log(f"iterated route {time.time() - t0:.0f}s, V {len(Vrows)} rows, dim ker V {dKV}")
     # T(r) for several generic r. If every later T lies in the first one (J_0 T_k = 0, an exact product), the
@@ -159,7 +159,7 @@ def tangent_sum(M, max_seeds=20, primes=(4611686018427387847, 230584300921369395
     import flint
     crn, A, Y, Nf = load(M); N = to_exact(Nf); m = Nf.shape[0]; mets = crn["metabolites"]; t0 = time.time()
     import kimonu
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=False)
+    it = kimonu.iterated_route(crn_of(A, Y, N), detach_uptakes=False)
     _, Vrows = exact_V(crn["Y"], m, it.modules, it.acr)
     relf = f"/scratch/sadreyev_lab/pschneider/kimonu_twopoint/{M}_relations.json"
     C = [{mets.index(k): Fraction(v) for k, v in r["c"].items()} for r in json.load(open(relf))["relations"]]

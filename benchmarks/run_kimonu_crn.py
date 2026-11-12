@@ -22,7 +22,7 @@ import numpy as np
 from scipy import sparse
 
 import kimonu
-from kimonu.io import exact_matrix
+from kimonu.linalg import exact
 from kimonu.reference import complex_graph, strong_components
 
 
@@ -38,7 +38,14 @@ def triplets_to_sparse(t, nrows, ncols, dtype=float):
 def to_exact(M):
     """Exact rational form of ``M`` for the kernel computation."""
     M = M.tocoo()
-    return exact_matrix(zip(M.row, M.col, M.data), M.shape)
+    return exact(zip(M.row, M.col, M.data), M.shape)
+
+
+def crn_of(A, Y, N=None, metabolite_ids=None):
+    """The kimonu.CRN of A and Y (kimonu.crn_from_matrices). A script that builds its network with exact coefficients
+    next to a float Y passes its exact N, which then replaces Y·A, since a float of a merged coefficient can round."""
+    net = kimonu.crn_from_matrices(A, Y, metabolite_ids=metabolite_ids)
+    return net if N is None else net._replace(N=N)
 
 
 
@@ -110,7 +117,6 @@ def main():
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64)
     Y = triplets_to_sparse(crn["Y"], nm, nc)
-    Sf = triplets_to_sparse(crn["S"], nm, nr)
 
     # "Balanced" means zero activity over the feasible set, which the kernel test reproduces only
     # when no reaction is blocked: span{v : Nv = 0, v >= 0} equals ker(N) minus the blocked
@@ -123,17 +129,15 @@ def main():
         n_blocked = nr - len(keep)
         if n_blocked:
             A = A[:, keep]
-            Sf = Sf[:, keep]
             nr = len(keep)
-    S = to_exact(Sf)
+    net = kimonu.crn_from_matrices(A, Y, metabolite_ids=crn["metabolites"])     # N = Y·A, the S of the crn.json
 
     times, t_conc, t_kin, t_acr = [], [], [], []
     for _ in range(args.repeats):
         t0 = time.perf_counter()
-        result = kimonu.concordance_from_matrices(A, S)
+        result = kimonu.concordance(net)
         t1 = time.perf_counter()
-        kin = kimonu.iterated_route(A, Y, S, detach_uptakes=args.detach_uptakes, seed=args.seed,
-                                    metabolite_ids=crn["metabolites"])
+        kin = kimonu.iterated_route(net, detach_uptakes=args.detach_uptakes, seed=args.seed)
         t2 = t3 = time.perf_counter()
         t_conc.append(t1 - t0)
         t_kin.append(t2 - t1)
@@ -162,7 +166,7 @@ def main():
         complexes.append({"id": f"complex_{j + 1}", "module": module_of[j], "composition": comp,
                           "kinetic_module": int(kin.module_of[j])})
 
-    succ = complex_graph(A).succ
+    succ = complex_graph(net).succ
     sccs = strong_components(succ, set(range(nc)))
     terminal = sum(1 for c in sccs if not any(w not in c for v in c for w in succ[v]))
 

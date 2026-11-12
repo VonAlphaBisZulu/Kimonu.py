@@ -20,7 +20,7 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 from kinetic_variants.uptake_modes import groups_of
 
 KEYS = ("modules", "giant", "pairs", "acr", "acrr_pairs", "acr_free", "acrr_pairs_free")
@@ -49,21 +49,21 @@ if __name__ == "__main__":
     crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
     nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
     A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-    N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+    net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
     mets = [m if isinstance(m, str) else m.get("id") for m in crn["metabolites"]]
     free = set(range(mets.index("E_1") if "E_1" in mets else nm))
     f = f"{os.environ.get('UM_DIR', B + '/kinetic_variants/uptake_modes')}/{M}.json"; one = f.replace(".json", f".{name}.json")
     stored = json.load(open(one if os.path.exists(one) else f))[name]
     out = dict(model=M, uptakes=name, n_complexes=nc, n_metabolites=nm, n_free=len(free), gap=stored["gap"])
     t0 = time.time()
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach)
+    it = kimonu.iterated_route(net, detach_uptakes=detach)
     record, out["it"] = members(it.modules, it.acr, it.acrr, free)
     assert record == {k: stored["it"][k] for k in KEYS}, (M, "iterated", record, stored["it"])
     out["rounds"], out["seconds_iterated"] = it.rounds, time.time() - t0
     out["tan"] = None                             # no gap: the tangent route returns the same lists
     if stored["gap"]:
         t0 = time.time()
-        tan = kimonu.tangent_route(A, Y, N, detach_uptakes=detach)
+        tan = kimonu.tangent_route(net, detach_uptakes=detach)
         record, out["tan"] = members(tan.modules, tan.acr, tan.acrr, free)
         assert record == {k: stored["tan"][k] for k in KEYS}, (M, "tangent", record, stored["tan"])
         out["seconds_tangent"] = time.time() - t0

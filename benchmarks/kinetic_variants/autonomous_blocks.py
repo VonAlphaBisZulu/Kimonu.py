@@ -96,18 +96,18 @@ def autonomous_acr(Nf, G, known=(), detach_uptakes=False, max_block=60, time_lim
         proven |= new
 
 
-def augment(Y, modules, known):
+def augment(net, modules, known):
     """Log closure (merge by coupling signature) and ACR, restarted with extra known-ACR species (Langary et al., 2025)."""
     import kimonu
     from compat.upstream import coupling_signatures
     sets, known = [set(m) for m in modules], set(known)
     while True:
-        sig = coupling_signatures(Y, sets, known)
+        sig = coupling_signatures(net, sets, known)
         merged = {}
         for s, key in zip(sets, sig):
             merged.setdefault(key, set()).update(s)
         merged = list(merged.values())
-        found = known | set(kimonu.readout(Y, kimonu.free_directions(Y, merged, known)).acr)
+        found = known | set(kimonu.readout(net, kimonu.free_directions(net, merged, known), False).acr)
         if len(merged) == len(sets) and found == known:
             return merged, known
         sets, known = merged, found
@@ -117,8 +117,10 @@ def run(A, Y, N, Nf, detach_uptakes=False, max_block=60, time_limit=600, log=pri
     """Iterated route, then alternate autonomous blocks and the log closure until neither proves more."""
     import kimonu
     from kinetic_variants.two_point import substrate_composition
+    from run_kimonu_crn import crn_of
     G = substrate_composition(A, Y)
-    it = kimonu.iterated_route(A, Y, N, detach_uptakes=detach_uptakes)
+    net = crn_of(A, Y, N)
+    it = kimonu.iterated_route(net, detach_uptakes=detach_uptakes)
     base = set(it.acr)
     modules, known, rounds, tested = it.modules, set(base), 0, {}
     while True:
@@ -127,12 +129,12 @@ def run(A, Y, N, Nf, detach_uptakes=False, max_block=60, time_limit=600, log=pri
         tested.update(t)
         if not proven:
             break
-        modules, known2 = augment(Y, modules, known | proven)
+        modules, known2 = augment(net, modules, known | proven)
         log(f"round {rounds}: blocks prove {len(proven)}, closure brings ACR to {len(known2)} (iterated {len(base)})")
         if known2 == known:
             break
         known = known2
-    acr = kimonu.readout(Y, kimonu.free_directions(Y, modules, known))
+    acr = kimonu.readout(net, kimonu.free_directions(net, modules, known), False)
     acrr = sorted((a, b) for g in acr.acrr_groups for k, a in enumerate(g) for b in g[k + 1:])
     return dict(iterated_acr=sorted(base), acr=sorted(acr.acr), acrr=acrr, modules=modules,
                 rounds=rounds,

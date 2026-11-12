@@ -21,34 +21,34 @@ from kimonu import free_directions, readout
 from kimonu.io import zero_complexes
 from kimonu.iterated import coupled_columns
 from kimonu.reference import shinar_feinberg
-from run_kimonu_crn import triplets_to_sparse, to_exact
+from run_kimonu_crn import triplets_to_sparse
 
 OUT = os.environ.get("SR_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_single_round")
 M = sys.argv[1]
 crn = json.load(open(f"{B}/unblocked/{M}_fixed.crn.json"))
 nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64); Y = triplets_to_sparse(crn["Y"], nm, nc)
-N = to_exact(triplets_to_sparse(crn["S"], nm, nr))
+net = kimonu.crn_from_matrices(A, Y)                 # N = Y·A, the S of the crn.json
 mets = crn["metabolites"]; cut = mets.index("E_1") if "E_1" in mets else nm
-skip = zero_complexes(Y)
+skip = zero_complexes(net)
 clean = lambda ms: sorted(sorted(int(c) for c in s if c not in skip) for s in ms if len(set(s) - skip) > 1)
 
 t0 = time.time()
-ref = clean(kimonu.reference_route(A, Y, N).modules)
+ref = clean(kimonu.reference_route(net).modules)
 t_ref = time.time() - t0
 t0 = time.time()
-flux = kimonu.interior_flux(N, 0)
-w1 = [{c for c in g if c < nc and c not in skip} for g in coupled_columns(A, Y, N, flux, True)]
+flux = kimonu.interior_flux(net, 0)
+w1 = [{c for c in g if c < nc and c not in skip} for g in coupled_columns(net, flux, True)]
 w1 = [s for s in w1 if s]
-w1c = readout(Y, free_directions(Y, w1), skip).modules
+w1c = readout(net, free_directions(net, w1)).modules
 t_w = time.time() - t0
-full = kimonu.iterated_route(A, Y, N, detach_uptakes=True, flux=flux).modules
+full = kimonu.iterated_route(net, detach_uptakes=True, flux=flux).modules
 variants = dict(ref=ref, w1=clean(w1), w1c=clean(w1c), full=clean(full))
 
 
 def relations(mods):
-    a, r = shinar_feinberg(Y, mods)
-    R = readout(Y, free_directions(Y, [set(m) for m in mods]), skip)
+    a, r = shinar_feinberg(net, mods)
+    R = readout(net, free_directions(net, [set(m) for m in mods]))
     pairs = sorted(tuple(sorted((x, y))) for g in R.acrr_groups for i, x in enumerate(g) for y in g[i + 1:])
     free = lambda acr, acrr: dict(acr=sorted(int(i) for i in acr if i < cut),
                                   acrr=sorted([int(i), int(j)] for i, j in acrr if i < cut and j < cut))
