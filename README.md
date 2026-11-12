@@ -170,11 +170,11 @@ pip install ".[dev]"
 pytest
 ```
 
-## Paper and benchmarks
+## Paper and scripts
 
 The paper is "Exact nullspaces find and certify kinetic modules and other mass-action invariants in metabolic
-networks". [`benchmarks/README.md`](benchmarks/README.md) maps each of its figures, tables and numbers to the script
-that made it, and the Zenodo archive holds the results (`benchmarks/ZENODO_README.md`).
+networks". [`scripts/README.md`](scripts/README.md) maps each of its figures, tables and numbers to the script
+that made it, and the Zenodo archive holds the results (`scripts/ZENODO_README.md`).
 
 ## License
 
