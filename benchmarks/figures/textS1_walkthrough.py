@@ -1,10 +1,10 @@
-"""Supplement, section S1: the example network of Figure 1 (EnvZ-OmpR) matrix by matrix, as Markdown with LaTeX.
+"""Supplementary Text S1: the example network of Figure 1 (EnvZ-OmpR) matrix by matrix, as Markdown with LaTeX.
 
 Every matrix is computed by Kimonu's own functions, exactly, in the species and complex names of Figure 1
 (A = EnvZ-ADP, B = EnvZ, C = EnvZ-ATP, D = EnvZ-P, E = OmpR, F = EnvZ-P.OmpR, G = OmpR-P, H = EnvZ-ATP.OmpR-P,
 I = EnvZ-ADP.OmpR-P). The interior flux is r* = K 1, as in Figure 1F.
 
-    python figures/supp_walkthrough.py > supp_walkthrough.md      # from benchmarks/
+    python figures/textS1_walkthrough.py > textS1_walkthrough.md      # from benchmarks/
 """
 import os, sys
 from fractions import Fraction

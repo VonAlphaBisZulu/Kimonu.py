@@ -12,8 +12,8 @@ script, run from benchmarks/ of a copy of the checkout, because the scripts rewr
 
     python figures/record_inputs.py lists/<script>.txt figures/<script>.py [args]
 
-for gather_figdata, pair_sets, seed_spread, make_data_s1_s2, make_table_s2 and paper_numbers (Python 3.12 environment
-of the runs) and make_figure3, make_supp_figures, make_float_four, make_hierarchy and extend_figure3 (matplotlib
+for gather_figdata, pair_sets, seed_spread, dataS1_S2, tableS2_S3 and paper_numbers (Python 3.12 environment
+of the runs) and fig4_figS1_S2_benchmark, figS3_S4_uptakes_seeds, figS5_S6_float, fig3AB_hierarchy and fig3CD_coverage (matplotlib
 3.8), as zenodo_bundle.sh does. Every file a script read must be in the archive (the published SVGs of <figures dir>
 included), or in SNAPSHOT_ONLY, or the script stops. Code is not copied into the data folders. The source snapshot (git archive of $KIMONU_REV, default HEAD) holds it. ZENODO_DOI,
 ARTICLE_DOI, RELEASE_TAG, ARCHIVE_VERSION and RELEASE_DATE fill the placeholders of README.md and CITATION.cff when
@@ -190,7 +190,7 @@ subprocess.run(["git", "archive", "--format=zip", f"--prefix=Kimonu.py-{commit}/
 def loc(src, look):
     """where the scripts of benchmarks/ read a part"""
     if look is None:
-        return "no script (the values are quoted in figures/make_fig3_methods.py)"
+        return "no script (the values are quoted in figures/fig4EF_methods_iLJ478.py)"
     if look[0] == ENV:
         return f"`${look[1]}`"
     return f"`{look[1]}/`" if os.path.isdir(src) else f"`{os.path.normpath(os.path.join(look[1], os.path.basename(src)))}`"

@@ -1,4 +1,4 @@
-"""Detached-uptake data for make_hierarchy.py: the detached block of uptake_modes/<model>[.detached].json in the
+"""Detached-uptake data for fig3AB_hierarchy.py: the detached block of uptake_modes/<model>[.detached].json in the
 schema of hierarchy/<model>.json, with the ACRR counted as independent ratios (k - 1 per group of k metabolites, fields
 acrr_ratios and acrr_ratios_free) from the group sizes of member_counts/<model>.json. The pair counts stay as
 acrr_pairs and acrr_pairs_free, and the group sizes are checked against them.

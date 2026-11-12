@@ -1,4 +1,4 @@
-# Removed files
+# Removed and renamed files
 
 On 2026-11-11 the files listed below were removed from the working tree to keep `benchmarks/` readable. They
 record earlier stages of the work. These are the August pipeline, pilot runs, reference runs before the
@@ -65,7 +65,7 @@ by `kinetic_variants/test_tangent_one_shot.py`.
 - `docs/figures_page.html`, `docs/pipeline_ledger.html`, `docs/theory_methods.html`
 - `docs/examples/figure1_gen.py`, `langary_example.html`, `net_fork.py`, `net_reduced.py`,
   `nullspace_walkthrough.html`, `walkthrough_gen.py` (walkthrough of the Langary et al. example, replaced by
-  `figures/supp_walkthrough.py`, Supplementary Text S1)
+  `figures/textS1_walkthrough.py`, Supplementary Text S1)
 - `docs/paper/md_to_science_tex.py` (replaced by `md_to_sciadv.py`)
 
 ## Notes and plans (removed in a later commit the same day, also present at `3066b9b`)
@@ -81,3 +81,43 @@ by `kinetic_variants/test_tangent_one_shot.py`.
   `Y`) and wrote `kinetic_variants/s210_*.json`, which `figures/gather_figdata.py` still reads for the `kimonu_up` arm.
 - `compat/test_upstream.py` moved to `../tests/test_reference.py`, as tests of `kimonu.reference_route`. Its tests of
   the September merges (`Y` given) were dropped.
+
+## Renamed on 2026-11-12 (git mv, history kept)
+Every drawing, table and data script is named by the paper item it produces, and every supplementary figure file
+carries its number. `git log --follow <new path>` shows the history under the old name.
+
+| old name | new name |
+|---|---|
+| `figures/make_hierarchy.py` | `figures/fig3AB_hierarchy.py` |
+| `figures/figure3_ratios.py` | `figures/fig3B_update_ratios.py` |
+| `figures/figure3_legend.py` | `figures/fig3AB_update_legend.py` |
+| `figures/extend_figure3.py` | `figures/fig3CD_coverage.py` |
+| `figures/make_figure2_bottom.py` | `figures/fig3EF_float.py` |
+| `figures/split_figure2.py` | `figures/fig2_fig3_split.py` |
+| `figures/make_figure3.py` | `figures/fig4_figS1_S2_benchmark.py` |
+| `figures/make_fig3_methods.py` | `figures/fig4EF_methods_iLJ478.py` |
+| `figures/figure4_update.py` | `figures/fig4ABF_update.py` |
+| `figures/figure34_terms.py` | `figures/fig3_fig4_update_terms.py` |
+| `figures/make_supp_figures.py` | `figures/figS3_S4_uptakes_seeds.py` |
+| `figures/make_float_four.py` | `figures/figS5_S6_float.py` |
+| `figures/make_table_s2.py` | `figures/tableS2_S3.py` |
+| `figures/make_data_s1_s2.py` | `figures/dataS1_S2.py` |
+| `figures/supp_walkthrough.py` | `figures/textS1_walkthrough.py` |
+| `docs/examples/network/figure1_lower.py` | `docs/examples/network/fig1CDE_matrices.py` |
+| `docs/examples/network/figure1_layers.py` | `docs/examples/network/fig1_update_layers.py` |
+| `docs/examples/network/figure1_matrix_labels.py` | `docs/examples/network/fig1_update_matrix_labels.py` |
+| `docs/examples/network/figure1_panelG_shared_W.py` | `docs/examples/network/fig1G_update_shared_W.py` |
+| `docs/examples/network/figure12_panels.py` | `docs/examples/network/fig1_fig2_panels.py` |
+| `docs/examples/network/figure2.py` | `docs/examples/network/fig2_kinase.py` |
+| `docs/examples/network/figure2_conventions.py` | `docs/examples/network/fig2_update_conventions.py` |
+| `docs/examples/network/figure2_loglog.py` | `docs/examples/network/fig2C_update_loglog.py` |
+| `docs/examples/network/figure2_panelE.py` | `docs/examples/network/fig2E_update_table.py` |
+| `docs/examples/network/figure3_phil_2026-10-06.svg` | `docs/examples/network/fig2AB_layout_phil_2026-10-06.svg` |
+| `figures/main/Figure3_draft.*` (October draft of Figure 4) | `figures/main/Figure4_draft.*` |
+| `figures/supp/FigS_stage_timing.*`, `FigS_reference_agreement.*` (October drafts) | `figures/supp/FigS1_stage_timing.*`, `FigS2_reference_agreement.*` |
+
+The figure files the scripts write were renamed with them: `FigS_stage_timing`, `FigS_reference_agreement`,
+`FigS_uptakes`, `FigS_seeds`, `FigS_certificate` and `FigS_float_errors` are `FigS1_stage_timing` to
+`FigS6_float_errors`, `Figure3_draft` (Figure 4) is `Figure4_draft`, `Figure3CD_draft` (Figure 4E, F) is
+`Figure4EF_draft`, `Fig_certificate` (Figure 3E, F) is `Figure3EF_draft` and `hierarchy` (Figure 3A, B) is
+`Figure3AB_draft`.

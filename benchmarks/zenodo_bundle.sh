@@ -33,10 +33,10 @@ SD=$HOME/miniconda3/envs/straindesign/bin/python          # Python 3.12, the env
 BIO=$HOME/miniconda3/envs/bioinfo/bin/python              # matplotlib 3.8 for the drawing scripts
 export PYTHONPATH=$HOME/sd-kernel-nonzeros PYTHONDONTWRITEBYTECODE=1 MPLBACKEND=Agg MPLCONFIGDIR=$W/mplcfg
 FROZEN="sweep/cocoa_v110 sweep/cocoa_eff reference_final reference_final_sampled"     # git-ignored parts of the records
-DATA="gather_figdata pair_sets seed_spread make_data_s1_s2 make_table_s2 paper_numbers"
-DRAW="make_figure3 make_supp_figures make_float_four make_hierarchy extend_figure3"
-args() { case $1 in make_data_s1_s2|make_figure3|make_supp_figures|make_float_four|make_hierarchy) echo "$2" ;;
-         make_table_s2) echo "$2/TableS2.md $2/TableS3.md" ;; extend_figure3) echo "$W/figures/Figure3.svg $2/Figure3_extend.svg" ;; esac; }
+DATA="gather_figdata pair_sets seed_spread dataS1_S2 tableS2_S3 paper_numbers"
+DRAW="fig4_figS1_S2_benchmark figS3_S4_uptakes_seeds figS5_S6_float fig3AB_hierarchy fig3CD_coverage"
+args() { case $1 in dataS1_S2|fig4_figS1_S2_benchmark|figS3_S4_uptakes_seeds|figS5_S6_float|fig3AB_hierarchy) echo "$2" ;;
+         tableS2_S3) echo "$2/TableS2.md $2/TableS3.md" ;; fig3CD_coverage) echo "$W/figures/Figure3.svg $2/Figure3.svg" ;; esac; }
 run() {   # <python> <script> <listing dir> <out dir> <record_inputs.py>
   $1 "$5" "$3/$2.txt" figures/$2.py $(args $2 $4) > "$4/$2.stdout" 2> "$4/$2.stderr"; echo "exit $? $2 ($(tail -1 "$4/$2.stderr"))"; }
 

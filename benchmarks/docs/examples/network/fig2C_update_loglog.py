@@ -9,7 +9,7 @@ Only the drawing of the lower plot is replaced (axes, ticks, the two curves, the
 The title, the axis labels and the formulas on the right stay where they are, and so does everything else in
 the figure, checked pixel by pixel at the end.
 
-    python figure2_loglog.py <vault Figure2.svg> <out.svg>
+    python fig2C_update_loglog.py <vault Figure2.svg> <out.svg>
 """
 import hashlib, math, os, sys, tempfile
 import xml.etree.ElementTree as ET

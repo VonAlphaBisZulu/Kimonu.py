@@ -2,9 +2,9 @@
 missed (false negative) and false (false positive), "local" for the tangent route in the legend of F and G, the
 formulas of panel C in Latin Modern, and C's tick labels in the same colour as the other plots. Illustrator's private
 copy of the document is dropped (it would not match). The bottom row (H, I) is redrawn afterwards by
-figures/make_figure2_bottom.py, which also embeds the fonts.
+figures/fig3EF_float.py, which also embeds the fonts.
 
-    python figure2_conventions.py <Figure2_draft.svg from Illustrator> <out.svg>
+    python fig2_update_conventions.py <Figure2_draft.svg from Illustrator> <out.svg>
 """
 import os, re, sys
 import xml.etree.ElementTree as ET

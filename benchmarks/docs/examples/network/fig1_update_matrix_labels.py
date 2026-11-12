@@ -5,7 +5,7 @@ then fonts embedded and the size set in points (svg_finish).
 Illustrator's own copy of the document (metadata with i:aipgf, written with "Preserve Illustrator Editing Capabilities")
 is dropped: it would no longer match the SVG, and Illustrator refuses such a file as invalid.
 
-    python figure1_matrix_labels.py <Figure1_draft2.svg from Illustrator> <out.svg>
+    python fig1_update_matrix_labels.py <Figure1_draft2.svg from Illustrator> <out.svg>
 """
 import os, re, sys
 import xml.etree.ElementTree as ET

@@ -1,14 +1,14 @@
-"""Figure 4E, F: the map of relations and methods (E) and what each tool computes, on one model (F). The letters D and E
-below are those of the draft; the file name dates from when this was Figure 3.
+"""Figure 4E, F: the map of relations and methods (E) and what each tool computes, on one model (F).
+fig4_figS1_S2_benchmark.py draws them into Figure 4 through draw(); run alone, this script writes them as Figure4EF_draft.
 
-D  Rows: flux balance (N r = 0, linear) and mass action (polynomial in x); columns: reaction or metabolite space
+E  Rows: flux balance (N r = 0, linear) and mass action (polynomial in x); columns: reaction or metabolite space
    and complex space. Each cell names the relation and the matrix it is read from; A and Y^T carry reaction and
    metabolite space into complex space. Langary et al.'s pipeline is the dashed path: concordance, then the
    reaction graph (upstream sets) to kinetic modules, then the Shinar-Feinberg rule (coupled complexes that
    differ in one or two metabolites) to ACR/ACRR. The readout is zero rows (fixed) and proportional (flux
    balance) or equal (mass action, log space) rows (coupled). Below, the mass-action methods nested by what they
    report; the reference-equivalent mode is light green with a dashed edge, as in A and B.
-E  The computations per tool and stage on iLJ478 (3440 complexes), each cell in the same slots: concordance
+F  The computations per tool and stage on iLJ478 (3440 complexes), each cell in the same slots: concordance
    (test, count, pairs skipped, time) and kinetic modules with ACR/ACRR (test, input, count, ACR rule, time).
    Sources: reference_final/reference_iLJ478.json (pairs tested, concordance time); the reference R stages
    timed on scratch (ref_rstage_timing_2026-11-03, median of three); sweep/cocoa_eff/cell_iLJ478_seed1234.log
@@ -20,7 +20,7 @@ E  The computations per tool and stage on iLJ478 (3440 complexes), each cell in 
    The dashed green line marks Kimonu's reference-equivalent mode: Kimonu's concordance, then the reference's
    kinetic stage, labelled on the right. It runs in a lane above the wall time of each cell.
 
-    python figures/make_fig3_methods.py <out_dir>     # from benchmarks/; make_figure3.py imports draw()
+    python figures/fig4EF_methods_iLJ478.py <out_dir>     # from benchmarks/; fig4_figS1_S2_benchmark.py imports draw()
 """
 import json, os, sys
 import matplotlib
@@ -48,7 +48,7 @@ def draw(ax, W=7.2, H=HCD):
         ax.add_patch(FancyArrowPatch(p, q, arrowstyle="-|>", mutation_scale=6, color=color, lw=lw, ls=ls,
                                      connectionstyle=f"arc3,rad={rad}", shrinkA=0, shrinkB=0, zorder=z))
 
-    # ---------------- C: the map
+    # ---------------- E: the map
     x0 = 0.52; cw, ch, gx, gy = 1.08, 0.46, 0.46, 0.30
     ytop = H - 0.42 - ch                      # top row of cells
     cols = [x0, x0 + cw + gx]; rows = [ytop, ytop - ch - gy]
@@ -90,7 +90,7 @@ def draw(ax, W=7.2, H=HCD):
             text(xs[k] + bw + sep / 2, yl + hl / 2, "$\\subseteq$", size=9)
     text(0.05, yl + hl + 0.1, "mass action, from what is proven (left) to what is complete (right)", size=6, color=MUTE, ha="left")
 
-    # ---------------- D: what each tool computes, iLJ478. Every cell fills the same slots, in the same order:
+    # ---------------- F: what each tool computes, iLJ478. Every cell fills the same slots, in the same order:
     # concordance: test, count, pairs skipped, -, wall time; kinetic: test, input, count, ACR rule, wall time.
     # A lane above the wall time carries the dashed line of Kimonu's reference-equivalent mode.
     xd = 3.2; wl, wc1, gut, wc2 = 0.55, 1.3, 0.12, 1.53
@@ -147,4 +147,4 @@ if __name__ == "__main__":
     draw(ax)
     out = sys.argv[1]; os.makedirs(out, exist_ok=True)
     for ext in ("svg", "png"):
-        fig.savefig(os.path.join(out, f"Figure3CD_draft.{ext}"), dpi=300)
+        fig.savefig(os.path.join(out, f"Figure4EF_draft.{ext}"), dpi=300)

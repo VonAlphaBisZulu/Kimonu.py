@@ -12,7 +12,7 @@ Checks: every old text occurs as often as expected, no new text box runs into an
 rendering both files (rsvg-convert) changes no pixel outside the boxes of the changed texts. A file that already reads
 the new words is reported and copied unchanged.
 
-    python figures/figure34_terms.py <vault figures dir> <out dir>     # from benchmarks/; writes Figure3.svg, Figure4.svg
+    python figures/fig3_fig4_update_terms.py <vault figures dir> <out dir>     # from benchmarks/; writes Figure3.svg, Figure4.svg
 """
 import os, re, sys, tempfile
 import xml.etree.ElementTree as ET

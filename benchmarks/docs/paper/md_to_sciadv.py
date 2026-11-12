@@ -9,7 +9,7 @@ newtx is not installed on this cluster, so the build uses the template's mathptm
 and longtable, which the template asks not to add. Science Advances has no required format at first submission.
 
     python md_to_sciadv.py <Kimonu.md> <Kimonu_Supplement.md> <template dir> <dir with figure PNGs> <out dir> <kimonu.bib>
-PNG names: Figure1.png ... and FigS_<name>.png, rendered from the vault SVGs.
+PNG names: Figure1.png ... and FigS<n>_<name>.png (the names of the vault SVGs), rendered from the vault SVGs.
 """
 import os, re, shutil, subprocess, sys
 

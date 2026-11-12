@@ -25,7 +25,7 @@ everything below about 1e-8 relative, which would count truly equal rows as diff
     python float_four.py <model> [part]   -> $KF_OUT/<model>.json, or $KF_OUT/parts/<model>__<part>.json
 
 part: "tangent" (both tangent arms), or "iterated_exact:k" / "iterated_svd:k" for the k-th of four contiguous
-chunks of the tolerance grid; without it, everything. figures/make_float_four.py merges the parts.
+chunks of the tolerance grid; without it, everything. figures/figS5_S6_float.py merges the parts.
 """
 import hashlib, json, os, sys, time
 from fractions import Fraction

@@ -1,5 +1,7 @@
-"""Figure 4 of the paper (A to D, E and F through make_fig3_methods.py) and figs. S1, S2: Kimonu's relations against the
-published tools, and the reference reproduced in seconds. The file name dates from when this was Figure 3.
+"""Figure 4 of the paper (A to D, E and F through fig4EF_methods_iLJ478.py) and figs. S1, S2: Kimonu's relations against the
+published tools, and the reference reproduced in seconds. Writes <out_dir>/Figure4_draft.svg and, next to <out_dir>,
+supp/FigS1_stage_timing.svg and supp/FigS2_reference_agreement.svg. The published Figure 4 carries hand edits and was
+updated in place by fig4ABF_update.py and fig3_fig4_update_terms.py; figs. S1 and S2 are published as drawn here.
 
 A  wall time vs network size on all 33 models for every arm, with a log-log least-squares line per arm.
 B  the tangent route at scale: the published symbolic local-ACR criterion against one exact nullspace, on the small
@@ -9,11 +11,11 @@ B  the tangent route at scale: the published symbolic local-ACR criterion agains
 C  coupled complex pairs, D independent ACR and ACRR relations (k - 1 per ACRR group) among free metabolites, per arm on the eleven
    models where the exhaustive reference finished (bars: value or median over seeds, whiskers: seed range);
    centred titles, "count" on each y axis and one legend below both, as Figure 3A, B.
-E, F  the map of relations and methods, and what each tool computes on iLJ478 (make_fig3_methods.py).
-fig. S2 (figures/supp/FigS_reference_agreement): the key quantities of Kimonu's reference-equivalent
+E, F  the map of relations and methods, and what each tool computes on iLJ478 (fig4EF_methods_iLJ478.py).
+fig. S2 (figures/supp/FigS2_reference_agreement): the key quantities of Kimonu's reference-equivalent
    mode and the exhaustive reference on the eleven models (identical, asserted below) and the wall time of that
    same computation, with the speedup.
-fig. S1 (figures/supp/FigS_stage_timing): where the time goes on those eleven models: the concordance stage against everything after it (kinetic
+fig. S1 (figures/supp/FigS1_stage_timing): where the time goes on those eleven models: the concordance stage against everything after it (kinetic
    modules, ACR/ACRR), per tool, as the range over the models with the median marked. Measured vs derived:
    Kimonu's stage times are measured (median of three replicates); the reference's concordance stage is its
    own measured time, and its R stage the wall time between the chain log's start stamp and the end of its
@@ -26,7 +28,7 @@ reference's definitions: concordance from ker(N), upstream sets merged by overla
 reference's pairwise rule (the Shinar-Feinberg criterion within kinetic modules). Stochastic arms show the median over three seeds. Layout is in inches at 7.2 in (518.4 pt) width; the
 supplementary table columns are sized from their measured text, so its axes are placed by hand.
 
-    python figures/make_figure3.py [out_dir]    # run from benchmarks/ after gather_figdata.py and pair_sets.py; default figures/main
+    python figures/fig4_figS1_S2_benchmark.py [out_dir]    # run from benchmarks/ after gather_figdata.py and pair_sets.py; default figures/main
 
 KIMONU_TIMING (default the paper's run, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/timing) holds the tangent-route
 times of B, KIMONU_LACR the symbolic baselines, KIMONU_REF_DIR the runs of the reference-equivalent mode for fig. S1.
@@ -122,12 +124,12 @@ def save_finished(f, stem, pdf=True, panels=None):
     f.savefig(stem + ".png", dpi=300)
     return used
 
-# --- layout, in inches: A scaling and B tangent route (top), C and D results per method (middle), E map and F computations (bottom, make_fig3_methods)
+# --- layout, in inches: A scaling and B tangent route (top), C and D results per method (middle), E map and F computations (bottom, fig4EF_methods_iLJ478)
 W, RH, HEAD, PAD = 7.2, 0.2, 3.2, 0.1                  # width, table row height, header rows, cell padding
 n = len(REF)
 hTab = (n + HEAD) * RH
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from make_fig3_methods import draw as draw_methods, HCD
+from fig4EF_methods_iLJ478 import draw as draw_methods, HCD
 hS, hBar, gapSB, gapBC = 2.05, 1.05, 1.26, 0.8      # A, B: axis label and the legend of A below; C, D: titles above, tick labels and the shared legend below
 xA, wS, xB, wB = 0.5, 3.0, 4.2, 2.9                # the two scaling panels
 H = 0.3 + hS + gapSB + hBar + gapBC + HCD
@@ -253,7 +255,7 @@ fig.legend(handles=bar_handles, loc="upper left", bbox_to_anchor=(0.5 / W, yLeg 
 axCD = fig.add_axes([0, 0, 1, HCD / H]); axCD.set_xlim(0, W); axCD.set_ylim(0, HCD); axCD.axis("off")
 math_texts = draw_methods(axCD, W, HCD)
 
-# --- supplementary figure (figures/supp/FigS_reference_agreement): the shared values and the same computation, timed
+# --- supplementary figure (figures/supp/FigS2_reference_agreement): the shared values and the same computation, timed
 HT = hTab + 0.55
 figT = plt.figure(figsize=(W, HT))
 labw = max(width_in(SHORT.get(m, m), 7) for m in REF) + PAD
@@ -306,11 +308,11 @@ os.makedirs(out, exist_ok=True)
 Hpt, yAB, yCD = H * 72, (H - yBar - hBar - 0.3) * 72, (H - HCD) * 72  # panel bounds in pt from the top: below the legends of A, B; above E, F
 xAB = (xB - 0.5) * 72                                                     # between A and B
 xBC, yL = (0.5 + wBar + 0.15) * 72, (H - yLeg + 0.03) * 72              # between the two bar charts; top of their legend
-save_finished(fig, os.path.join(out, "Figure3_draft"), panels=[
+save_finished(fig, os.path.join(out, "Figure4_draft"), panels=[
     ("A", [(0, 0, xAB, yAB)]), ("B", [(xAB, 0, 518.4, yAB)]), ("C", [(0, yAB, xBC, yL)]), ("D", [(xBC, yAB, 518.4, yL)]),
     ("legend_CD", [(0, yL, 518.4, yCD)]), ("E", [(0, yCD, 225, Hpt)]), ("F", [(225, yCD, 518.4, Hpt)])])
 supp = os.path.join(os.path.dirname(os.path.abspath(out)), "supp"); os.makedirs(supp, exist_ok=True)
-save_finished(figT, os.path.join(supp, "FigS_reference_agreement"))
+save_finished(figT, os.path.join(supp, "FigS2_reference_agreement"))
 # --- supplementary figure: concordance stage against the rest, per tool, over the eleven models of A
 hD, yD, HS = 1.0, 0.36, 1.5
 figS = plt.figure(figsize=(W, HS))
@@ -338,5 +340,5 @@ axD.legend(handles=[Line2D([], [], ls="", marker="o", ms=4.5, mfc=INK, mec="whit
                     Line2D([], [], ls="", marker="o", ms=4.5, mfc="white", mec=INK, mew=0.9, label="kinetic modules, ACR/ACRR")],
            loc="upper left", bbox_to_anchor=(1.01, 1.0), frameon=False, handletextpad=0.2, labelspacing=0.4)
 
-save_finished(figS, os.path.join(supp, "FigS_stage_timing"), pdf=False)
+save_finished(figS, os.path.join(supp, "FigS1_stage_timing"), pdf=False)
 print(f"speedup over the exhaustive reference: {min(ratios):.3g} to {max(ratios):.3g}, median {np.median(ratios):.3g} (11 models)")

@@ -1,7 +1,7 @@
 """Figures 1 and 2 (Phil's Illustrator files): one group per panel, font sizes on the figure scale, formulas as
 live Latin Modern text, then svg_finish (fonts embedded, no clipping).
 
-Size scale, shared with Figure 3 (figures/make_figure3.py):
+Size scale, shared with Figure 3 (figures/fig4_figS1_S2_benchmark.py):
     18 bold   panel letters
     14 bold   network nodes; 11 bold for the small copies in Figure 2D
     8 or 9    panel titles, diagram and table labels
@@ -10,10 +10,10 @@ Size scale, shared with Figure 3 (figures/make_figure3.py):
     scripts   70 % of their base, rounded up to half points (4.5 under 6 pt)
 Formulas take the size of the text around them. Figure 2's formulas typed in Arial stay Arial.
 
-The formula outlines (pdflatex glyphs from figure1_latex.py and figure2.py) are found by their boxes below, in
+The formula outlines (pdflatex glyphs from figure1_latex.py and fig2_kinase.py) are found by their boxes below, in
 the coordinates of the current files; each is replaced by the same formula set by matplotlib (svg_panels.typeset).
 
-    python figure12_panels.py <in Figure1.svg> <in Figure2.svg> <out dir>
+    python fig1_fig2_panels.py <in Figure1.svg> <in Figure2.svg> <out dir>
 """
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "figures"))

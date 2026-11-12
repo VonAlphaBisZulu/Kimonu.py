@@ -1,6 +1,6 @@
 """Figure 4 on the final results, edited in place on the vault Figure 4, which carries Phil's Illustrator edits.
 
-make_figure3.py draws Figure 4 from scratch, but the vault file was edited after that (bold titles, legend layout,
+fig4_figS1_S2_benchmark.py draws Figure 4 from scratch, but the vault file was edited after that (bold titles, legend layout,
 the labels of the reference lines in B, live formulas in E, "generic k"). This script keeps all of it and moves only
 what the data decide.
 
@@ -16,7 +16,7 @@ The positions are calibrated on the tick marks of each axis, and the markers are
 the vault figure was drawn from: figdata.json of commit 451a748 (A) and the tangent runs in OLD_TIMING (B). Every
 matched marker must lie within 0.3 pt of its old position, and every old fit line must start where the old data put it.
 
-    python figures/figure4_update.py <vault Figure4.svg> <out.svg>     # from benchmarks/, after gather_figdata.py
+    python figures/fig4ABF_update.py <vault Figure4.svg> <out.svg>     # from benchmarks/, after gather_figdata.py
 
 KIMONU_TIMING (default the rerun of 2026-11-11) gives the new tangent times, OLD_TIMING (default
 /scratch/sadreyev_lab/pschneider/kimonu_timing_seeds) the old ones, OLD_REV (default 451a748) the old figdata.json.
@@ -130,7 +130,7 @@ for arm, (c, filled, dashed) in ARMS.items():
     for m, p in hit.items():
         dx, dy = XA(NEW["n_complexes"][m], sec(NEW[arm][m])) - XA(OLD["n_complexes"][m], sec(OLD[arm][m]))
         move(p, dx, dy)
-    # the fit line, as make_figure3.py draws it
+    # the fit line, as fig4_figS1_S2_benchmark.py draws it
     fits = {}
     for key, D in (("old", OLD), ("new", NEW)):
         X = np.array([D["n_complexes"][m] for m in ms], float); Y = np.array([sec(D[arm][m]) for m in ms], float)

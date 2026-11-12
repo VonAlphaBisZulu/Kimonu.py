@@ -1,24 +1,24 @@
-"""Drafts from kinetic_variants/float_four.py and float_exactcmp.py: floating point against exact arithmetic, for
-both routes and four ways of computing and comparing the nullspace rows.
+"""Figs. S5 and S6, and the draft of Figure 3E, F, from kinetic_variants/float_four.py and float_exactcmp.py: floating point
+against exact arithmetic, for both routes and four ways of computing and comparing the nullspace rows.
 
     exactcmp   exact nullspace (Kimonu's RREF bases), rows kept as fractions, element-wise tolerance, decided exactly
     exact      exact nullspace rounded to an orthonormal float64 basis, row-relative Euclidean tolerance
     svdabs     SVD nullspace (orthonormal), element-wise tolerance
     svd        SVD nullspace (orthonormal), row-relative Euclidean tolerance
 
-Fig_certificate     draft of Figure 3E, F (drawn into the figure by make_figure2_bottom.py): per tolerance, what the comparison of the two routes certifies, exact nullspace
+Figure3EF_draft     draft of Figure 3E, F (drawn into the figure by fig3EF_float.py): per tolerance, what the comparison of the two routes certifies, exact nullspace
                     (exactcmp) against SVD nullspace (svdabs), one element-wise rule. Classes: the routes agree and are
                     right (the complete set, certified), the routes differ as they do exactly (the gap models), the
                     routes differ only because of floating point, the routes agree on a wrong answer (a false
                     certificate). The first bar is tolerance 0 (bitwise equal rows); the dashed line is what exact
                     arithmetic certifies. Answers are compared as ACR, ACRR and kinetic modules.
-FigS_certificate    fig. S5, the same for all four ways.
-FigS_float_errors   fig. S6, per route and way: the models whose ACR and ACRR come out right, only made up, only missed, or both.
+FigS5_certificate    fig. S5, the same for all four ways.
+FigS6_float_errors   fig. S6, per route and way: the models whose ACR and ACRR come out right, only made up, only missed, or both.
 
 Figs. S5 and S6 have the colour key in one row below the plots, so the plots take the full page width, and one SVG group
 per plot (panel_A, panel_B, ... row by row) plus panel_legend.
 
-    python figures/make_float_four.py <out_dir>        # from benchmarks/
+    python figures/figS5_S6_float.py <out_dir>        # from benchmarks/
 """
 import glob, json, os, sys
 from collections import defaultdict
@@ -192,7 +192,7 @@ def certificate_legend(fig, x, y, exact):
 
 
 def certificate(ways, name):
-    """Fig_certificate (two ways, the key at the right as in Figure 3) or, for more ways, fig. S5 (the key below)."""
+    """Figure3EF_draft (two ways, the key at the right as in Figure 3) or, for more ways, fig. S5 (the key below)."""
     if len(ways) > 2:
         return certificate_supp(ways, name)
     fig, axs = plt.subplots(1, len(ways), figsize=(7.2, 2.2), sharey=True, squeeze=False)
@@ -257,10 +257,10 @@ if __name__ == "__main__":
     summary = {}
     avail = [w for w in WAYS if any(f"iterated_{w}" in runs[m] for m in runs)]
     if {"exactcmp", "svdabs"} <= set(avail):
-        summary["Fig_certificate"] = certificate(["exactcmp", "svdabs"], "Fig_certificate")
+        summary["Figure3EF_draft"] = certificate(["exactcmp", "svdabs"], "Figure3EF_draft")
     if avail:
-        summary["FigS_certificate"] = certificate(avail, "FigS_certificate")
-        summary["FigS_float_errors"] = errors(avail, "FigS_float_errors")
+        summary["FigS5_certificate"] = certificate(avail, "FigS5_certificate")
+        summary["FigS6_float_errors"] = errors(avail, "FigS6_float_errors")
     json.dump(dict(taus=TAUS, **summary), open(f"{OUT}/float_four_summary.json", "w"), indent=1)
     for k, v in summary.items():
         print(k, f"{v['n']} models")

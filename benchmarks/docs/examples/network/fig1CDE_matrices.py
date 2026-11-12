@@ -5,7 +5,7 @@ D: complex activities M = A K
 E: tangent space T = ker(N diag(r*) S^T Y^T) and its complex signatures Y^T T
 Units are points on the 7.2 x 9 in artboard; text 8 pt Arial, panel letters as in the draft.
 
-    python figure1_lower.py <Figure1_draft.svg> <met_network_reversible.svg> <out.svg>
+    python fig1CDE_matrices.py <Figure1_draft.svg> <met_network_reversible.svg> <out.svg>
 """
 import re, sys
 import sympy as sy

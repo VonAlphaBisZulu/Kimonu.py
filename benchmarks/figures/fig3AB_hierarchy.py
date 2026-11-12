@@ -10,7 +10,10 @@ uptakes. Data: HIERARCHY_DIR, default kinetic_variants/hierarchy_detached/<model
 uptake_modes.py), the input of Figure 3A, B. HIERARCHY_DIR=kinetic_variants/hierarchy draws the attached panels of
 October (hierarchy_data.py, removed, see HISTORY.md).
 
-    python figures/make_hierarchy.py [out_dir]   # from benchmarks/; default figures/main
+    python figures/fig3AB_hierarchy.py [out_dir]   # from benchmarks/; default figures/main
+
+Writes <out_dir>/Figure3AB_draft.svg. The published Figure 3 carries hand edits and was updated in place by
+fig3B_update_ratios.py, fig3AB_update_legend.py, fig3CD_coverage.py and fig3_fig4_update_terms.py.
 """
 import glob, json, os, sys
 import numpy as np
@@ -22,7 +25,7 @@ from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
 out = sys.argv[1] if len(sys.argv) > 1 else "figures/main"
 # the combined Figure 2 of October used FIG_HEIGHT_IN=2.3 FIG_LETTERS=0 FIG_LEGEND_BOTTOM=1 (make_figure2.py, see HISTORY.md)
 HEIGHT_IN = float(os.environ.get("FIG_HEIGHT_IN", 2.9)); LETTERS = os.environ.get("FIG_LETTERS", "1") == "1"
-NAME = os.environ.get("FIG_NAME", "hierarchy")
+NAME = os.environ.get("FIG_NAME", "Figure3AB_draft")
 LEGEND_BOTTOM = os.environ.get("FIG_LEGEND_BOTTOM", "0") == "1"   # combined figure: the top band holds the panel letters
 plt.rcParams.update({"font.family": "Arial", "font.size": 7, "axes.labelsize": 7, "xtick.labelsize": 6,
                      "ytick.labelsize": 6.5, "legend.fontsize": 6.5, "axes.linewidth": 0.6,

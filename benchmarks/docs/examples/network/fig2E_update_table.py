@@ -12,7 +12,7 @@ The headers "iterated route" and "tangent route" of both tables lose their under
 text like the "ground truth" headers next to them. The regular face is narrower, so each word is re-centred on the
 centre it had before. Nothing else in the figure changes, checked pixel by pixel at the end.
 
-    python figure2_panelE.py <vault Figure2.svg> <out.svg> [<panelE_before.png> <panelE_after.png>]
+    python fig2E_update_table.py <vault Figure2.svg> <out.svg> [<panelE_before.png> <panelE_after.png>]
 """
 import hashlib, os, sys, tempfile
 import xml.etree.ElementTree as ET

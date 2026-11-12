@@ -11,7 +11,7 @@ feedback label. Here
 
 Nothing else moves. Everything outside the three edited places must render as before, checked pixel by pixel.
 
-    python figure1_panelG_shared_W.py <vault Figure1.svg> <out.svg>
+    python fig1G_update_shared_W.py <vault Figure1.svg> <out.svg>
 """
 import hashlib, os, re, sys, tempfile
 import xml.etree.ElementTree as ET

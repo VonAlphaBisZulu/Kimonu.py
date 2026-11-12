@@ -29,7 +29,7 @@ into a checkout, see below) and `@SNAPSHOT@`.
 
 @PARTS@
 
-`figures/` holds the published figures (`Figure1.svg` to `Figure4.svg`, `supp/FigS_*.svg`) and Data S1 and S2
+`figures/` holds the published figures (`Figure1.svg` to `Figure4.svg`, `supp/FigS1_stage_timing.svg` to `supp/FigS6_float_errors.svg`) and Data S1 and S2
 (`supp/DataS1_values.csv`, `supp/DataS2_uptake_acr.csv`).
 
 @COUNTS@
@@ -42,26 +42,26 @@ version, Python), and each timing arm `hardware_<job>.txt` (hostname, lscpu, fre
 | paper item | files of this archive | script (in `benchmarks/`) |
 |---|---|---|
 | Fig. 1, 2 | `figures/Figure1.svg`, `Figure2.svg` (closed-form examples, no data) | edit scripts in `docs/examples/network/` |
-| Fig. 3A, B | `results/kimonu/hierarchy_detached/` (from `uptake_modes/` and `member_counts/`) | `figures/make_hierarchy.py`, `figure3_ratios.py` |
-| Fig. 3C, D | `results/kimonu/member_counts/`, `networks/unblocked/` | `figures/extend_figure3.py` |
-| Fig. 3E, F | `results/kimonu/float_comparison/parts/` | `figures/make_figure2_bottom.py` |
-| Fig. 4A | `figures/source_data/figdata.json` (from `results/kimonu/timing/{det,att,ref}`, `results/cocoa_jl/`, `results/reference/`) | `figures/gather_figdata.py`, `make_figure3.py` |
-| Fig. 4B | `results/kimonu/timing/{tan,small}`, `results/kimonu/symbolic_baselines/` | `figures/make_figure3.py` |
-| Fig. 4C, D | `figures/source_data/pair_counts.json`, `pair_sets.json` (from `results/kimonu/timing/ref` and the module files of COCOA.jl and the reference) | `figures/pair_sets.py`, `make_figure3.py` |
-| Fig. 4E, F | `figdata.json`, `results/reference/exhaustive/reference_iLJ478.json`, `results/cocoa_jl/efficient_true/cell_iLJ478_seed1234.log`, `results/*/kinetic_stage_iLJ478/` | `figures/make_fig3_methods.py` |
-| fig. S1 | `results/kimonu/timing/ref`, `results/reference/exhaustive/acr/*.log`, COCOA.jl logs | `figures/make_figure3.py` |
-| fig. S2 | `figdata.json` | `figures/make_figure3.py` |
-| fig. S3 | `figdata.json` | `figures/make_supp_figures.py` |
-| fig. S4 | `figures/source_data/seed_spread.json` (from `results/kimonu/timing/det`, `results/cocoa_jl/`, `results/reference/sampled/`) | `figures/seed_spread.py`, `make_supp_figures.py` |
-| figs. S5, S6 | `results/kimonu/float_comparison/parts/` | `figures/make_float_four.py` |
-| Tables S2, S3 | `networks/unblocked/`, `networks/deficiency/`, `figdata.json`, `results/kimonu/member_counts/` | `figures/make_table_s2.py` |
-| Data S1 | `figdata.json`, `pair_counts.json`, result `figures/supp/DataS1_values.csv` | `figures/make_data_s1_s2.py` |
-| Data S2 | `results/kimonu/uptake_lists/`, result `figures/supp/DataS2_uptake_acr.csv` | `figures/make_data_s1_s2.py` |
+| Fig. 3A, B | `results/kimonu/hierarchy_detached/` (from `uptake_modes/` and `member_counts/`) | `figures/fig3AB_hierarchy.py`, `fig3B_update_ratios.py` |
+| Fig. 3C, D | `results/kimonu/member_counts/`, `networks/unblocked/` | `figures/fig3CD_coverage.py` |
+| Fig. 3E, F | `results/kimonu/float_comparison/parts/` | `figures/fig3EF_float.py` |
+| Fig. 4A | `figures/source_data/figdata.json` (from `results/kimonu/timing/{det,att,ref}`, `results/cocoa_jl/`, `results/reference/`) | `figures/gather_figdata.py`, `fig4_figS1_S2_benchmark.py` |
+| Fig. 4B | `results/kimonu/timing/{tan,small}`, `results/kimonu/symbolic_baselines/` | `figures/fig4_figS1_S2_benchmark.py` |
+| Fig. 4C, D | `figures/source_data/pair_counts.json`, `pair_sets.json` (from `results/kimonu/timing/ref` and the module files of COCOA.jl and the reference) | `figures/pair_sets.py`, `fig4_figS1_S2_benchmark.py` |
+| Fig. 4E, F | `figdata.json`, `results/reference/exhaustive/reference_iLJ478.json`, `results/cocoa_jl/efficient_true/cell_iLJ478_seed1234.log`, `results/*/kinetic_stage_iLJ478/` | `figures/fig4EF_methods_iLJ478.py` |
+| fig. S1 | `results/kimonu/timing/ref`, `results/reference/exhaustive/acr/*.log`, COCOA.jl logs | `figures/fig4_figS1_S2_benchmark.py` |
+| fig. S2 | `figdata.json` | `figures/fig4_figS1_S2_benchmark.py` |
+| fig. S3 | `figdata.json` | `figures/figS3_S4_uptakes_seeds.py` |
+| fig. S4 | `figures/source_data/seed_spread.json` (from `results/kimonu/timing/det`, `results/cocoa_jl/`, `results/reference/sampled/`) | `figures/seed_spread.py`, `figS3_S4_uptakes_seeds.py` |
+| figs. S5, S6 | `results/kimonu/float_comparison/parts/` | `figures/figS5_S6_float.py` |
+| Tables S2, S3 | `networks/unblocked/`, `networks/deficiency/`, `figdata.json`, `results/kimonu/member_counts/` | `figures/tableS2_S3.py` |
+| Data S1 | `figdata.json`, `pair_counts.json`, result `figures/supp/DataS1_values.csv` | `figures/dataS1_S2.py` |
+| Data S2 | `results/kimonu/uptake_lists/`, result `figures/supp/DataS2_uptake_acr.csv` | `figures/dataS1_S2.py` |
 | numbers of the Results, Materials and Methods and Supplementary Text | all of the above, also `fb_vs_ma/`, `gap_roots/`, `second_order/`, `gap_experiments/`, `uniform_flux/`, `genericity_bound/`, `scale_check/`, `preprocessing_time/`, `one_lp/` | `figures/paper_numbers.py` (one line per number with its source) |
 
 The published Figures 1 to 4 carry hand edits made in Adobe Illustrator. Figure 3B to F and Figure 4 were updated in
-place on those files by `figures/figure3_ratios.py`, `extend_figure3.py`, `make_figure2_bottom.py`,
-`figure3_legend.py` and `figure4_update.py`. `figures/make_figure3.py` draws the same values of Figure 4 without the
+place on those files by `figures/fig3B_update_ratios.py`, `fig3CD_coverage.py`, `fig3EF_float.py`,
+`fig3AB_update_legend.py` and `fig4ABF_update.py`. `figures/fig4_figS1_S2_benchmark.py` draws the same values of Figure 4 without the
 hand edits.
 
 ## Software and hardware
@@ -95,12 +95,12 @@ hand edits.
     eval "$(bash link_records.sh Kimonu.py-@COMMIT@)"     # links the records into the checkout, sets the variables
     cd Kimonu.py-@COMMIT@/benchmarks
     python figures/gather_figdata.py; python figures/pair_sets.py; python figures/seed_spread.py   # figures/source_data
-    python figures/make_figure3.py out        # Fig. 4, figs. S1, S2
-    python figures/make_supp_figures.py out   # figs. S3, S4
-    python figures/make_float_four.py out     # figs. S5, S6
-    python figures/make_hierarchy.py out      # Fig. 3A, B
-    python figures/make_data_s1_s2.py out     # Data S1, S2
-    python figures/make_table_s2.py out/TableS2.md out/TableS3.md
+    python figures/fig4_figS1_S2_benchmark.py out        # Fig. 4, figs. S1, S2
+    python figures/figS3_S4_uptakes_seeds.py out   # figs. S3, S4
+    python figures/figS5_S6_float.py out     # figs. S5, S6
+    python figures/fig3AB_hierarchy.py out      # Fig. 3A, B
+    python figures/dataS1_S2.py out     # Data S1, S2
+    python figures/tableS2_S3.py out/TableS2.md out/TableS3.md
     python figures/paper_numbers.py           # every number of the text, with its source
 
 `link_records.sh` links the COCOA.jl and reference records into `benchmarks/sweep/` and `benchmarks/reference_final*/`,

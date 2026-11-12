@@ -21,7 +21,7 @@ basis differs (RREF for the exact kernel, orthonormal for the SVD).
 
     python float_exactcmp.py <model> <part>    part: "tangent", "iterated:k" (k-th of four tolerance chunks) or "iterated:tN" (tolerance N alone),
                                                 "svd_tangent" or "svd_iterated:k"
-                                                -> $KF_OUT/parts/<model>__<arm>.json, merged by make_float_four.py
+                                                -> $KF_OUT/parts/<model>__<arm>.json, merged by figS5_S6_float.py
 """
 import hashlib, json, os, sys, time
 from fractions import Fraction

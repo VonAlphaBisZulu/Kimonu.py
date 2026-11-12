@@ -1,7 +1,7 @@
 """Figure 1 with flux balance and mass action told apart: warm colours and a "flux balance" pill for everything that
 follows from N r = 0 alone, cold colours and a "mass action" pill for everything that needs mass-action kinetics.
 
-    python figure1_layers.py <Figure1_draft.svg> <out.svg>
+    python fig1_update_layers.py <Figure1_draft.svg> <out.svg>
 
 Flux balance (warm): concordance modules, balanced complexes, the kernel columns k1 to k3 and the coupled reactions
 of panel C. Mass action (cold): ACR and ACRR groups, kinetic modules. Each equation that introduces a layer and each

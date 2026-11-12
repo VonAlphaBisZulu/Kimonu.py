@@ -11,7 +11,7 @@ y = a - b log10(max(v, 0.7)) to within 0.05 pt, and the bar ends must lie on it 
 of its tick label. With --pairs the old counts are drawn again, and the output must render as the input (the check
 of this script).
 
-    python figures/figure3_ratios.py <vault Figure3.svg> <out.svg> [--pairs]     # from benchmarks/
+    python figures/fig3B_update_ratios.py <vault Figure3.svg> <out.svg> [--pairs]     # from benchmarks/
 
 HIERARCHY_DIR (default kinetic_variants/hierarchy_detached, written by hierarchy_detached.py) gives the counts.
 """
@@ -35,7 +35,7 @@ D = {d["model"]: d for d in (json.load(open(f)) for f in glob.glob(f"{HIERARCHY_
 assert len(D) == 33, len(D)
 old_v = lambda r: r["acr_free"] + r["acrr_pairs_free"]
 new_v = old_v if PAIRS else (lambda r: r["acr_free"] + r["acrr_ratios_free"])
-floor = lambda v: max(v, 0.7)                             # zero counts sit on the floor of the log axis, as in make_hierarchy.py
+floor = lambda v: max(v, 0.7)                             # zero counts sit on the floor of the log axis, as in fig3AB_hierarchy.py
 
 text = open(src, encoding="utf-8").read()
 root = ET.fromstring(text)

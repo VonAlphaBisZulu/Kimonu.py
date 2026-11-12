@@ -14,13 +14,13 @@ D: the two steady states on the network of B: exact flux r* on each arrow, shaft
    into C + 2P -> 3P in one and mostly into decay in the other. ψ_C and ψ_P swap, while the module's ratio
    ψ_{C+2P} / ψ_P = 4 is the same in both.
 E: ACR per metabolite, truth against the iterated route, the tangent route (local ACR) and the sign certificate.
-A and B follow Phil's layout of 2026-10-06 (figure3_phil_2026-10-06.svg) in Figure 1's units: bold 14 pt
+A and B follow Phil's layout of 2026-10-06 (fig2AB_layout_phil_2026-10-06.svg) in Figure 1's units: bold 14 pt
 nodes, 8 pt labels, 1.2 pt strokes, Figure 1's heads, and harpoons with the reverse direction in #bbb whose
 heads sit half a stroke out, flush with the outer edge of the shaft. Every reaction is its own group, so the
 drawing can be rearranged in Illustrator. All panels are drawn at final size, 518.4 pt wide. Arial has no
 glyph for the empty set or for check marks, so those are paths.
 
-    python figure2.py <out.svg>
+    python fig2_kinase.py <out.svg>
 """
 import math, os, sys
 from scipy.optimize import brentq

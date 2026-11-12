@@ -20,7 +20,7 @@ what becomes of it under detached uptakes (ACR in both, in an ACRR group, or fre
 uptake_lists.py wrote (iterated route, both uptake modes, metabolites as indices into the network's own list).
 Free metabolites are those before "E_1" in that list. The script prints the totals that Supplementary Text S5 quotes.
 
-    python figures/make_data_s1_s2.py <out_dir>        # from benchmarks/
+    python figures/dataS1_S2.py <out_dir>        # from benchmarks/
 
 UPTAKE_LISTS replaces the lists of the paper, /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/uptake_lists (e.g. a rerun),
 KIMONU_TIMING and KIMONU_REF_DIR the timing runs (default the rerun of 2026-11-11, timing/ and timing/ref).

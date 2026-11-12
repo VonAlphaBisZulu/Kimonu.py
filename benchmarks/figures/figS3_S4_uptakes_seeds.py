@@ -1,14 +1,14 @@
-"""Supplementary figures not drawn by make_figure3.py, in the figure conventions of the paper (svg_finish, svg_panels).
+"""Figs. S3 and S4 of the Supplement, in the figure conventions of the paper (svg_finish, svg_panels).
 
-fig. S3 (FigS_uptakes) attached against detached uptakes, per network (Kimonu, iterated route): kinetic modules (A), ACR
+fig. S3 (FigS3_uptakes) attached against detached uptakes, per network (Kimonu, iterated route): kinetic modules (A), ACR
                 metabolites (B) and independent ACRR ratios (C, k - 1 per group of k) among free metabolites. figdata.json, arms "kimonu" (attached,
                 $KIMONU_ATT_DIR) and "kimonu_det" (detached, $KIMONU_DET_DIR).
-fig. S4 (FigS_seeds) relations that change with the random seed, per network and arm: coupled complex pairs (A) and ACR
+fig. S4 (FigS4_seeds) relations that change with the random seed, per network and arm: coupled complex pairs (A) and ACR
                 metabolites plus independent ACRR ratios among free metabolites (B) that differ between the seeds (the
                 rank of what some seed finds minus the rank of what all seeds share, seed_spread.py).
                 figures/seed_spread.json (seed_spread.py); Kimonu's r* seeds 0, 1, 2 change nothing.
 
-    python figures/make_supp_figures.py <out_dir>        # from benchmarks/
+    python figures/figS3_S4_uptakes_seeds.py <out_dir>        # from benchmarks/
 """
 import io, json, os, sys, tempfile
 import numpy as np
@@ -70,7 +70,7 @@ def uptakes(out):
                         Line2D([], [], ls="", marker="o", ms=4, mfc="white", mec=GREEN, mew=0.9, label="attached uptakes")],
                loc="upper right", bbox_to_anchor=(1.0, 1.0), frameon=False, ncol=2, handletextpad=0.2, columnspacing=1.2)
     Hp = H * 72; b = [(top + (k + 1) * hA + k * gap + 0.1) * 72 for k in range(3)]
-    save(fig, os.path.join(out, "FigS_uptakes"), [("legend", [(300, 0, 518.4, 14)]), ("A", [(0, 0, 518.4, b[0])]),
+    save(fig, os.path.join(out, "FigS3_uptakes"), [("legend", [(300, 0, 518.4, 14)]), ("A", [(0, 0, 518.4, b[0])]),
                                                   ("B", [(0, b[0], 518.4, b[1])]), ("C", [(0, b[1], 518.4, Hp)])])
 
 
@@ -100,7 +100,7 @@ def seeds(out):
                  mfc=c if f else "white", mec="white" if f else c, mew=0.5 if f else 0.8, label=l) for a, l, c, f in ARMS]
     fig.legend(handles=hd, loc="upper right", bbox_to_anchor=(1.0, 1.0), frameon=False, ncol=4, handletextpad=0.2, columnspacing=1.0)
     Hp = H * 72; b = [(top + hA + 0.1) * 72]
-    save(fig, os.path.join(out, "FigS_seeds"), [("legend", [(100, 0, 518.4, 14)]), ("A", [(0, 0, 518.4, b[0])]), ("B", [(0, b[0], 518.4, Hp)])])
+    save(fig, os.path.join(out, "FigS4_seeds"), [("legend", [(100, 0, 518.4, 14)]), ("A", [(0, 0, 518.4, b[0])]), ("B", [(0, b[0], 518.4, Hp)])])
 
 
 if __name__ == "__main__":

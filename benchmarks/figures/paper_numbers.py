@@ -138,8 +138,8 @@ out(R, "R15", "of these, points from flux balance, from a shared substrate compl
     f"{100 * fb / nr:.1f}, {100 * (sub - fb) / nr:.1f}, {100 * (ma - sub) / nr:.1f}", "fb_vs_ma/ flux_coupling_and_shared_substrate.members")
 out(R, "R15b", "tangent route, reactions in a rate class (not in the text)", pct(ma_t, nr), "fb_vs_ma/ rates_tangent.members")
 
-import make_data_s1_s2
-n2, tot = make_data_s1_s2.data_s2(os.devnull)
+import dataS1_S2
+n2, tot = dataS1_S2.data_s2(os.devnull)
 out(R, "R16", "more free ACR metabolites with attached uptakes", tot["lost"], "UPTAKE_LISTS (uptake_lists.py), as Data S2")
 out(R, "R17", "of these extracellular or periplasmic", f"{tot['extracellular'] + tot['periplasmic']} = {pct(tot['extracellular'] + tot['periplasmic'], tot['lost'])}",
     "UPTAKE_LISTS")
@@ -162,14 +162,14 @@ out(R, "R20", "open questions (fewest roots found that close every open relation
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import make_float_four as ff
+import figS5_S6_float as ff
 _, axs = plt.subplots(1, 2)
 cert = ff.draw_certificate(axs, ["exactcmp", "svdabs"])
 plt.close("all")
 k14 = min(range(len(ff.TAUS)), key=lambda k: abs(ff.TAUS[k] - 1e-14))
 e, s = cert["exactcmp"], cert["svdabs"]
 out(R, "R21", f"exact nullspace, tolerance {ff.TAUS[k14]:g}: networks on which the routes differ", f"{e['gap'][k14] + e['float_differ'][k14]} of {len(e['models'])}",
-    f"{ff.KF}/parts (make_float_four.draw_certificate)")
+    f"{ff.KF}/parts (figS5_S6_float.draw_certificate)")
 out(R, "R22", "exact nullspace, most networks certified at a tolerance above 0", max(e["certified"]), f"{ff.KF}/parts")
 out(R, "R23", "SVD nullspace, most networks certified at any tolerance", max(s["certified"] + [s["at_zero"][0]]), f"{ff.KF}/parts")
 out(R, "R24", "SVD nullspace at tolerance 0: false certificates", f"{s['at_zero'][3]} of {len(s['models'])}", f"{ff.KF}/parts")
@@ -274,7 +274,7 @@ for arm in ("ref_exh", "ref_sampled", "cocoa_false", "cocoa_true", "kimonu_det",
     ms = [m for m in D["models"] if m in D[arm]]
     fits[arm] = (np.polyfit(np.log10([nC[m] for m in ms]), np.log10([sec(D[arm][m]) for m in ms]), 1)[0], len(ms))
     out(M, "M15", f"fit exponent of wall time on complexes, {arm} (slope of Fig. 4A)", f"{fits[arm][0]:.2f} over {fits[arm][1]} networks",
-        "figdata.json (as make_figure3.py)")
+        "figdata.json (as fig4_figS1_S2_benchmark.py)")
 pw = [fits[a][0] for a in ("ref_exh", "ref_sampled", "cocoa_false", "cocoa_true")]
 out(M, "M16", "exponents of the pairwise tests; networks per fit", f"{min(pw):.1f} to {max(pw):.1f}; {min(v[1] for v in fits.values())} to "
     f"{max(v[1] for v in fits.values())}", "figdata.json")
@@ -328,7 +328,7 @@ out(X, "S4b", "iterated route, longest (median of three, detached)", f"{med(dett
 ratio = sorted(med(tan[m]) / med(dett[m]) for m in tan if m in dett)
 out(X, "S4c", "tangent route over iterated route, per network (medians)", f"{ratio[0]:.1f} to {ratio[-1]:.0f}-fold, median {med(ratio):.0f}", f"{TIMING}/tan, det")
 # S5. Attached and detached uptakes
-out(X, "S5a", "free ACR metabolites attached, detached", f"{tot['attached']}, {tot['both'] + tot['gained']}", "UPTAKE_LISTS (make_data_s1_s2.data_s2)")
+out(X, "S5a", "free ACR metabolites attached, detached", f"{tot['attached']}, {tot['both'] + tot['gained']}", "UPTAKE_LISTS (dataS1_S2.data_s2)")
 out(X, "S5b", "attached only; extracellular, periplasmic; in a detached ACRR group; gained by detaching",
     f"{tot['lost']}; {tot['extracellular']}, {tot['periplasmic']}; {tot['lost_in_acrr']}; {tot['gained']}", "UPTAKE_LISTS")
 FA = [json.load(open(f"kinetic_variants/fb_vs_ma/{m}.attached.json")) for m in MODELS]
@@ -436,5 +436,5 @@ out(M, "N2", "SVD threads, networks with all parts on 2 threads per arm; network
 out(M, "N3", "software versions (environment as it is now; provenance records Python, Kimonu, StrainDesign)",
     ", ".join(f"{k} {v}" for k, v in HW["versions"]["straindesign_env"].items()) + f", Julia {HW['versions']['julia_manifest']}",
     "hardware_record.json (versions), timing/*/provenance_*.txt")
-out(N, "N4", "kinetic stage on iLJ478, COCOA.jl 4.5 s and reference 3.5 min", "-", "constants of figures/make_fig3_methods.py, from "
+out(N, "N4", "kinetic stage on iLJ478, COCOA.jl 4.5 s and reference 3.5 min", "-", "constants of figures/fig4EF_methods_iLJ478.py, from "
     "scratch cocoa_kin_timing_2026-11-03 and ref_rstage_timing_2026-11-03")

@@ -14,7 +14,7 @@ of table S2 (Fig. 3C). ACRR is counted as k - 1 independent ratios per group of 
 free metabolites as k - 1 per group of k free metabolites. The share of free metabolites with ACR or in an ACRR group is
 that of Fig. 3D. Gap networks are marked with a dagger. The deficiency is given as a share of dim ker N.
 
-    python figures/make_table_s2.py [s2.md [s3.md]]     # from benchmarks/; prints both tables when no file is given
+    python figures/tableS2_S3.py [s2.md [s3.md]]     # from benchmarks/; prints both tables when no file is given
 """
 import json, os, sys
 

@@ -40,26 +40,26 @@ To rerun the Kimonu results (COCOA.jl and the reference are not rerun), in this 
 
 | paper item | script | input | output |
 |---|---|---|---|
-| Fig. 1 | Illustrator master, edited by `docs/examples/network/figure1_layers.py`, `figure1_matrix_labels.py`, `figure1_panelG_shared_W.py`, `figure12_panels.py`. Matrices from `figure1_lower.py` (SymPy) | none | vault `figures/Figure1.svg` |
-| Fig. 2 | `docs/examples/network/figure2.py` (networks, steady states, values), then `figure2_conventions.py`, `figure2_loglog.py`, `figure2_panelE.py`, `figure12_panels.py` | closed form | vault `Figure2.svg` |
-| Fig. 3A, B (K) | `figures/make_hierarchy.py`; panel B in k - 1 ratios on the vault SVG by `figures/figure3_ratios.py`, the shared legend without colons by `figures/figure3_legend.py` | `kinetic_variants/hierarchy_detached/` from `hierarchy_detached.py` from `uptake_modes/` (`uptake_modes.py`, `.sbatch`) and `member_counts/` | vault `Figure3.svg` (through `figures/split_figure2.py`) |
-| Fig. 3C, D (K) | `figures/extend_figure3.py`, in place on the vault SVG (redraws C, D when they exist) | `kinetic_variants/member_counts/` (`member_counts.py`, `.sbatch`), `unblocked/` | vault `Figure3.svg` |
-| Fig. 3E, F (K) | `figures/make_figure2_bottom.py` (uses `make_float_four.draw_certificate`) | scratch `kimonu_float_four/parts` from `float_exactcmp.py` (E) and `float_four.py` (F), their `.sbatch` and part lists | vault `Figure3.svg` |
-| Fig. 4A (K, F) | `figures/make_figure3.py` | `figdata.json` from `figures/gather_figdata.py`, which reads scratch `kimonu_rerun_1111/timing/{det,att,ref}` (`timing_exclusive.sbatch` running `run_kimonu_crn.py`, `run_kimonu_refmode.py`) and `sweep/cocoa_v110`, `sweep/cocoa_eff`, `reference_final`, `reference_final_sampled` | vault `Figure4.svg` |
-| Fig. 4B (K) | `figures/make_figure3.py` | scratch `kimonu_rerun_1111/timing/{tan,small}` (`tangent_cell.py`), `kimonu_local_acr` (`local_acr_symbolic.py`, `local_acr_ladder.sbatch`) | same |
-| Fig. 4C, D (K, F) | `figures/make_figure3.py` | `figures/pair_counts.json`, `pair_sets.json` from `figures/pair_sets.py`, which runs Kimonu's default and reads the modules of the reference-equivalent mode in scratch `kimonu_rerun_1111/timing/ref` and the module files of COCOA.jl and the reference | same |
-| Fig. 4E, F (F) | `figures/make_fig3_methods.py`, called by `make_figure3.py` | `figdata.json`, `reference_final/reference_iLJ478.json`, `sweep/cocoa_eff/cell_iLJ478_seed1234.log` | same |
-| Fig. 4 on new results (K) | `figures/figure4_update.py`, in place on the vault SVG, which carries Phil's Illustrator edits: moves the markers, fit lines and slopes of A, the exact-nullspace markers of B and Kimonu's times and the size of iLJ478 in F | `figdata.json` (new) and that of commit 451a748 (old), the timing arms small and tan of the rerun and of `kimonu_timing_seeds` | vault `Figure4.svg` |
-| Figs. 3, 4 in the words of the text | `figures/figure34_terms.py`, in place on both vault SVGs: nullspace for kernel, networks for models, the iIS312 stages as in `figures/names.py` | none | vault `Figure3.svg`, `Figure4.svg` |
-| fig. S1 (K, F) | `figures/make_figure3.py` | `KIMONU_REF_DIR`, `reference_final/acr/*.log`, COCOA.jl logs | `figures/supp/FigS_stage_timing.svg` |
-| fig. S2 (K, F) | `figures/make_figure3.py` (asserts that the reference-equivalent mode equals the exhaustive reference) | `figdata.json` | `figures/supp/FigS_reference_agreement.svg` |
-| fig. S3 (K) | `figures/make_supp_figures.py` | `figdata.json` (arms `kimonu`, `kimonu_det`) | `FigS_uptakes.svg` |
-| fig. S4 (K, F) | `figures/make_supp_figures.py` | `figures/seed_spread.json` from `figures/seed_spread.py`, which reads the COCOA.jl and sampled-reference seeds and the three seeds of Kimonu's timing runs, scratch `kimonu_rerun_1111/timing/det` | `FigS_seeds.svg` |
-| figs. S5, S6 (K) | `figures/make_float_four.py` | scratch `kimonu_float_four/parts` | `FigS_certificate.svg`, `FigS_float_errors.svg` |
-| Text S1 (K) | `figures/supp_walkthrough.py` | Kimonu at r* = K·1 | Markdown for the Supplement |
-| Tables S2, S3 | `figures/make_table_s2.py` | `unblocked/`, `deficiency/deficiency_33.json` (`deficiency_split.py`), `figdata.json`, `kinetic_variants/member_counts/` | Markdown tables |
-| Data S1 (K, F) | `figures/make_data_s1_s2.py` | `figdata.json`, `figures/pair_counts.json`, Kimonu's pairs and tangent-route rows from `kinetic_variants/uptake_modes/`, `member_counts/` and scratch `kimonu_rerun_1111/timing/{tan,ref}` | `DataS1_values.csv` |
-| Data S2 (K) | `figures/make_data_s1_s2.py` | scratch `kimonu_rerun_1111/uptake_lists` (`uptake_lists.py`, `.sbatch`) | `DataS2_uptake_acr.csv` |
+| Fig. 1 | Illustrator master, edited by `docs/examples/network/fig1_update_layers.py`, `fig1_update_matrix_labels.py`, `fig1G_update_shared_W.py`, `fig1_fig2_panels.py`. Matrices from `fig1CDE_matrices.py` (SymPy) | none | vault `figures/Figure1.svg` |
+| Fig. 2 | `docs/examples/network/fig2_kinase.py` (networks, steady states, values), then `fig2_update_conventions.py`, `fig2C_update_loglog.py`, `fig2E_update_table.py`, `fig1_fig2_panels.py` | closed form | vault `Figure2.svg` |
+| Fig. 3A, B (K) | `figures/fig3AB_hierarchy.py`; panel B in k - 1 ratios on the vault SVG by `figures/fig3B_update_ratios.py`, the shared legend without colons by `figures/fig3AB_update_legend.py` | `kinetic_variants/hierarchy_detached/` from `hierarchy_detached.py` from `uptake_modes/` (`uptake_modes.py`, `.sbatch`) and `member_counts/` | vault `Figure3.svg` (through `figures/fig2_fig3_split.py`) |
+| Fig. 3C, D (K) | `figures/fig3CD_coverage.py`, in place on the vault SVG (redraws C, D when they exist) | `kinetic_variants/member_counts/` (`member_counts.py`, `.sbatch`), `unblocked/` | vault `Figure3.svg` |
+| Fig. 3E, F (K) | `figures/fig3EF_float.py` (uses `figS5_S6_float.draw_certificate`) | scratch `kimonu_float_four/parts` from `float_exactcmp.py` (E) and `float_four.py` (F), their `.sbatch` and part lists | vault `Figure3.svg` |
+| Fig. 4A (K, F) | `figures/fig4_figS1_S2_benchmark.py` | `figdata.json` from `figures/gather_figdata.py`, which reads scratch `kimonu_rerun_1111/timing/{det,att,ref}` (`timing_exclusive.sbatch` running `run_kimonu_crn.py`, `run_kimonu_refmode.py`) and `sweep/cocoa_v110`, `sweep/cocoa_eff`, `reference_final`, `reference_final_sampled` | vault `Figure4.svg` |
+| Fig. 4B (K) | `figures/fig4_figS1_S2_benchmark.py` | scratch `kimonu_rerun_1111/timing/{tan,small}` (`tangent_cell.py`), `kimonu_local_acr` (`local_acr_symbolic.py`, `local_acr_ladder.sbatch`) | same |
+| Fig. 4C, D (K, F) | `figures/fig4_figS1_S2_benchmark.py` | `figures/pair_counts.json`, `pair_sets.json` from `figures/pair_sets.py`, which runs Kimonu's default and reads the modules of the reference-equivalent mode in scratch `kimonu_rerun_1111/timing/ref` and the module files of COCOA.jl and the reference | same |
+| Fig. 4E, F (F) | `figures/fig4EF_methods_iLJ478.py`, called by `fig4_figS1_S2_benchmark.py` | `figdata.json`, `reference_final/reference_iLJ478.json`, `sweep/cocoa_eff/cell_iLJ478_seed1234.log` | same |
+| Fig. 4 on new results (K) | `figures/fig4ABF_update.py`, in place on the vault SVG, which carries Phil's Illustrator edits: moves the markers, fit lines and slopes of A, the exact-nullspace markers of B and Kimonu's times and the size of iLJ478 in F | `figdata.json` (new) and that of commit 451a748 (old), the timing arms small and tan of the rerun and of `kimonu_timing_seeds` | vault `Figure4.svg` |
+| Figs. 3, 4 in the words of the text | `figures/fig3_fig4_update_terms.py`, in place on both vault SVGs: nullspace for kernel, networks for models, the iIS312 stages as in `figures/names.py` | none | vault `Figure3.svg`, `Figure4.svg` |
+| fig. S1 (K, F) | `figures/fig4_figS1_S2_benchmark.py` | `KIMONU_REF_DIR`, `reference_final/acr/*.log`, COCOA.jl logs | `figures/supp/FigS1_stage_timing.svg` |
+| fig. S2 (K, F) | `figures/fig4_figS1_S2_benchmark.py` (asserts that the reference-equivalent mode equals the exhaustive reference) | `figdata.json` | `figures/supp/FigS2_reference_agreement.svg` |
+| fig. S3 (K) | `figures/figS3_S4_uptakes_seeds.py` | `figdata.json` (arms `kimonu`, `kimonu_det`) | `FigS3_uptakes.svg` |
+| fig. S4 (K, F) | `figures/figS3_S4_uptakes_seeds.py` | `figures/seed_spread.json` from `figures/seed_spread.py`, which reads the COCOA.jl and sampled-reference seeds and the three seeds of Kimonu's timing runs, scratch `kimonu_rerun_1111/timing/det` | `FigS4_seeds.svg` |
+| figs. S5, S6 (K) | `figures/figS5_S6_float.py` | scratch `kimonu_float_four/parts` | `FigS5_certificate.svg`, `FigS6_float_errors.svg` |
+| Text S1 (K) | `figures/textS1_walkthrough.py` | Kimonu at r* = K·1 | Markdown for the Supplement |
+| Tables S2, S3 | `figures/tableS2_S3.py` | `unblocked/`, `deficiency/deficiency_33.json` (`deficiency_split.py`), `figdata.json`, `kinetic_variants/member_counts/` | Markdown tables |
+| Data S1 (K, F) | `figures/dataS1_S2.py` | `figdata.json`, `figures/pair_counts.json`, Kimonu's pairs and tangent-route rows from `kinetic_variants/uptake_modes/`, `member_counts/` and scratch `kimonu_rerun_1111/timing/{tan,ref}` | `DataS1_values.csv` |
+| Data S2 (K) | `figures/dataS1_S2.py` | scratch `kimonu_rerun_1111/uptake_lists` (`uptake_lists.py`, `.sbatch`) | `DataS2_uptake_acr.csv` |
 | numbers of Results, Methods and Supplementary Text | `figures/paper_numbers.py` | all of the above | one line per number with its source |
 
 Runs behind single sentences, all in `kinetic_variants/` and read by `paper_numbers.py`: `fb_vs_ma.py` with
@@ -83,10 +83,10 @@ Runs behind single sentences, all in `kinetic_variants/` and read by `paper_numb
   `uptake_lists.py`, `fb_vs_ma.py`, `fb_vs_ma_summary.py`, `gap_roots.py`, `cert_modp.py`, `float_exactcmp.py`,
   `float_four.py`, `sz_flux.py`, `one_lp.py`, `preprocess_time.py`, `second_order_modp.py`, `seed_invariance.py`, each
   with its `.sbatch`. `models33.txt` and `models_gap.txt` are the array indices.
-- `figures/`. `gather_figdata.py`, `pair_sets.py`, `seed_spread.py`, `make_figure3.py`, `make_fig3_methods.py`,
-  `make_hierarchy.py`, `extend_figure3.py`, `make_figure2_bottom.py`, `split_figure2.py` (the one-off split of the
-  combined figure into Figures 2 and 3), `make_float_four.py`, `make_supp_figures.py`, `supp_walkthrough.py`,
-  `make_data_s1_s2.py`, `make_table_s2.py`, `paper_numbers.py`, `figure34_terms.py`. `names.py` holds the one display name
+- `figures/`. `gather_figdata.py`, `pair_sets.py`, `seed_spread.py`, `fig4_figS1_S2_benchmark.py`, `fig4EF_methods_iLJ478.py`,
+  `fig3AB_hierarchy.py`, `fig3CD_coverage.py`, `fig3EF_float.py`, `fig2_fig3_split.py` (the one-off split of the
+  combined figure into Figures 2 and 3), `figS5_S6_float.py`, `figS3_S4_uptakes_seeds.py`, `textS1_walkthrough.py`,
+  `dataS1_S2.py`, `tableS2_S3.py`, `paper_numbers.py`, `fig3_fig4_update_terms.py`. `names.py` holds the one display name
   per network that every figure, table and data file uses.
 - `deficiency/deficiency_split.py` (deficiency, linkage classes and ranks of the 33 networks).
 - `docs/examples/network/` (the edit scripts of Figures 1 and 2).

@@ -10,7 +10,7 @@ lose their final punctuation, and a colon that leads into a display equation goe
 mention, with the legend as running text below, so a long legend can cross a page.
 
     python md_to_kimonu_tex.py <Kimonu.md> <Kimonu_Supplement.md> <template dir> <dir with PNGs> <out dir> <kimonu.bib>
-PNG names: Figure1.png ... and FigS_<name>.png, rendered from the vault SVGs.
+PNG names: Figure1.png ... and FigS<n>_<name>.png (the names of the vault SVGs), rendered from the vault SVGs.
 """
 import os, re, shutil, subprocess, sys
 
