@@ -36,6 +36,47 @@ and 2 of the paper: concordance, kinetic modules, ACR and ACRR by both routes, t
 constants, the rate constants for given values, and the values as formulas in the rate constants. The Binder badge
 opens it in the browser, with nothing to install.
 
+## Use
+
+```python
+import kimonu
+
+crn = kimonu.prepare(model)          # a cobra model: split reversible reactions, remove blocked ones, N = Y·A
+res = kimonu.analyze(crn)            # the default, the iterated route with detached uptakes
+res.modules                          # kinetic modules, as indices into crn.complexes
+res.acr, res.acrr                    # ACR metabolites and ACRR pairs, as metabolite ids
+
+cert = kimonu.analyze(crn, route="both")    # both routes at one reference flux
+cert.certified, cert.open_acr               # whether the list is complete, and what stays open
+```
+
+For networks that already come as matrices, every function also takes A, Y and N directly.
+
+## API
+
+The functions follow the paper. Every one has a docstring that gives its purpose, its steps and the equation it
+computes.
+
+| paper | function | module |
+|---|---|---|
+| reversible reactions split, N = Y·A with the zero complex | `irreversible`, `build_crn` (returns a `CRN`) | `io` |
+| blocked reactions (one LP), pinned rates | `prepare` | `io` |
+| K = ker(N), M = A·K, balanced and concordant complexes (Fig. 1C, E) | `concordance`, `concordance_from_matrices` | `concordance` |
+| ACR, ACRR and kinetic modules as zero and equal rows of B (Fig. 1F) | `readout`, `RouteResult` | `readout` |
+| exact interior reference flux r* | `interior_flux` (draw "uniform" from 2^bits integers, or "lp") | `steady_state` |
+| W = N diag(r*) Sᵀ (Eq. 3) | `steady_state_map` | `steady_state` |
+| iterated route, ker((YΔ)ᵀ) (Eq. 4, left) | `iterated_route`, `free_directions` | `iterated`, `readout` |
+| tangent route, ker(W Yᵀ) (Eq. 4, right) | `tangent_route`, `tangent_space` | `tangent` |
+| both routes, certified or open relations | `certify` (returns a `Certificate`) | `certify` |
+| default mode from a cobra model | `analyze` (route "iterated", "tangent", "reference" or "both") | `analysis` |
+| reference-equivalent mode (upstream sets, Shinar–Feinberg rule) | `reference_route` | `reference` |
+| flux coupling under mass action, Λ = Sᵀ Yᵀ B | `kinetic_flux_coupling` | `coupling` |
+| values at given rate constants, and rate constants for given values | `relation_values`, `rate_constants` | `values` |
+| values as formulas in the rate constants | `binomial_formulas`, `symbolic_formulas` | `formulas` |
+
+The three routes return one `RouteResult` with the modules, ACR, ACRR, the basis B they were read from, the
+reference flux r* and the number of rounds. `kimonu.linalg` holds the exact linear algebra they share.
+
 ## Tests
 
 ```
