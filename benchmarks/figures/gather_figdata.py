@@ -4,7 +4,7 @@ Arms: kimonu (iterated route, attached uptakes; seconds the median of three seed
 (iterated route, detached uptakes, Kimonu's default) from $KIMONU_DET_DIR, kimonu_ref (reference-equivalent mode,
 run_kimonu_refmode.py) from $KIMONU_REF_DIR, kimonu_up from sweep_shared/ (the upstream-set route of September, kept in
 the file but drawn by no figure of the paper; compat/upstream.py;
-giant_overlap from the sweep_tentative/ logs, S2-10 fields from kinetic_variants/), COCOA from sweep/cocoa_v110 (efficient=false) and sweep/cocoa_eff
+giant_overlap from the sweep_tentative/ logs, the pairwise-rule fields *_s210 from kinetic_variants/s210_*.json), COCOA from sweep/cocoa_v110 (efficient=false) and sweep/cocoa_eff
 (efficient=true), reference from reference_final/ (exhaustive, fixed algorithm and bridge; retested partitions from
 reference_final/retest/ where present) and reference_final_sampled/. Earlier reference runs are not read: they predate the concordance fixes.
 Free metabolites are those listed before "E_1" in the model's own metabolite list.
@@ -70,7 +70,8 @@ def kimonu_up_rec(m):
                 n_kinetic=d["n_kinetic_modules"], **s210(m)), d["n_complexes"]
 
 def s210(m):
-    """ACR/ACRR by the reference's combinatorial rule on Kimonu's modules (kinetic_variants/s210_criterion.py)."""
+    """ACR/ACRR by the reference's pairwise rule on the September modules, from the records of the removed
+    kinetic_variants/s210_criterion.py (HISTORY.md); the rule is now kimonu.reference.shinar_feinberg."""
     f = f"kinetic_variants/s210_{m}.json"
     if not os.path.isfile(f): return {}
     d = json.load(open(f))

@@ -151,11 +151,12 @@ def main():
             conc = kimonu.concordance_from_matrices(A, N)
             nullity = sd.sparse_nullspace(N).shape[1]
             kin = upstream.kinetic_modules(A, conc.modules, conc.balanced, Y=Y, nullity=nullity)
-            found = kimonu.acr_acrr(Y, kin.modules, mets)
+            found = kimonu.readout(Y, kimonu.free_directions(Y, kin.modules))
             seconds = time.perf_counter() - t0
 
-            k_acr = {a for a in found.acr if a in free}
-            k_acrr = {tuple(sorted(p)) for p in found.acrr if p[0] in free and p[1] in free}
+            k_acr = {mets[i] for i in found.acr if mets[i] in free}
+            k_acrr = {tuple(sorted((mets[a], mets[b]))) for g in found.acrr_groups for k, a in enumerate(g)
+                      for b in g[k + 1:] if mets[a] in free and mets[b] in free}
 
             p_acr = read_published(os.path.join(
                 single_dir, f"M_MetSingle_{name}_concordant_{args.variant}.csv"))

@@ -1,12 +1,16 @@
 #!/usr/bin/env python
-"""Run Kimonu on a pre-decomposed network (crn.json), rather than on a cobra model.
+"""Run Kimonu on a pre-decomposed network (crn.json), rather than on a cobra model: concordance, then the iterated route.
 
 Used for the reference implementation's own elementary-step-split models, which already carry A
 and Y. Analysing them directly means the comparison against the published numbers is made on the
-paper's own input, with no preprocessing of ours in between.
+paper's own input, with no preprocessing of ours in between. Also holds the crn.json loader
+(triplets_to_sparse, to_exact) that most scripts import.
+
+kimonu.iterated_route reads ACR and ACRR in its last round, so seconds_kinetic includes them, and seconds_acr,
+kept for the readers of earlier records, is 0.
 
 Usage:
-    python benchmarks/run_kimonu_crn.py <crn.json> <out.json> [--repeats N]
+    python benchmarks/run_kimonu_crn.py <crn.json> <out.json> [--repeats N] [--detach-uptakes] [--seed S]
 """
 import argparse
 import json
@@ -18,9 +22,8 @@ import numpy as np
 from scipy import sparse
 
 import kimonu
-from compat import upstream
 from kimonu.io import exact_matrix
-from compat.upstream import complex_graph, _sccs
+from kimonu.reference import complex_graph, strong_components
 
 
 def triplets_to_sparse(t, nrows, ncols, dtype=float):
@@ -95,12 +98,10 @@ def main():
                          "shared preprocessing is costed once rather than inside one arm.")
     ap.add_argument("--solver", default=None,
                     help="LP solver for the blocked-reaction FVA; default picks the best free one.")
-    ap.add_argument("--route", choices=("psi", "upstream"), default="psi",
-                    help="kinetic modules from the psi null space (Kimonu) or, for comparability with "
-                         "the published tools, from upstream sets (compat/upstream.py).")
     ap.add_argument("--detach-uptakes", action="store_true",
-                    help="psi route: every uptake reaction gets its own source.")
-    ap.add_argument("--seed", type=int, default=0, help="psi route: seed of the interior flux.")
+                    help="every uptake reaction gets its own source (the package default; off here for the "
+                         "recorded attached arm).")
+    ap.add_argument("--seed", type=int, default=0, help="seed of the interior flux r*.")
     args = ap.parse_args()
 
     with open(args.crn) as fh:
@@ -131,15 +132,9 @@ def main():
         t0 = time.perf_counter()
         result = kimonu.concordance_from_matrices(A, S)
         t1 = time.perf_counter()
-        if args.route == "psi":
-            kin = kimonu.kinetic_modules(A, Y, S, detach_uptakes=args.detach_uptakes, seed=args.seed)
-        else:
-            kin = upstream.kinetic_modules(A, result.modules, result.balanced, Y=Y,
-                                           nullity=result.nullity)
-        t2 = time.perf_counter()
-        acr = kimonu.acr_acrr(Y, kin.modules, metabolite_ids=crn["metabolites"],
-                              known_acr=kin.known_acr)
-        t3 = time.perf_counter()
+        kin = kimonu.iterated_route(A, Y, S, detach_uptakes=args.detach_uptakes, seed=args.seed,
+                                    metabolite_ids=crn["metabolites"])
+        t2 = t3 = time.perf_counter()
         t_conc.append(t1 - t0)
         t_kin.append(t2 - t1)
         t_acr.append(t3 - t2)
@@ -167,8 +162,8 @@ def main():
         complexes.append({"id": f"complex_{j + 1}", "module": module_of[j], "composition": comp,
                           "kinetic_module": int(kin.module_of[j])})
 
-    succ, pred = complex_graph(A)
-    sccs = _sccs(succ, set(range(nc)))
+    succ = complex_graph(A).succ
+    sccs = strong_components(succ, set(range(nc)))
     terminal = sum(1 for c in sccs if not any(w not in c for v in c for w in succ[v]))
 
     # The supplement panels count free metabolites only: the reference's elementary-step split
@@ -189,19 +184,19 @@ def main():
            "n_sccs": len(sccs), "largest_scc": max((len(c) for c in sccs), default=0),
            "n_terminal_sccs": terminal,
            "n_kinetic_modules": kin.n_modules, "giant_kinetic_module": kin.giant_module,
-           "kinetic_route": args.route + ("_detached" if args.detach_uptakes else ""),
-           "deficiency": getattr(kin, "deficiency", None),
-           "kinetic_iterations": getattr(kin, "iterations", getattr(kin, "rounds", None)),
-           "acr": list(acr.acr), "acrr": [list(p) for p in acr.acrr],
-           "acr_free": [m for m in acr.acr if m in free],
-           "acrr_free": [list(p) for p in acr.acrr if p[0] in free and p[1] in free],
+           "kinetic_route": "iterated" + ("_detached" if args.detach_uptakes else ""),
+           "deficiency": None,
+           "kinetic_iterations": kin.rounds,
+           "acr": list(kin.acr), "acrr": [list(p) for p in kin.acrr],
+           "acr_free": [m for m in kin.acr if m in free],
+           "acrr_free": [list(p) for p in kin.acrr if p[0] in free and p[1] in free],
            "complexes": complexes}
     with open(args.out, "w") as fh:
         json.dump(out, fh, indent=1)
 
     print(f"{nc} complexes, {out['n_balanced']} balanced, {out['n_concordance_modules']} modules, "
           f"{out['n_concordant_pairs']} pairs, {out['n_kinetic_modules']} kinetic "
-          f"(giant {out['giant_kinetic_module']}), delta={out['deficiency']}, "
+          f"(giant {out['giant_kinetic_module']}), "
           f"ACR {len(out['acr_free'])} free / {len(out['acr'])} all, "
           f"ACRR {len(out['acrr_free'])} free / {len(out['acrr'])} all, {min(times):.2f}s")
 

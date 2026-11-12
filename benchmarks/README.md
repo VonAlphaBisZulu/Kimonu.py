@@ -68,10 +68,10 @@ Runs behind single sentences, all in `kinetic_variants/` and read by `paper_numb
 
 ## Paper scripts (Kimonu runs)
 
-- Runners. `run_kimonu_crn.py` runs concordance and the iterated route on a crn.json (route name `psi`, uptakes
-  attached unless `--detach-uptakes`) and holds the crn.json loader (`triplets_to_sparse`, `to_exact`) that most
-  scripts import. `run_kimonu_refmode.py` is the reference-equivalent mode. It uses `compat/upstream.py` (upstream sets
-  merged by overlap only, `Y=None`) and `kinetic_variants/s210_criterion.py` (the Shinar–Feinberg rule).
+- Runners. `run_kimonu_crn.py` runs concordance and the iterated route (`kimonu.iterated_route`) on a crn.json
+  (uptakes attached unless `--detach-uptakes`) and holds the crn.json loader (`triplets_to_sparse`, `to_exact`) that
+  most scripts import. `run_kimonu_refmode.py` times the stages of the reference-equivalent mode
+  (`kimonu.reference_route`, upstream sets merged by overlap only and the Shinar–Feinberg rule).
   `kinetic_variants/tangent_cell.py` times the tangent route.
 - `kinetic_variants/`. `timing_exclusive.sbatch`, `uptake_modes.py`, `hierarchy_detached.py`, `member_counts.py`,
   `uptake_lists.py`, `fb_vs_ma.py`, `fb_vs_ma_summary.py`, `gap_roots.py`, `cert_modp.py`, `float_exactcmp.py`,
@@ -123,7 +123,9 @@ One-off runs whose result the Supplement states in words. `kinetic_variants/READ
   `compare_to_published.py`, `validate_sweep.py`, `validate_acr_published.py`, `cocoa_s5000.sbatch`.
 - Imported modules of earlier stages. `kinetic_variants/tangent_one_shot.py` and `tangent_fast.py` (the first exact
   readouts of the tangent route, used by the scripts above and by `second_order_modp.py` and `local_acr_symbolic.py`),
-  `kinetic_variants/branch_certificate.py`.
+  `kinetic_variants/branch_certificate.py`, and `compat/upstream.py` (the extra merges of the upstream-set route of
+  September on top of `kimonu.reference`, used by `validate_acr_published.py`,
+  `matlab_reference/compare_kinetic_partitions.py`, `kinetic_variants/autonomous_blocks.py` and `terminal_join.py`).
 
 ## Tools and loaders
 
@@ -134,8 +136,8 @@ One-off runs whose result the Supplement states in words. `kinetic_variants/READ
 
 ## Tests
 
-`../tests/` is the package test suite (pytest, run by CI). `compat/test_upstream.py` tests the upstream sets of the
-reference-equivalent mode. `kinetic_variants/test_tangent_one_shot.py` tests the code of the Supplement experiments
+`../tests/` is the package test suite (pytest, run by CI), including the tests of the reference-equivalent mode
+(`test_reference.py`). `kinetic_variants/test_tangent_one_shot.py` tests the code of the Supplement experiments
 (it needs CPLEX and is not run by CI).
 
 ## Data folders

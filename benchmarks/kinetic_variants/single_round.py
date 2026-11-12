@@ -1,13 +1,13 @@
 """Does Figure 4 (the reference-equivalent mode) need the upstream sets? One round of ker(W), with and without one log closure, against
-Kimonu's reference-equivalent mode (run_kimonu_refmode.py: concordance, upstream sets merged where they
+Kimonu's reference-equivalent mode (kimonu.reference_route: concordance, upstream sets merged where they
 overlap, ACR/ACRR by the reference's pairwise rule).
 
-Variants, each read out with the reference's pairwise rule (s210) and with the kernel rule (zero and equal rows
+Variants, each read out with the reference's pairwise rule (Shinar-Feinberg) and with the kernel rule (zero and equal rows
 of ker((Y Delta)^T)):
     ref       the reference-equivalent mode (upstream sets)
     w1        the coupled sets of ker(W), one round, no closure
     w1c       w1 followed by one closure in log space (one readout of ker((Y Delta)^T)), no feedback
-    full      the iterated route to its fixed point (kimonu.kinetic_modules)
+    full      the iterated route to its fixed point (kimonu.iterated_route)
 Detached uptakes; the zero complex is left out of every module.
 
     python single_round.py <model>   -> $SR_OUT/<model>.json
@@ -17,13 +17,11 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from compat import upstream
-from kimonu.acr import free_directions, readout
+from kimonu import free_directions, readout
 from kimonu.io import zero_complexes
-from kimonu.kinetic import _closure, _psi_coupled
-from kimonu.linalg import positive_flux
+from kimonu.iterated import coupled_columns
+from kimonu.reference import shinar_feinberg
 from run_kimonu_crn import triplets_to_sparse, to_exact
-from kinetic_variants.s210_criterion import s210
 
 OUT = os.environ.get("SR_OUT", "/scratch/sadreyev_lab/pschneider/kimonu_single_round")
 M = sys.argv[1]
@@ -36,22 +34,22 @@ skip = zero_complexes(Y)
 clean = lambda ms: sorted(sorted(int(c) for c in s if c not in skip) for s in ms if len(set(s) - skip) > 1)
 
 t0 = time.time()
-res = kimonu.concordance_from_matrices(A, N)
-ref = clean(upstream.kinetic_modules(A, [g for g in res.modules if len(g) > 1], res.balanced, Y=None).modules)
+ref = clean(kimonu.reference_route(A, Y, N).modules)
 t_ref = time.time() - t0
 t0 = time.time()
-flux = positive_flux(N, 0)
-w1 = [s for s in _psi_coupled(A, Y, N, flux, True)[0] if s]
-w1c, _ = _closure(Y, w1, skip)
+flux = kimonu.interior_flux(N, 0)
+w1 = [{c for c in g if c < nc and c not in skip} for g in coupled_columns(A, Y, N, flux, True)]
+w1 = [s for s in w1 if s]
+w1c = readout(Y, free_directions(Y, w1), skip).modules
 t_w = time.time() - t0
-full = kimonu.kinetic_modules(A, Y, N, detach_uptakes=True).modules
+full = kimonu.iterated_route(A, Y, N, detach_uptakes=True, flux=flux).modules
 variants = dict(ref=ref, w1=clean(w1), w1c=clean(w1c), full=clean(full))
 
 
 def relations(mods):
-    a, r = s210(Y, mods)
+    a, r = shinar_feinberg(Y, mods)
     R = readout(Y, free_directions(Y, [set(m) for m in mods]), skip)
-    pairs = sorted(tuple(sorted((x, y))) for g in R.acrr for i, x in enumerate(g) for y in g[i + 1:])
+    pairs = sorted(tuple(sorted((x, y))) for g in R.acrr_groups for i, x in enumerate(g) for y in g[i + 1:])
     free = lambda acr, acrr: dict(acr=sorted(int(i) for i in acr if i < cut),
                                   acrr=sorted([int(i), int(j)] for i, j in acrr if i < cut and j < cut))
     return dict(pairwise=free(a, r), kernel=free(R.acr, pairs))

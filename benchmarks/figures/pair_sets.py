@@ -21,10 +21,9 @@ import numpy as np
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(B)
 sys.path[:0] = [B, os.path.join(os.path.dirname(B), "src")]
 import kimonu
-from kimonu.acr import free_directions, readout
 from kimonu.io import zero_complexes
+from kimonu.reference import shinar_feinberg
 from run_kimonu_crn import triplets_to_sparse, to_exact
-from kinetic_variants.s210_criterion import s210
 from figures.gather_figdata import read_pairs
 import csv
 
@@ -101,13 +100,11 @@ for m in REF:
     K = lambda mods: [[ckey[c] for c in mod if c not in skip] for mod in mods if len(set(mod) - skip) > 1]
     arms = {}
     # Kimonu default
-    km = kimonu.kinetic_modules(A, Y, N, detach_uptakes=True)
-    R = readout(Y, free_directions(Y, km.modules), skip)
-    acrr = [(mets[a], mets[b]) for g in R.acrr for i, a in enumerate(g) for b in g[i + 1:]]
-    arms["kimonu_det"] = [(cpairs(K(km.modules)),) + rule([mets[i] for i in R.acr], acrr, free)]
+    km = kimonu.iterated_route(A, Y, N, detach_uptakes=True, metabolite_ids=mets)
+    arms["kimonu_det"] = [(cpairs(K(km.modules)),) + rule(km.acr, km.acrr, free)]
     # Kimonu reference-equivalent mode: its modules, ACR/ACRR by the reference's pairwise rule
     k = json.load(open(f"{REFMOD}/kimonu_{m}.json"))
-    a, r = s210(Y, k["modules"])
+    a, r = shinar_feinberg(Y, k["modules"])
     arms["kimonu_ref"] = [(cpairs(K(k["modules"])),) + rule([mets[i] for i in a], [(mets[i], mets[j]) for i, j in r], free)]
     # reference, exhaustive and sampled: complexes in the reference's own list, matched by composition
     def ref_arm(rec_json, root, stem):

@@ -11,7 +11,7 @@ sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimon
 sys.path.insert(0, "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/src")
 import kimonu
 from compat import upstream
-from compat.upstream import _Topology, _sccs
+from kimonu.reference import complex_graph, strong_components
 from run_kimonu_crn import triplets_to_sparse, to_exact
 
 B = "/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/benchmarks"
@@ -21,9 +21,9 @@ nc, nr, nm = crn["n_complexes"], crn["n_reactions"], crn["n_metabolites"]
 A = triplets_to_sparse(crn["A"], nc, nr, dtype=np.int64)
 Y = triplets_to_sparse(crn["Y"], nm, nc)
 S = to_exact(triplets_to_sparse(crn["S"], nm, nr))
-topo = _Topology(A); succ, pred = topo.succ, topo.pred
+graph = complex_graph(A); succ, pred = graph.succ, graph.pred
 term = set()
-for comp in _sccs(succ, set(range(nc))):
+for comp in strong_components(succ, set(range(nc))):
     if not any(succ[v] - comp for v in comp):
         term |= comp
 
@@ -64,7 +64,7 @@ def tentative(C0):
         C3 -= x; Cm3 |= x
         if not C3: break
     Cm4 = set()
-    for comp in _sccs({v: succ[v] & C3 for v in C3}, set(C3)):
+    for comp in strong_components({v: succ[v] & C3 for v in C3}, set(C3)):
         if any((succ[v] & C3) - comp for v in comp): Cm4 |= comp
     return Cm3 | Cm4
 def merge(sets):

@@ -74,3 +74,10 @@ by `kinetic_variants/test_tangent_one_shot.py`.
   `README.md`)
 - `FINDINGS.md`, `matlab_reference/FINDINGS.md` (dated lab records to 2026-09-24; the adaptations of the reference
   they led to are in pull request 1 of the fork and in Supplementary Text S3)
+
+## Removed with the refactor of the package (2026-11-11, present at `f534bf3`)
+- `kinetic_variants/s210_criterion.py`. Its function `s210`, the pairwise Shinar–Feinberg rule of the reference, is
+  now `kimonu.reference.shinar_feinberg`. Its main ran the upstream-set route of September (`compat/upstream.py` with
+  `Y`) and wrote `kinetic_variants/s210_*.json`, which `figures/gather_figdata.py` still reads for the `kimonu_up` arm.
+- `compat/test_upstream.py` moved to `../tests/test_reference.py`, as tests of `kimonu.reference_route`. Its tests of
+  the September merges (`Y` given) were dropped.
