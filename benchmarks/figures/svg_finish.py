@@ -21,6 +21,8 @@ What this script does to an SVG made by matplotlib or exported by Illustrator:
 3. No clipping. Every clip-path is removed (Illustrator warns that clipping is lost in SVG Tiny).
    The figure scripts keep every mark inside its axes, and check() renders the figure with and
    without clipping to confirm that nothing changes.
+4. Text colour as an attribute. Every text carries fill="..." itself, as Illustrator writes it, instead of a fill
+   in its style or none (black).
 
     python figures/svg_finish.py <in.svg> <out.svg>          # finish an SVG exported elsewhere
 """
