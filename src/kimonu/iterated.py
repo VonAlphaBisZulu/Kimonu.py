@@ -17,7 +17,7 @@ linear programs and coupled groups read as equal rows.
    coupled sets, for instance two complexes that share a metabolite and differ by an ACRR pair.
 3. Feedback. The mass balance treats every u_c as an unknown of its own, so a merge found on the log scale is new
    information for it. Every complex c of a merged set adds the row u_c = u_d against the first member d of its new
-   set to W. The kernel shrinks, and the smaller kernel can couple further complexes. On the EnvZ–OmpR network of
+   set to W. The nullspace shrinks, and the smaller nullspace can couple further complexes. On the EnvZ–OmpR network of
    Fig. 1 this joins the set that contains G to the rest and so gives G its ACR.
 
 The rounds end when the readout merges no sets, and that last readout gives the modules, ACR and ACRR. The test
@@ -43,34 +43,35 @@ source of its own, so only couplings that hold for every supply remain. The zero
 is a coupled set of its own, and is a module of its own, listed last. Attached, its uptake reactions run at constant
 rate, and complexes coupled to it share its module, a fixed medium.
 """
-from kimonu.readout import free_directions, readout, route_result
-from kimonu.linalg import null_space_rows, proportional_classes
+from kimonu.linalg import nullspace
+from kimonu.network import as_crn
+from kimonu.readout import free_directions, readout, route_result, row_readout
 from kimonu.steady_state import interior_flux, steady_state_map
 
 
 def coupled_columns(crn, flux, detach_uptakes=True, equal=()):
-    """Classes of the columns of W (complexes, then detached sources) whose u keep a fixed ratio, from ker(W).
+    """Groups of the columns of W (complexes, then detached sources) whose u keep a fixed ratio, from ker(W).
 
     ``equal`` lists pairs (c, d) already known to satisfy u_c = u_d at every steady state, the feedback rows. They
     enter W as extra rows. Every steady state solves W u = 0, so columns with proportional rows in ker(W) keep a
     fixed ratio at every steady state, and since u = 1 is one of them, that ratio is 1. For the same reason no row of
-    ker(W) is zero, so every column lands in exactly one class. Restricted to the complexes, the classes are the
+    ker(W) is zero, so every column lands in exactly one group. Restricted to the complexes, the groups are the
     coupled sets.
     """
     W, n_columns = steady_state_map(crn, flux, detach_uptakes)
     W += [tuple(sorted(((c, 1), (d, -1)))) for c, d in equal]                 # u_c - u_d = 0
-    _, classes = proportional_classes(null_space_rows(W, n_columns))
-    return classes
+    return row_readout(nullspace(W, n_columns)).groups
 
 
-def iterated_route(crn, detach_uptakes=True, seed=0, draw="lp", bits=64, flux=None):
+def iterated_route(network, detach_uptakes=True, seed=0, draw="lp", bits=64, flux=None):
     """Kinetic modules, ACR and ACRR by the iterated route, each proven for generic rate constants.
 
     The default analysis of Kimonu. :func:`kimonu.certify` adds the tangent route at the same r* and tells whether
     the list is complete.
 
     Args:
-        crn: the network (:class:`kimonu.CRN`), without blocked reactions (:func:`kimonu.prepare`).
+        network: a :class:`kimonu.CRN` without blocked reactions, or a cobra model, which is preprocessed first
+            (:func:`kimonu.as_crn`). Pass the CRN when calling several functions, so that preprocessing runs once.
         detach_uptakes: give every reaction out of the zero complex its own source (default), so only relations
             that hold for every supply are reported. False attaches the uptakes to the zero complex, a fixed medium.
         seed, draw, bits: of the reference flux r* (:func:`kimonu.interior_flux`). The results do not depend on
@@ -80,6 +81,7 @@ def iterated_route(crn, detach_uptakes=True, seed=0, draw="lp", bits=64, flux=No
     Returns a :class:`kimonu.RouteResult` with ``rounds``, the number of rounds of mass balance and composition, and
     ``dimension``, dim ker((YΔ)ᵀ) of the last round.
     """
+    crn = as_crn(network)
     n = len(crn.Yt)
     # 1) Generic rate constants: an interior steady-state flux r* fixes k = r* with the steady state x* = 1.
     if flux is None:
@@ -88,8 +90,8 @@ def iterated_route(crn, detach_uptakes=True, seed=0, draw="lp", bits=64, flux=No
     while True:
         rounds += 1
         # 2) Mass balance: equal rows of ker(W), with the feedback rows u_c = u_d, are the coupled sets.
-        classes = coupled_columns(crn, flux, detach_uptakes, equal)
-        coupled = [s for s in ({c for c in g if c < n} for g in classes) if s]
+        groups = coupled_columns(crn, flux, detach_uptakes, equal)
+        coupled = [s for s in ({c for c in g if c < n} for g in groups) if s]
         # 3) Composition: B = ker((YΔ)ᵀ) of the coupled sets. Its readout merges sets whose compositions differ by
         #    a fixed combination and finds ACR and ACRR.
         B = free_directions(crn, coupled)

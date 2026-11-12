@@ -19,6 +19,7 @@ import warnings
 from collections import namedtuple
 
 from kimonu.iterated import iterated_route
+from kimonu.network import as_crn
 from kimonu.steady_state import interior_flux
 from kimonu.tangent import tangent_route
 
@@ -40,16 +41,19 @@ def _coupled_pairs(modules):
     return {(a, b) for g in modules for a in g for b in g if a < b}
 
 
-def certify(crn, detach_uptakes=True, seed=0, draw="lp", bits=64):
+def certify(network, detach_uptakes=True, seed=0, draw="lp", bits=64):
     """Run the iterated and the tangent route at one reference flux and tell whether their lists agree.
 
     Args:
-        crn, detach_uptakes, seed, draw, bits: as for :func:`kimonu.iterated_route`. One r* is drawn with
+        network: a :class:`kimonu.CRN` without blocked reactions, or a cobra model, which is preprocessed first
+            (:func:`kimonu.as_crn`). Pass the CRN when calling several functions, so that preprocessing runs once.
+        detach_uptakes, seed, draw, bits: as for :func:`kimonu.iterated_route`. One r* is drawn with
             :func:`kimonu.interior_flux` and passed to both routes.
 
     Returns a :class:`Certificate`. A gap between the routes is not an error. It gives a warning that says how many
     relations stay open.
     """
+    crn = as_crn(network)
     flux = interior_flux(crn, seed, draw, bits)
     it = iterated_route(crn, detach_uptakes, flux=flux)
     tan = tangent_route(crn, detach_uptakes, flux=flux)

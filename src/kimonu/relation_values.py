@@ -4,10 +4,11 @@ The routes decide which combinations vᵀ ln x take the same value at every posi
 computes that value for given rate constants k, exactly (:func:`relation_values`). It reruns the iterated route
 (:mod:`kimonu.iterated`) at k itself instead of at a generic flux.
 
-1. Mass balance. Every positive steady state x for k has its complex concentrations ψ = ψ(x) in the kernel of
+1. Mass balance. Every positive steady state x for k has its complex concentrations ψ = ψ(x) in the nullspace of
    W_k = N diag(k) Sᵀ, the W of Eq. 3 with k in place of r* (:func:`kimonu.steady_state_map`). When rows c and d of
-   an exact basis of ker(W_k) are proportional, row c = λ row d, every kernel vector has ψ_c = λ ψ_d, so the ratio of
-   the two complex concentrations is λ, a rational number for rational k. No steady state has to be found.
+   an exact basis of ker(W_k) are proportional, row c = λ row d (:func:`kimonu.readout.row_readout`), every vector of
+   the nullspace has ψ_c = λ ψ_d, so the ratio of the two complex concentrations is λ, a rational number for rational
+   k. No steady state has to be found.
 2. Composition. Within a coupled set, ln ψ_c - ln ψ_d = (y_c - y_d)ᵀ ln x = ln λ. A fixed combination v found by
    the readout lies in the span of these composition differences, v = Σ_t a_t (y_c_t - y_d_t), so
    vᵀ ln x = Σ_t a_t ln λ_t and e^(vᵀ ln x) = Π_t λ_t^a_t. The coefficients a_t are rational, so the value is a
@@ -47,9 +48,9 @@ from collections import namedtuple
 from fractions import Fraction
 from math import floor, lcm, log, exp
 
-from kimonu.io import substrate_complexes, zero_complexes
-from kimonu.linalg import fraction, null_space_rows
-from kimonu.readout import free_directions, readout
+from kimonu.linalg import fraction, nullspace
+from kimonu.network import as_crn, substrate_complexes, zero_complexes
+from kimonu.readout import free_directions, readout, row_readout
 from kimonu.steady_state import interior_flux, steady_state_map
 
 Values = namedtuple("Values", ["acr", "acrr", "modules", "rounds"])
@@ -258,22 +259,18 @@ class _Facts(_Span):
             assert Value(value) == 1
 
 
-def _ratio_classes(rows, n):
-    """Classes of proportional rows among the first n, with the ratio of every member to the first one.
+def _ratio_groups(rows, n):
+    """Groups of proportional rows among the first n, with the ratio of every member to the first one.
 
-    A zero row is a complex that every kernel vector, and so every steady state, sets to zero, and a
+    A zero row is a complex that every vector of the nullspace, and so every steady state, sets to zero, and a
     negative ratio one that no positive vector satisfies: either way there is no positive steady state.
     """
-    classes = {}
-    for c, row in enumerate(rows[:n]):
-        if not row:
-            raise ValueError(f"no positive steady state for these rate constants: complex {c} is forced to zero")
-        first = row[0][1]
-        classes.setdefault(tuple((col, v / first) for col, v in row), []).append((c, first))
+    zero, groups, ratio = row_readout(rows[:n])
+    if zero:
+        raise ValueError(f"no positive steady state for these rate constants: complex {zero[0]} is forced to zero")
     out = []
-    for members in classes.values():
-        (first, f0), *_ = members
-        ratios = {c: f / f0 for c, f in members}      # ψ_c / ψ_first
+    for group in groups:
+        ratios = {c: ratio[c] for c in group}         # ψ_c / ψ_first
         if any(x < 0 for x in ratios.values()):
             raise ValueError(f"no positive steady state for these rate constants: complexes {sorted(ratios)} "
                              "would need concentrations of opposite sign")
@@ -291,11 +288,15 @@ def _difference(crn, c, d):
     return out
 
 
-def relation_values(crn, k, detach_uptakes=True):
+def relation_values(network, k, detach_uptakes=True):
     """Exact values of the ACR, ACRR and kinetic-module relations at the rate constants k.
 
+    The iterated route runs at k itself (see the module docstring), so the modules, ACR and ACRR are those that hold
+    at k, and each comes with its exact value.
+
     Args:
-        crn: the network, as for :func:`kimonu.iterated_route`.
+        network: a :class:`kimonu.CRN` without blocked reactions, or a cobra model, which is preprocessed first
+            (:func:`kimonu.as_crn`). Pass the CRN when calling several functions, so that preprocessing runs once.
         k: one positive rate constant per reaction, in reaction order. Ints and Fractions are exact;
             a float is read as the decimal it prints as.
         detach_uptakes: as for :func:`kimonu.iterated_route`.
@@ -303,6 +304,7 @@ def relation_values(crn, k, detach_uptakes=True):
     Returns a :class:`Values`, with every value a :class:`Value` and metabolites named by crn.metabolite_ids.
     Raises ValueError when k admits no positive steady state, as far as the relations show it.
     """
+    crn = as_crn(network)
     values = _values(crn, k, detach_uptakes)
     name = crn.metabolite_ids
     return values._replace(acr={name[i]: x for i, x in values.acr.items()},
@@ -323,27 +325,27 @@ def _values(crn, k, detach_uptakes):
         # 1) Linear: proportional rows of ker(W_k), with the extra rows of the feedback
         W, n_columns = steady_state_map(crn, k, detach_uptakes)
         W += [tuple(sorted(((c, 1), (d, -mu)))) for c, d, mu in equal]
-        rows = null_space_rows(W, n_columns)
-        classes = [{c: x for c, x in g.items() if c not in skip} for g in _ratio_classes(rows, n)]
-        classes = [g for g in classes if g]
-        # 2) Log: the composition differences within each class, with ln of their ratios, span the fixed
-        #    combinations; the readout merges the classes they connect
+        rows = nullspace(W, n_columns)
+        groups = [{c: x for c, x in g.items() if c not in skip} for g in _ratio_groups(rows, n)]
+        groups = [g for g in groups if g]
+        # 2) Log: the composition differences within each group, with ln of their ratios, span the fixed
+        #    combinations; the readout merges the groups they connect
         span = _Span()
-        for g in classes:
+        for g in groups:
             first = min(g)
             for c in sorted(g):
                 if c != first:                        # y_first - y_c, at ln ψ_first / ψ_c
                     span.add(_difference(crn, first, c), {g[first] / g[c]: Fraction(1)})
-        found = readout(crn, free_directions(crn, [set(g) for g in classes]), detach_uptakes)
-        # 3) Feedback: the merges that no class already holds, with their values. A complex that is no
+        found = readout(crn, free_directions(crn, [set(g) for g in groups]), detach_uptakes)
+        # 3) Feedback: the merges that no group already holds, with their values. A complex that is no
         #    reaction's substrate has a zero column in W_k, so a row for it would fix only its own ψ.
-        class_of = {c: t for t, g in enumerate(classes) for c in g}
+        group_of = {c: t for t, g in enumerate(groups) for c in g}
         new = []
         for module in found.modules:
             inner = sorted(module & substrates)
             first = inner[0] if inner else None
             for c in inner[1:]:
-                if class_of[c] != class_of[first]:
+                if group_of[c] != group_of[first]:
                     mu = span.value(_difference(crn, first, c))                 # ψ_first / ψ_c
                     if mu.rational is None:
                         raise NotImplementedError(f"the feedback needs the irrational ratio {mu} "
@@ -363,11 +365,11 @@ def _values(crn, k, detach_uptakes):
     return Values(acr=acr, acrr=acrr, modules=modules, rounds=rounds)
 
 
-def rate_constants(crn, flux, x=None):
+def rate_constants(network, flux, x=None):
     """Rate constants k_j = r_j / ψ_s(j)(x) for which x is a positive steady state with flux r.
 
     Args:
-        crn: the network.
+        network: a :class:`kimonu.CRN`, or a cobra model, which is preprocessed first (:func:`kimonu.as_crn`).
         flux: an interior steady-state flux r (every entry positive, N r = 0), e.g. the ``flux`` of a
             :class:`kimonu.RouteResult`.
         x: positive concentrations, one per metabolite; all ones when omitted, which gives k = r.
@@ -379,6 +381,7 @@ def rate_constants(crn, flux, x=None):
     """
     if x is None:
         return list(flux)
+    crn = as_crn(network)
     x = [fraction(v) for v in x]
     k = []
     for j, c in sorted(substrate_complexes(crn).items()):
@@ -394,11 +397,12 @@ def rate_constants(crn, flux, x=None):
     return k
 
 
-def binomial_formulas(crn, detach_uptakes=True, seed=0, draw="lp", bits=64):
+def binomial_formulas(network, detach_uptakes=True, seed=0, draw="lp", bits=64):
     """Monomial formulas in k for the relations that flux coupling fixes, and the constraints it puts on k.
 
     Args:
-        crn: the network, as for :func:`kimonu.iterated_route`.
+        network: a :class:`kimonu.CRN` without blocked reactions, or a cobra model, which is preprocessed first
+            (:func:`kimonu.as_crn`). Pass the CRN when calling several functions, so that preprocessing runs once.
         detach_uptakes: as for :func:`kimonu.iterated_route`.
         seed, draw, bits: of the interior flux r* at which the relations are found (:func:`relation_values` at
             k = r*, :func:`kimonu.interior_flux`).
@@ -407,6 +411,7 @@ def binomial_formulas(crn, detach_uptakes=True, seed=0, draw="lp", bits=64):
     flux coupling fixes and None for the others, and the constraints flux coupling puts on k (see the module
     docstring).
     """
+    crn = as_crn(network)
     found = _values(crn, interior_flux(crn, seed, draw, bits), detach_uptakes)
     facts = _flux_facts(crn, detach_uptakes)
 
@@ -422,20 +427,18 @@ def _flux_facts(crn, detach_uptakes):
     """The span of the flux-coupling facts, with the constraints they put on k"""
     substrate = substrate_complexes(crn)
     skip = zero_complexes(crn) if detach_uptakes else set()
-    # fully coupled reactions: proportional rows of ker N, each with its ratio to the first of its class
-    classes = {}
-    for j, row in enumerate(null_space_rows(crn.N)):
-        first = row[0][1]
-        classes.setdefault(tuple((col, v / first) for col, v in row), []).append((j, first))
+    # fully coupled reactions: proportional rows of ker N, each with its ratio to the first of its group
+    _, groups, ratio = row_readout(nullspace(crn.N))
     facts = _Facts()
-    for members in classes.values():
-        members = [(j, f) for j, f in members if substrate[j] not in skip]
+    for group in groups:
+        members = [j for j in group if substrate[j] not in skip]
         if not members:
             continue
-        (j, f), *rest = members
-        for l, g in rest:                             # v_l = (g / f) v_j: k_l ψ_s(l) = (g / f) k_j ψ_s(j)
+        j, *rest = members
+        for l in rest:                                # v_l = ρ v_j: k_l ψ_s(l) = ρ k_j ψ_s(j), ρ = ratio[l] / ratio[j]
             c, d = substrate[l], substrate[j]
-            facts.add(_difference(crn, c, d), {g / f: Fraction(1), ("k", j): Fraction(1), ("k", l): Fraction(-1)})
+            facts.add(_difference(crn, c, d),
+                      {ratio[l] / ratio[j]: Fraction(1), ("k", j): Fraction(1), ("k", l): Fraction(-1)})
     return facts
 
 

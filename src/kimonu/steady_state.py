@@ -17,8 +17,9 @@ concentration and scale by the same factor u_c.
 Both routes start from W (:func:`steady_state_map`). The iterated route reads coupled complexes from ker(W), and
 the tangent route linearizes W u around u = 1. Uptakes are either attached, so they consume the zero complex with
 ψ_∅ = 1 and run at the constant rate k_j, or detached (the default), so each draws from a source of its own whose
-concentration is free and adds a column of its own to W (:func:`rate_columns`). Where the sources need coordinates
-of their own, as in the tangent route, each is a species of its own (:func:`with_sources`).
+concentration is free and adds a column of its own to W (:func:`kimonu.network.uptake_columns`). Where the sources
+need coordinates of their own, as in the tangent route, each is a species of its own
+(:func:`kimonu.network.with_sources`).
 
 :func:`interior_flux` draws r* at random, which gives the result for generic rate constants, that is, for all rate
 constants that admit a positive steady state except finely tuned ones. The default is an LP point with random
@@ -33,13 +34,13 @@ from math import ceil, lcm
 import numpy as np
 from scipy.optimize import linprog
 
-from kimonu.io import substrate_complexes, zero_complexes
-from kimonu.linalg import entries, null_space_rows, to_float
+from kimonu.linalg import entries, nullspace, to_float
+from kimonu.network import as_crn, uptake_columns
 
 _LP_SCALE = 10**6           # the LP point's free coordinates are rounded to multiples of 1/_LP_SCALE
 
 
-def interior_flux(crn, seed=0, draw="lp", bits=64):
+def interior_flux(network, seed=0, draw="lp", bits=64):
     """An exact, strictly positive steady-state flux r* in ker(N), as a list of integers (Fractions), drawn at random.
 
     Both draws start from an LP point. HiGHS (bundled with scipy) solves N r = 0 with random lower bounds
@@ -47,7 +48,7 @@ def interior_flux(crn, seed=0, draw="lp", bits=64):
     every rate to at least 1 spans rates over about eight orders of magnitude on genome-scale models, and HiGHS
     solved it on every model and seed tried, where SCIP, GLPK and CPLEX through straindesign often did not.
 
-    Every flux in ker(N) is r = K b, with K the RREF basis of :func:`kimonu.linalg.null_space_rows`, and b its free
+    Every flux in ker(N) is r = K b, with K the RREF basis of :func:`kimonu.linalg.nullspace`, and b its free
     coordinates. K has the unit row e_j at free reaction j (1 at basis vector j, 0 at the others), so a row of K with a
     single entry K_ij belongs to free reaction j itself or to a reaction fully coupled to it, and either gives
     b_j = r_i / K_ij. The free coordinates of the LP point are read off the first such row for each j. They are
@@ -56,7 +57,8 @@ def interior_flux(crn, seed=0, draw="lp", bits=64):
     construction, and r* > 0 is checked in exact arithmetic.
 
     Args:
-        crn: the network (:class:`kimonu.CRN`). Only N is read.
+        network: a :class:`kimonu.CRN`, or a cobra model, which is preprocessed first (:func:`kimonu.as_crn`).
+            Only N is read.
         seed: seed of the LP's random bounds and objective and of the uniform draw.
         draw: "lp" (default) or "uniform".
             "lp". r* = K c, the LP point. Its integers are small, so the tangent route stays fast. An LP optimum is
@@ -79,13 +81,14 @@ def interior_flux(crn, seed=0, draw="lp", bits=64):
         raise ValueError(f"draw must be 'uniform' or 'lp', not {draw!r}")
     if not (isinstance(bits, int) and bits >= 1):
         raise ValueError(f"bits must be a positive integer, not {bits!r}")
+    crn = as_crn(network)
     Nf = to_float(crn.N); m, q = Nf.shape
     rng = np.random.default_rng(seed)
     lower = 1 + rng.random(q)
     lp = linprog(rng.random(q), A_eq=Nf, b_eq=np.zeros(m), bounds=[(lo, None) for lo in lower], method="highs")
     if lp.status != 0:
         raise ValueError("no strictly positive steady-state flux; remove blocked reactions first")
-    K = null_space_rows(crn.N)
+    K = nullspace(crn.N)
 
     def free_coordinates(values):
         """{basis vector j: b_j} of a flux in ker(N), read at the first row of K with a single entry in column j"""
@@ -127,51 +130,21 @@ def interior_flux(crn, seed=0, draw="lp", bits=64):
     return [x * denominator for x in flux]
 
 
-def rate_columns(crn, detach_uptakes=True):
-    """The column of u that carries each reaction's rate, {reaction: column}, and the number of columns.
-
-    Reaction j runs at r*_j u_c for its column c. That is its substrate complex σ(j), or, for a detached uptake, a
-    source of its own after the n complexes, numbered in the order of the reactions.
-    """
-    n = len(crn.Yt)
-    zero = zero_complexes(crn) if detach_uptakes else set()
-    column, n_columns = {}, n
-    for j, c in substrate_complexes(crn).items():
-        if c in zero:
-            column[j], n_columns = n_columns, n_columns + 1
-        else:
-            column[j] = c
-    return column, n_columns
-
-
-def with_sources(crn, detach_uptakes=True):
-    """The network with every detached source as a species of its own, for the routes that give sources coordinates.
-
-    A detached source s (column n + s of W, :func:`rate_columns`) has a free concentration. As a species of its own,
-    with composition e_(m+s), it is one more row of Yᵀ after the n complexes, the Ŷᵀ that the tangent route
-    multiplies W by (W Ŷᵀ) and flux coupling reads (Ŷᵀ B), and one more metabolite after the m metabolites, named
-    "source of <reaction id>". Only Yt and metabolite_ids are extended, since a source is not balanced and adds no
-    row to N. With attached uptakes, or without uptakes, the network is returned as it is.
-    """
-    column, n_columns = rate_columns(crn, detach_uptakes)
-    m, n = len(crn.metabolite_ids), len(crn.Yt)
-    if n_columns == n:
-        return crn
-    uptakes = sorted((c, j) for j, c in column.items() if c >= n)
-    return crn._replace(Yt=crn.Yt + [((m + s, 1),) for s in range(n_columns - n)],
-                        metabolite_ids=list(crn.metabolite_ids) + [f"source of {crn.reaction_ids[j]}"
-                                                                   for _, j in uptakes])
-
-
-def steady_state_map(crn, flux, detach_uptakes=True):
+def steady_state_map(network, flux, detach_uptakes=True):
     """W = N diag(r*) Sᵀ of Eq. 3 in row form (one row per metabolite), and its number of columns, so that dx/dt = W u.
 
     Column c collects, for every reaction that consumes complex c, its column of N times its rate at r*. A detached
-    uptake gets a column of its own after the n complexes (:func:`rate_columns`), a free source rather than the
-    constant ψ_∅ = 1. Both routes, :func:`kimonu.relation_values` (with k in place of r*) and
+    uptake gets a column of its own after the n complexes (:func:`kimonu.network.uptake_columns`), a free source
+    rather than the constant ψ_∅ = 1. Both routes, :func:`kimonu.relation_values` (with k in place of r*) and
     :func:`kimonu.kinetic_flux_coupling` build on this map.
+
+    Args:
+        network: a :class:`kimonu.CRN`, or a cobra model, which is preprocessed first (:func:`kimonu.as_crn`).
+        flux: the reference flux r*, one entry per reaction, as :func:`interior_flux` draws it.
+        detach_uptakes: give every reaction out of the zero complex a source of its own (default).
     """
-    column, n_columns = rate_columns(crn, detach_uptakes)
+    crn = as_crn(network)
+    column, n_columns = uptake_columns(crn, detach_uptakes)
     triples, (m, _) = entries(crn.N)
     W = [{} for _ in range(m)]
     for i, j, v in triples:

@@ -27,6 +27,7 @@ from collections import namedtuple
 from scipy import sparse
 
 from kimonu.concordance import concordance
+from kimonu.network import as_crn
 from kimonu.readout import Readout, route_result
 
 ComplexGraph = namedtuple("ComplexGraph", ["succ", "pred", "producers", "substrates"])
@@ -238,21 +239,24 @@ def shinar_feinberg(crn, modules):
     return acr, acrr
 
 
-def reference_route(crn):
+def reference_route(network):
     """Kinetic modules, ACR and ACRR in the reference-equivalent mode, the definitions of Langary et al. (2025).
 
     Args:
-        crn: the network, as for :func:`kimonu.iterated_route`, without blocked reactions.
+        network: a :class:`kimonu.CRN` without blocked reactions, or a cobra model, which is preprocessed first
+            (:func:`kimonu.as_crn`). Pass the CRN when calling several functions, so that preprocessing runs once.
 
     Returns a :class:`kimonu.RouteResult` with ``rounds`` the rounds of :func:`upstream_modules` and
     ``concordance`` the :class:`kimonu.ConcordanceResult` it started from. ``B`` and ``flux`` are None, since the
     mode reads no basis and needs no reference flux.
     """
+    crn = as_crn(network)
     # 1) concordance from M = A·K, without the pins, since under mass action the bounds do not set the rates
     conc = concordance(crn._replace(pins={}))
     # 2) to 4) seeds, upstream sets and the overlap merge
     modules, rounds = upstream_modules(crn, [g for g in conc.modules if len(g) > 1], conc.balanced)
-    # 5) ACR and ACRR by the Shinar–Feinberg rule. Each ACRR pair is a group of two.
+    # 5) ACR and ACRR by the Shinar–Feinberg rule. Each ACRR pair enters as a group of two, and route_result joins
+    #    pairs that share a metabolite into the groups of acrr_groups.
     acr, acrr = shinar_feinberg(crn, modules)
     return route_result("reference", crn, Readout(modules, sorted(acr), [list(p) for p in sorted(acrr)]),
                         rounds=rounds, concordance=conc)

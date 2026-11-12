@@ -12,15 +12,22 @@ product complex. Mass action needs that, because an uptake from the zero complex
 Complexes are numbered in the order in which the reactions first use them, as in COCOA.
 
 Mass action gives every reaction one substrate complex and one direction, so a reaction that can run both ways
-becomes two (:func:`irreversible`). Each reaction is otherwise taken as one mass-action step. Kimonu does not split
-enzyme-catalyzed reactions into elementary steps, and networks that need them have to carry them already.
+becomes two (:func:`make_irreversible`). Each reaction is otherwise taken as one mass-action step. Kimonu does not
+split enzyme-catalyzed reactions into elementary steps, and networks that need them have to carry them already.
 
-The network is a :class:`CRN`, and every analysis takes it as its first argument. :func:`prepare` builds it from a
+The network is a :class:`CRN`, and every analysis takes it as its first argument. :func:`preprocess` builds it from a
 cobra model with the preprocessing every analysis shares. It splits reversible reactions, removes blocked
 reactions, finds pinned rates and builds the factorization (:func:`build_crn`). Blocked reactions follow from one
-LP (:func:`kimonu.linalg.blocked_reactions`) when every lower bound is zero, and from FVA only when a positive lower
-bound forces flux, since only then can a bound pin a rate. :func:`crn_from_matrices` builds the CRN of a network
-that already comes as A and Y, such as the elementary-step models of Langary et al. (2025).
+LP (:func:`_blocked_reactions`) when every lower bound is zero, and from FVA only when a positive lower bound forces
+flux, since only then can a bound pin a rate. :func:`crn_from_matrices` builds the CRN of a network that already
+comes as A and Y, such as the elementary-step models of Langary et al. (2025). Every analysis also takes a cobra
+model and preprocesses it first (:func:`as_crn`). When several analyses run on one model, preprocess it once and
+pass the CRN to each.
+
+Detached uptakes. With detached uptakes (the default of every analysis), each reaction out of the zero complex draws
+from a source of its own, whose concentration is free. :func:`uptake_columns` gives the source of each such
+reaction, and :func:`with_sources` extends the network by one coordinate per source, for the computations that need
+the sources as coordinates.
 """
 from collections import namedtuple
 
@@ -29,10 +36,11 @@ import cobra
 import numpy as np
 from cobra.util.array import create_stoichiometric_matrix
 from scipy import sparse
+from scipy.optimize import linprog
 
 import straindesign as sd
 
-from kimonu.linalg import blocked_reactions, exact, fraction, matrix_product, row_form
+from kimonu.linalg import exact, fraction, matrix_product, row_form, to_float
 
 CRN = namedtuple("CRN", ["A", "Yt", "N", "complexes", "reaction_ids", "metabolite_ids", "pins"])
 CRN.__doc__ = """One network, N = Y·A, with the names of the rows and columns. Every analysis takes it first.
@@ -47,7 +55,7 @@ complexes       one complex per row of A, as a sorted tuple of (metabolite id, c
 reaction_ids    reaction ids in the column order of A and N
 metabolite_ids  metabolite ids in the row order of N. Results name metabolites by them.
 pins            {reaction id: exact value} of the rates that a bound holds at a nonzero value in every steady
-                state. Empty from :func:`build_crn` and :func:`crn_from_matrices`, found by :func:`prepare`.
+                state. Empty from :func:`build_crn` and :func:`crn_from_matrices`, found by :func:`preprocess`.
 """
 
 
@@ -80,7 +88,7 @@ def crn_from_matrices(A, Y, metabolite_ids=None, reaction_ids=None):
             results then name metabolites by their index.
 
     The network is taken as it is. It must have no blocked reactions for the mass-action routes and for exact
-    concordance, as :func:`prepare` ensures for a cobra model.
+    concordance, as :func:`preprocess` ensures for a cobra model.
     """
     A = sparse.csr_matrix(A).astype(np.int64)
     Yt = row_form(sparse.csr_matrix(Y).T)
@@ -89,7 +97,7 @@ def crn_from_matrices(A, Y, metabolite_ids=None, reaction_ids=None):
                 reaction_ids if reaction_ids is not None else list(range(A.shape[1])))
 
 
-def irreversible(model):
+def make_irreversible(model):
     """``model`` with every reaction running in its written direction only.
 
     A reaction with a negative lower bound gets a reverse reaction ``<id>_rev`` with the opposite stoichiometry and
@@ -114,11 +122,11 @@ def irreversible(model):
 
 
 def build_crn(model):
-    """The :class:`CRN` of ``model`` after :func:`irreversible`, with no reaction removed and no pins.
+    """The :class:`CRN` of ``model`` after :func:`make_irreversible`, with no reaction removed and no pins.
 
-    Use :func:`prepare` for a model that may have blocked reactions or pinned rates.
+    Use :func:`preprocess` for a model that may have blocked reactions or pinned rates.
     """
-    model = irreversible(model)
+    model = make_irreversible(model)
     met_ids = [m.id for m in model.metabolites]
     met_idx = {m: i for i, m in enumerate(met_ids)}
 
@@ -141,10 +149,10 @@ def build_crn(model):
     return _crn(A, list(complex_index), met_ids, [r.id for r in model.reactions])
 
 
-def prepare(model, solver=None):
+def preprocess(model, solver=None):
     """The :class:`CRN` of ``model`` ready for analysis: split, without blocked reactions, with its pinned rates.
 
-    1. Reversible reactions are split into two (:func:`irreversible`).
+    1. Reversible reactions are split into two (:func:`make_irreversible`).
     2. Blocked reactions are found and removed, together with metabolites that no reaction uses any more.
     3. Rates that a bound holds at a nonzero value in every steady state (pins) are found.
     4. The factorization N = Y·A is built (:func:`build_crn`), with the pins attached.
@@ -159,31 +167,73 @@ def prepare(model, solver=None):
         solver: solver for FVA, which is needed only when a positive lower bound forces flux; None lets
             straindesign choose.
     """
-    model = irreversible(model).copy()
-    blocked, pins = _blocked_and_pinned(model, solver)
+    model = make_irreversible(model).copy()
+    blocked, pins = _find_blocked_and_pinned(model, solver)
     if blocked:
         model.remove_reactions(blocked, remove_orphans=True)
     return build_crn(model)._replace(pins=pins)
 
 
-def _blocked_and_pinned(model, solver=None):
+_preprocess = preprocess          # as_crn has a keyword of the same name
+
+
+def as_crn(network, preprocess=True, solver=None):
+    """The :class:`CRN` of ``network``, which every analysis calls on its first argument.
+
+    Args:
+        network: a :class:`CRN`, which is returned as it is, or a cobra model.
+        preprocess: for a cobra model, run :func:`preprocess` (default), which splits reversible reactions, removes
+            blocked reactions and finds pinned rates. A model that has no blocked reactions and no pinned rates can
+            be passed with ``preprocess=False``, which only builds N = Y·A (:func:`build_crn`).
+        solver: solver for FVA, if the model needs it (:func:`preprocess`). None lets straindesign choose.
+
+    A cobra model is preprocessed anew in every call. When several analyses run on one model, call
+    :func:`preprocess` once and pass the CRN to each.
+    """
+    if isinstance(network, CRN):
+        return network
+    return _preprocess(network, solver) if preprocess else build_crn(network)
+
+
+def _find_blocked_and_pinned(model, solver=None):
     """(ids of the blocked reactions, pinned rates) of an irreversible model.
 
     With every lower bound at zero, r = 0 is a steady state, so a rate that is constant over the steady states is
     zero. Nothing is pinned then, and finite upper bounds only scale, so they cannot block a reaction. One LP then
-    settles it. A positive lower bound forces flux and needs FVA.
+    settles it (:func:`_blocked_reactions`). A positive lower bound forces flux and needs FVA.
     """
     if all(r.lower_bound <= 0 for r in model.reactions):
         S = create_stoichiometric_matrix(model, array_type="lil")
         closed = [j for j, r in enumerate(model.reactions) if r.upper_bound <= 0]
-        return [model.reactions[j].id for j in np.flatnonzero(blocked_reactions(S.tocsr(), closed))], {}
+        return [model.reactions[j].id for j in np.flatnonzero(_blocked_reactions(S.tocsr(), closed))], {}
     ranges = sd.fva(model, solver=solver) if solver else sd.fva(model)
     blocked = [r for r in ranges.index
                if abs(ranges.at[r, "minimum"]) <= 1e-9 and abs(ranges.at[r, "maximum"]) <= 1e-9]
-    return blocked, _pins(model, ranges)
+    return blocked, _find_pins(model, ranges)
 
 
-def _pins(model, ranges, tol=1e-9):
+def _blocked_reactions(N, closed=()):
+    """Boolean array, True for the reactions of N that no steady state with r >= 0 can run.
+
+    One LP: max sum(z) subject to N r = 0, r >= 0, 0 <= z <= 1 and z <= r. The steady states form a cone,
+    and two steady states add up to one that runs the reactions of both, so a single r runs every reaction
+    that can run at all. Scaling it brings each of them to at least 1, which makes z_j = 1 for those and
+    z_j = 0 for the blocked ones. Maximizing sum(r) under upper bounds instead stops at a vertex and leaves
+    reactions that can run at zero. ``closed`` lists the indices of reactions with an upper bound of zero.
+    """
+    Nf = to_float(N); m, q = Nf.shape
+    closed = set(closed)
+    bounds = [(0, 0 if j in closed else None) for j in range(q)] + [(0, 1)] * q
+    A_eq = sparse.hstack([Nf, sparse.csr_matrix((m, q))], format="csr")
+    A_ub = sparse.hstack([-sparse.identity(q), sparse.identity(q)], format="csr")
+    lp = linprog(np.r_[np.zeros(q), -np.ones(q)], A_ub=A_ub, b_ub=np.zeros(q), A_eq=A_eq, b_eq=np.zeros(m),
+                 bounds=bounds, method="highs")
+    if lp.status != 0:
+        raise ValueError(f"blocked-reaction LP failed: {lp.message}")
+    return lp.x[q:] <= 0.5
+
+
+def _find_pins(model, ranges, tol=1e-9):
     """{reaction id: exact value} for the rates that a bound holds at a nonzero value in every steady state.
 
     FVA shows such a rate as minimum == maximum. The bound it sits on gives the value exactly. A rate that is
@@ -211,3 +261,40 @@ def substrate_complexes(crn):
 def zero_complexes(crn):
     """Complexes with no metabolites, the zero complex of uptake and export reactions."""
     return {c for c, y in enumerate(crn.Yt) if not y}
+
+
+def uptake_columns(crn, detach_uptakes=True):
+    """The column of u that carries each reaction's rate, {reaction: column}, and the number of columns.
+
+    Reaction j runs at r*_j u_c for its column c. That is its substrate complex σ(j), or, for a detached uptake, a
+    source of its own after the n complexes, numbered in the order of the reactions. These are the columns of
+    W (:func:`kimonu.steady_state_map`).
+    """
+    n = len(crn.Yt)
+    zero = zero_complexes(crn) if detach_uptakes else set()
+    column, n_columns = {}, n
+    for j, c in substrate_complexes(crn).items():
+        if c in zero:
+            column[j], n_columns = n_columns, n_columns + 1
+        else:
+            column[j] = c
+    return column, n_columns
+
+
+def with_sources(crn, detach_uptakes=True):
+    """The network with every detached source as a species of its own, for the routes that give sources coordinates.
+
+    A detached source s (column n + s of W, :func:`uptake_columns`) has a free concentration. As a species of its
+    own, with composition e_(m+s), it is one more row of Yᵀ after the n complexes, the Ŷᵀ that the tangent route
+    multiplies W by (W Ŷᵀ) and flux coupling reads (Ŷᵀ B), and one more coordinate after the m metabolites, named
+    "source of <reaction id>". Only Yt and metabolite_ids are extended, since a source is not balanced and adds no
+    row to N. With attached uptakes, or without uptakes, the network is returned as it is.
+    """
+    column, n_columns = uptake_columns(crn, detach_uptakes)
+    m, n = len(crn.metabolite_ids), len(crn.Yt)
+    if n_columns == n:
+        return crn
+    uptakes = sorted((c, j) for j, c in column.items() if c >= n)
+    return crn._replace(Yt=crn.Yt + [((m + s, 1),) for s in range(n_columns - n)],
+                        metabolite_ids=list(crn.metabolite_ids) + [f"source of {crn.reaction_ids[j]}"
+                                                                   for _, j in uptakes])
