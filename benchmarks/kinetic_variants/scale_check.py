@@ -5,6 +5,8 @@ at scale 100, and unrounded (the LP point's float64 values as exact binary fract
 
 Run on 2026-11-11 for iNJ661 and iHN637 (sadreyevlab, 2 cores, not exclusive) into
 /scratch/sadreyev_lab/pschneider/kimonu_rerun_1111/scale_check/<model>.json, read by figures/paper_numbers.py (S8).
+iNJ661 was timed again on an exclusive node, one core, three runs (kinetic_variants/scale_check_exclusive.sbatch,
+job 572320) into scale_check/exclusive/iNJ661_rep{1,2,3}.json; the paper's S8 times are their medians.
 """
 import json, os, sys, time
 from fractions import Fraction

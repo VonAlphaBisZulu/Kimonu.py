@@ -371,6 +371,13 @@ for f in sorted(f for f in glob.glob(f"{SCALE}/*.json") if not f.endswith("_1e4.
         out(X, "S8a", f"{d['model']}, {route} route, LP point at scale 10^6, at scale 100, unrounded (seconds, largest bits; same results as at 10^6)",
             f"{a['seconds']:.1f} s ({a['max_bits']} bits), {b['seconds']:.1f} s ({b['max_bits']} bits, same {b['same_as_1e6']}), "
             f"{c['seconds']:.1f} s ({c['max_bits']} bits, same {c['same_as_1e6']})", f"{f} (one run each, not exclusive)")
+for m in sorted({os.path.basename(f).split("_rep")[0] for f in glob.glob(f"{SCALE}/exclusive/*_rep*.json")}):
+    reps = [json.load(open(f)) for f in sorted(glob.glob(f"{SCALE}/exclusive/{m}_rep*.json"))]
+    med = lambda key: statistics.median(r[key]["seconds"] for r in reps)
+    out(X, "S8a", f"{m}, tangent route, LP point at scale 10^6 against unrounded, median of {len(reps)} (exclusive node, 1 core)",
+        f"{med('tangent_scale_1e6'):.1f} s against {med('tangent_unrounded'):.1f} s (iterated {med('iterated_scale_1e6'):.1f} s against "
+        f"{med('iterated_unrounded'):.1f} s); same results {all(r['tangent_unrounded']['same_as_1e6'] for r in reps)}",
+        f"{SCALE}/exclusive/{m}_rep*.json (job 572320)")
 for f in sorted(glob.glob(f"{SCALE}/*_1e4.json")):
     d = json.load(open(f))
     out(X, "S8b", f"{d['model']}, same results as at scale 10^6 at scales 10^4 and 10^5 (tangent, iterated)",
