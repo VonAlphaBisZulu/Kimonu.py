@@ -65,7 +65,7 @@ def coupled_columns(A, Y, N, flux, detach_uptakes=True, equal=()):
     return classes
 
 
-def iterated_route(A, Y, N, detach_uptakes=True, seed=0, draw="uniform", bits=64, metabolite_ids=None, flux=None):
+def iterated_route(A, Y, N, detach_uptakes=True, seed=0, draw="lp", bits=64, metabolite_ids=None, flux=None):
     """Kinetic modules, ACR and ACRR by the iterated route, each proven for generic rate constants.
 
     The default analysis of Kimonu. :func:`kimonu.certify` adds the tangent route at the same r* and tells whether

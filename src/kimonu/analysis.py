@@ -13,7 +13,7 @@ from kimonu.tangent import tangent_route
 ROUTES = ("iterated", "tangent", "reference", "both")
 
 
-def analyze(model, route="iterated", detach_uptakes=True, seed=0, draw="uniform", bits=64, solver=None):
+def analyze(model, route="iterated", detach_uptakes=True, seed=0, draw="lp", bits=64, solver=None):
     """Kinetic modules, ACR and ACRR of a cobra model, or of a :class:`kimonu.CRN` from :func:`kimonu.prepare`.
 
     Args:

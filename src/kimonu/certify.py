@@ -12,8 +12,8 @@ beyond the iterated route stays open. Each open relation asks whether a second s
 steady states connects to the reference, as in the self-activating kinase of Fig. 2.
 
 :func:`certify` draws one r* and runs both routes there, so they are compared at the same point. It is not the
-default analysis, since the tangent route's nullspace is denser and takes longer (up to about an hour on the
-largest genome-scale network with the uniform draw).
+default analysis, since the tangent route's nullspace is denser and takes longer (up to about 8 minutes on the
+largest genome-scale networks at the default LP point, and about ten times that with the uniform draw).
 """
 import warnings
 from collections import namedtuple
@@ -40,7 +40,7 @@ def _coupled_pairs(modules):
     return {(a, b) for g in modules for a in g for b in g if a < b}
 
 
-def certify(A, Y, N, detach_uptakes=True, seed=0, draw="uniform", bits=64, metabolite_ids=None):
+def certify(A, Y, N, detach_uptakes=True, seed=0, draw="lp", bits=64, metabolite_ids=None):
     """Run the iterated and the tangent route at one reference flux and tell whether their lists agree.
 
     Args:

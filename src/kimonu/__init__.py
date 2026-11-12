@@ -24,7 +24,7 @@ Mass action, the basis B (Fig. 1F)
     ACR, ACRR, kinetic modules from B              readout(Y, B) -> Readout, and RouteResult of every route
     Yᵀ B                                           kimonu.readout.complex_directions(Y, B)
 Reference steady state (Eq. 3, Fig. 1G)
-    exact interior flux r*, generic k = r*         interior_flux(N, seed, draw="uniform", bits=64)
+    exact interior flux r*, generic k = r*         interior_flux(N, seed, draw="lp", bits=64)
     W = N diag(r*) Sᵀ                              steady_state_map(A, Y, N, r*)
 Iterated route (Eq. 4, left)
     coupled sets of ker(W), YΔ, ker((YΔ)ᵀ), feedback   iterated_route(A, Y, N) -> RouteResult, .B

@@ -115,7 +115,7 @@ def _assemble(found, formula, names):
     return list(acr.items()), list(acrr.items()), list(modules.items())
 
 
-def binomial_formulas(A, Y, N, detach_uptakes=True, metabolite_ids=None, seed=0, draw="uniform", bits=64):
+def binomial_formulas(A, Y, N, detach_uptakes=True, metabolite_ids=None, seed=0, draw="lp", bits=64):
     """Monomial formulas in k for the relations that flux coupling fixes, and the constraints it puts on k.
 
     Args:

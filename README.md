@@ -63,7 +63,7 @@ computes.
 | blocked reactions (one LP), pinned rates | `prepare` | `io` |
 | K = ker(N), M = A·K, balanced and concordant complexes (Fig. 1C, E) | `concordance`, `concordance_from_matrices` | `concordance` |
 | ACR, ACRR and kinetic modules as zero and equal rows of B (Fig. 1F) | `readout`, `RouteResult` | `readout` |
-| exact interior reference flux r* | `interior_flux` (draw "uniform" from 2^bits integers, or "lp") | `steady_state` |
+| exact interior reference flux r* | `interior_flux` (an LP point by default, or draw "uniform" from 2^bits integers) | `steady_state` |
 | W = N diag(r*) Sᵀ (Eq. 3) | `steady_state_map` | `steady_state` |
 | iterated route, ker((YΔ)ᵀ) (Eq. 4, left) | `iterated_route`, `free_directions` | `iterated`, `readout` |
 | tangent route, ker(W Yᵀ) (Eq. 4, right) | `tangent_route`, `tangent_space` | `tangent` |

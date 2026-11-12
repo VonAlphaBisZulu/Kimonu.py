@@ -69,7 +69,7 @@ def tangent_space(A, Y, N, flux, detach_uptakes=True):
     return [tuple(sorted(r.items())) for r in rows]
 
 
-def tangent_route(A, Y, N, detach_uptakes=True, seed=0, draw="uniform", bits=64, metabolite_ids=None, flux=None):
+def tangent_route(A, Y, N, detach_uptakes=True, seed=0, draw="lp", bits=64, metabolite_ids=None, flux=None):
     """Kinetic modules, ACR and ACRR by the tangent route, which reports every true relation and possibly false ones.
 
     Every relation that holds at every positive steady state (for generic rate constants) is reported. A reported
@@ -80,8 +80,8 @@ def tangent_route(A, Y, N, detach_uptakes=True, seed=0, draw="uniform", bits=64,
         A, Y, N: the network, as for :func:`kimonu.iterated_route`. The network must have no blocked reactions.
         detach_uptakes: give every reaction out of the zero complex its own source (default), as for
             :func:`kimonu.iterated_route`.
-        seed, draw, bits: of the reference flux r* (:func:`kimonu.interior_flux`). draw="lp", or fewer bits, give
-            smaller integers and run faster, draw="lp" without the probability bound of the uniform draw.
+        seed, draw, bits: of the reference flux r* (:func:`kimonu.interior_flux`). The default LP point keeps the
+            integers small. draw="uniform" adds the probability bound and makes this route several times slower.
         metabolite_ids: optional names for ``acr`` and ``acrr``. Indices are returned when omitted.
         flux: a reference flux r* to use instead of drawing one.
 

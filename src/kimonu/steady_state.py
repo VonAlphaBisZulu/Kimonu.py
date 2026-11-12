@@ -20,9 +20,11 @@ the tangent route linearizes W u around u = 1. Uptakes are either attached, so t
 concentration is free and adds a column of its own to W (:func:`rate_columns`).
 
 :func:`interior_flux` draws r* at random, which gives the result for generic rate constants, that is, for all rate
-constants that admit a positive steady state except finely tuned ones. With the default uniform draw a
-Schwartz–Zippel bound limits the probability that r* is finely tuned (Schwartz, 1980; Zippel, 1979), and the
-keyword ``bits`` sets that bound.
+constants that admit a positive steady state except finely tuned ones. The default is an LP point with random
+bounds and objective, which keeps the integers of r* small. The uniform draw (``draw="uniform"``) is slower for the
+tangent route, but a Schwartz–Zippel bound then limits the probability that r* is finely tuned (Schwartz, 1980;
+Zippel, 1979), and the keyword ``bits`` sets that bound. On all 33 genome-scale networks both draws gave the same
+results.
 """
 from fractions import Fraction
 from math import ceil, lcm
@@ -36,7 +38,7 @@ from kimonu.linalg import entries, null_space_rows, to_float
 _LP_SCALE = 10**6           # the LP point's free coordinates are rounded to multiples of 1/_LP_SCALE
 
 
-def interior_flux(N, seed=0, draw="uniform", bits=64):
+def interior_flux(N, seed=0, draw="lp", bits=64):
     """An exact, strictly positive steady-state flux r* in ker(N), as a list of integers (Fractions), drawn at random.
 
     Both draws start from an LP point. HiGHS (bundled with scipy) solves N r = 0 with random lower bounds
@@ -52,19 +54,19 @@ def interior_flux(N, seed=0, draw="uniform", bits=64):
     Args:
         N: metabolites x reactions stoichiometric matrix, exact (straindesign RationalMatrix) or integer.
         seed: seed of the LP's random bounds and objective and of the uniform draw.
-        draw: "uniform" (default) or "lp".
+        draw: "lp" (default) or "uniform".
+            "lp". r* = K c, the LP point. Its integers are small, so the tangent route stays fast. An LP optimum is
+            not a uniform random draw, so no probability bound applies to it.
             "uniform". r* = K (T c + s), with c the integer free coordinates of the LP point, s drawn uniformly
             from the integers [0, 2^bits) in each free coordinate, and
             T = ceil(2 · 2^bits · max_i Σ_j |K_ij| / min r_c), with r_c = K c the LP point, large enough that r*
             stays strictly positive whatever s is. A shift by the fixed T c keeps the degree of a polynomial, so a
             nonzero polynomial of degree D in the free coordinates vanishes at r* with probability at most
-            D / 2^bits (Schwartz–Zippel), and the bound applies to r* itself.
-            "lp". r* = K c, the LP point. Its integers are smaller, so the tangent route runs several times faster,
-            but an LP optimum is not a random draw, and no probability bound applies to it.
+            D / 2^bits (Schwartz–Zippel), and the bound applies to r* itself. The larger integers make the tangent
+            route about 2 to 12 times slower on genome-scale networks (bits=64); the iterated route costs the same.
             On all 33 genome-scale networks both draws gave the same kinetic modules, ACR and ACRR for both routes.
         bits: size of the uniform draw, s in [0, 2^bits), used only for draw="uniform" (default 64). The bound
-            D / 2^bits halves with every extra bit. Fewer bits make the tangent route faster, because the entries
-            of r* are smaller.
+            D / 2^bits halves with every extra bit, and the tangent route's cost grows about linearly with bits.
 
     Raises ValueError when N has no strictly positive steady state, which means the network still has blocked
     reactions.

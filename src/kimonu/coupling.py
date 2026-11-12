@@ -95,7 +95,7 @@ def _tangent(A, Y, N, detach_uptakes, flux):
     return label, fixed
 
 
-def kinetic_flux_coupling(A, Y, N, detach_uptakes=True, seed=0, route="iterated", draw="uniform", bits=64,
+def kinetic_flux_coupling(A, Y, N, detach_uptakes=True, seed=0, route="iterated", draw="lp", bits=64,
                           flux=None):
     """Reactions whose rates keep a fixed ratio under mass action, and the rates that are fixed.
 
