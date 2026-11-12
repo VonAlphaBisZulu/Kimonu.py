@@ -14,8 +14,9 @@
 # The published supplementary figures must be named as the scripts write them (FigS1_stage_timing.svg to
 # FigS6_float_errors.svg), or make_zenodo_bundle.py stops. VAULT points at another folder of the same layout.
 # A rebuild replaces bundle/, upload/ and work/ of <out>. ZENODO_DOI, ARTICLE_DOI, ARCHIVE_VERSION and RELEASE_DATE,
-# when set, fill the placeholders of README.md, CITATION.cff and the metadata (make_zenodo_bundle.py). SBATCH_EXCLUDE
-# (read by sbatch) keeps the job off given nodes.
+# when set, fill the placeholders of README.md, CITATION.cff and the metadata (make_zenodo_bundle.py). KZ_EXCLUDE lists
+# the nodes the job must not use (default node05 to node08, which have a hardware issue since 2026-11-12; KZ_EXCLUDE=
+# for none). Slurm 21.08 has no SBATCH_EXCLUDE.
 set -u
 K=/home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py
 VAULT=${VAULT:-/home/sadreyev_lab/pschneider/pipelines/Obsidian/Phil/Kimonu}      # read only
@@ -29,7 +30,8 @@ if [ -z "${KZ_BUNDLE_JOB:-}" ]; then          # not SLURM_JOB_ID, which an inter
   cp -p "$VAULT/Kimonu.md" "$W/manuscript.md"
   cp -p "$0" "$W/zenodo_bundle.sh"
   echo "staged $(ls "$W/figures" "$W/figures/supp" | grep -c '\.') figure files; commit $KIMONU_REV"
-  exec sbatch -J kz_bundle -p sadreyevlab -c 2 --mem=8G -t 06:00:00 -o "$W/logs/bundle_%j.log" \
+  EXCL=${KZ_EXCLUDE-node05,node06,node07,node08}
+  exec sbatch -J kz_bundle -p sadreyevlab -c 2 --mem=8G -t 06:00:00 -o "$W/logs/bundle_%j.log" ${EXCL:+--exclude=$EXCL} \
        --export=ALL,KZ_BUNDLE_JOB=1,KIMONU_REV=$KIMONU_REV "$W/zenodo_bundle.sh" "$OUT"
 fi
 
