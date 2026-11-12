@@ -200,7 +200,7 @@ def certificate(ways, name):
     fig.subplots_adjust(left=0.07, right=0.76, bottom=0.2, top=0.86, wspace=0.08)
     out = draw_certificate(axs, ways, {"exactcmp": "exact kernel", "svdabs": "SVD kernel"})
     for ax in axs:
-        ax.set_xlabel("tolerance (0: rows exactly equal)", color=INK)
+        ax.set_xlabel("tolerance (0 = rows exactly equal)", color=INK)
     axs[0].set_ylabel("models", color=INK)
     certificate_legend(fig, 0.77, 0.86, out[ways[0]]["exact"])
     save_svg(fig, f"{OUT}/{name}"); plt.close(fig)
@@ -215,7 +215,7 @@ def certificate_supp(ways, name):
     out = draw_certificate(axs, ways, {w_: WAYNAME[w_].replace(", ", ",\n") for w_ in ways})
     for ax in axs:
         sparse_ticks(ax)
-        ax.set_xlabel("tolerance (0: rows exactly equal)", color=INK)
+        ax.set_xlabel("tolerance (0 = rows exactly equal)", color=INK)
     axs[0].set_ylabel("models", color=INK)
     ex = out[ways[0]]["exact"]
     handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (GREEN, BLUE_, GREY, RED)] + \
@@ -244,7 +244,7 @@ def errors(ways, name):
             bars(ax, cls, zero, (GREEN, RED, BLUE_, BOTH)); axes_style(ax, n); sparse_ticks(ax)
             ax.set_title(f"{route} route\n{WAYNAME[way]}", fontsize=8, color=INK, pad=3)
             out[arm] = dict(right=cls[0].astype(int).tolist(), at_zero=zero.astype(int).tolist())
-    for ax in axs[1]: ax.set_xlabel("tolerance (0: rows exactly equal)", color=INK)
+    for ax in axs[1]: ax.set_xlabel("tolerance (0 = rows exactly equal)", color=INK)
     for ax in axs[:, 0]: ax.set_ylabel("models")
     handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (GREEN, RED, BLUE_, BOTH)]
     key_below(fig, handles, ["all relations right", "relations made up", "relations missed", "missed and made up"])
