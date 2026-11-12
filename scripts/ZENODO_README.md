@@ -1,7 +1,6 @@
 # Run records and figure data for "Exact nullspaces find and certify kinetic modules and other mass-action invariants in metabolic networks"
 
-Philipp C. Schneider, Department of Molecular Biology, Massachusetts General Hospital, Boston, MA, USA
-(ORCID 0000-0001-8858-428X).
+@AUTHOR@, @AFFILIATION@ (ORCID @ORCID@).
 Article DOI @ARTICLE_DOI@, archive DOI @ZENODO_DOI@.
 Built on @DATE@ by `scripts/zenodo_bundle.sh` and `scripts/make_zenodo_bundle.py` of Kimonu.py at commit @COMMIT@.
 

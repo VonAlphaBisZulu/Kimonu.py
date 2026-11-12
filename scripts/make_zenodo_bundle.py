@@ -30,6 +30,9 @@ import records
 
 CODE = (".py", ".pyc", ".sbatch", ".sh", ".R", ".m", ".jl")
 RUN_COMMIT = "451a748"          # Kimonu commit of the final runs (provenance_*.txt); later src gives the same results
+# The author, the one place to change it: README.md, CITATION.cff, the Zenodo metadata and UPLOAD.md take it from here.
+AUTHOR = dict(family="Schneider Chuzel", given="Philipp C.", orcid="0000-0001-8858-428X")
+AFFILIATION = "Department of Molecular Biology, Massachusetts General Hospital Research Institute, Massachusetts General Hospital, Boston, MA 02114, USA"
 LEFT_OUT = (records.DRAFTS, records.EXPERIMENTS)
 
 # archive folder, the paper items it feeds, content, and what produced it (paths under scripts/, SLURM job ids)
@@ -186,7 +189,7 @@ REC = records.RECORDS
 git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, check=True).stdout.strip()
 REV = os.environ.get("KIMONU_REV", "HEAD")
 commit, commit_full = git("rev-parse", "--short=7", REV), git("rev-parse", REV)
-meta = {k: os.environ.get(k, d) for k, d in dict(ZENODO_DOI="10.5281/zenodo.XXXXXXX", ARTICLE_DOI="10.1126/sciadv.XXXXXXX",
+meta = {k: os.environ.get(k, d) for k, d in dict(ZENODO_DOI="10.5281/zenodo.24145925", ARTICLE_DOI="10.1126/sciadv.XXXXXXX",
         ARCHIVE_VERSION="X.Y", RELEASE_DATE="YYYY-MM-DD").items()}
 top, upload = os.path.join(out, "top"), os.path.join(out, "upload")
 for d in (top, upload):
@@ -235,7 +238,9 @@ def tally(d):
 layout = "| archive folder | content | feeds | produced by | files |\n|---|---|---|---|---|\n"
 layout += "".join(f"| `{d}/` | {what} | {items} | {made} | {tally(d)} |\n" for d, items, what, made in PARTS)
 layout += "".join(f"| `figures/{f}` | the published file | {item} | {made} | 1 |\n" for f, (item, made) in PUBLISHED.items())
-fill = {"@COMMIT@": commit, "@COMMIT_FULL@": commit_full, "@RUN_COMMIT@": RUN_COMMIT, "@DATE@": datetime.date.today().isoformat(),
+NAME = f"{AUTHOR['given']} {AUTHOR['family']}"                 # as a byline; "family, given" for Zenodo
+fill = {"@AUTHOR@": NAME, "@AUTHOR_FAMILY@": AUTHOR["family"], "@AUTHOR_GIVEN@": AUTHOR["given"], "@ORCID@": AUTHOR["orcid"],
+        "@AFFILIATION@": AFFILIATION, "@COMMIT@": commit, "@COMMIT_FULL@": commit_full, "@RUN_COMMIT@": RUN_COMMIT, "@DATE@": datetime.date.today().isoformat(),
         "@LAYOUT@": layout.rstrip(), "@SNAPSHOT@": snapshot, "@YEAR@": meta["RELEASE_DATE"][:4]}
 fill.update({f"@{k}@": v for k, v in meta.items()})
 PLACEHOLDER = ("XXXXXXX", "X.Y", "YYYY")
@@ -278,10 +283,10 @@ message: "If you use these records, please cite the article and this archive."
 type: dataset
 title: 'Run records and figure data for "Exact nullspaces find and certify kinetic modules and other mass-action invariants in metabolic networks"'
 authors:
-  - family-names: Schneider
-    given-names: Philipp C.
-    affiliation: "Department of Molecular Biology, Massachusetts General Hospital, Boston, MA, USA"
-    orcid: "https://orcid.org/0000-0001-8858-428X"
+  - family-names: "@AUTHOR_FAMILY@"
+    given-names: "@AUTHOR_GIVEN@"
+    affiliation: "@AFFILIATION@"
+    orcid: "https://orcid.org/@ORCID@"
 version: "@ARCHIVE_VERSION@"
 date-released: "@RELEASE_DATE@"
 doi: "@ZENODO_DOI@"
@@ -298,9 +303,9 @@ preferred-citation:
   type: article
   title: "Exact nullspaces find and certify kinetic modules and other mass-action invariants in metabolic networks"
   authors:
-    - family-names: Schneider
-      given-names: Philipp C.
-      orcid: "https://orcid.org/0000-0001-8858-428X"
+    - family-names: "@AUTHOR_FAMILY@"
+      given-names: "@AUTHOR_GIVEN@"
+      orcid: "https://orcid.org/@ORCID@"
   journal: "Science Advances"
   year: @YEAR@
   doi: "@ARTICLE_DOI@"
@@ -372,7 +377,7 @@ LAYOUT = [
     ("figures/", "the published figures (SVG), Data S1 and S2 (CSV) and the source data the figures are drawn from"),
     (snapshot, f"a snapshot of the source code and the scripts at commit {commit}")]
 esc = lambda s: s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-desc = (f"<p>Run records and figure data of the article \"{esc(paper)}\" by Philipp C. Schneider (Science Advances, "
+desc = (f"<p>Run records and figure data of the article \"{esc(paper)}\" by {esc(NAME)} (Science Advances, "
         f"DOI {meta['ARTICLE_DOI']}). The archive holds every file that the figures, tables, Data S1 and S2 and the "
         f"numbers of the article are computed from, and its README.md maps each file to the paper item it supports and "
         f"to the script that reads it.</p><p><strong>Abstract of the article.</strong> {esc(abstract)}</p>"
@@ -386,8 +391,7 @@ desc = (f"<p>Run records and figure data of the article \"{esc(paper)}\" by Phil
           f"the code in the snapshot under the Apache License 2.0.</p>")
 record = {"metadata": {
     "upload_type": "dataset", "title": TITLE,
-    "creators": [{"name": "Schneider, Philipp C.", "orcid": "0000-0001-8858-428X",
-                  "affiliation": "Department of Molecular Biology, Massachusetts General Hospital, Boston, MA, USA"}],
+    "creators": [{"name": f"{AUTHOR['family']}, {AUTHOR['given']}", "orcid": AUTHOR["orcid"], "affiliation": AFFILIATION}],
     "description": desc, "access_right": "open", "license": "cc-by-4.0", "keywords": KEYWORDS,
     "related_identifiers": [
         {"identifier": REPO, "relation": "isSupplementTo", "resource_type": "software", "scheme": "url"},

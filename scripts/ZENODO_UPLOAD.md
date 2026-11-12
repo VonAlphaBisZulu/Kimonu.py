@@ -20,15 +20,14 @@ The record has 2 files and @ZIPMB@ MB, well within Zenodo's limits of 100 files 
    `scp pschneider@<cluster login node>:@OUT@/upload/* .`
 2. Open https://zenodo.org, log in, and click **New upload** (the **+** menu at the top right).
 3. **Files.** Drag `Kimonu_records.zip` and `README.md` into the upload area and wait until both show 100%.
-4. **Digital Object Identifier.** At "Do you already have a DOI for this upload?" choose **No**, then click
-   **Get a DOI now!**. Zenodo reserves a DOI of the form 10.5281/zenodo.NNNNNNN. Note it down. It resolves only after
-   step 15.
+4. **Digital Object Identifier.** The draft holds the reserved DOI @ZENODO_DOI@, which README.md, CITATION.cff and
+   `zenodo_metadata.json` name already. It resolves only after step 15.
 5. **Resource type.** Dataset.
 6. **Title.** @TITLE@
 7. **Publication date.** The day you publish (the form proposes today).
-8. **Creators.** Click **Add creator**, choose **Person**, family name `Schneider`, given names `Philipp C.`, ORCID
-   `0000-0001-8858-428X`, affiliation `Massachusetts General Hospital` (pick the entry from the list). The form takes
-   the institution only, and the department is in `CITATION.cff` and in `zenodo_metadata.json`.
+8. **Creators.** Click **Add creator**, choose **Person**, family name `@AUTHOR_FAMILY@`, given names `@AUTHOR_GIVEN@`,
+   ORCID `@ORCID@`, affiliation `Massachusetts General Hospital` (pick the entry from the list). The form takes the
+   institution only, and the full affiliation (@AFFILIATION@) is in `CITATION.cff` and in `zenodo_metadata.json`.
 9. **Description.** Paste from `description.html`. It names the article DOI as 10.1126/sciadv.XXXXXXX until the
    article has one, so replace it then or delete those words before publishing.
 10. **Licenses.** Creative Commons Attribution 4.0 International (remove any other license the form proposes).
@@ -49,19 +48,20 @@ The record has 2 files and @ZIPMB@ MB, well within Zenodo's limits of 100 files 
 Science Advances asks that the data be available when the paper is published. Publishing the record at submission is
 the simplest way to let the reviewers open it.
 
-## After the DOI exists
+## The DOI in the text
 
-- Manuscript (`Kimonu.md`, data availability), replace "==(DOI)==" by `(https://doi.org/10.5281/zenodo.NNNNNNN)`, and
-  fill in the release tag where the Materials and Methods ask for the version number.
+- Manuscript (`Kimonu.md`, data availability), replace "==(DOI)==" by `(https://doi.org/@ZENODO_DOI@)`, and fill in
+  the release tag where the Materials and Methods ask for the version number.
 - Cover letter, the same DOI wherever the archive is mentioned.
-- Optional, before step 15. The README inside the zip carries placeholders for the archive DOI and the article DOI,
-  and CITATION.cff also for the version and date of this record. The README names Kimonu by commit and points to the
-  releases of the repository for the latest stable version. To fill them, rebuild after step 4 (about 30 minutes, on the
-  cluster), delete the two uploaded files in the draft and upload the new ones from the same place.
+- Optional, before step 15. The README inside the zip carries a placeholder for the article DOI, and CITATION.cff
+  also for the version and date of this record. The README names Kimonu by commit and points to the releases of the
+  repository for the latest stable version. To fill them, rebuild (about 30 minutes, on the cluster), delete the two
+  uploaded files in the draft and upload the new ones from the same place.
 
       cd ~/pipelines/2026-08_Kimonu/Kimonu.py
-      KIMONU_REV=@COMMIT@ ZENODO_DOI=10.5281/zenodo.NNNNNNN ARCHIVE_VERSION=1.0 RELEASE_DATE=YYYY-MM-DD \
-        bash scripts/zenodo_bundle.sh @OUT@
+      KIMONU_REV=@COMMIT@ ARCHIVE_VERSION=1.0 RELEASE_DATE=YYYY-MM-DD bash scripts/zenodo_bundle.sh @OUT@
+
+  The author's name, ORCID and affiliation are `AUTHOR` and `AFFILIATION` at the top of `scripts/make_zenodo_bundle.py`.
 
   `ARTICLE_DOI=10.1126/sciadv...` can be added the same way once it exists. The same command
   without the variables rebuilds the whole package after any change of the figures, Data S1 and S2 or the records.
