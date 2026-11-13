@@ -34,3 +34,5 @@
 1 iHN637 random-pair 2
 1 iHN637 random-pair 3
 1 iHN637 random-pair 4
+0 iHN637 glyc3p[c]
+0 iHN637 ser__L[c]
