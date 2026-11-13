@@ -79,7 +79,7 @@ from kimonu.coupling import (FluxCouplingResult, MassBalanceCouplingResult, kine
 from kimonu.relation_values import (Formulas, Monomial, Value, Values, binomial_formulas, rate_constants,
                                     relation_values)
 
-__version__ = "0.0.1"
+__version__ = "1.0.0"
 __all__ = [
     # networks and preprocessing
     "make_irreversible", "build_crn", "preprocess", "crn_from_matrices", "as_crn", "CRN",
