@@ -117,7 +117,8 @@ Runs behind single sentences, all in `kinetic_variants/` and read by `paper_numb
   `dataS1_S2.py`, `tableS2_S3.py`, `paper_numbers.py`, `fig3_fig4_update_terms.py`. `names.py` holds the one display name
   per network that every figure, table and data file uses.
 - `deficiency/deficiency_split.py` (deficiency, linkage classes and ranks of the 33 networks).
-- `docs/examples/network/` (the edit scripts of Figures 1 and 2).
+- `docs/examples/network/` (the edit scripts of Figures 1 and 2, and `notebook_networks.py`, which cuts the network
+  drawings of `examples/figures/` for the example notebook from panels A and B of the published figures).
 
 ## Frozen comparison harness (COCOA.jl, reference)
 
