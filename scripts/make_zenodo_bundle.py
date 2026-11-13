@@ -77,7 +77,7 @@ PARTS = [
      "ACR and ACRR lists of the iterated route per uptake mode, metabolites as indices into the network's own list",
      "`scripts/kinetic_variants/uptake_lists.py`, run by `scripts/kinetic_variants/uptake_lists.sbatch`, SLURM job 572114"),
     ("results/kimonu/gap_roots", "Results, Supplementary Text S6", "the open questions the three gap networks come down to",
-     "`scripts/kinetic_variants/gap_roots.py`, run by `scripts/kinetic_variants/gap_roots.sbatch` with `scripts/kinetic_variants/gap_roots_cases.txt`, SLURM job 572118"),
+     "`scripts/kinetic_variants/gap_roots.py`, run by `scripts/kinetic_variants/gap_roots.sbatch` with `scripts/kinetic_variants/gap_roots_cases.txt`, SLURM jobs 572118 (cases 1 to 15), 572688 and 572709 (cases 16 to 38)"),
     ("results/kimonu/second_order", "Supplementary Text S12", "exact second-order test modulo a prime on the gap networks",
      "`scripts/kinetic_variants/second_order_modp.py`, run by `scripts/kinetic_variants/second_order_modp.sbatch`, SLURM job 572119"),
     ("results/kimonu/gap_experiments/injectivity", "Supplementary Text S6, S7",

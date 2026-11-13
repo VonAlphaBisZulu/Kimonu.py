@@ -11,7 +11,9 @@ has its own rows. Its kinetic modules, ACR, ACRR and pairs are those of uptake_m
 member_counts/ (the ACRR group sizes, tan, or it where the routes agree), checked against the timed runs in
 results/kimonu/timing/tan, and its wall time is the median of those three runs (seeds 0, 1, 2, which agree on every
 count). That route computes no balanced complexes or concordance modules, so these two cells stay empty.
-A tool that did not finish within 7 days gets "not finished in 7 days".
+The reference was run on 11 networks only (Materials and Methods) and gets "not run" on the others. COCOA.jl gets
+"not finished in 7 days" where one of its runs of that setting reached the limit, and "stopped after <d> days" with
+the longest run otherwise, both from results/cocoa_jl/runs_not_finished/runs_not_finished.tsv.
 ACRR is counted as independent ratios, k - 1 per group of k metabolites (acrr_ratios, and acrr_ratios_free for k free
 metabolites of a group), as in the paper. The last two columns keep the ACRR pairs as each tool lists them.
 
@@ -48,7 +50,18 @@ ARMS = [("kimonu_det", "Kimonu, iterated route, detached uptakes"),
         ("cocoa_true", "COCOA.jl v1.1.0, efficient=true")]
 KEYS = ["balanced", "conc", "n_kinetic", "giant", "acr", "acrr_ratios", "acr_free", "acrr_ratios_free", "seconds"]
 LISTED = [("acrr", "acrr_pairs_as_listed"), ("acrr_free", "acrr_pairs_as_listed_free")]
-NOT_FINISHED = "not finished in 7 days"
+NOT_RUN = "not run"                                   # the reference, on the 22 networks it was not run on
+
+
+def cocoa_not_finished():
+    """{(arm, model): label} of the COCOA.jl settings without a result, from the longest of their runs"""
+    longest = {}
+    with open(records.read(records.COCOA_NOT_FINISHED, "runs_not_finished.tsv")) as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            if r["elapsed_days"]:
+                k = ("cocoa_" + r["efficient"], r["network"])
+                longest[k] = max(longest.get(k, 0.0), float(r["elapsed_days"]))
+    return {k: "not finished in 7 days" if d >= 7 else f"stopped after {d:.1f} days" for k, d in longest.items()}
 
 
 pairs_of = lambda sizes: sum(k * (k - 1) // 2 for k in sizes)
@@ -95,6 +108,7 @@ def data_s1(path):
     D = json.load(open(records.read(records.SOURCE_DATA, "figdata.json")))
     PC = json.load(open(records.read(records.SOURCE_DATA, "pair_counts.json")))
     nC, n = D["n_complexes"], 0
+    CNF = cocoa_not_finished()
     with open(path, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["model", "network", "complexes", "arm", "seed"] + KEYS + ["coupled_complex_pairs"] + [h for _, h in LISTED])
@@ -102,8 +116,9 @@ def data_s1(path):
             K = kimonu_rows(m, D, PC)
             for arm, label in ARMS:
                 v = K.get(arm) or D[arm].get(m)
-                if v is None:      # only the reference and COCOA.jl have networks they did not finish
-                    w.writerow([m, network(m), nC[m], label, ""] + [NOT_FINISHED if arm.startswith(("ref", "cocoa")) else ""] * len(KEYS) + [""] * (1 + len(LISTED)))
+                if v is None:      # only the reference (not run) and COCOA.jl (not finished) have networks without a result
+                    tag = NOT_RUN if arm.startswith("ref") else CNF[(arm, m)]
+                    w.writerow([m, network(m), nC[m], label, ""] + [tag] * len(KEYS) + [""] * (1 + len(LISTED)))
                     n += 1
                     continue
                 pc = PC.get(m, {}).get(arm)
