@@ -13,3 +13,24 @@
 0 iHN637 glyc3p[c] ser__L[c]
 0 iNJ661 PIM2[c]/PIM1[c]
 0 iCN718 nadph[c] malACP[c] acACP[c] propacp[c] E_89/E231_ACP[c]_accoa[c]_complex
+1 iCN718 nadph[c]
+1 iCN718 malACP[c]
+1 iCN718 acACP[c]
+1 iCN718 propacp[c]
+1 iCN718 E_89/E231_ACP[c]_accoa[c]_complex
+1 iCN718 nadph[c] malACP[c]
+1 iCN718 nadph[c] acACP[c]
+1 iCN718 nadph[c] propacp[c]
+1 iCN718 nadph[c] E_89/E231_ACP[c]_accoa[c]_complex
+1 iCN718 malACP[c] acACP[c]
+1 iCN718 malACP[c] propacp[c]
+1 iCN718 malACP[c] E_89/E231_ACP[c]_accoa[c]_complex
+1 iCN718 acACP[c] propacp[c]
+1 iCN718 acACP[c] E_89/E231_ACP[c]_accoa[c]_complex
+1 iCN718 propacp[c] E_89/E231_ACP[c]_accoa[c]_complex
+1 iHN637 glyc3p[c]
+1 iHN637 ser__L[c]
+1 iHN637 random-pair 1
+1 iHN637 random-pair 2
+1 iHN637 random-pair 3
+1 iHN637 random-pair 4

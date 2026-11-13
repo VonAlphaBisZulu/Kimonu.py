@@ -12,6 +12,13 @@ every complex (the constant goes into the rate constants) and the two balances a
 original steady states satisfy as well.
 
     python kinetic_variants/gap_roots.py <model> [root ...]   # root: metabolite (ACR) or a/b (ACRR); default: the open ACR relations
+    python kinetic_variants/gap_roots.py <model> random-pair <seed>   # control, see below
+
+The control "random-pair <seed>" fixes, in place of the open ACR metabolites, one random free metabolite (a
+metabolite of the original model, not an enzyme form) per open ACR metabolite, drawn with numpy's default_rng(seed)
+among those whose degree (the reactions of the network it occurs in) lies within 25% of that open ACR
+metabolite's degree. Metabolites that occur in an open relation or that the iterated route already proves ACR are
+left out. The draw and the candidate counts go into the output under "selection".
 
 DETACH=1 runs the iterated route with detached uptakes (the open relations are the same in both modes).
 """
@@ -108,8 +115,26 @@ def proven(A, Y, N, ms):
     return acr, find
 
 
-A, Y, N, ms, _ = build(rx)
+A, Y, N, ms, kept0 = build(rx)
 acr0, find0 = proven(A, Y, N, ms)
+selection = None
+if roots[:1] == ["random-pair"]:                 # the control described in the docstring
+    seed = int(roots[1])
+    free = set(mets[:mets.index("E_1")] if "E_1" in mets else mets)
+    deg = {}
+    for s, p in kept0:
+        for n in set(s) | set(p):
+            deg[n] = deg.get(n, 0) + 1
+    in_rel = {n for r in rel for n in list(r["c"]) + list(r.get("group", []))}
+    pool = sorted(n for n in free if n in deg and n not in in_rel and n not in acr0)
+    rng = np.random.default_rng(seed)
+    roots, near = [], {}
+    for t in [next(iter(r["c"])) for r in rel if r["kind"] == "ACR"]:
+        cand = [n for n in pool if n not in roots and abs(deg[n] - deg[t]) <= 0.25 * deg[t]]
+        pick = str(rng.choice(cand))
+        roots.append(pick)
+        near[t] = dict(degree=deg[t], candidates=len(cand), pick=pick, pick_degree=deg[pick])
+    selection = dict(seed=seed, free_metabolites_eligible=len(pool), near=near)
 A, Y, N, ms, kept = build(fixed(rx, set(roots)))
 acr1, find1 = proven(A, Y, N, ms)
 alias = {}
@@ -132,4 +157,4 @@ for r in rel:
         ok = a == b or (a in fixed_acr and b in fixed_acr) or (a in ms and b in ms and find1(a) == find1(b))
     (closed if ok else still).append(r)
 print(json.dumps(dict(model=M, detached=DETACH, roots=roots, reactions_kept=len(kept), n_relations=len(rel), closed=len(closed),
-                      open=[(r["kind"], r["c"]) for r in still]), indent=1))
+                      open=[(r["kind"], r["c"]) for r in still], **({"selection": selection} if selection else {})), indent=1))

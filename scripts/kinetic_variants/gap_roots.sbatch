@@ -4,13 +4,14 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=30G
 #SBATCH --time=0-04:00:00
-#SBATCH --array=1-15
+#SBATCH --array=1-36
 #SBATCH --output=/scratch/sadreyev_lab/pschneider/kimonu_gaproots/logs/gr_%A_%a.log
 # The open relations on the three gap networks that follow from a few roots (Results, "at most 5, 1 and 2 open
 # questions"). One case per task from gap_roots_cases.txt: DETACH flag, model, roots (metabolite = ACR, a/b = ACRR,
-# "none" = no root). Ran 2026-11-02 (job 568497) with StrainDesign ~/sd-scip-pricing; the
-# default tree is now StrainDesign 1.19.2 ($HOME/sd-kernel-nonzeros).
-#   sbatch kinetic_variants/gap_roots.sbatch        # from scripts/
+# "none" = no root, "random-pair <seed>" = the control). Cases 1-15 ran 2026-11-11 (job 572118) and cases 16-36
+# (single roots and pairs on iCN718, single roots and four random pairs on iHN637, Supplementary Text S6) on
+# 2026-11-13, both with StrainDesign 1.19.2 ($HOME/sd-kernel-nonzeros).
+#   sbatch kinetic_variants/gap_roots.sbatch        # from scripts/; --array=16-36 for the later cases only
 cd /home/sadreyev_lab/pschneider/pipelines/2026-08_Kimonu/Kimonu.py/scripts
 SD=${SD_TREE:-$HOME/sd-kernel-nonzeros}
 export PYTHONPATH=$SD OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1} OPENBLAS_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1} MKL_NUM_THREADS=${SLURM_CPUS_PER_TASK:-1}
